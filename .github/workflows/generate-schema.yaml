@@ -28,7 +28,7 @@ jobs:
         run: |
           cd server
           python manage.py migrate --settings conf.settings_testing
-          python manage.py spectacular --settings conf.settings_testing --file ./schema.yaml
+          python manage.py spectacular --settings conf.settings_testing --file schema.yaml
 
       - uses: actions/upload-artifact@v3
         with:
