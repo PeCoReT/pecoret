@@ -1,0 +1,41 @@
+
+name: Publish dev packages to GitHub Packages
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME_SERVER: pecoret-server
+  IMAGE_NAME_FRONTEND: pecoret-frontend
+
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME_SERVER }}
+          tags: ${{ steps.meta.outputs.labels }}
+      - name: Build and push server image
+        uses: docker/build-push-action@v5
+        with:
+          context: server
+          push: true
+          tags: dev
+          labels: ${{ steps.meta.outputs.labels }}
