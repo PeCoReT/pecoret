@@ -1,0 +1,31 @@
+name: Publish Docker image
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  IMAGE_NAME_SERVER: pecoret-server
+  IMAGE_NAME_FRONTEND: pecoret-frontend
+  REGISTRY: ghcr.io
+
+jobs:
+  push_to_registry:
+    permissions:
+      contents: write
+      packages: write
+    name: Push Docker image to Docker Registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      - name: build and upload images
+        run: |
+          docker login ${{ env.REGISTRY }} --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
+          docker build -t ${{ env.IMAGE_NAME_SERVER }} server
+          docker tag ${{ env.IMAGE_NAME_SERVER}} ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME_SERVER }}:dev
+          docker push ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME_SERVER }}:dev
+          docker build -t ${{ env.IMAGE_NAME_FRONTEND }} frontend
+          docker tag ${{ env.IMAGE_NAME_FRONTEND }} ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME_FRONTEND }}:dev
+          docker push ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME_FRONTEND }}:dev
