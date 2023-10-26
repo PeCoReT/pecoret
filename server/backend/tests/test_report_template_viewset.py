@@ -34,7 +34,7 @@ class ReportTemplateCreateView(APITestCase, PeCoReTTestCaseMixin):
         self.url = self.get_url("backend:report-template-list")
         self.data = {
             "name": "test",
-            "path": "test",
+            "package": "test",
             "status": ReportTemplateStatus.ACTIVE.label,
         }
 

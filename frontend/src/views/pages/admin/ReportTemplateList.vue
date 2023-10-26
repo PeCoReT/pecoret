@@ -91,9 +91,9 @@ export default {
         <div class="col-12">
             <Card>
                 <template #content>
-                    <DataTable paginator dataKey rowHover :rows="pagination.limit" :value="items" lazy filterDisplay="menu" :totalRecords="totalRecords" :loading="loading" @page="onPage" responsiveLayout="scroll" @filter="onFilter" @sort="onSort">
+                    <DataTable paginator rowHover :rows="pagination.limit" :value="items" lazy filterDisplay="menu" :totalRecords="totalRecords" :loading="loading" @page="onPage" responsiveLayout="scroll" @filter="onFilter" @sort="onSort">
                         <Column field="name" header="Name"></Column>
-                        <Column field="path" header="Path"></Column>
+                        <Column field="package" header="Package"></Column>
                         <Column field="status" header="Status"></Column>
                         <Column header="Actions">
                             <template #body="slotProps">

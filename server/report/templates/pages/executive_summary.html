@@ -40,15 +40,15 @@
       </tr>
       </thead>
       <tbody>
-      {% for asset in variant.get_assets() %}
+      {% for asset in template.get_assets() %}
         <tr>
           <td>{{ asset }}</td>
-          <td>{{ variant.get_findings_count_for_asset(asset, "CRITICAL") }}</td>
-          <td>{{ variant.get_findings_count_for_asset(asset, "HIGH") }}</td>
-          <td>{{ variant.get_findings_count_for_asset(asset, "MEDIUM") }}</td>
-          <td>{{ variant.get_findings_count_for_asset(asset, "LOW") }}</td>
-          <td>{{ variant.get_findings_count_for_asset(asset, "INFORMATIONAL") }}</td>
-          <td>{{ variant.get_findings_count_for_asset(asset) }}</td>
+          <td>{{ template.get_findings_count_for_asset(asset, "CRITICAL") }}</td>
+          <td>{{ template.get_findings_count_for_asset(asset, "HIGH") }}</td>
+          <td>{{ template.get_findings_count_for_asset(asset, "MEDIUM") }}</td>
+          <td>{{ template.get_findings_count_for_asset(asset, "LOW") }}</td>
+          <td>{{ template.get_findings_count_for_asset(asset, "INFORMATIONAL") }}</td>
+          <td>{{ template.get_findings_count_for_asset(asset) }}</td>
         </tr>
       {% endfor %}
       </tbody>

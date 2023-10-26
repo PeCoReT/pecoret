@@ -1,24 +1,23 @@
 <script>
-import AdminService from '@/service/AdminService'
-
+import AdminService from '@/service/AdminService';
 
 export default {
-    name: "ReportTemplateUpdateDialog",
+    name: 'ReportTemplateUpdateDialog',
     props: {
         template: {
             required: true
         }
     },
-    emits: ["object-updated"],
+    emits: ['object-updated'],
     data() {
         return {
             visible: false,
             model: this.user,
             service: new AdminService(),
             statusChoices: [
-                { title: "Active", value: "Active" },
-                { title: "Draft", value: "Draft" },
-                { title: "Deactivated", value: "Deactivated" }
+                { title: 'Active', value: 'Active' },
+                { title: 'Draft', value: 'Draft' },
+                { title: 'Deactivated', value: 'Deactivated' }
             ]
         };
     },
@@ -32,14 +31,14 @@ export default {
         patch() {
             let data = {
                 name: this.model.name,
-                path: this.model.path,
+                package: this.model.package,
                 status: this.model.status
-            }
+            };
             this.service.patchReportTemplate(this.$api, this.template.pk, data).then(() => {
-                this.$emit("object-updated", this.model);
+                this.$emit('object-updated', this.model);
                 this.visible = false;
             });
-        },
+        }
     },
     watch: {
         template: {
@@ -49,22 +48,21 @@ export default {
                 this.model = value;
             }
         }
-    },
-}
+    }
+};
 </script>
 
 <template>
     <Button icon="fa fa-pen-to-square" size="small" @click="open" outlined></Button>
 
     <Dialog header="Update Report Template" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
-
         <div class="flex flex-column gap-2">
             <label for="name">Name</label>
             <InputText id="name" v-model="model.name"></InputText>
         </div>
         <div class="flex flex-column gap-2">
-            <label for="first_name">Path</label>
-            <InputText id="path" v-model="model.path"></InputText>
+            <label for="package">Package</label>
+            <InputText id="package" v-model="model.package"></InputText>
         </div>
         <div class="flex flex-column gap-2">
             <label for="status">Status</label>

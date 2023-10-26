@@ -1,24 +1,23 @@
 <script>
-import AdminService from '@/service/AdminService'
-
+import AdminService from '@/service/AdminService';
 
 export default {
-    name: "ReportTemplateCreateDialog",
-    emits: ["object-created"],
+    name: 'ReportTemplateCreateDialog',
+    emits: ['object-created'],
     data() {
         return {
             visible: false,
             model: {
                 name: null,
-                path: null,
+                package: null,
                 status: null
             },
             statusChoices: [
-                { title: "Active", value: "Active" },
-                { title: "Draft", value: "Draft" },
-                { title: "Deactivated", value: "Deactivated" }
+                { title: 'Active', value: 'Active' },
+                { title: 'Draft', value: 'Draft' },
+                { title: 'Deactivated', value: 'Deactivated' }
             ],
-            service: new AdminService(),
+            service: new AdminService()
         };
     },
     methods: {
@@ -32,21 +31,21 @@ export default {
             let data = {
                 name: this.model.name,
                 status: this.model.status,
-                path: this.model.path
-            }
+                package: this.model.package
+            };
             this.service.createReportTemplate(this.$api, data).then((response) => {
                 this.$toast.add({
-                    severity: "success",
-                    summary: "Report template Created!",
+                    severity: 'success',
+                    summary: 'Report template Created!',
                     life: 3000,
-                    detail: "Report template created successfully!"
+                    detail: 'Report template created successfully!'
                 });
-                this.$emit("object-created", response.data);
+                this.$emit('object-created', response.data);
                 this.visible = false;
             });
-        },
-    },
-}
+        }
+    }
+};
 </script>
 
 <template>
@@ -58,8 +57,8 @@ export default {
             <InputText id="name" v-model="model.name"></InputText>
         </div>
         <div class="flex flex-column gap-2">
-            <label for="first_name">Path</label>
-            <InputText id="path" v-model="model.path"></InputText>
+            <label for="package">Package</label>
+            <InputText id="package" v-model="model.package"></InputText>
         </div>
         <div class="flex flex-column gap-2">
             <label for="status">Status</label>
