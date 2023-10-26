@@ -39,7 +39,7 @@ class ImageAttachment(TimestampedModel):
         super().delete(using=using, keep_parents=keep_parents)
 
     def get_preview_url(self):
-        return reverse("backend:advisories:attachment-preview", kwargs={
+        return reverse("advisories:attachment-preview", kwargs={
             'advisory': self.advisory.pk,
             'pk': self.pk
         })
