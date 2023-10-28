@@ -44,7 +44,9 @@ export default {
         onSort(event) {
             this.loading = true;
             let params = {
-                ordering: event.sortField
+                ordering: event.sortField,
+                status: this.filters.status.value,
+                labels: this.filters.labels.value
             };
             if (event.sortOrder === -1) {
                 params['ordering'] = '-' + event.sortField;
@@ -59,7 +61,7 @@ export default {
                     this.loading = false;
                 });
         },
-        onFilter(event) {
+        onFilter() {
             this.getItems();
         },
         onRowClick(pk) {
