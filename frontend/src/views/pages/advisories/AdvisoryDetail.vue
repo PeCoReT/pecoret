@@ -168,7 +168,7 @@ export default {
                 .downloadAdvisoryAsPDF(this.$api, this.advisoryId, params)
                 .then((response) => {
                     const filename = 'advisory_' + this.advisoryId + '.pdf';
-                    this.forceMarkdownFileDownload(response, filename);
+                    this.forceFileDownload(response, filename);
                     this.exportTemplate = null;
                 })
                 .finally(() => {
