@@ -2,15 +2,15 @@ import re
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
-from django.core.exceptions import ValidationError
 from django.dispatch import receiver
 from django.core.files.images import ImageFile
-from pecoret.core.models import TimestampedModel
+from pecoret.core.models import TimestampedModel, CASCADE_REPORT_TEMPLATE_DEFAULT
 from .finding import Severity
 from .vulnerability import VulnerabilityTemplate
 from .advisory_timeline import AdvisoryTimeline
 from .advisory_membership import AdvisoryMembership, Roles
 from advisories.models.attachment import ImageAttachment
+from .report_templates import ReportTemplate
 
 
 def create_advisory_id():
@@ -29,6 +29,14 @@ def create_advisory_id():
         formatter = "%0{len}d".format(len=length)
     new_pk = formatter % int(int(last_id) + 1)
     return f"{year}-{new_pk}"
+
+
+def default_report_template():
+    """
+    get the default report template for advisory model field
+    :return:
+    """
+    return ReportTemplate.objects.get(name="default_template").pk
 
 
 class AdvisoryStatusChoices(models.IntegerChoices):
@@ -126,6 +134,8 @@ class Advisory(TimestampedModel):
     custom_report_title = models.CharField(max_length=255, null=True, blank=True)
     hide_advisory_id_in_report = models.BooleanField(default=False)
     proof_text = models.TextField(blank=True, default="")
+    report_template = models.ForeignKey('backend.ReportTemplate', on_delete=CASCADE_REPORT_TEMPLATE_DEFAULT,
+                                        default=default_report_template)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

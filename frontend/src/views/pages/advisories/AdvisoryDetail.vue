@@ -5,7 +5,6 @@ import AdvisoryTabMenu from '@/components/pages/AdvisoryTabMenu.vue';
 import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import { useAuthStore } from '@/store/auth';
-import ReportTemplateSelectField from '@/components/elements/forms/ReportTemplateSelectField.vue';
 
 export default {
     name: 'AdvisoryDetail',
@@ -18,10 +17,11 @@ export default {
             advisoryId: this.$route.params.advisoryId,
             authStore: useAuthStore(),
             advisory: { vulnerability: {} },
-            templateSelectDialogVisible: false,
             exportTemplate: null,
             downloadPending: false,
             dataLoaded: false,
+            showPreview: false,
+            previewData: null,
             breadcrumbs: [
                 {
                     label: 'Advisories',
@@ -56,12 +56,6 @@ export default {
                     command: () => {
                         this.downloadAsMarkdown();
                     }
-                },
-                {
-                    label: 'PDF with template',
-                    command: () => {
-                        this.openTemplateSelectDialog();
-                    }
                 }
             ]
         };
@@ -77,11 +71,21 @@ export default {
                 name: 'AdvisoryList'
             });
         },
-        closeTemplateSelectDialog() {
-            this.templateSelectDialogVisible = false;
+        togglePreview() {
+            this.showPreview = !this.showPreview;
+            if (this.showPreview === true) {
+                this.getPreviewData();
+            } else {
+                this.previewData = null;
+            }
         },
-        openTemplateSelectDialog() {
-            this.templateSelectDialogVisible = true;
+        getPreviewData() {
+            let config = {
+                responseType: 'arraybuffer'
+            };
+            this.$api.get('/advisories/' + this.advisoryId + '/preview/', config).then((response) => {
+                this.previewData = response.data;
+            });
         },
         toggleDownloadMenu(event) {
             this.$refs.downloadMenu.toggle(event);
@@ -101,6 +105,9 @@ export default {
         patchAdvisory(data) {
             this.service.patchAdvisory(this.$api, this.advisoryId, data).then((response) => {
                 this.advisory = response.data;
+                if (this.showPreview === true) {
+                    this.getPreviewData();
+                }
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Advisory updated!',
@@ -159,7 +166,6 @@ export default {
         },
         downloadAsPDF() {
             this.downloadPending = true;
-            this.closeTemplateSelectDialog();
             let params = {};
             if (this.exportTemplate) {
                 params['template'] = this.exportTemplate;
@@ -197,7 +203,19 @@ export default {
             });
         }
     },
-    components: { ReportTemplateSelectField, DetailCardWithIcon, MarkdownEditor, InfoCardWithForm, AdvisoryTabMenu }
+    computed: {
+        containerCol() {
+            if (this.showPreview === true) {
+                return 'col-6';
+            }
+            return 'col-12';
+        },
+        previewUrl() {
+            let blob = new Blob([this.previewData], { type: 'application/pdf' });
+            return URL.createObjectURL(blob);
+        }
+    },
+    components: { DetailCardWithIcon, MarkdownEditor, InfoCardWithForm, AdvisoryTabMenu }
 };
 </script>
 
@@ -215,6 +233,8 @@ export default {
         </div>
         <div class="col-6">
             <div class="flex justify-content-end">
+                <Button icon="fa fa-eye" outlined label="Preview" @click="togglePreview"></Button>
+
                 <Button label="Download" icon="fa fa-download" outlined :loading="downloadPending" :disabled="downloadPending" @click="toggleDownloadMenu"></Button>
                 <Menu ref="downloadMenu" :model="downloadMenuItems" :popup="true"></Menu>
                 <Button label="Edit" icon="fa fa-pen-to-square" outlined @click="this.$router.push({ name: 'AdvisoryUpdate', params: { advisoryId: this.advisoryId } })"></Button>
@@ -224,7 +244,7 @@ export default {
     </div>
 
     <div class="grid">
-        <div class="col-12">
+        <div :class="containerCol">
             <AdvisoryTabMenu class="surface-card"></AdvisoryTabMenu>
             <div class="card" v-if="dataLoaded">
                 <div class="grid">
@@ -283,17 +303,9 @@ export default {
                 <Skeleton width="10rem" height="4rem"></Skeleton>
             </div>
         </div>
-    </div>
 
-    <Dialog header="Advisory Export Template" v-model:visible="templateSelectDialogVisible" modal :style="{ width: '70vw' }">
-        <div class="grid formgrid p-fluid">
-            <div class="field col-12">
-                <ReportTemplateSelectField v-model="exportTemplate"></ReportTemplateSelectField>
-            </div>
+        <div :class="containerCol" v-if="showPreview === true">
+            <iframe :src="previewUrl" v-if="this.previewData" :key="this.previewData" class="w-full h-full"></iframe>
         </div>
-        <template #footer>
-            <Button label="Cancel" @click="closeTemplateSelectDialog()" class="p-button-outlined"></Button>
-            <Button label="Save" @click="this.downloadAsPDF" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+    </div>
 </template>

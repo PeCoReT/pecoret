@@ -4,6 +4,7 @@ import VulnerabilityTemplateService from '@/service/VulnerabilityTemplateService
 import SeveritySelectField from '@/components/elements/forms/SeveritySelectField.vue';
 import { useAuthStore } from '@/store/auth';
 import AdvisoryLabelSelectField from '@/components/elements/forms/AdvisoryLabelSelectField.vue';
+import ReportTemplateSelectField from "@/components/elements/forms/ReportTemplateSelectField.vue";
 
 export default {
     name: 'AdvisoryUpdate',
@@ -53,7 +54,8 @@ export default {
                 hide_advisory_id_in_report: this.model.hide_advisory_id_in_report,
                 custom_report_title: this.model.custom_report_title,
                 cve_id: this.model.cve_id,
-                vulnerability_id: this.model.template
+                vulnerability_id: this.model.template,
+                report_template: this.model.report_template
             };
             if (this.authStore.groups.isAdvisoryManagement === true) {
                 data['labels'] = [];
@@ -109,7 +111,7 @@ export default {
     mounted() {
         this.getAdvisory();
     },
-    components: { SeveritySelectField, AdvisoryLabelSelectField }
+    components: { ReportTemplateSelectField, SeveritySelectField, AdvisoryLabelSelectField }
 };
 </script>
 <template>
@@ -155,6 +157,9 @@ export default {
                     </div>
                     <div class="field col-12" v-if="authStore.groups.isAdvisoryManagement === true">
                         <AdvisoryLabelSelectField v-model="model.labels"></AdvisoryLabelSelectField>
+                    </div>
+                    <div class="field col-12">
+                        <ReportTemplateSelectField v-model="model.report_template"></ReportTemplateSelectField>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="custom_title">Custom Report Title</label>
