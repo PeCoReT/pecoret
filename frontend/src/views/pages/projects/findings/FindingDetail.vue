@@ -67,6 +67,7 @@ export default {
                 if (response.data.user_account === null) {
                     this.finding.user_account = {};
                 }
+                this.$toast.add({ severity: 'success', summary: 'Updated', detail: 'Finding updated!', life: 3000 });
             });
         },
         confirmDialogDelete() {
