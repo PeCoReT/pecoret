@@ -40,11 +40,21 @@ class FindingViewSet(PeCoReTModelViewSet):
     def export_pdf(self, request, *args, **kwargs):
         finding = self.get_object()
         # export finding using company-wide report_template
-        template = self.request.project.company.report_template
+        template = request.project.company.report_template
         result = export_single_finding(finding, template)
         response = HttpResponse(result, content_type="application/pdf")
         filename = "finding_%s.pdf" % finding.internal_id
         response["Content-Disposition"] = "attachment; filename=%s" % filename
+        return response
+
+    @action(detail=True, methods=["get"])
+    def preview(self, request, *args, **kwargs):
+        finding = self.get_object()
+        # export finding using company-wide report_template
+        template = request.project.company.report_template
+        result = export_single_finding(finding, template)
+        response = HttpResponse(result, content_type="application/pdf")
+        response["Content-Disposition"] = "inline"
         return response
 
     @action(detail=True, methods=["post"], serializer_class=FindingCopySerializer)

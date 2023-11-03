@@ -18,6 +18,8 @@ export default {
             projectId: this.$route.params.projectId,
             findingId: this.$route.params.findingId,
             finding: { user_account: {}, component: {} },
+            showPreview: false,
+            previewData: null,
             breadcrumbs: [
                 {
                     label: 'Findings',
@@ -46,6 +48,18 @@ export default {
             downloadPending: false
         };
     },
+    computed: {
+        containerCol() {
+            if (this.showPreview === true) {
+                return 'col-6';
+            }
+            return 'col-12';
+        },
+        previewUrl() {
+            let blob = new Blob([this.previewData], { type: 'application/pdf' });
+            return URL.createObjectURL(blob);
+        }
+    },
     methods: {
         getFinding() {
             this.findingService.getFinding(this.projectId, this.findingId).then((response) => {
@@ -66,6 +80,9 @@ export default {
                 this.finding = response.data;
                 if (response.data.user_account === null) {
                     this.finding.user_account = {};
+                }
+                if (this.showPreview === true) {
+                    this.getPreviewData();
                 }
                 this.$toast.add({ severity: 'success', summary: 'Updated', detail: 'Finding updated!', life: 3000 });
             });
@@ -89,6 +106,22 @@ export default {
             link.setAttribute('download', title);
             link.click();
             this.downloadPending = false;
+        },
+        togglePreview() {
+            this.showPreview = !this.showPreview;
+            if (this.showPreview === true) {
+                this.getPreviewData();
+            } else {
+                this.previewData = null;
+            }
+        },
+        getPreviewData() {
+            let config = {
+                responseType: 'arraybuffer'
+            };
+            this.$api.get('/projects/' + this.projectId + '/findings/' + this.findingId + '/preview/', config).then((response) => {
+                this.previewData = response.data;
+            });
         },
         downloadAsPDF() {
             this.downloadPending = true;
@@ -129,6 +162,7 @@ export default {
         </div>
         <div class="col-6 h-full">
             <div class="flex justify-content-end">
+                <Button icon="fa fa-eye" outlined label="Preview" @click="togglePreview"></Button>
                 <Button label="Download" outlined icon="fa fa-download" :loading="downloadPending" :disabled="downloadPending" @click="downloadAsPDF"></Button>
                 <FindingAsAdvisoryDialog></FindingAsAdvisoryDialog>
                 <Button outlined icon="fa fa-pen-to-square" label="Edit" @click="this.$router.push({ name: 'FindingUpdate', params: { projectId: this.projectId, findingId: this.findingId } })"></Button>
@@ -138,7 +172,7 @@ export default {
     </div>
 
     <div class="grid">
-        <div class="col-12">
+        <div :class="containerCol">
             <FindingTabMenu class="surface-card"></FindingTabMenu>
             <Card class="border-noround-top">
                 <template #content>
@@ -187,6 +221,10 @@ export default {
                     </div>
                 </template>
             </Card>
+        </div>
+
+        <div :class="containerCol">
+            <iframe :src="this.previewUrl" v-if="this.previewData" class="w-full h-full" :key="previewData"></iframe>
         </div>
     </div>
 </template>

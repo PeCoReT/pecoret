@@ -179,7 +179,7 @@ class ActiveReportTemplateField(serializers.Field):
     }
 
     def to_representation(self, value):
-        return value
+        return value.pk
 
     # pylint: disable=inconsistent-return-statements
     def to_internal_value(self, data):

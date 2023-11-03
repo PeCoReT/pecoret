@@ -1,5 +1,6 @@
 from django.db import models
 from backend.models import User
+from backend.models.report_templates import ReportTemplate
 from .assets import AssetRelatedModel
 
 
@@ -38,4 +39,10 @@ class TimestampedModel(models.Model):
 def CASCADE_USER_TO_GHOST(collector, field, sub_objs, using):
     for obj in sub_objs:
         obj.user = User.objects.get(username="Ghost")
+    models.CASCADE(collector, field, sub_objs, using)
+
+
+def CASCADE_REPORT_TEMPLATE_DEFAULT(collector, field, sub_objs, using):
+    for obj in sub_objs:
+        obj.report_template = ReportTemplate.objects.get(name="default_template")
     models.CASCADE(collector, field, sub_objs, using)

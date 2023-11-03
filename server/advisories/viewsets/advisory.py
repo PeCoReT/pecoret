@@ -142,14 +142,7 @@ class AdvisoryViewSet(PeCoReTModelViewSet):
             HttpResponse: PDF Response
         """
         advisory = self.get_object()
-        serializer = AdvisoryDownloadSerializer(data=request.GET)
-        serializer.is_valid(raise_exception=True)
-        if not serializer.data.get('template'):
-            template = ReportTemplate.objects.get(name=settings.ADVISORY_TEMPLATE)
-        else:
-            template = serializer.data["template"]
-
-        result = export_advisory(advisory, template)
+        result = export_advisory(advisory, advisory.report_template)
         response = HttpResponse(result, content_type="application/pdf")
         filename = f"advisory_{advisory.pk}"
         response["Content-Disposition"] = f"attachment; filename={filename}.pdf"
@@ -164,9 +157,16 @@ class AdvisoryViewSet(PeCoReTModelViewSet):
             HttpResponse: Response with file attachment
         """
         advisory = self.get_object()
-        template = ReportTemplate.objects.get(name=settings.ADVISORY_TEMPLATE)
-        result = export_advisory_markdown(advisory, template)
+        result = export_advisory_markdown(advisory, advisory.report_template)
         response = HttpResponse(result, content_type="plain/text")
         filename = f"advisory_{advisory.pk}.md"
         response["Content-Disposition"] = f"attachment;filename={filename}"
+        return response
+
+    @action(detail=True, methods=["get"])
+    def preview(self, request, *args, **kwargs):
+        advisory = self.get_object()
+        result = export_advisory(advisory, advisory.report_template)
+        response = HttpResponse(result, content_type="application/pdf")
+        response["Content-Disposition"] = "inline"
         return response

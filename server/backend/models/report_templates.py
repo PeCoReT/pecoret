@@ -1,5 +1,7 @@
 from pathlib import Path
 from django.db import models
+from django.dispatch import receiver
+from django.core.exceptions import PermissionDenied, ValidationError
 
 
 class ReportTemplateStatus(models.IntegerChoices):
@@ -25,6 +27,19 @@ class ReportTemplate(models.Model):
     def __str__(self):
         return self.name
 
+    def __init__(self, *args , **kwargs):
+        super().__init__(*args, **kwargs)
+        self.old_name = self.name
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def clean(self):
+        if self.old_name == "default_template" and self.old_name != self.name:
+            raise ValidationError({"name": "cannot change name of default template"})
+        return super().clean()
+
     @property
     def template_path(self):
         """the path of the ``templates`` subdirectory of the report template.
@@ -36,3 +51,9 @@ class ReportTemplate(models.Model):
 
     class Meta:
         ordering = ["-date_created", "name"]
+
+
+@receiver(models.signals.pre_delete, sender=ReportTemplate)
+def prevent_default_template_delete(sender, instance, **kwargs):
+    if instance.name == "default_template":
+        raise PermissionDenied("Default template cannot be removed")
