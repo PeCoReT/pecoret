@@ -174,6 +174,16 @@ export default {
                             projectId: this.$route.params.projectId
                         }
                     })
+                },
+                {
+                    label: 'Notes',
+                    icon: 'fa fa-note-sticky',
+                    route: this.$router.resolve({
+                        name: 'ProjectNoteList',
+                        params: {
+                            projectId: this.$route.params.projectId
+                        }
+                    })
                 }
             ]
         };

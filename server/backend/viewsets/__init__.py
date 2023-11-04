@@ -25,3 +25,4 @@ from .finding_attachment import FindingImageAttachmentViewSet
 from .api_token import APITokenViewSet
 from .project_command import ProjectCommandViewSet
 from .project_scope import ProjectScopeViewSet
+from .project_note import ProjectNoteViewSet
