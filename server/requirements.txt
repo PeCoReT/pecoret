@@ -1,4 +1,4 @@
-django==4.2.6
+django==4.2.7
 djangorestframework==3.14.0
 django-filter==23.3
 Pillow==10.1.0
