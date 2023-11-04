@@ -209,6 +209,11 @@ const router = createRouter({
                                     path: '/projects/:projectId/scopes',
                                     name: 'ProjectScopeList',
                                     component: () => import('@/views/pages/projects/scope/ScopeList.vue')
+                                },
+                                {
+                                    path: '/projects/:projectId/notes',
+                                    name: 'ProjectNoteList',
+                                    component: () => import('@/views/pages/projects/notes/NoteList.vue')
                                 }
                             ]
                         }
