@@ -1,132 +1,104 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   style="opacity: 1; transition: opacity 0.3s ease 0s; overflow: visible;"
-   id="__tmb-270"
-   viewBox="0 0 512 512"
+   id="svg41491"
+   viewBox="0 0 77.926331 65.015991"
+   height="65.015991"
+   width="77.926331"
    version="1.1"
-   sodipodi:docname="2-no-fonts.svg"
-   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   sodipodi:docname="favicon.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
+  <metadata
+     id="metadata41497">
+    <rdf:rdf>
+      <cc:work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:work>
+    </rdf:rdf>
+  </metadata>
   <defs
-     id="defs27" />
-  <rect
-     x="0"
-     y="0"
-     width="512"
-     height="512"
-     fill="none"
-     id="rect2" />
-  <svg
-     viewBox="0 0 512 512"
-     data-svgdocument=""
-     id="_ulBRnfcOj3VyDQUqUOEKd"
-     class="fl-svgdocument"
-     overflow="hidden"
-     style="overflow: visible;"
-     version="1.1">
-    <rect
-       fill="none"
-       x="0"
-       y="0"
-       width="100%"
-       height="100%"
-       id="rect4" />
-    <defs
-       id="_FS__db40CzrMADV5NKuuW"
-       transform="matrix(2.1431543827056885, 0, 0, 2.1431543827056885, -72.2154769897461, -24.324373245239258)">
-      <linearGradient
-         id="o_f0e2g634c_3810"
-         x1="56.353604"
-         y1="37.105967"
-         x2="86.57544"
-         y2="37.105967"
-         gradientTransform="scale(1.0745542,0.93061851)"
-         gradientUnits="userSpaceOnUse">
-        <stop
-           id="_Uf-Qhgm0orNVLQFkSeLAv"
-           offset="0%"
-           stop-color="rgb(0, 136, 255)"
-           stop-opacity="0.55" />
-        <stop
-           id="_7xsj3EiEHsXRJ-gMIEYK9"
-           offset="100%"
-           stop-color="rgb(0, 136, 255)"
-           stop-opacity="0.55" />
-      </linearGradient>
-      <linearGradient
-         id="o_f0e2g634c_3811"
-         x1="31.419058"
-         y1="20.484004"
-         x2="61.64136"
-         y2="20.484004"
-         gradientTransform="scale(1.0745707,0.93060418)"
-         gradientUnits="userSpaceOnUse">
-        <stop
-           id="_Eqn2leSTavmwOdUcS5xzu"
-           offset="0%"
-           stop-color="rgb(28, 158, 117)"
-           stop-opacity="0.57" />
-        <stop
-           id="_j6kfcS4pun-P6NaI_RbGY"
-           offset="100%"
-           stop-color="rgb(28, 158, 117)"
-           stop-opacity="0.57" />
-      </linearGradient>
-      <linearGradient
-         id="o_f0e2g634c_3812"
-         x1="31.419058"
-         y1="86.973067"
-         x2="61.64136"
-         y2="86.973067"
-         gradientTransform="scale(1.0745707,0.93060418)"
-         gradientUnits="userSpaceOnUse">
-        <stop
-           id="_504xnfF9aJ8B3Zmo2TlcK"
-           offset="0%"
-           stop-color="rgb(95, 184, 57)"
-           stop-opacity="0.65" />
-        <stop
-           id="_OBCZye785zlBm9IH2IMZo"
-           offset="100%"
-           stop-color="rgb(95, 184, 57)"
-           stop-opacity="0.65" />
-      </linearGradient>
-    </defs>
-    <polygon
-       id="_Wwk3iq3G0ezD5GoNqFBJV"
-       points="31.327,79.531 39.445,65.469 31.327,51.406 15.089,51.406 6.97,65.469 15.089,79.531 "
-       fill="#2c9e1c"
-       transform="matrix(4.7260833,0,0,4.7260833,121.79442,-67.573778)" />
-    <polygon
-       id="_0Su4OwRjujkSFmNRpIXq7"
-       points="41.881,64.063 58.119,64.063 66.238,50 58.119,35.938 41.881,35.938 33.762,50 "
-       fill="#0088ff"
-       transform="matrix(4.7260833,0,0,4.7260833,-80.536278,5.5995848)" />
-    <polygon
-       id="_wIBIpgORDj0vjaTbXIjdQ"
-       points="6.97,34.531 15.089,48.594 31.327,48.594 39.445,34.531 31.327,20.469 15.089,20.469 "
-       fill="#1c9e75"
-       transform="matrix(4.7260833,0,0,4.7260833,198.01141,77.993914)" />
-    <polygon
-       id="_rqERDTKphf1ItlaxsFDHs"
-       points="68.673,20.469 60.555,34.531 68.673,48.594 84.911,48.594 93.03,34.531 84.911,20.469 "
-       fill="url(#o_f0e2g634c_3810)"
-       transform="matrix(4.7260833,0,0,4.7260833,-93.169159,145.01163)"
-       style="fill:url(#o_f0e2g634c_3810)" />
-    <polygon
-       id="_K8JfXVSBjM6xQeBzSqNNK"
-       points="41.881,5 33.762,19.063 41.881,33.125 58.119,33.125 66.238,19.063 58.119,5 "
-       fill="url(#o_f0e2g634c_3811)"
-       transform="matrix(4.7260833,0,0,4.7260833,110.26443,218.19014)"
-       style="fill:url(#o_f0e2g634c_3811)" />
-    <polygon
-       id="_pkpd5opzEyxxECyPV-sej"
-       points="41.881,66.875 33.762,80.938 41.881,95 58.119,95 66.238,80.938 58.119,66.875 "
-       fill="url(#o_f0e2g634c_3812)"
-       transform="matrix(4.7260833,0,0,4.7260833,-42.115108,-207.08481)"
-       style="fill:url(#o_f0e2g634c_3812)" />
-  </svg>
+     id="defs41495" />
+  <linearGradient
+     spreadMethod="pad"
+     y2="0.30000001"
+     x2="-0.1"
+     y1="1.2"
+     x1="0.30000001"
+     id="3d_gradient2-logo-76ceb8bc-5752-4e2c-ab00-227fe8aff3de">
+    <stop
+       id="stop41472"
+       stop-opacity="1"
+       stop-color="#ffffff"
+       offset="0%" />
+    <stop
+       id="stop41474"
+       stop-opacity="1"
+       stop-color="#000000"
+       offset="100%" />
+  </linearGradient>
+  <linearGradient
+     gradientTransform="rotate(-30)"
+     spreadMethod="pad"
+     y2="0.30000001"
+     x2="-0.1"
+     y1="1.2"
+     x1="0.30000001"
+     id="3d_gradient3-logo-76ceb8bc-5752-4e2c-ab00-227fe8aff3de">
+    <stop
+       id="stop41477"
+       stop-opacity="1"
+       stop-color="#ffffff"
+       offset="0%" />
+    <stop
+       id="stop41479"
+       stop-opacity="1"
+       stop-color="#cccccc"
+       offset="50%" />
+    <stop
+       id="stop41481"
+       stop-opacity="1"
+       stop-color="#000000"
+       offset="100%" />
+  </linearGradient>
+  <g
+     id="logo-group"
+     transform="translate(-151.72356,-329.59201)">
+    <g
+       id="logo-center">
+      <g
+         id="title"
+         style="font-style:normal;font-weight:normal;font-size:72px;line-height:1;font-family:'Brandmark Sans 25';font-variant-ligatures:normal;text-align:center;text-anchor:middle">
+        <path
+           id="path41572"
+           style="font-style:normal;font-weight:normal;font-size:72px;line-height:1;font-family:'Brandmark Sans 25';font-variant-ligatures:normal;text-align:center;text-anchor:middle"
+           d="m 324.81575,-50.4 h -43.704 c -0.792,0 -1.512,0.648 -1.512,1.512 v 7.128 c 0,0.864 0.72,1.512 1.512,1.512 h 43.704 c 2.736,0 4.968,2.232 4.968,4.968 0,2.736 -2.232,4.968 -4.968,4.968 h -43.704 c -0.792,0 -1.512,0.72 -1.512,1.512 v 27.288 c 0,0.792 0.72,1.512 1.512,1.512 h 7.128 c 0.864,0 1.512,-0.72 1.512,-1.512 v -18.576 h 35.064 c 8.352,0 15.192,-6.84 15.192,-15.192 0,-8.352 -6.84,-15.12 -15.192,-15.12 z"
+           stroke-width="0"
+           stroke-linejoin="miter"
+           stroke-miterlimit="2"
+           fill="#b779e7"
+           stroke="#b779e7"
+           transform="matrix(1.29,0,0,1.29,-208.96011,394.608)"
+           inkscape:export-filename="path41572.svg"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
+      </g>
+    </g>
+  </g>
 </svg>
