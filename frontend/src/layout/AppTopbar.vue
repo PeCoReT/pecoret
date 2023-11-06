@@ -158,8 +158,7 @@ export default {
     <Menubar :model="items" class="surface-card layout-topbar" ref="menu" :pt="{menu: {class: 'top-menu'}}">
         <template #start>
             <router-link to="/" class="layout-topbar-logo">
-                <img src="/images/logo-icon.svg" alt="logo" />
-                <span>PeCoReT</span>
+                <img src="/images/logo-no-slogan.svg" alt="logo" />
             </router-link>
         </template>
         <template #item="{ label, item, props, root, hasSubmenu }">

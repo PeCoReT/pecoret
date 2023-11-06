@@ -33,14 +33,12 @@ export default {
 <template>
     <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
         <div class="flex flex-column align-items-center justify-content-center">
-            <img src="/images/logo-icon.svg" alt="PeCoReT logo" class="mb-5 w-6rem flex-shrink-0" />
+            <img src="/images/logo-icon.svg" alt="PeCoReT logo" class="mb-5 flex-shrink-0" />
             <div
                 style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
-                <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius: 53px">
+                <div class="w-full surface-card pt-5 pb-8 px-5 sm:px-8" style="border-radius: 53px">
                     <div class="text-center mb-5">
-                        <div class="text-900 text-4xl font-medium mb-3">PeCoReT</div>
-                        <div class="text-900 text-1xl font-medium mb-3">Pentest Collaboration and Reporting Tool!</div>
-                        <span class="text-600 font-medium">Activate Account</span>
+                        <span class="text-600 font-bold" style="font-size: large">Activate Account</span>
                     </div>
 
                     <div>

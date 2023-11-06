@@ -16,12 +16,13 @@
     color: var(--surface-900);
     font-size: 1.5rem;
     font-weight: 500;
-    width: 350px;
+    width: 250px;
     border-radius: 12px;
     order: 1;
 
     img {
       height: 2.5rem;
+      max-width: 100%;
       margin-right: .5rem;
     }
   }
