@@ -100,6 +100,11 @@ class AssetGenericRelatedField(GenericRelatedField):
         self.fail("incorrect_value")
 
 
+class ObjectLockRelatedField(GenericRelatedField):
+    def to_internal_value(self, data):
+        return data
+
+
 class ProjectFilteredPrimaryKeyRelatedField(PrimaryKeyRelatedField):
     """field that filters relations for a project.
     model must have a queryset `for_project` method.

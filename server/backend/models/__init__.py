@@ -29,6 +29,7 @@ from .project_command import ProjectCommand
 from .project_scope import ProjectScope
 from .project_note import ProjectNote
 
+from .object_lock import ObjectLock
 
 # assets
 from .assets.host import Host
