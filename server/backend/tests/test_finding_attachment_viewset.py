@@ -20,8 +20,8 @@ class ImageAttachmentListView(APITestCase, PeCoReTTestCaseMixin):
             user=self.pentester2,
             vulnerability__project=self.project2,
         )
-        self.proof1 = self.create_instance(FindingImageAttachment, finding=self.finding1, caption="proof1")
-        self.proof2 = self.create_instance(FindingImageAttachment, finding=self.finding2, caption="proof2")
+        self.proof1 = self.create_instance(FindingImageAttachment, finding=self.finding1)
+        self.proof2 = self.create_instance(FindingImageAttachment, finding=self.finding2)
         self.url = self.get_url(
             "backend:findings:attachment-list",
             project=self.project1.pk,
@@ -112,8 +112,8 @@ class ProofDestroyViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
             user=self.pentester2,
             vulnerability__project=self.project2,
         )
-        self.proof1 = self.create_instance(FindingImageAttachment, finding=self.finding1, caption="proof1")
-        self.proof2 = self.create_instance(FindingImageAttachment, finding=self.finding2, caption="proof2")
+        self.proof1 = self.create_instance(FindingImageAttachment, finding=self.finding1)
+        self.proof2 = self.create_instance(FindingImageAttachment, finding=self.finding2)
         self.url = self.get_url(
             "backend:findings:attachment-detail",
             project=self.project1.pk,

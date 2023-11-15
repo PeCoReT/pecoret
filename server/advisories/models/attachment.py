@@ -29,7 +29,6 @@ class ImageAttachment(TimestampedModel):
     advisory = models.ForeignKey('backend.Advisory', on_delete=models.CASCADE)
     image = models.ImageField(max_length=256, upload_to=upload_path)
     name = models.CharField(max_length=128)
-    caption = models.CharField(max_length=256, null=True, blank=True)
 
     class Meta:
         ordering = ["-date_updated"]

@@ -55,18 +55,16 @@ export default {
     <div class="grid">
         <div class="col-12">
             <FindingTabMenu class="surface-card"></FindingTabMenu>
-            <Card class="border-noround-top">
-                <template #content>
-                    <Timeline :value="items" class="mt-3">
-                        <template #opposite="slotProps">
-                            <small class="p-text-secondary">{{ slotProps.item.date_created }}</small>
-                        </template>
-                        <template #content="slotProps">
-                            {{ slotProps.item.title }}
-                        </template>
-                    </Timeline>
-                </template>
-            </Card>
+            <div class="card border-noround-top">
+                <Timeline :value="items" class="mt-3">
+                    <template #opposite="slotProps">
+                        <small class="p-text-secondary">{{ slotProps.item.date_created }}</small>
+                    </template>
+                    <template #content="slotProps">
+                        {{ slotProps.item.title }}
+                    </template>
+                </Timeline>
+            </div>
         </div>
     </div>
 </template>

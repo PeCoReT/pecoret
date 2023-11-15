@@ -100,41 +100,39 @@ export default {
     <div class="grid">
         <div class="col-12">
             <CompanyTabMenu class="surface-card"></CompanyTabMenu>
-            <Card>
-                <template #content>
-                    <div class="col-12">
-                        <DataTable
-                            :paginator="true"
-                            dataKey="pk"
-                            :rowHover="items.length > 0"
-                            :rows="pagination.limit"
-                            :value="items"
-                            filterDisplay="menu"
-                            :lazy="true"
-                            responsiveLayout="scroll"
-                            :totalRecords="totalRecords"
-                            :loading="loading"
-                            @page="onPage"
-                            @sort="onSort"
-                            @filter="onFilter"
-                        >
-                            <template #empty>
-                                <BlankSlate title="No contacts!" text="No contacts found!" icon="fa fa-address-card"></BlankSlate>
+            <div class="card border-noround-top">
+                <div class="col-12">
+                    <DataTable
+                        :paginator="true"
+                        dataKey="pk"
+                        :rowHover="items.length > 0"
+                        :rows="pagination.limit"
+                        :value="items"
+                        filterDisplay="menu"
+                        :lazy="true"
+                        responsiveLayout="scroll"
+                        :totalRecords="totalRecords"
+                        :loading="loading"
+                        @page="onPage"
+                        @sort="onSort"
+                        @filter="onFilter"
+                    >
+                        <template #empty>
+                            <BlankSlate title="No contacts!" text="No contacts found!" icon="fa fa-address-card"></BlankSlate>
+                        </template>
+                        <Column field="first_name" header="First Name"></Column>
+                        <Column field="last_name" header="Last Name"></Column>
+                        <Column field="email" header="E-Mail"></Column>
+                        <Column field="phone" header="Phone"></Column>
+                        <Column field="role" header="Role"></Column>
+                        <Column header="Actions">
+                            <template #body="slotProps">
+                                <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                             </template>
-                            <Column field="first_name" header="First Name"></Column>
-                            <Column field="last_name" header="Last Name"></Column>
-                            <Column field="email" header="E-Mail"></Column>
-                            <Column field="phone" header="Phone"></Column>
-                            <Column field="role" header="Role"></Column>
-                            <Column header="Actions">
-                                <template #body="slotProps">
-                                    <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
-                                </template>
-                            </Column>
-                        </DataTable>
-                    </div>
-                </template>
-            </Card>
+                        </Column>
+                    </DataTable>
+                </div>
+            </div>
         </div>
     </div>
 </template>

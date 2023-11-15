@@ -147,7 +147,10 @@ export default {
                 lossOfAvailability: [
                     { value: 0, title: 'N/A' },
                     { value: 1, title: 'Minimal secondary services interrupted' },
-                    { value: 5, title: 'Minimal primary services interrupted or extensive secondary services interrupted' },
+                    {
+                        value: 5,
+                        title: 'Minimal primary services interrupted or extensive secondary services interrupted'
+                    },
                     { value: 7, title: 'Extensive primary services interrupted' },
                     { value: 9, title: 'All services completely lost' }
                 ],
@@ -230,202 +233,180 @@ export default {
         <div class="col-12">
             <FindingTabMenu class="surface-card"></FindingTabMenu>
 
-            <Card class="border-noround-top">
-                <template #content>
-                    <p class="text-xl">CVSS Base-Score</p>
+            <div class="card border-noround-top">
+                <p class="text-xl">CVSS Base-Score</p>
 
-                    <div class="grid">
-                        <div class="col-6">
-                            <div class="flex flex-column gap-2">
-                                <label for="av">Attack Vector (AV)</label>
-                                <Dropdown v-model="model.base_cvss.av" :options="cvssChoices.av" optionValue="value" @change="patchCVSS({ av: this.model.base_cvss.av })" optionLabel="title"> </Dropdown>
-                            </div>
-
-                            <div class="flex flex-column gap-2">
-                                <label for="av">Attack Complexity (AC)</label>
-                                <Dropdown v-model="model.base_cvss.ac" :options="cvssChoices.ac" optionLabel="title" optionValue="value" @change="patchCVSS({ ac: this.model.base_cvss.ac })"> </Dropdown>
-                            </div>
-                            <div class="flex flex-column gap-2">
-                                <label for="av">Privileges Required (PR)</label>
-                                <Dropdown v-model="model.base_cvss.pr" :options="cvssChoices.pr" optionLabel="title" optionValue="value" @change="patchCVSS({ pr: this.model.base_cvss.pr })"> </Dropdown>
-                            </div>
-                            <div class="flex flex-column gap-2">
-                                <label for="av">User Interaction (UI)</label>
-                                <Dropdown v-model="model.base_cvss.ui" :options="cvssChoices.ui" optionLabel="title" optionValue="value" @change="patchCVSS({ ui: this.model.base_cvss.ui })"> </Dropdown>
-                            </div>
+                <div class="grid">
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2">
+                            <label for="av">Attack Vector (AV)</label>
+                            <Dropdown v-model="model.base_cvss.av" :options="cvssChoices.av" optionValue="value" @change="patchCVSS({ av: this.model.base_cvss.av })" optionLabel="title"></Dropdown>
                         </div>
-                        <div class="col-6">
-                            <div class="flex flex-column gap-2">
-                                <label for="av">Scope (S)</label>
-                                <Dropdown v-model="model.base_cvss.s" :options="cvssChoices.s" optionLabel="title" optionValue="value" @change="patchCVSS({ s: this.model.base_cvss.s })"> </Dropdown>
-                            </div>
-                            <div class="flex flex-column gap-2">
-                                <label for="av">Confidentiality (C)</label>
-                                <Dropdown v-model="model.base_cvss.c" :options="cvssChoices.cia" optionLabel="title" optionValue="value" @change="patchCVSS({ c: this.model.base_cvss.c })"> </Dropdown>
-                            </div>
-                            <div class="flex flex-column gap-2">
-                                <label for="av">Integrity (I)</label>
-                                <Dropdown v-model="model.base_cvss.i" :options="cvssChoices.cia" optionLabel="title" optionValue="value" @change="patchCVSS({ i: this.model.base_cvss.i })"> </Dropdown>
-                            </div>
-                            <div class="flex flex-column gap-2">
-                                <label for="av">Availability (A)</label>
-                                <Dropdown v-model="model.base_cvss.a" :options="cvssChoices.cia" optionLabel="title" optionValue="value" @change="patchCVSS({ a: this.model.base_cvss.a })"> </Dropdown>
-                            </div>
+
+                        <div class="flex flex-column gap-2">
+                            <label for="av">Attack Complexity (AC)</label>
+                            <Dropdown v-model="model.base_cvss.ac" :options="cvssChoices.ac" optionLabel="title" optionValue="value" @change="patchCVSS({ ac: this.model.base_cvss.ac })"></Dropdown>
+                        </div>
+                        <div class="flex flex-column gap-2">
+                            <label for="av">Privileges Required (PR)</label>
+                            <Dropdown v-model="model.base_cvss.pr" :options="cvssChoices.pr" optionLabel="title" optionValue="value" @change="patchCVSS({ pr: this.model.base_cvss.pr })"></Dropdown>
+                        </div>
+                        <div class="flex flex-column gap-2">
+                            <label for="av">User Interaction (UI)</label>
+                            <Dropdown v-model="model.base_cvss.ui" :options="cvssChoices.ui" optionLabel="title" optionValue="value" @change="patchCVSS({ ui: this.model.base_cvss.ui })"></Dropdown>
                         </div>
                     </div>
-                    <div class="grid">
-                        <div class="col-12">
-                            <ProgressBar :value="model.base_cvss.cvss31_base_score * 10">{{ model.base_cvss.cvss31_base_score }}</ProgressBar>
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2">
+                            <label for="av">Scope (S)</label>
+                            <Dropdown v-model="model.base_cvss.s" :options="cvssChoices.s" optionLabel="title" optionValue="value" @change="patchCVSS({ s: this.model.base_cvss.s })"></Dropdown>
+                        </div>
+                        <div class="flex flex-column gap-2">
+                            <label for="av">Confidentiality (C)</label>
+                            <Dropdown v-model="model.base_cvss.c" :options="cvssChoices.cia" optionLabel="title" optionValue="value" @change="patchCVSS({ c: this.model.base_cvss.c })"></Dropdown>
+                        </div>
+                        <div class="flex flex-column gap-2">
+                            <label for="av">Integrity (I)</label>
+                            <Dropdown v-model="model.base_cvss.i" :options="cvssChoices.cia" optionLabel="title" optionValue="value" @change="patchCVSS({ i: this.model.base_cvss.i })"></Dropdown>
+                        </div>
+                        <div class="flex flex-column gap-2">
+                            <label for="av">Availability (A)</label>
+                            <Dropdown v-model="model.base_cvss.a" :options="cvssChoices.cia" optionLabel="title" optionValue="value" @change="patchCVSS({ a: this.model.base_cvss.a })"></Dropdown>
                         </div>
                     </div>
-                </template>
-            </Card>
+                </div>
+                <div class="grid">
+                    <div class="col-12">
+                        <ProgressBar :value="model.base_cvss.cvss31_base_score * 10">
+                            {{ model.base_cvss.cvss31_base_score }}
+                        </ProgressBar>
+                    </div>
+                </div>
+            </div>
 
-            <Card class="mt-3">
-                <template #content>
-                    <p class="text-xl">OWASP Risk-Rating</p>
+            <div class="card mt-3">
+                <p class="text-xl">OWASP Risk-Rating</p>
 
-                    <div class="grid">
-                        <div class="col-6">
-                            <div class="flex flex-column gap-2">
-                                <label for="skill_level">Skill Level</label>
-                                <Dropdown v-model="model.owasp.skill_level" :options="owaspChoices.skillLevel" optionLabel="title" optionValue="value" @change="patchOWASP({ skill_level: this.model.owasp.skill_level })"></Dropdown>
-                            </div>
-                            <div class="flex flex-column gap-2">
-                                <label for="skill_level">Motive</label>
-                                <Dropdown v-model="model.owasp.motive" :options="owaspChoices.motive" optionLabel="title" optionValue="value" @change="patchOWASP({ motive: this.model.owasp.motive })"></Dropdown>
-                            </div>
-                            <div class="flex flex-column gap-2">
-                                <label for="skill_level">Opportunity</label>
-                                <Dropdown v-model="model.owasp.opportunity" :options="owaspChoices.opportunity" optionLabel="title" optionValue="value" @change="patchOWASP({ opportunity: this.model.owasp.opportunity })"></Dropdown>
-                            </div>
-                            <div class="flex flex-column gap-2">
-                                <label for="skill_level">Size</label>
-                                <Dropdown v-model="model.owasp.size" :options="owaspChoices.size" optionLabel="title" optionValue="value" @change="patchOWASP({ size: this.model.owasp.size })"></Dropdown>
-                            </div>
+                <div class="grid">
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2">
+                            <label for="skill_level">Skill Level</label>
+                            <Dropdown v-model="model.owasp.skill_level" :options="owaspChoices.skillLevel" optionLabel="title" optionValue="value" @change="patchOWASP({ skill_level: this.model.owasp.skill_level })"></Dropdown>
                         </div>
-                        <div class="col-6">
-                            <div class="flex flex-column gap-2">
-                                <label for="skill_level">Ease of Discovery</label>
-                                <Dropdown
-                                    v-model="model.owasp.ease_of_discovery"
-                                    :options="owaspChoices.easeOfDiscovery"
-                                    optionLabel="title"
-                                    optionValue="value"
-                                    @change="patchOWASP({ ease_of_discovery: this.model.owasp.ease_of_discovery })"
-                                ></Dropdown>
-                            </div>
-                            <div class="flex flex-column gap-2">
-                                <label for="skill_level">Ease of Exploit</label>
-                                <Dropdown v-model="model.owasp.ease_of_exploit" :options="owaspChoices.easeOfExploit" optionLabel="title" optionValue="value" @change="patchOWASP({ ease_of_exploit: this.model.owasp.ease_of_exploit })"></Dropdown>
-                            </div>
-                            <div class="flex flex-column gap-2">
-                                <label for="skill_level">Awareness</label>
-                                <Dropdown v-model="model.owasp.awareness" :options="owaspChoices.awareness" optionLabel="title" optionValue="value" @change="patchOWASP({ awareness: this.model.owasp.awareness })"></Dropdown>
-                            </div>
-                            <div class="flex flex-column gap-2">
-                                <label for="skill_level">Intrusion Detection</label>
-                                <Dropdown
-                                    v-model="model.owasp.intrusion_detection"
-                                    :options="owaspChoices.intrusionDetection"
-                                    optionLabel="title"
-                                    optionValue="value"
-                                    @change="patchOWASP({ intrusion_detection: this.model.owasp.intrusion_detection })"
-                                ></Dropdown>
-                            </div>
+                        <div class="flex flex-column gap-2">
+                            <label for="skill_level">Motive</label>
+                            <Dropdown v-model="model.owasp.motive" :options="owaspChoices.motive" optionLabel="title" optionValue="value" @change="patchOWASP({ motive: this.model.owasp.motive })"></Dropdown>
+                        </div>
+                        <div class="flex flex-column gap-2">
+                            <label for="skill_level">Opportunity</label>
+                            <Dropdown v-model="model.owasp.opportunity" :options="owaspChoices.opportunity" optionLabel="title" optionValue="value" @change="patchOWASP({ opportunity: this.model.owasp.opportunity })"></Dropdown>
+                        </div>
+                        <div class="flex flex-column gap-2">
+                            <label for="skill_level">Size</label>
+                            <Dropdown v-model="model.owasp.size" :options="owaspChoices.size" optionLabel="title" optionValue="value" @change="patchOWASP({ size: this.model.owasp.size })"></Dropdown>
                         </div>
                     </div>
-
-                    <div class="grid">
-                        <div class="col-12">
-                            <p>Likelihood Factors</p>
-                            <ProgressBar v-if="model.owasp.likelihood_factors" :value="model.owasp.likelihood_factors[0] * 10">{{ model.owasp.likelihood_factors[0] }}</ProgressBar>
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2">
+                            <label for="skill_level">Ease of Discovery</label>
+                            <Dropdown v-model="model.owasp.ease_of_discovery" :options="owaspChoices.easeOfDiscovery" optionLabel="title" optionValue="value" @change="patchOWASP({ ease_of_discovery: this.model.owasp.ease_of_discovery })"></Dropdown>
+                        </div>
+                        <div class="flex flex-column gap-2">
+                            <label for="skill_level">Ease of Exploit</label>
+                            <Dropdown v-model="model.owasp.ease_of_exploit" :options="owaspChoices.easeOfExploit" optionLabel="title" optionValue="value" @change="patchOWASP({ ease_of_exploit: this.model.owasp.ease_of_exploit })"></Dropdown>
+                        </div>
+                        <div class="flex flex-column gap-2">
+                            <label for="skill_level">Awareness</label>
+                            <Dropdown v-model="model.owasp.awareness" :options="owaspChoices.awareness" optionLabel="title" optionValue="value" @change="patchOWASP({ awareness: this.model.owasp.awareness })"></Dropdown>
+                        </div>
+                        <div class="flex flex-column gap-2">
+                            <label for="skill_level">Intrusion Detection</label>
+                            <Dropdown
+                                v-model="model.owasp.intrusion_detection"
+                                :options="owaspChoices.intrusionDetection"
+                                optionLabel="title"
+                                optionValue="value"
+                                @change="patchOWASP({ intrusion_detection: this.model.owasp.intrusion_detection })"
+                            ></Dropdown>
                         </div>
                     </div>
+                </div>
 
-                    <div class="grid mt-3">
-                        <div class="col-6">
-                            <div class="flex flex-column gap-2">
-                                <label for="skill_level">Loss of Confidentiality</label>
-                                <Dropdown
-                                    v-model="model.owasp.loss_of_confidentiality"
-                                    :options="owaspChoices.lossOfConfidentiality"
-                                    optionLabel="title"
-                                    optionValue="value"
-                                    @change="patchOWASP({ loss_of_confidentiality: this.model.owasp.loss_of_confidentiality })"
-                                ></Dropdown>
-                            </div>
-                            <div class="flex flex-column gap-2">
-                                <label for="skill_level">Loss of Availability</label>
-                                <Dropdown
-                                    v-model="model.owasp.loss_of_availability"
-                                    :options="owaspChoices.lossOfAvailability"
-                                    optionLabel="title"
-                                    optionValue="value"
-                                    @change="patchOWASP({ loss_of_availability: this.model.owasp.loss_of_availability })"
-                                ></Dropdown>
-                            </div>
-                            <div class="flex flex-column gap-2">
-                                <label for="skill_level">Loss of Integrity</label>
-                                <Dropdown
-                                    v-model="model.owasp.loss_of_integrity"
-                                    :options="owaspChoices.lossOfIntegrity"
-                                    optionLabel="title"
-                                    optionValue="value"
-                                    @change="patchOWASP({ loss_of_integrity: this.model.owasp.loss_of_integrity })"
-                                ></Dropdown>
-                            </div>
-                            <div class="flex flex-column gap-2">
-                                <label for="skill_level">Loss of Accountability</label>
-                                <Dropdown
-                                    v-model="model.owasp.loss_of_accountability"
-                                    :options="owaspChoices.lossOfAccountability"
-                                    optionLabel="title"
-                                    optionValue="value"
-                                    @change="patchOWASP({ loss_of_accountability: this.model.owasp.loss_of_accountability })"
-                                ></Dropdown>
-                            </div>
+                <div class="grid">
+                    <div class="col-12">
+                        <p>Likelihood Factors</p>
+                        <ProgressBar v-if="model.owasp.likelihood_factors" :value="model.owasp.likelihood_factors[0] * 10">
+                            {{ model.owasp.likelihood_factors[0] }}
+                        </ProgressBar>
+                    </div>
+                </div>
+
+                <div class="grid mt-3">
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2">
+                            <label for="skill_level">Loss of Confidentiality</label>
+                            <Dropdown
+                                v-model="model.owasp.loss_of_confidentiality"
+                                :options="owaspChoices.lossOfConfidentiality"
+                                optionLabel="title"
+                                optionValue="value"
+                                @change="patchOWASP({ loss_of_confidentiality: this.model.owasp.loss_of_confidentiality })"
+                            ></Dropdown>
                         </div>
-                        <div class="col-6">
-                            <div class="flex flex-column gap-2">
-                                <label for="skill_level">Financial Damage</label>
-                                <Dropdown v-model="model.owasp.financial_damage" :options="owaspChoices.financialDamage" optionLabel="title" optionValue="value" @change="patchOWASP({ financial_damage: this.model.owasp.financial_damage })"></Dropdown>
-                            </div>
-                            <div class="flex flex-column gap-2">
-                                <label for="skill_level">Reputation Damage</label>
-                                <Dropdown
-                                    v-model="model.owasp.reputation_damage"
-                                    :options="owaspChoices.reputationDamage"
-                                    optionLabel="title"
-                                    optionValue="value"
-                                    @change="patchOWASP({ reputation_damage: this.model.owasp.reputation_damage })"
-                                ></Dropdown>
-                            </div>
-                            <div class="flex flex-column gap-2">
-                                <label for="skill_level">Non-compliance</label>
-                                <Dropdown v-model="model.owasp.non_compliance" :options="owaspChoices.nonCompliance" optionLabel="title" optionValue="value" @change="patchOWASP({ non_compliance: this.model.owasp.non_compliance })"></Dropdown>
-                            </div>
-                            <div class="flex flex-column gap-2">
-                                <label for="skill_level">Privacy Violation</label>
-                                <Dropdown
-                                    v-model="model.owasp.privacy_violation"
-                                    :options="owaspChoices.privacyViolation"
-                                    optionLabel="title"
-                                    optionValue="value"
-                                    @change="patchOWASP({ privacy_violation: this.model.owasp.privacy_violation })"
-                                ></Dropdown>
-                            </div>
+                        <div class="flex flex-column gap-2">
+                            <label for="skill_level">Loss of Availability</label>
+                            <Dropdown
+                                v-model="model.owasp.loss_of_availability"
+                                :options="owaspChoices.lossOfAvailability"
+                                optionLabel="title"
+                                optionValue="value"
+                                @change="patchOWASP({ loss_of_availability: this.model.owasp.loss_of_availability })"
+                            ></Dropdown>
+                        </div>
+                        <div class="flex flex-column gap-2">
+                            <label for="skill_level">Loss of Integrity</label>
+                            <Dropdown v-model="model.owasp.loss_of_integrity" :options="owaspChoices.lossOfIntegrity" optionLabel="title" optionValue="value" @change="patchOWASP({ loss_of_integrity: this.model.owasp.loss_of_integrity })"></Dropdown>
+                        </div>
+                        <div class="flex flex-column gap-2">
+                            <label for="skill_level">Loss of Accountability</label>
+                            <Dropdown
+                                v-model="model.owasp.loss_of_accountability"
+                                :options="owaspChoices.lossOfAccountability"
+                                optionLabel="title"
+                                optionValue="value"
+                                @change="patchOWASP({ loss_of_accountability: this.model.owasp.loss_of_accountability })"
+                            ></Dropdown>
                         </div>
                     </div>
-
-                    <div class="grid">
-                        <div class="col-12">
-                            <p>Impact Factors</p>
-                            <ProgressBar v-if="model.owasp.impact_factors" :value="model.owasp.impact_factors[0] * 10">{{ model.owasp.impact_factors[0] }}</ProgressBar>
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2">
+                            <label for="skill_level">Financial Damage</label>
+                            <Dropdown v-model="model.owasp.financial_damage" :options="owaspChoices.financialDamage" optionLabel="title" optionValue="value" @change="patchOWASP({ financial_damage: this.model.owasp.financial_damage })"></Dropdown>
+                        </div>
+                        <div class="flex flex-column gap-2">
+                            <label for="skill_level">Reputation Damage</label>
+                            <Dropdown v-model="model.owasp.reputation_damage" :options="owaspChoices.reputationDamage" optionLabel="title" optionValue="value" @change="patchOWASP({ reputation_damage: this.model.owasp.reputation_damage })"></Dropdown>
+                        </div>
+                        <div class="flex flex-column gap-2">
+                            <label for="skill_level">Non-compliance</label>
+                            <Dropdown v-model="model.owasp.non_compliance" :options="owaspChoices.nonCompliance" optionLabel="title" optionValue="value" @change="patchOWASP({ non_compliance: this.model.owasp.non_compliance })"></Dropdown>
+                        </div>
+                        <div class="flex flex-column gap-2">
+                            <label for="skill_level">Privacy Violation</label>
+                            <Dropdown v-model="model.owasp.privacy_violation" :options="owaspChoices.privacyViolation" optionLabel="title" optionValue="value" @change="patchOWASP({ privacy_violation: this.model.owasp.privacy_violation })"></Dropdown>
                         </div>
                     </div>
-                </template>
-            </Card>
+                </div>
+
+                <div class="grid">
+                    <div class="col-12">
+                        <p>Impact Factors</p>
+                        <ProgressBar v-if="model.owasp.impact_factors" :value="model.owasp.impact_factors[0] * 10">
+                            {{ model.owasp.impact_factors[0] }}
+                        </ProgressBar>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>

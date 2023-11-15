@@ -103,44 +103,42 @@ export default {
     <div class="grid">
         <div class="col-12">
             <ReportTabMenu class="surface-card"></ReportTabMenu>
-            <Card>
-                <template #content>
-                    <div class="grid">
-                        <div class="col-12 md:col-3">
-                            <DetailCardWithIcon title="Language" icon="fa fa-flag" class="surface-ground" :text="project.language"></DetailCardWithIcon>
-                        </div>
-                        <div class="col-12 md:col-3">
-                            <DetailCardWithIcon title="Author" icon="fa fa-feather" class="surface-ground" :text="report.author.username"></DetailCardWithIcon>
-                        </div>
-                        <div class="col-12 md:col-3">
-                            <DetailCardWithIcon title="Template" icon="fa fa-wand-magic-sparkles" class="surface-ground" :text="report.template.name"></DetailCardWithIcon>
-                        </div>
-                        <div class="col-12 md:col-3">
-                            <DetailCardWithIcon title="Variant" icon="fa fa-file-invoice" class="surface-ground" :text="report.variant"></DetailCardWithIcon>
-                        </div>
+            <div class="card border-noround-top">
+                <div class="grid">
+                    <div class="col-12 md:col-3">
+                        <DetailCardWithIcon title="Language" icon="fa fa-flag" class="surface-ground" :text="project.language"></DetailCardWithIcon>
                     </div>
+                    <div class="col-12 md:col-3">
+                        <DetailCardWithIcon title="Author" icon="fa fa-feather" class="surface-ground" :text="report.author.username"></DetailCardWithIcon>
+                    </div>
+                    <div class="col-12 md:col-3">
+                        <DetailCardWithIcon title="Template" icon="fa fa-wand-magic-sparkles" class="surface-ground" :text="report.template.name"></DetailCardWithIcon>
+                    </div>
+                    <div class="col-12 md:col-3">
+                        <DetailCardWithIcon title="Variant" icon="fa fa-file-invoice" class="surface-ground" :text="report.variant"></DetailCardWithIcon>
+                    </div>
+                </div>
 
-                    <div class="grid formgrid p-fluid mt-3">
-                        <div class="field col-12">
-                            <label for="name">Name</label>
-                            <InputText id="name" v-model="report.name"></InputText>
-                        </div>
-                        <div class="field col-12">
-                            <label for="title">Title</label>
-                            <InputText id="title" v-model="report.title"></InputText>
-                        </div>
-                        <div class="field col-12">
-                            <label for="author">Author</label>
-                            <Dropdown id="author" optionLabel="username" :options="authorChoices" v-model="report.author" @focus="getAuthorChoices"></Dropdown>
-                        </div>
-                        <div class="col-12">
-                            <div class="flex justify-content-end mt-3">
-                                <Button label="Save" @click="updateReport"></Button>
-                            </div>
+                <div class="grid formgrid p-fluid mt-3">
+                    <div class="field col-12">
+                        <label for="name">Name</label>
+                        <InputText id="name" v-model="report.name"></InputText>
+                    </div>
+                    <div class="field col-12">
+                        <label for="title">Title</label>
+                        <InputText id="title" v-model="report.title"></InputText>
+                    </div>
+                    <div class="field col-12">
+                        <label for="author">Author</label>
+                        <Dropdown id="author" optionLabel="username" :options="authorChoices" v-model="report.author" @focus="getAuthorChoices"></Dropdown>
+                    </div>
+                    <div class="col-12">
+                        <div class="flex justify-content-end mt-3">
+                            <Button label="Save" @click="updateReport"></Button>
                         </div>
                     </div>
-                </template>
-            </Card>
+                </div>
+            </div>
         </div>
     </div>
 </template>

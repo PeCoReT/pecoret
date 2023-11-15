@@ -3,6 +3,7 @@ import markdown from '@/utils/markdown';
 import FindingService from '@/service/FindingService';
 import FindingTabMenu from '@/components/pages/FindingTabMenu.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
+import BlankSlate from "@/components/BlankSlate.vue";
 
 export default {
     name: 'FindingCommentList',
@@ -57,7 +58,7 @@ export default {
             let data = {
                 comment: this.model.comment
             };
-            this.findingService.createComment(this.$api, this.projectId, this.findingId, data).then((response) => {
+            this.findingService.createComment(this.$api, this.projectId, this.findingId, data).then(() => {
                 this.model.comment = '';
                 this.getComments();
             });
@@ -66,7 +67,7 @@ export default {
     mounted() {
         this.getComments();
     },
-    components: { MarkdownEditor, FindingTabMenu }
+    components: { BlankSlate, MarkdownEditor, FindingTabMenu }
 };
 </script>
 
@@ -80,11 +81,23 @@ export default {
         <div class="col-12">
             <FindingTabMenu class="surface-card"></FindingTabMenu>
             <div class="card border-noround-top" v-if="items.length > 1">
-                <div class="card" v-for="comment in items" :key="comment.pk">
-                    {{ comment.comment }}
+                <div class="card pb-3 pt-4" v-for="comment in items" :key="comment.pk">
+                    <div class="grid pt-2">
+                        <div class="col-12">
+                            {{ comment.comment }}
+                        </div>
+                    </div>
+                    <div class="grid text-color-secondary">
+                        <div class="col-12">
+                            <small>{{ comment.user.username }} - {{ comment.date_created }}</small>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="card mt-3">
+            <div class="card border-noround-top" v-else>
+                <BlankSlate title="No comments" text="No comments found!" icon="fa fa-comments"></BlankSlate>
+            </div>
+            <div class="card">
                 <MarkdownEditor v-model="model.comment"></MarkdownEditor>
                 <div class="flex justify-content-end">
                     <Button @click="saveNewComment" label="Save"></Button>

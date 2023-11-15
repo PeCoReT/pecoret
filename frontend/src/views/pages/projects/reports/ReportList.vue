@@ -25,8 +25,8 @@ export default {
         this.getItems();
     },
     methods: {
-        onSort(event) {},
-        onFilter(event) {},
+        onSort() {},
+        onFilter() {},
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();

@@ -7,7 +7,7 @@ class ImageAttachmentSerializer(serializers.ModelSerializer):
         model = ImageAttachment
         fields = [
             "pk", "date_created", "date_updated",
-            "image", "caption"
+            "image"
         ]
 
     def to_representation(self, instance):

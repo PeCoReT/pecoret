@@ -185,7 +185,7 @@ class Finding(models.Model):
         This allows our injected data to be bleached before further used
         :return:
         """
-        image_re = r'(?P<alt>!\[[^\]]*\])\((?P<filename>.*/projects/\d+/findings/\d+/attachments/(?P<attachment>\d+)/preview/+)(?=\"|\))\)'
+        image_re = r'(?P<alt>!\[(?P<caption>[^\]]*)\])\((?P<filename>.*/projects/\d+/findings/\d+/attachments/(?P<attachment>\d+)/preview/+)(?=\"|\))\)'
 
         def attachment_replace(match):
             attachment_pk = match.group("attachment")
@@ -194,7 +194,8 @@ class Finding(models.Model):
                 # not an attachment for our finding! nice try!
                 return match.group()
             attachment = qs.get()
-            template = f"<div class='image-proof'><div class='image-container'><img src='{attachment.image_base64}'></div><div class='caption'><span class='figure-prefix'>Figure</span><span>{attachment.caption}</span></div></div>"
+            caption = match.group('caption')
+            template = f"<div class='image-proof'><div class='image-container'><img src='{attachment.image_base64}'></div><div class='caption'><span class='figure-prefix'>Figure</span><span>{caption}</span></div></div>"
             return template
         proof_text = re.sub(image_re, attachment_replace, self.proof_text)
         return proof_text
