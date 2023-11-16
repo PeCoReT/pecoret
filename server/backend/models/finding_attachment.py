@@ -32,7 +32,6 @@ class FindingImageAttachment(TimestampedModel):
     finding = models.ForeignKey('backend.Finding', on_delete=models.CASCADE)
     image = models.ImageField(max_length=256, upload_to=finding_upload_path)
     name = models.CharField(max_length=128)
-    caption = models.CharField(max_length=256, null=True, blank=True)
 
     class Meta:
         ordering = ["-date_updated"]

@@ -117,7 +117,7 @@ export default {
         <div class="col-12">
             <ReportTabMenu class="surface-card"></ReportTabMenu>
 
-            <div class="card">
+            <div class="card border-noround-top">
                 <DataTable paginator lazy dataKey="pk" :value="items" :rows="pagination.limit" :totalRecords="totalRecords" filterDisplay="menu" :loading="loading" @page="onPage" @sort="onSort" :rowHover="items.length > 0" @filter="onFilter">
                     <template #empty>
                         <BlankSlate icon="fa fa-clock-rotate-left" title="Version History" text="No version history found!"></BlankSlate>

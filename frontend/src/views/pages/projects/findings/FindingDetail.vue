@@ -20,6 +20,7 @@ export default {
             finding: { user_account: {}, component: {} },
             showPreview: false,
             previewData: null,
+            previewLoading: false,
             breadcrumbs: [
                 {
                     label: 'Findings',
@@ -116,12 +117,18 @@ export default {
             }
         },
         getPreviewData() {
+            this.previewLoading = true;
             let config = {
                 responseType: 'arraybuffer'
             };
-            this.$api.get('/projects/' + this.projectId + '/findings/' + this.findingId + '/preview/', config).then((response) => {
-                this.previewData = response.data;
-            });
+            this.$api
+                .get('/projects/' + this.projectId + '/findings/' + this.findingId + '/preview/', config)
+                .then((response) => {
+                    this.previewData = response.data;
+                })
+                .finally(() => {
+                    this.previewLoading = false;
+                });
         },
         downloadAsPDF() {
             this.downloadPending = true;
@@ -174,57 +181,59 @@ export default {
     <div class="grid">
         <div :class="containerCol">
             <FindingTabMenu class="surface-card"></FindingTabMenu>
-            <Card class="border-noround-top">
-                <template #content>
-                    <div class="grid">
-                        <div class="col-12 md:col-4">
-                            <DetailCardWithIcon title="Asset" icon="fa-crosshairs" class="surface-ground" :text="finding.component.display_name"></DetailCardWithIcon>
-                        </div>
-                        <div class="col-12 md:col-4">
-                            <DetailCardWithIcon title="User Account" icon="fa-user" class="surface-ground" :text="finding.user_account.username || '-'"></DetailCardWithIcon>
-                        </div>
-                        <div class="col-12 md:col-4">
-                            <DetailCardWithIcon title="Status" icon="fa-bookmark" class="surface-ground" :text="finding.status"></DetailCardWithIcon>
-                        </div>
+            <div class="card border-noround-top">
+                <div class="grid">
+                    <div class="col-12 md:col-4">
+                        <DetailCardWithIcon title="Asset" icon="fa-crosshairs" class="surface-ground" :text="finding.component.display_name"></DetailCardWithIcon>
                     </div>
-                    <div class="grid">
-                        <div class="col-12 md:col-3">
-                            <InfoCardWithForm class="surface-ground w-full" title="Status" icon="fa-bookmark">
-                                <Dropdown v-model="finding.status" :options="statusChoices" optionValue="value" @change="patchFindingData({ status: finding.status })" optionLabel="title" class="w-full"></Dropdown>
-                            </InfoCardWithForm>
-                        </div>
-                        <div class="col-12 md:col-3">
-                            <InfoCardWithForm class="surface-ground" title="Finding Date" icon="fa-calendar">
-                                <Calendar v-model="finding.finding_date" @change="patchFindingData({ finding_date: finding.finding_date })"></Calendar>
-                            </InfoCardWithForm>
-                        </div>
-                        <div class="col-12 md:col-3">
-                            <InfoCardWithForm class="surface-ground" title="Severity" icon="fa-attention">
-                                <Dropdown v-model="finding.severity" :options="severityOptions" optionLabel="label" @change="patchFindingData({ severity: finding.severity })" optionValue="value"></Dropdown>
-                            </InfoCardWithForm>
-                        </div>
-                        <div class="col-12 md:col-3">
-                            <InfoCardWithForm class="surface-ground" title="Needs review?" icon="fa-user-tag">
-                                <InputSwitch v-model="finding.needs_review" @change="patchFindingData({ needs_review: finding.needs_review })"></InputSwitch>
-                            </InfoCardWithForm>
-                        </div>
+                    <div class="col-12 md:col-4">
+                        <DetailCardWithIcon title="User Account" icon="fa-user" class="surface-ground" :text="finding.user_account.username || '-'"></DetailCardWithIcon>
                     </div>
+                    <div class="col-12 md:col-4">
+                        <DetailCardWithIcon title="Status" icon="fa-bookmark" class="surface-ground" :text="finding.status"></DetailCardWithIcon>
+                    </div>
+                </div>
+                <div class="grid">
+                    <div class="col-12 md:col-3">
+                        <InfoCardWithForm class="surface-ground w-full" title="Status" icon="fa-bookmark">
+                            <Dropdown v-model="finding.status" :options="statusChoices" optionValue="value" @change="patchFindingData({ status: finding.status })" optionLabel="title" class="w-full"></Dropdown>
+                        </InfoCardWithForm>
+                    </div>
+                    <div class="col-12 md:col-3">
+                        <InfoCardWithForm class="surface-ground" title="Finding Date" icon="fa-calendar">
+                            <Calendar v-model="finding.finding_date" @change="patchFindingData({ finding_date: finding.finding_date })"></Calendar>
+                        </InfoCardWithForm>
+                    </div>
+                    <div class="col-12 md:col-3">
+                        <InfoCardWithForm class="surface-ground" title="Severity" icon="fa-attention">
+                            <Dropdown v-model="finding.severity" :options="severityOptions" optionLabel="label" @change="patchFindingData({ severity: finding.severity })" optionValue="value"></Dropdown>
+                        </InfoCardWithForm>
+                    </div>
+                    <div class="col-12 md:col-3">
+                        <InfoCardWithForm class="surface-ground" title="Needs review?" icon="fa-user-tag">
+                            <InputSwitch v-model="finding.needs_review" @change="patchFindingData({ needs_review: finding.needs_review })"></InputSwitch>
+                        </InfoCardWithForm>
+                    </div>
+                </div>
 
-                    <div class="grid formgrid p-fluid mt-3">
-                        <div class="col-12 field">
-                            <label>Proof</label>
-                            <MarkdownEditor @blur="patchFindingData({ proof_text: finding.proof_text })" v-model="finding.proof_text"></MarkdownEditor>
-                        </div>
-                        <div class="col-12">
-                            <FileDrop></FileDrop>
-                        </div>
+                <div class="grid formgrid p-fluid mt-3">
+                    <div class="col-12 field">
+                        <label>Proof</label>
+                        <MarkdownEditor v-model="finding.proof_text"></MarkdownEditor>
                     </div>
-                </template>
-            </Card>
+                    <div class="col-12">
+                        <FileDrop></FileDrop>
+                    </div>
+                    <div class="col-12 field">
+                        <Button label="Save" @click="patchFindingData({ proof_text: finding.proof_text })"></Button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div :class="containerCol">
-            <iframe :src="this.previewUrl" v-if="this.previewData" class="w-full h-full" :key="previewData"></iframe>
+            <ProgressBar v-if="!this.previewData && this.showPreview === true" mode="indeterminate" class="h-1rem"></ProgressBar>
+            <iframe :src="this.previewUrl" v-if="previewLoading !== true && this.previewData" class="w-full h-full" :key="previewData"></iframe>
         </div>
     </div>
 </template>

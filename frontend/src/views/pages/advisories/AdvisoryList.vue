@@ -101,63 +101,61 @@ export default {
 
     <div class="grid">
         <div class="col-12">
-            <Card>
-                <template #content>
-                    <DataTable
-                        paginator
-                        lazy
-                        dataKey="pk"
-                        :value="items"
-                        :rows="pagination.limit"
-                        :totalRecords="totalRecords"
-                        filterDisplay="menu"
-                        :loading="loading"
-                        @sort="onSort"
-                        @page="onPage"
-                        @filter="onFilter"
-                        :rowHover="items.length > 0"
-                        v-model:filters="filters"
-                    >
-                        <template #header>
-                            <div class="flex justify-content-between flex-column sm:flex-row">
-                                <span class="p-input-icon-left mb-2">
-                                    <i class="pi pi-search" />
-                                    <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                                </span>
-                            </div>
-                        </template>
+            <div class="card">
+                <DataTable
+                    paginator
+                    lazy
+                    dataKey="pk"
+                    :value="items"
+                    :rows="pagination.limit"
+                    :totalRecords="totalRecords"
+                    filterDisplay="menu"
+                    :loading="loading"
+                    @sort="onSort"
+                    @page="onPage"
+                    @filter="onFilter"
+                    :rowHover="items.length > 0"
+                    v-model:filters="filters"
+                >
+                    <template #header>
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                            <span class="p-input-icon-left mb-2">
+                                <i class="pi pi-search" />
+                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
+                            </span>
+                        </div>
+                    </template>
 
-                        <template #empty>
-                            <BlankSlate icon="fa fa-bugs" text="No advisories found in inbox!" title="No advisories!"></BlankSlate>
-                        </template>
+                    <template #empty>
+                        <BlankSlate icon="fa fa-bugs" text="No advisories found in inbox!" title="No advisories!"></BlankSlate>
+                    </template>
 
-                        <Column field="pk" header="ID">
-                            <template #body="slotProps">
-                                <router-link class="text-color underline" :to="{ name: 'AdvisoryDetail', params: { advisoryId: slotProps.data.pk } }">
-                                    {{ slotProps.data.pk }}
-                                </router-link>
-                            </template>
-                        </Column>
-                        <Column field="internal_name" header="Internal Name"></Column>
-                        <Column field="vulnerability.name" header="Vulnerability"></Column>
-                        <Column field="severity" header="Severity">
-                            <template #body="slotProps">
-                                <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
-                            </template>
-                        </Column>
-                        <Column header="Product">
-                            <template #body="slotProps"> {{ slotProps.data.product }} (by {{ slotProps.data.vendor_name }}) </template>
-                        </Column>
-                        <Column field="status" header="Status" :showFilterMatchModes="false">
-                            <template #filter="{ filterModel }">
-                                <Dropdown v-model="filterModel.value" :options="statusChoices" placeholder="Select One" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Dropdown>
-                            </template>
-                        </Column>
-                        <Column field="is_draft" header="Is Draft?"></Column>
-                        <Column field="date_planned_disclosure" header="Planned Disclosure"></Column>
-                    </DataTable>
-                </template>
-            </Card>
+                    <Column field="pk" header="ID">
+                        <template #body="slotProps">
+                            <router-link class="text-color underline" :to="{ name: 'AdvisoryDetail', params: { advisoryId: slotProps.data.pk } }">
+                                {{ slotProps.data.pk }}
+                            </router-link>
+                        </template>
+                    </Column>
+                    <Column field="internal_name" header="Internal Name"></Column>
+                    <Column field="vulnerability.name" header="Vulnerability"></Column>
+                    <Column field="severity" header="Severity">
+                        <template #body="slotProps">
+                            <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
+                        </template>
+                    </Column>
+                    <Column header="Product">
+                        <template #body="slotProps"> {{ slotProps.data.product }} (by {{ slotProps.data.vendor_name }}) </template>
+                    </Column>
+                    <Column field="status" header="Status" :showFilterMatchModes="false">
+                        <template #filter="{ filterModel }">
+                            <Dropdown v-model="filterModel.value" :options="statusChoices" placeholder="Select One" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Dropdown>
+                        </template>
+                    </Column>
+                    <Column field="is_draft" header="Is Draft?"></Column>
+                    <Column field="date_planned_disclosure" header="Planned Disclosure"></Column>
+                </DataTable>
+            </div>
         </div>
     </div>
 </template>

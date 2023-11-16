@@ -246,7 +246,7 @@ export default {
     <div class="grid">
         <div :class="containerCol">
             <AdvisoryTabMenu class="surface-card"></AdvisoryTabMenu>
-            <div class="card" v-if="dataLoaded">
+            <div class="card border-noround-top" v-if="dataLoaded">
                 <div class="grid">
                     <div class="col-12 md:col-3">
                         <DetailCardWithIcon title="Product" icon="fa fa-cart-shopping" class="surface-ground" :text="advisory.product + '(by ' + advisory.vendor_name + ')'"></DetailCardWithIcon>

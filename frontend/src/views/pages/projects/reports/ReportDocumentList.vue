@@ -213,7 +213,7 @@ export default {
     <div class="grid">
         <div class="col-12">
             <ReportTabMenu class="surface-card"></ReportTabMenu>
-            <div class="card">
+            <div class="card border-noround-top">
                 <div class="grid">
                     <div class="col-6"></div>
                     <div class="col-6">
@@ -227,6 +227,13 @@ export default {
                                 :disabled="this.previewDocument.task && !this.previewDocument.task.stopped"
                                 @click="createPreviewDocument"
                             ></Button>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid" v-if="this.previewDocument !== null">
+                    <div class="col-6 col-offset-6">
+                        <div class="flex justify-content-end">
+                            <small>Created at {{ this.previewDocument.date_created }}</small>
                         </div>
                     </div>
                 </div>

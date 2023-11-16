@@ -21,7 +21,6 @@ export default {
     },
     methods: {
         onGlobalSearch(query) {
-            this.loading = true;
             let params = {
                 search: query
             };

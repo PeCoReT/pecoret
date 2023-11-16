@@ -78,10 +78,13 @@ export default {
             <div class="card border-noround-top">
                 <div class="grid formgrid p-fluid">
                     <div class="col-12 field">
-                        <MarkdownEditor @blur="patchAdvisory" v-model="model.proof_text"></MarkdownEditor>
+                        <MarkdownEditor v-model="model.proof_text"></MarkdownEditor>
                     </div>
                     <div class="col-12 field">
                         <AdvisoryAttachmentFileDrop></AdvisoryAttachmentFileDrop>
+                    </div>
+                    <div class="col-12 field">
+                        <Button label="Save" @click="patchAdvisory"></Button>
                     </div>
                 </div>
             </div>

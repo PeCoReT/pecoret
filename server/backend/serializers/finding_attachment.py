@@ -8,7 +8,7 @@ class FindingImageAttachmentSerializer(serializers.ModelSerializer):
         model = FindingImageAttachment
         fields = [
             "pk", "date_created", "date_updated",
-            "image", "caption"
+            "image"
         ]
 
     def to_representation(self, instance):
