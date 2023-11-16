@@ -78,6 +78,15 @@ export default {
         },
         pinProject() {
             projectService.pinProject(this.$api, this.projectId, this.project.pinned).then(() => {});
+        },
+        onLatestFindingVisit(pk) {
+            this.$router.push({
+                name: 'FindingDetail',
+                params: {
+                    projectId: this.projectId,
+                    findingId: pk
+                }
+            });
         }
     },
     computed: {
@@ -115,11 +124,11 @@ export default {
             <DetailCardWithIcon title="Dates" :text="projectDateDisplay" icon="fa-calendar"></DetailCardWithIcon>
         </div>
         <div class="col-12 md:col-6 lg:col-6 xl:col-3">
-            <DetailCardWithIcon title="Role" icon="fa-crown" :text="role.role"> </DetailCardWithIcon>
+            <DetailCardWithIcon title="Role" icon="fa-crown" :text="role.role"></DetailCardWithIcon>
         </div>
         <div class="col-12 md:col-6 lg:col-6 xl:col-3">
             <InfoCardWithForm title="Status" icon="fa-bookmark">
-                <Dropdown v-model="project.status" :options="statusChoices" optionValue="value" @change="patchProject({ status: project.status })" optionLabel="label" class="w-full"> </Dropdown>
+                <Dropdown v-model="project.status" :options="statusChoices" optionValue="value" @change="patchProject({ status: project.status })" optionLabel="label" class="w-full"></Dropdown>
             </InfoCardWithForm>
         </div>
         <div class="col-12 md:col-6 lg:col-6 xl:col-3">
@@ -136,7 +145,7 @@ export default {
                 <template #content>
                     <DataView :value="latestFindings">
                         <template #list="slotProps">
-                            <div class="col-12">
+                            <div class="col-12 border-round border-1 hover:surface-hover" @click="onLatestFindingVisit(slotProps.data.pk)">
                                 <div class="flex p-4 gap-4">
                                     <div class="flex justify-content-start w-full">{{ slotProps.data.vulnerability.name }} / {{ slotProps.data.name }}</div>
 
