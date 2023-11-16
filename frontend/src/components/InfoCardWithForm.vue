@@ -7,9 +7,9 @@ export default {
         },
         icon: {
             required: true
-        },
+        }
     }
-}
+};
 </script>
 
 <template>
@@ -19,9 +19,8 @@ export default {
                 <span class="block text-500 font-medium mb-3">{{ title }}</span>
                 <slot />
             </div>
-            <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
-                style="width: 2.5rem; height: 2.5rem">
-                <i class="fa text-blue-500 text-xl" :class="icon"></i>
+            <div class="flex align-items-center justify-content-center text-500" style="width: 2.5rem; height: 2.5rem">
+                <i class="fa text-secondary-800 text-xl" :class="icon"></i>
             </div>
         </div>
     </div>
