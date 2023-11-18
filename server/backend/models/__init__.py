@@ -2,8 +2,7 @@ from .user import User
 from .user_settings import UserSettings
 from .project import Project
 from .cwe import CWE
-from .vulnerability import VulnerabilityTemplate, ProjectVulnerability
-from .vulnerability_category import VulnerabilityCategory
+from .vulnerability import VulnerabilityTemplate, ProjectVulnerability, VulnerabilityTemplateTranslation
 from .finding import Finding
 from .account import Account
 from .report_templates import ReportTemplate

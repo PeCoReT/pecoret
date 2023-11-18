@@ -290,7 +290,21 @@ const router = createRouter({
                     name: 'VulnerabilityTemplateList',
                     component: () => import('@/views/pages/vulnerability_templates/VulnerabilityTemplateList.vue')
                 },
-
+                {
+                    path: '/vulnerability-templates/create',
+                    name: 'VulnerabilityTemplateCreate',
+                    component: () => import('@/views/pages/vulnerability_templates/VulnerabilityTemplateCreate.vue')
+                },
+                {
+                    path: '/vulnerability-templates/:templateId',
+                    name: 'VulnerabilityTemplateUpdate',
+                    component: () => import('@/views/pages/vulnerability_templates/VulnerabilityTemplateUpdate.vue')
+                },
+                {
+                    path: '/vulnerability-templates/:templateId/:language',
+                    name: 'VulnerabilityTemplateTranslationUpdate',
+                    component: () => import('@/views/pages/vulnerability_templates/TranslationUpdate.vue')
+                },
                 {
                     path: '/companies',
                     children: [

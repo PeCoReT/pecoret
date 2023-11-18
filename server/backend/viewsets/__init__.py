@@ -9,7 +9,6 @@ from .reports import (
 from .report_templates import ReportTemplateViewSet
 from .membership import MembershipViewSet
 from .cwe import CWEViewSet
-from .vulnerability_category import VulnerabilityCategoryViewSet
 from .users import UserViewSet, GroupViewSet
 from .finding_timeline import FindingTimelineViewSet
 from .company_contact import CompanyContactViewSet
