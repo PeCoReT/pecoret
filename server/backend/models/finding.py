@@ -62,6 +62,16 @@ class FindingManager(models.Manager):
             defaults_from_template = ["severity"]
             for key in defaults_from_template:
                 data.setdefault(key, getattr(template, key))
+            # if template is global template use localization
+            if not isinstance(template, ProjectVulnerability):
+                localized = template.get_localized(data['project'].language)
+                data.update({
+                    "name": localized.name,
+                    'recommendation': localized.recommendation,
+                    'remediation': localized.remediation,
+                    'description': localized.description
+                })
+
         cwe_id = data.pop("cwe_ids", cwe_ids_default)
         finding = self.create(**data)
         finding.cwe_id = cwe_id

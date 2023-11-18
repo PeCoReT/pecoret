@@ -15,14 +15,11 @@ router.register(
     viewsets.VulnerabilityTemplateViewSet,
     "vulnerability-template",
 )
+
 router.register("companies", viewsets.CompanyViewSet, "company")
 router.register("cwes", viewsets.CWEViewSet, "cwe")
 router.register("report-templates", viewsets.ReportTemplateViewSet, "report-template")
-router.register(
-    "vulnerability-categories",
-    viewsets.VulnerabilityCategoryViewSet,
-    "vulnerability-category",
-)
+
 router.register("users", viewsets.UserViewSet, "user")
 router.register("groups", viewsets.GroupViewSet, "group")
 

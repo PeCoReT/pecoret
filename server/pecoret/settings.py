@@ -30,7 +30,6 @@ INSTALLED_APPS = [
     "django_q",
     "django_filters",
     "drf_spectacular",
-    "modeltranslation",
     "generic_relations",
     "backend.apps.BackendConfig",
     "advisories.apps.AdvisoriesConfig",

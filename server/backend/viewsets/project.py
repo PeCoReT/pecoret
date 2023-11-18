@@ -79,7 +79,7 @@ class ProjectViewSet(PeCoReTModelViewSet):
     def available_languages(self, request, *args, **kwargs):
         data = []
         for lang in settings.LANGUAGES:
-            data.append({"language": lang[1]})
+            data.append({"language": lang[1], "code": lang[0]})
         return Response(data)
 
     @action(detail=True, methods=["post", "delete"], serializer_class=PinnedProjectSerializer)
