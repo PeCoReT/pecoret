@@ -139,7 +139,7 @@ export default {
             </div>
             <div class="field col-12">
                 <label for="require_cvss_score">Require CVSS Score</label>
-                <Dropdown :options="scoreChoices" optionLabel="label" optionValue="value" v-model="model.require_cvss_score"></Dropdown>
+                <Dropdown :options="scoreChoices" :show-clear="true" optionLabel="label" optionValue="value" v-model="model.require_cvss_score"></Dropdown>
             </div>
             <div class="field col-12">
                 <label for="description">Description</label>

@@ -2,11 +2,12 @@
 import FindingService from '@/service/FindingService';
 import FindingTabMenu from '@/components/pages/FindingTabMenu.vue';
 import CVSS4CalculatorForm from '@/components/forms/CVSS4CalculatorForm.vue';
-import { useAuthStore } from "@/store/auth";
+import { useAuthStore } from '@/store/auth';
+import BlankSlate from '@/components/BlankSlate.vue';
 
 export default {
     name: 'ScoreList',
-    components: { CVSS4CalculatorForm, FindingTabMenu },
+    components: { BlankSlate, CVSS4CalculatorForm, FindingTabMenu },
     mounted() {
         this.getCVSS();
         this.getFinding();
@@ -132,7 +133,7 @@ export default {
                 <CVSS4CalculatorForm v-model="cvss4" @update:score="this.onScoreUpdate"></CVSS4CalculatorForm>
             </div>
 
-            <div class="card border-noround-top" v-if="authStore.activeProject.require_cvss_score === 1">
+            <div class="card border-noround-top" v-else-if="authStore.activeProject.require_cvss_score === 1">
                 <p class="text-xl">CVSS Base-Score</p>
 
                 <div class="grid">
@@ -181,6 +182,10 @@ export default {
                         </ProgressBar>
                     </div>
                 </div>
+            </div>
+
+            <div class="card border-noround-top" v-else>
+                <BlankSlate title="Scores disabled" text="No scores are configured for this project" icon="fa fa-calculator"></BlankSlate>
             </div>
         </div>
     </div>
