@@ -19,7 +19,6 @@ from .finding_comment import FindingComment
 from .company_information import CompanyInformation
 from .pentest_type import PentestType
 from .cvss_score import CVSSBaseScore
-from .owasp_risk_rating import OWASPRiskRating
 from .pinned_project import PinnedProject
 from .project_file import ProjectFile
 from .finding_attachment import FindingImageAttachment

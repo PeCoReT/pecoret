@@ -50,3 +50,18 @@ class CVSSBaseScoreList(APITestCase, PeCoReTTestCaseMixin):
 class CVSSBaseScoreUpdate(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
+
+
+class CVSS40CalculatorView(APITestCase, PeCoReTTestCaseMixin):
+    def setUp(self):
+        self.init_mixin()
+        self.url = self.get_url("backend:cvss4-calculator")
+        self.data = {
+            'vector': 'CVSS:4.0/AV:N/AC:L/AT:N/PR:L/UI:N/VC:N/VI:N/VA:N/SC:L/SI:N/SA:N'
+        }
+
+    def test_cvss4_calculator(self):
+        self.client.force_login(self.pentester1)
+        response = self.basic_status_code_check(self.url, self.client.post, 200, data=self.data)
+        self.assertEqual(response.json()['score'], 5.3)
+        self.assertEqual(response.json()['severity'], 'Medium')

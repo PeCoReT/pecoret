@@ -49,6 +49,7 @@ class FindingSerializer(serializers.ModelSerializer):
             "status",
             "imported",
             "name",
+            "cvss_score_40",
             "finding_date",
             "authenticated_test",
             "needs_review",

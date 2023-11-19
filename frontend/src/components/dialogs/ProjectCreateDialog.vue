@@ -17,9 +17,13 @@ export default {
                 test_method: null,
                 language: null,
                 description: '',
-                require_cvss_base_score: false,
+                require_cvss_score: null,
                 company: null
             },
+            scoreChoices: [
+                { label: 'CVSS 4.0 Base', value: 0 },
+                { label: 'CVSS 3.1 Base', value: 1 }
+            ],
             testMethodChoices: [
                 { title: 'Unknown', value: 'Unknown' },
                 { title: 'Greybox', value: 'Grey Box' },
@@ -81,7 +85,6 @@ export default {
                 test_method: this.model.test_method,
                 language: this.model.language,
                 require_cvss_base_score: this.model.require_cvss_base_score,
-                require_owasp_risk_rating: this.model.require_owasp_risk_rating,
                 description: this.model.description,
                 company: this.model.company
             };
@@ -135,16 +138,8 @@ export default {
                 <Dropdown :options="companyChoices" @filter="onFilterCompany" @focus="onFocusCompany" filter optionLabel="name" optionValue="pk" v-model="model.company"></Dropdown>
             </div>
             <div class="field col-12">
-                <div class="flex align-items-center">
-                    <Checkbox v-model="model.require_cvss_base_score" :binary="true" inputId="require_cvss"></Checkbox>
-                    <label for="require_cvss" class="ml-2">Require CVSS Base Score?</label>
-                </div>
-            </div>
-            <div class="field col-12">
-                <div class="flex align-items-center">
-                    <Checkbox v-model="model.require_owasp_risk_rating" :binary="true" inputId="require_risk_rating"></Checkbox>
-                    <label for="require_risk_rating" class="ml-2">Require OWASP Risk Rating?</label>
-                </div>
+                <label for="require_cvss_score">Require CVSS Score</label>
+                <Dropdown :options="scoreChoices" optionLabel="label" optionValue="value" v-model="model.require_cvss_score"></Dropdown>
             </div>
             <div class="field col-12">
                 <label for="description">Description</label>
