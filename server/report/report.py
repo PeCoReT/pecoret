@@ -1,13 +1,16 @@
 import datetime
 from pathlib import Path
-import matplotlib.pyplot as plt
+
 import matplotlib as mpl
 import matplotlib.font_manager as font_manager
+import matplotlib.pyplot as plt
 from django.conf import settings
 from django.db.models import Count, Max, Q
 from django.utils.translation import gettext as _
 from matplotlib.ticker import MaxNLocator
+
 from backend.models import ProjectVulnerability, Finding, Host, WebApplication, Membership, ProjectScope
+from backend.models.project import ScoreChoices
 from backend.models.vulnerability import Severity
 from pecoret.core.reporting import types as report_types
 from pecoret.core.reporting.charts.base import Chart
@@ -30,9 +33,18 @@ class ErrorMixin:
             if not finding.proof_text:
                 error = ReportError("Missing proof!", f"#finding-{finding.pk}-proofs")
                 self._add_error(error)
-            if self.get_project().require_cvss_base_score and finding.cvssbasescore.is_incomplete:
-                error = ReportError("Missing CVSS base score", f"#finding-{finding.pk}-title")
-                self._add_error(error)
+            if self.get_project().require_cvss_score is not None:
+                score = ScoreChoices(self.get_project().require_cvss_score)
+                if score == ScoreChoices['CVSS31_BASE']:
+                    if finding.cvssbasescore.is_incomplete:
+                        error = ReportError(
+                            "Missing CVSS base score", f"#finding-{finding.pk}-title")
+                        self._add_error(error)
+                elif score == ScoreChoices['CVSS4_BASE']:
+                    if not finding.cvss_score_40:
+                        error = ReportError(
+                            "Missing CVSS base score", f"#finding-{finding.pk}-title")
+                        self._add_error(error)
 
 
 class FindingBarChart(Chart):

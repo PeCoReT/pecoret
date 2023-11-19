@@ -31,23 +31,22 @@
       </td>
     </tr>
 
-    {% if finding.project.require_cvss_base_score %}
+    {% if finding.project.require_cvss_score == 1 %}
       <tr>
         <th style="padding-right: 65px">{{ _('CVSS Base Score') }}</th>
         <td> {{ finding.cvssbasescore.cvss31_base_score }} -
           {{ finding.cvssbasescore.cvss31_base_severity | dynamic_trans }} ({{ finding.cvssbasescore.cvss31_vector }})
         </td>
       </tr>
-    {% endif %}
-    {% if finding.project.require_owasp_risk_rating %}
+    {% elif finding.project.require_cvss_score == 0 %}
       <tr>
-        <th style="padding-right: 65px">{{ _('OWASP Risk Rating') }}</th>
+        <th style="padding-right: 65px">{{ _('CVSS Base Score') }}</th>
         <td>
-          {{ finding.owaspriskrating.vulnerability_factor }}
-          - {{ finding.owaspriskrating.overall_risk_severity | dynamic_trans }} ({{ finding.owaspriskrating.vector }})
+          {{ finding.cvss40_score.0 }} - {{ finding.cvss40_score.1 | dynamic_trans }} ({{ finding.cvss_score_40 }})
         </td>
       </tr>
     {% endif %}
+
   </table>
 
   {% if finding.recommendation %}

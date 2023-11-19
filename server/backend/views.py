@@ -9,6 +9,9 @@ from rest_framework import serializers
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
 from backend.serializers.user import UserMeSerializer
+from backend.utils import cvss4
+from backend.models.finding import Severity
+from backend.serializers.cvss_calculator import CVSS4CalculatorSerializer, CVSS4CalculatedSerializer
 from .throttle import AuthFlowThrottle
 
 
@@ -113,3 +116,22 @@ class AuthCheckView(APIView):
                 {"user": user, "csrf_token": request.META.get("CSRF_COOKIE", None)}
             ).data
         )
+
+
+class CVSS4CalculatorView(APIView):
+    """
+    calculates the severity and score based on a CVSS4 vector string
+    """
+
+    authentication_classes = [SessionAuthentication]
+
+    @extend_schema(request=CVSS4CalculatorSerializer, responses=CVSS4CalculatedSerializer)
+    @method_decorator(csrf_protect)
+    def post(self, request, **kwargs):
+        serializer = CVSS4CalculatorSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        score, severity = cvss4.CVSS4Calculator().from_string(serializer.validated_data['vector'])
+        data = {'score': score, 'severity': Severity[severity.upper()].label}
+        serializer = CVSS4CalculatedSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

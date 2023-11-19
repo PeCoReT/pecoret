@@ -1,21 +1,27 @@
 import copy
 import re
+
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.core import validators
+from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
 from django.db import models
 from django.db.models import signals
 from django.dispatch import receiver
-from django.core.exceptions import ValidationError
-from django.utils.translation import gettext as _
 from django.utils import timezone
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
+from django.utils.translation import gettext as _
 from django_q.tasks import async_task
+
 from backend.tasks import mail
-from .vulnerability import Severity, ProjectVulnerability
+from backend.utils import cvss4
+from .cvss_score import CVSSBaseScore
 from .cwe import CWE
 from .finding_timeline import FindingTimeline
-from .cvss_score import CVSSBaseScore
-from .owasp_risk_rating import OWASPRiskRating
+from .vulnerability import Severity, ProjectVulnerability
+
+CVSS_40_REGEX = (r'CVSS:4\.0\/AV:[N|A|L|P]\/AC:[L|H]\/AT:[N|P]\/PR:[N|L|H]\/UI:[N|P|A]\/VC:[H|L|N]\/'
+                 r'VI:[H|L|N]\/VA:[H|L|N]\/SC:[H|L|N]\/SI:[H|L|N]\/SA:[H|L|N]')
 
 
 class FindingStatus(models.IntegerChoices):
@@ -136,6 +142,9 @@ class Finding(models.Model):
     component = GenericForeignKey('component_content_type', 'component_object_id')
 
     proof_text = models.TextField(default="", blank=True)
+    cvss_score_40 = models.CharField(max_length=255, null=True, blank=True, validators=[validators.RegexValidator(
+        regex=CVSS_40_REGEX
+    )])
 
     class Meta:
         ordering = ["-severity"]
@@ -155,6 +164,10 @@ class Finding(models.Model):
         if self.date_retest:
             return True
         return False
+
+    @property
+    def cvss40_score(self):
+        return cvss4.CVSS4Calculator().from_string(self.cvss_score_40)
 
     def save(self, *args, **kwargs):
         if not self.finding_date:
@@ -207,6 +220,7 @@ class Finding(models.Model):
             caption = match.group('caption')
             template = f"<div class='image-proof'><div class='image-container'><img src='{attachment.image_base64}'></div><div class='caption'><span class='figure-prefix'>Figure</span><span>{caption}</span></div></div>"
             return template
+
         proof_text = re.sub(image_re, attachment_replace, self.proof_text)
         return proof_text
 
@@ -234,7 +248,6 @@ def init_scores(sender, instance, created, **kwargs):
     """
     if created:
         CVSSBaseScore.objects.create(finding=instance)
-        OWASPRiskRating.objects.create(finding=instance)
 
 
 @receiver(signals.post_save, sender=Finding)

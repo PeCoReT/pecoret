@@ -15,6 +15,11 @@ class TestMethod(models.IntegerChoices):
     UNKNOWN = 3, "Unknown"
 
 
+class ScoreChoices(models.IntegerChoices):
+    CVSS4_BASE = 0, 'CVSS 4.0 Base'
+    CVSS31_BASE = 1, 'CVSS 3.1 Base'
+
+
 class ProjectQuerySet(models.QuerySet):
     def for_project(self, project):
         if hasattr(project, "pk"):
@@ -44,8 +49,7 @@ class Project(TimestampedModel):
     company = models.ForeignKey("backend.Company", on_delete=models.PROTECT)
     test_method = models.PositiveSmallIntegerField(choices=TestMethod.choices)
     year = models.PositiveIntegerField(editable=False, blank=True, null=True)
-    require_cvss_base_score = models.BooleanField(default=False)
-    require_owasp_risk_rating = models.BooleanField(default=False)
+    require_cvss_score = models.PositiveSmallIntegerField(blank=True, null=True, choices=ScoreChoices.choices)
     language = models.CharField(choices=settings.LANGUAGES, default="en", max_length=4)
 
     def __str__(self):

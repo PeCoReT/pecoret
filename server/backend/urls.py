@@ -63,7 +63,6 @@ project_router.register('notes', viewsets.ProjectNoteViewSet, 'note')
 # finding routes
 finding_router = DefaultRouter()
 finding_router.register("cvss-scores", viewsets.CVSSBaseScoreViewSet, "cvss-score")
-finding_router.register("owasp-risk-ratings", viewsets.OWASPRiskRatingViewSet, "owasp-risk-rating")
 finding_router.register("timelines", viewsets.FindingTimelineViewSet, "timeline")
 finding_router.register("comments", viewsets.FindingCommentViewSet, "comment")
 finding_router.register("attachments", viewsets.FindingImageAttachmentViewSet, "attachment")
@@ -90,6 +89,7 @@ urlpatterns = [
     path("auth/login/", views.LoginView.as_view(), name="login"),
     path("auth/logout/", views.LogoutView.as_view(), name="logout"),
     path("auth/check/", views.AuthCheckView.as_view(), name="auth-check"),
+    path("cvss-calculator/4.0/", views.CVSS4CalculatorView.as_view(), name='cvss4-calculator'),
     path("projects/<int:project>/", include(project_router.urls)),
     path(
         "projects/<int:project>/findings/<int:finding>/",
