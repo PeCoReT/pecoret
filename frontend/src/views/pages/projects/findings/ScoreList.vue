@@ -2,6 +2,7 @@
 import FindingService from '@/service/FindingService';
 import FindingTabMenu from '@/components/pages/FindingTabMenu.vue';
 import CVSS4CalculatorForm from '@/components/forms/CVSS4CalculatorForm.vue';
+import { useAuthStore } from "@/store/auth";
 
 export default {
     name: 'ScoreList',
@@ -33,6 +34,7 @@ export default {
     },
     data() {
         return {
+            authStore: useAuthStore(),
             projectId: this.$route.params.projectId,
             findingId: this.$route.params.findingId,
             service: new FindingService(),
@@ -115,7 +117,7 @@ export default {
         <div class="col-12">
             <FindingTabMenu class="surface-card"></FindingTabMenu>
 
-            <div class="card border-noround-top">
+            <div class="card border-noround-top" v-if="authStore.activeProject.require_cvss_score === 0">
                 <div class="grid">
                     <div class="col-6">
                         <p class="text-xl">CVSS 4.0 Base-Score</p>
@@ -130,7 +132,7 @@ export default {
                 <CVSS4CalculatorForm v-model="cvss4" @update:score="this.onScoreUpdate"></CVSS4CalculatorForm>
             </div>
 
-            <div class="card">
+            <div class="card border-noround-top" v-if="authStore.activeProject.require_cvss_score === 1">
                 <p class="text-xl">CVSS Base-Score</p>
 
                 <div class="grid">
