@@ -27,7 +27,8 @@
     <tr>
       <th style="padding-right:65px">{{ _('Vulnerability') }}</th>
       <td>
-        <a href="#vulnerability-{{ finding.vulnerability.pk }}" class="text-dark">{{ finding.vulnerability.name|dynamic_trans }}</a>
+        <a href="#vulnerability-{{ finding.vulnerability.pk }}"
+           class="text-dark">{{ finding.vulnerability.name|dynamic_trans }}</a>
       </td>
     </tr>
 
@@ -42,7 +43,11 @@
       <tr>
         <th style="padding-right: 65px">{{ _('CVSS Base Score') }}</th>
         <td>
-          {{ finding.cvss40_score.0 }} - {{ finding.cvss40_score.1 | dynamic_trans }} ({{ finding.cvss_score_40 }})
+          {% if finding.cvss40_score %}
+            {{ finding.cvss40_score.0 }} - {{ finding.cvss40_score.1 | dynamic_trans }} ({{ finding.cvss_score_40 }})
+          {% else %}
+            Incomplete
+          {% endif %}
         </td>
       </tr>
     {% endif %}
