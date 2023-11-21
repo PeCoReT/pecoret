@@ -145,11 +145,15 @@ class Finding(models.Model):
     cvss_score_40 = models.CharField(max_length=255, null=True, blank=True, validators=[validators.RegexValidator(
         regex=CVSS_40_REGEX
     )])
+    unique_id = models.CharField(max_length=16, blank=True)
 
     class Meta:
         ordering = ["-severity"]
         indexes = [
             models.Index(fields=['component_content_type', 'component_object_id'])
+        ]
+        unique_together = [
+            ('unique_id', 'project')
         ]
 
     def __str__(self):
@@ -174,8 +178,16 @@ class Finding(models.Model):
             self.finding_date = timezone.now()
         if not self.pk or not self.project:
             self.project = self.vulnerability.project
+        if self.unique_id is None:
+            self.unique_id = self.create_unique_id()
         self.full_clean()
         return super().save(*args, **kwargs)
+
+    def create_unique_id(self):
+        qs = self.project.finding_set.filter(date_created__lt=timezone.now()).order_by('date_created')
+        count = qs.count() + 1
+        unique_id = f'F-{count:05d}'
+        return unique_id
 
     def clean(self):
         if not self.component:
@@ -191,13 +203,6 @@ class Finding(models.Model):
     @vuln_key.setter
     def vuln_key(self, value):
         self.vulnerability = ProjectVulnerability.objects.get_or_create_from_key(*value)
-
-    @property
-    def internal_id(self):
-        return "{year}{finding:05d}".format(
-            year=self.finding_date.year,
-            finding=self.pk,
-        )
 
     @property
     def report_proof_text(self):

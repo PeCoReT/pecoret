@@ -30,4 +30,4 @@ class FindingTimeline(TimelineItem):
     finding = models.ForeignKey('backend.Finding', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.title} on {self.finding.internal_id}"
+        return f"{self.title} on {self.finding.unique_id}"

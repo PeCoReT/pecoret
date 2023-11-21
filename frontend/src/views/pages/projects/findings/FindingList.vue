@@ -187,7 +187,7 @@ export default {
                         </template>
                     </Column>
                     <Column field="vulnerability.name" header="Vulnerability"></Column>
-                    <Column field="internal_id" header="ID"></Column>
+                    <Column field="unique_id" header="ID"></Column>
                     <Column field="status" header="Status"></Column>
                     <Column field="finding_date" header="Date"></Column>
                     <Column field="needs_review" header="Needs Review" :showFilterMatchModes="false">

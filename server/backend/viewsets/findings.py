@@ -43,7 +43,7 @@ class FindingViewSet(PeCoReTModelViewSet):
         template = request.project.company.report_template
         result = export_single_finding(finding, template)
         response = HttpResponse(result, content_type="application/pdf")
-        filename = "finding_%s.pdf" % finding.internal_id
+        filename = "finding_%s.pdf" % finding.unqiue_id.lower()
         response["Content-Disposition"] = "attachment; filename=%s" % filename
         return response
 

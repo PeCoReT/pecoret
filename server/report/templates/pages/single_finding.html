@@ -1,5 +1,5 @@
 <section class="page-break-after">
-  <h3 id="finding-{{ finding.pk }}-title">{{ finding.vulnerability.name }} - {{ finding.internal_id }}</h3>
+  <h3 id="finding-{{ finding.pk }}-title">{{ finding.vulnerability.name }} - {{ finding.unique_id }}</h3>
   {% with section="#finding-" + finding.pk|string + "-title" %}
     {% include './components/report_error_for_section.html' %}
   {% endwith %}
