@@ -178,14 +178,13 @@ class Finding(models.Model):
             self.finding_date = timezone.now()
         if not self.pk or not self.project:
             self.project = self.vulnerability.project
-        if self.unique_id is None:
+        if self.unique_id is None or self.unique_id == '':
             self.unique_id = self.create_unique_id()
         self.full_clean()
         return super().save(*args, **kwargs)
 
     def create_unique_id(self):
-        qs = self.project.finding_set.filter(date_created__lt=timezone.now()).order_by('date_created')
-        count = qs.count() + 1
+        count = self.project.finding_set.count() + 1
         unique_id = f'F-{count:05d}'
         return unique_id
 
