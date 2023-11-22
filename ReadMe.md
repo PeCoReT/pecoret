@@ -2,8 +2,6 @@
 
 *PeCoReT* (Pentest Collaboration and Reporting Tool) is an open source application to manage your pentest projects.
 
-**Do not use it in production! PeCoReT is in an early stage of development!**
-
 The documentation is located at [https://pecoret.github.io](https://pecoret.github.io).
 
 
@@ -15,4 +13,5 @@ The documentation is located at [https://pecoret.github.io](https://pecoret.gith
 * Markdown support
 * Checklists (track progress of pentested assets)
 * REST-API
+* Project Notes
 * Open-Source and self-hosted
