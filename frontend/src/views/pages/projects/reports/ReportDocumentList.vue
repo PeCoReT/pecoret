@@ -17,6 +17,7 @@ export default {
             timer: '',
             timerPreviewDocument: '',
             items: [],
+            previewDownloadLoading: false,
             previewDocument: {},
             breadcrumbs: [
                 {
@@ -68,8 +69,8 @@ export default {
             clearInterval(this.timer);
             this.timer = '';
         },
-        onSort(event) {},
-        onFilter(event) {},
+        onSort() {},
+        onFilter() {},
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
@@ -150,14 +151,22 @@ export default {
             document.body.appendChild(link);
             link.click();
         },
-        downloadDocument(documentId) {
+        downloadDocument(documentId, isPreview) {
+            if (isPreview === true) {
+                this.previewDownloadLoading = true;
+            }
             let url = '/projects/' + this.projectId + '/reports/' + this.reportId + '/report-releases/' + documentId + '/download/';
             let config = {};
             config.responseType = 'arraybuffer';
-            this.$api.get(url, config).then((response) => {
-                let filename = response.headers['content-disposition'].split('filename=')[1].split(';')[0];
-                this.forceFileDownload(response, filename);
-            });
+            this.$api
+                .get(url, config)
+                .then((response) => {
+                    let filename = response.headers['content-disposition'].split('filename=')[1].split(';')[0];
+                    this.forceFileDownload(response, filename);
+                })
+                .finally(() => {
+                    this.previewDownloadLoading = false;
+                });
         },
         confirmDialogDelete(documentId) {
             this.$confirm.require({
@@ -218,7 +227,7 @@ export default {
                     <div class="col-6"></div>
                     <div class="col-6">
                         <div class="flex justify-content-end">
-                            <Button label="Download" icon="fa fa-download" class="mr-2" :disabled="!previewDocument.pk" outlined @click="downloadDocument(previewDocument.pk)"></Button>
+                            <Button label="Download" icon="fa fa-download" class="mr-2" :disabled="!previewDocument.pk" outlined @click="downloadDocument(previewDocument.pk, true)" :loading="previewDownloadLoading"></Button>
                             <Button
                                 label="Preview Document"
                                 icon="fa fa-plus"
