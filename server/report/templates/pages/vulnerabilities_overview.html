@@ -29,7 +29,6 @@
               <a href="#finding-{{ finding.pk }}-title">
                 <strong>{{ finding.unique_id }} - {{ finding.vulnerability.name }}</strong>
               </a>
-              <p class="text-dark font-space-small">{{ finding.vulnerability.remediation }}</p>
 
             </td>
             <td class="text-{{ finding.get_severity_display().lower() }} risk">
