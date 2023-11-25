@@ -14,4 +14,5 @@ The documentation is located at [https://pecoret.github.io](https://pecoret.gith
 * Checklists (track progress of pentested assets)
 * REST-API
 * Project Notes
+* Multi language vulnerabilities
 * Open-Source and self-hosted
