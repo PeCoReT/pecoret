@@ -6,6 +6,7 @@ The documentation is located at [https://pecoret.github.io](https://pecoret.gith
 
 
 ## Features
+* No *pro* or premium features (free to use)
 * Unlimited projects and users
 * Customize different aspects of the application (e.g. report templates, vulnerability templates, checklists, ...)
 * Report generator based on weasyprint (no more Word documents ;))
