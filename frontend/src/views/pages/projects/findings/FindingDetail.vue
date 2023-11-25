@@ -205,7 +205,7 @@ export default {
                         </InfoCardWithForm>
                     </div>
                     <div class="col-12 md:col-3">
-                        <InfoCardWithForm class="surface-ground" title="Severity" icon="fa-attention">
+                        <InfoCardWithForm class="surface-ground" title="Severity" icon="fa fa-shield-halved">
                             <Dropdown v-model="finding.severity" :options="severityOptions" optionLabel="label" @change="patchFindingData({ severity: finding.severity })" optionValue="value"></Dropdown>
                         </InfoCardWithForm>
                     </div>

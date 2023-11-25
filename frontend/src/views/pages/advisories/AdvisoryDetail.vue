@@ -273,7 +273,7 @@ export default {
                         </InfoCardWithForm>
                     </div>
                     <div class="col-12 md:col-3">
-                        <InfoCardWithForm class="surface-ground w-full" title="Severity" icon="fa fa-attention">
+                        <InfoCardWithForm class="surface-ground w-full" title="Severity" icon="fa fa-shield-halved">
                             <Dropdown v-model="advisory.severity" :options="severityChoices" optionLabel="label" @change="patchAdvisory({ severity: advisory.severity })" optionValue="value"></Dropdown>
                         </InfoCardWithForm>
                     </div>
