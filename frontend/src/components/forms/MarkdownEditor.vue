@@ -80,7 +80,8 @@ export default {
                     toolbar: this.toolbar,
                     promptURLs: false,
                     uploadImage: false,
-                    maxHeight: '400px'
+                    maxHeight: '400px',
+                    autofocus: false
                 },
                 this.configs
             );
@@ -141,9 +142,13 @@ export default {
                     val = '';
                 }
                 this.value = val;
-                const pos = this.simplemde.codemirror.getCursor();
-                this.simplemde.value(val);
-                this.simplemde.codemirror.setSelection(pos);
+                if (this.isValueUpdateFromInner === true) {
+                    const pos = this.simplemde.codemirror.getCursor();
+                    this.simplemde.value(val);
+                    this.simplemde.codemirror.setSelection(pos);
+                } else {
+                    this.simplemde.value(val);
+                }
             }
         }
     }

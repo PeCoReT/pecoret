@@ -3,6 +3,7 @@ import ReportService from '@/service/ReportService';
 import ProjectService from '@/service/ProjectService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import ReportTabMenu from '@/components/pages/ReportTabMenu.vue';
+import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
     name: 'ReportDetail',
@@ -29,7 +30,8 @@ export default {
             reportId: this.$route.params.reportId,
             reportService: new ReportService(),
             projectService: new ProjectService(),
-            authorChoices: []
+            authorChoices: [],
+            saveLoading: false
         };
     },
     mounted() {
@@ -46,14 +48,28 @@ export default {
             });
         },
         updateReport() {
+            this.saveLoading = true;
             let data = {
                 author: this.report.author.pk,
                 title: this.report.title,
-                name: this.report.name
+                name: this.report.name,
+                recommendation: this.report.recommendation,
+                evaluation: this.report.evaluation
             };
-            this.reportService.updateReport(this.$api, this.projectId, this.reportId, data).then((response) => {
-                this.getItem();
-            });
+            this.reportService
+                .updateReport(this.$api, this.projectId, this.reportId, data)
+                .then(() => {
+                    this.$toast.add({
+                        severity: 'success',
+                        summary: 'Report updated!',
+                        life: 3000,
+                        detail: 'Report was updated successfully!'
+                    });
+                    this.getItem();
+                })
+                .finally(() => {
+                    this.saveLoading = false;
+                });
         },
         confirmDialogDelete() {
             this.$confirm.require({
@@ -79,7 +95,7 @@ export default {
             });
         }
     },
-    components: { DetailCardWithIcon, ReportTabMenu }
+    components: { DetailCardWithIcon, ReportTabMenu, MarkdownEditor }
 };
 </script>
 <template>
@@ -120,21 +136,29 @@ export default {
                 </div>
 
                 <div class="grid formgrid p-fluid mt-3">
-                    <div class="field col-12">
+                    <div class="field sm:col-12 md:col-4">
                         <label for="name">Name</label>
                         <InputText id="name" v-model="report.name"></InputText>
                     </div>
-                    <div class="field col-12">
+                    <div class="field sm:col-12 md:col-4">
                         <label for="title">Title</label>
                         <InputText id="title" v-model="report.title"></InputText>
                     </div>
-                    <div class="field col-12">
+                    <div class="field sm:col-12 md:col-4">
                         <label for="author">Author</label>
                         <Dropdown id="author" optionLabel="username" :options="authorChoices" v-model="report.author" @focus="getAuthorChoices"></Dropdown>
                     </div>
+                    <div class="field col-12">
+                        <label for="evaluation">Evaluation</label>
+                        <MarkdownEditor v-model="report.evaluation"></MarkdownEditor>
+                    </div>
+                    <div class="field col-12">
+                        <label for="recommendation">Recommendation</label>
+                        <MarkdownEditor v-model="report.recommendation"></MarkdownEditor>
+                    </div>
                     <div class="col-12">
                         <div class="flex justify-content-end mt-3">
-                            <Button label="Save" @click="updateReport"></Button>
+                            <Button label="Save" @click="updateReport" :loading="saveLoading === true"></Button>
                         </div>
                     </div>
                 </div>

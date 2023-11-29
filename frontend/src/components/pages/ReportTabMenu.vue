@@ -15,16 +15,6 @@ export default {
                     })
                 },
                 {
-                    label: 'Executive Summary',
-                    route: this.$router.resolve({
-                        name: 'ReportExecutiveSummaryDetail',
-                        params: {
-                            projectId: this.$route.params.projectId,
-                            reportId: this.$route.params.reportId
-                        }
-                    })
-                },
-                {
                     label: 'Version History',
                     route: this.$router.resolve({
                         name: 'ReportVersionHistoryList',

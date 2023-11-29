@@ -161,11 +161,6 @@ const router = createRouter({
                                     component: () => import('@/views/pages/projects/reports/ReportDetail.vue')
                                 },
                                 {
-                                    path: '/projects/:projectId/reports/:reportId/executive-summary',
-                                    name: 'ReportExecutiveSummaryDetail',
-                                    component: () => import('@/views/pages/projects/reports/ExecutiveSummary.vue')
-                                },
-                                {
                                     path: '/projects/:projectId/reports/:reportId/version-history',
                                     name: 'ReportVersionHistoryList',
                                     component: () => import('@/views/pages/projects/reports/VersionHistoryList.vue')
