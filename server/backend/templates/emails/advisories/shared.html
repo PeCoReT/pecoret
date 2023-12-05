@@ -14,7 +14,7 @@ This usually means, that one of our security researchers found a vulnerability i
 
 
 {% trans "The advisory can be found here:" %}
-{{ protocol }}://{{ domain }}{{ url|safe }}
+{{ site_url }}{{ url|safe }}
 
 {% trans "Thanks for using our site!" %}
 
@@ -26,7 +26,7 @@ This usually means, that one of our security researchers found a vulnerability i
 <p>{% blocktrans %}You're receiving this email because a new advisory was shared with you on {{ site_name }}.{% endblocktrans %}</p>
 <p>This usually means, that one of our security researchers found a vulnerability in one of your products.</p>
 <p>{% trans "The advisory can be found here:" %}</p>
-  <p><a href="{{ protocol }}://{{ domain }}{{ url|safe }}">{{ protocol }}://{{ domain }}/{{ url|safe }}</a></p>
+  <p><a href="{{ site_url }}{{ url|safe }}">{{ site_url }}/{{ url|safe }}</a></p>
 
 <p>{% trans "Thanks for using our site!" %}</p>
 

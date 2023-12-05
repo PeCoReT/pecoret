@@ -30,8 +30,8 @@ INSTALLED_APPS = [
     "django_q",
     "django_filters",
     "drf_spectacular",
-    "dbsettings",
     "generic_relations",
+    "extra_settings",
     "backend.apps.BackendConfig",
     "advisories.apps.AdvisoriesConfig",
     "checklists.apps.ChecklistsConfig"
@@ -181,9 +181,6 @@ Q_CLUSTER = {
 }
 
 
-REPORT_COMPANY_INFORMATION = {"name": "PeCoReT Project", "street": "Unkown Street"}
-
-
 SITE_URLS = {
     "PASSWORD_RESET": "/reset-password/{uid}/{token}",
     "ACTIVATION": "/account-activation/{uid}/{token}",
@@ -199,10 +196,6 @@ PASSWORD_HASHERS = [
 
 ENABLE_DJANGO_ADMIN_PANEL = False
 
-SITE_NAME = "PeCoReT"
-DOMAIN = "localhost:3000"
-PROTOCOL = "http"
-
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'Strict'
@@ -210,13 +203,42 @@ SESSION_COOKIE_SAMESITE = 'Strict'
 
 FALLBACK_REPORT_TEMPLATE = "default_template"
 
-############
-# Advisories
-############
-ADVISORY_ID_PREFIX = "pecoret"
-ADVISORY_TEMPLATE = "default_template"
-ADVISORY_MEMBERSHIP_DEFAULT_READ_ONLY_PERMISSION_DAYS = 120
 
+EXTRA_SETTINGS_DEFAULTS = [
+    {
+      'name': 'GENERAL_SITE_NAME',
+      'type': 'string',
+      'value': 'PeCoReT',
+      'description': 'Name of the site. Mainly used in mails.'
+    },
+    {
+        'name': 'GENERAL_SITE_URL',
+        'type': 'url',
+        'value': 'http://localhost:3000',
+        'description': 'URL to this application. Mainly used to generate links in mails.'
+    },
+    {
+        'name': 'GENERAL_COMPANY_NAME',
+        'type': 'string',
+        'value': 'PeCoReT Project'
+    },
+    {
+        'name': 'GENERAL_COMPANY_MAIL',
+        'type': 'email',
+        'value': 'pecoret@example.lan',
+    },
+    {
+        'name': 'ADVISORY_ID_PREFIX',
+        'type': 'string',
+        'value': 'pecoret'
+    },
+    {
+        'name': 'ADVISORY_DISCLOSURE_TIMEDELTA',
+        'type': 'int',
+        'value': 60,
+        'description': 'Timedelta (in days) for the planned disclosure date of an advisory.'
+    }
+]
 
 
 if DEBUG:

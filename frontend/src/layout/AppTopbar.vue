@@ -1,35 +1,35 @@
 <script>
-import { useAuthStore } from "@/store/auth";
-import ProjectTabMenu from "./ProjectTabMenu.vue";
-import AuthService from "../service/AuthService";
+import { useAuthStore } from '@/store/auth';
+import ProjectTabMenu from './ProjectTabMenu.vue';
+import AuthService from '../service/AuthService';
 
 export default {
-    name: "AppTopbar",
+    name: 'AppTopbar',
     data() {
         return {
             topbarMenuActive: null,
             authStore: useAuthStore(),
             userMenuItems: [
                 {
-                    label: "API-Tokens",
-                    icon: "fa fa-fingerprint",
+                    label: 'API-Tokens',
+                    icon: 'fa fa-fingerprint',
                     route: this.$router.resolve({
-                        name: "APITokenList"
+                        name: 'APITokenList'
                     })
                 },
                 {
-                    label: "Settings",
-                    icon: "fa fa-gear",
+                    label: 'Settings',
+                    icon: 'fa fa-gear',
                     route: this.$router.resolve({
-                        name: "UserSettingsDetail"
+                        name: 'UserSettingsDetail'
                     })
                 },
                 {
                     separator: true
                 },
                 {
-                    label: "Logout",
-                    icon: "fa fa-right-from-bracket",
+                    label: 'Logout',
+                    icon: 'fa fa-right-from-bracket',
                     command: this.onLogout
                 }
             ]
@@ -40,40 +40,40 @@ export default {
             let items = [];
             if (this.showProjectButton === true) {
                 items.push({
-                    label: "Projects",
-                    route: this.$router.resolve({ name: "ProjectList" })
+                    label: 'Projects',
+                    route: this.$router.resolve({ name: 'ProjectList' })
                 });
             }
             if (this.showCompanyButton === true) {
                 items.push({
-                    label: "Companies",
-                    route: this.$router.resolve({ name: "CompanyList" })
+                    label: 'Companies',
+                    route: this.$router.resolve({ name: 'CompanyList' })
                 });
             }
             if (this.showVulnerabilityTemplatesButton === true) {
                 items.push({
-                    label: "Vulnerability Templates",
-                    route: this.$router.resolve({ name: "VulnerabilityTemplateList" })
+                    label: 'Vulnerability Templates',
+                    route: this.$router.resolve({ name: 'VulnerabilityTemplateList' })
                 });
             }
-            let advisories = { label: "Advisories", items: [] };
+            let advisories = { label: 'Advisories', items: [] };
             advisories.items.push({
-                label: "My Advisories",
+                label: 'My Advisories',
                 route: this.$router.resolve({
-                    name: "AdvisoryList"
+                    name: 'AdvisoryList'
                 })
             });
             if (this.authStore.groups.isAdvisoryManagement === true) {
                 advisories.items.push({
-                    label: "Dashboard",
+                    label: 'Dashboard',
                     route: this.$router.resolve({
-                        name: "AdvisoryManagementDashboard"
+                        name: 'AdvisoryManagementDashboard'
                     })
                 });
                 advisories.items.push({
-                    label: "Labels",
+                    label: 'Labels',
                     route: this.$router.resolve({
-                        name: "AdvisoryManagementLabelList"
+                        name: 'AdvisoryManagementLabelList'
                     })
                 });
             }
@@ -81,24 +81,30 @@ export default {
 
             if (this.authStore.groups.isAdmin === true) {
                 items.push({
-                    label: "Admin",
+                    label: 'Admin Panel',
                     items: [
                         {
-                            label: "Users",
+                            label: 'Users',
                             route: this.$router.resolve({
-                                name: "UserList"
+                                name: 'UserList'
                             })
                         },
                         {
-                            label: "Report Templates",
+                            label: 'Report Templates',
                             route: this.$router.resolve({
-                                name: "ReportTemplateList"
+                                name: 'ReportTemplateList'
                             })
                         },
                         {
-                            label: "Project Types",
+                            label: 'Project Types',
                             route: this.$router.resolve({
-                                name: "ProjectTypeList"
+                                name: 'ProjectTypeList'
+                            })
+                        },
+                        {
+                            label: 'Settings',
+                            route: this.$router.resolve({
+                                name: 'AdminSettings'
                             })
                         }
                     ]
@@ -132,17 +138,15 @@ export default {
         },
         topbarMenuClasses() {
             return {
-                "layout-topbar-menu-mobile-active": this.topbarMenuActive
+                'layout-topbar-menu-mobile-active': this.topbarMenuActive
             };
         }
-
     },
     methods: {
-
         onLogout() {
             const authService = new AuthService();
             authService.logout(this.$api).then(() => {
-                this.$router.push({ name: "Login" });
+                this.$router.push({ name: 'Login' });
             });
         },
         toggleMenu(event) {
@@ -154,24 +158,21 @@ export default {
 </script>
 
 <template>
-
-    <Menubar :model="items" class="surface-card layout-topbar" ref="menu" :pt="{menu: {class: 'top-menu'}}">
+    <Menubar :model="items" class="surface-card layout-topbar" ref="menu" :pt="{ menu: { class: 'top-menu' } }">
         <template #start>
             <router-link to="/" class="layout-topbar-logo">
                 <img src="/images/logo-no-slogan.svg" alt="logo" />
             </router-link>
         </template>
         <template #item="{ label, item, props, root, hasSubmenu }">
-            <router-link class="flex" v-bind="props.action" v-slot="routerProps" :to="item.route"
-                         v-if="item.route">
+            <router-link class="flex" v-bind="props.action" v-slot="routerProps" :to="item.route" v-if="item.route">
                 <span v-bind="props.icon" />
                 <span v-bind="props.label">{{ label }}</span>
             </router-link>
             <a v-else :href="item.url" :target="item.target" v-bind="props.action">
                 <span v-bind="props.icon" />
                 <span v-bind="props.label">{{ label }}</span>
-                <span :class="[hasSubmenu && (root ? 'pi pi-fw pi-angle-down' : 'pi pi-fw pi-angle-right')]"
-                      v-bind="props.submenuicon" />
+                <span :class="[hasSubmenu && (root ? 'pi pi-fw pi-angle-down' : 'pi pi-fw pi-angle-right')]" v-bind="props.submenuicon" />
             </a>
         </template>
     </Menubar>

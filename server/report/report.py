@@ -1,15 +1,13 @@
 import datetime
-from pathlib import Path
-
 import matplotlib as mpl
 import matplotlib.font_manager as font_manager
 import matplotlib.pyplot as plt
-from django.conf import settings
+from pathlib import Path
 from django.db.models import Count, Max, Q
 from django.utils.translation import gettext as _
 from matplotlib.ticker import MaxNLocator
-
-from backend.models import ProjectVulnerability, Finding, Host, WebApplication, Membership, ProjectScope, Settings
+from extra_settings.models import Setting
+from backend.models import ProjectVulnerability, Finding, Host, WebApplication, Membership, ProjectScope
 from backend.models.project import ScoreChoices
 from backend.models.vulnerability import Severity
 from pecoret.core.reporting import types as report_types
@@ -90,8 +88,9 @@ class PentestPDFReport(ErrorMixin, report_types.PentestPDFReport):
     def get_context(self):
         context = super().get_context()
         context["now"] = datetime.datetime.now().strftime("%B %d, %Y")
-        context['settings'] = dict(Settings.objects.values()[0])
-        context["REPORT_COMPANY_INFORMATION"] = settings.REPORT_COMPANY_INFORMATION
+        context['settings'] = {
+            'GENERAL_COMPANY_NAME': Setting.get('GENERAL_COMPANY_NAME'),
+        }
         context["findings"] = Finding.objects.for_report(self.get_project())
         context["members"] = Membership.objects.for_project(self.get_project()).for_report()
         context['vulnerabilities'] = ProjectVulnerability.objects.for_project(self.get_project()).filter(

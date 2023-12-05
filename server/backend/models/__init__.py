@@ -28,7 +28,6 @@ from .project_scope import ProjectScope
 from .project_note import ProjectNote
 
 from .object_lock import ObjectLock
-from .settings import Settings
 
 # assets
 from .assets.host import Host

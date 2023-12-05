@@ -31,6 +31,11 @@ const router = createRouter({
                             path: '/admins/project-types',
                             name: 'ProjectTypeList',
                             component: () => import('@/views/pages/admin/ProjectTypeList.vue')
+                        },
+                        {
+                            path: '/admins/settings',
+                            name: 'AdminSettings',
+                            component: () => import('@/views/pages/admin/Settings.vue')
                         }
                     ]
                 },
