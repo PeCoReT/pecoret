@@ -13,16 +13,8 @@ python manage.py migrate
 echo "Collect static files"
 python manage.py collectstatic --noinput
 
-# import vulnerability templates
-if [ ! -f "/app/resources/templates/vulnerability-templates/categories.yaml" ]; then
-    echo "Cloning default templates..."
-fi
-
-python manage.py import_vulnerability_templates /app/resources/templates/vulnerability-templates
-
-# echo "Update checklists"
-# python manage.py update_checklists
-
+echo "Import CWE entries"
+python manage.py import_cwe_entries
 # create superuser
 echo "Create superuser"
 python manage.py createsuperuser --noinput
