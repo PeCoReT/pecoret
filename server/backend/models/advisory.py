@@ -1,16 +1,18 @@
 import re
-from django.db import models
-from django.utils import timezone
-from django.conf import settings
-from django.dispatch import receiver
+
 from django.core.files.images import ImageFile
-from pecoret.core.models import TimestampedModel, CASCADE_REPORT_TEMPLATE_DEFAULT
-from .finding import Severity
-from .vulnerability import VulnerabilityTemplate
-from .advisory_timeline import AdvisoryTimeline
-from .advisory_membership import AdvisoryMembership, Roles
+from django.db import models
+from django.dispatch import receiver
+from django.utils import timezone
+from extra_settings.models import Setting
+
 from advisories.models.attachment import ImageAttachment
+from pecoret.core.models import TimestampedModel, CASCADE_REPORT_TEMPLATE_DEFAULT
+from .advisory_membership import AdvisoryMembership, Roles
+from .advisory_timeline import AdvisoryTimeline
+from .finding import Severity
 from .report_templates import ReportTemplate
+from .vulnerability import VulnerabilityTemplate
 
 
 def create_advisory_id():
@@ -71,7 +73,8 @@ class AdvisoryQuerySet(models.QuerySet):
 
 class AdvisoryManager(models.Manager):
     def create_from_template(self, **data):
-        data["date_planned_disclosure"] = timezone.now() + timezone.timedelta(days=60)
+        data["date_planned_disclosure"] = timezone.now() + timezone.timedelta(
+            days=Setting.get('ADVISORY_DISCLOSURE_TIMEDELTA'))
         data["recommendation"] = VulnerabilityTemplate.objects.get(
             vulnerability_id=data["vulnerability_key"]
         ).recommendation
@@ -79,7 +82,8 @@ class AdvisoryManager(models.Manager):
         return advisory
 
     def create_from_finding(self, finding, **data):
-        data["date_planned_disclosure"] = timezone.now() + timezone.timedelta(days=60)
+        data["date_planned_disclosure"] = timezone.now() + timezone.timedelta(
+            days=Setting.get('ADVISORY_DISCLOSURE_TIMEDELTA'))
         data["severity"] = finding.severity
         data["user"] = finding.user
         data["proof_text"] = finding.proof_text
@@ -145,7 +149,8 @@ class Advisory(TimestampedModel):
         return self.advisory_id
 
     def get_advisory_id_display(self):
-        return f"{settings.ADVISORY_ID_PREFIX}{self.advisory_id}"
+        prefix = Setting.get('ADVISORY_ID_PREFIX')
+        return f"{prefix}{self.advisory_id}"
 
     @property
     def vulnerability_key(self):

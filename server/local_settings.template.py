@@ -1,17 +1,5 @@
 from pecoret.settings import *
 
-# General
-# SITE_NAME = "PeCoReT staging"
-# DOMAIN = "pecoret.example.com"
-# PROTOCOL = "https"
-#
-# REPORT_COMPANY_INFORMATION = {
-#    "name": "TCM Security, Inc.",
-#    "street": "North Carolina",
-#    "city": "Charlotte",
-#    "homepage": "https://tcm-sec.com",
-#    "email": "christian.poeschl@usd.de",
-# }
 
 # SECRET_KEY = "changeme!really!changeme!now"
 
@@ -35,10 +23,6 @@ from pecoret.settings import *
 #EMAIL_HOST_USER = "noreply@example.com"
 #EMAIL_HOST_PASSWORD = "mysecurepassword"
 #DEFAULT_FROM_EMAIL = "noreply@example.com"
-
-
-# Advisories
-# ADVISORY_TEMPLATE = "default_template"
 
 
 # Misc
