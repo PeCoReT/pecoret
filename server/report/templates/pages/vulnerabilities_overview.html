@@ -2,7 +2,8 @@
   <h2>{{ _('Vulnerabilities') }}</h2>
   <p>
     {% trans %}
-      This section aims to provide a comprehensive assessment of the weaknesses and potential vulnerabilities identified during the engagement.
+      This section aims to provide a comprehensive assessment of the weaknesses and potential vulnerabilities identified
+      during the engagement.
     {% endtrans %}
   </p>
   {% for vulnerability in vulnerabilities %}
@@ -29,6 +30,7 @@
               <a href="#finding-{{ finding.pk }}-title">
                 <strong>{{ finding.unique_id }} - {{ finding.vulnerability.name }}</strong>
               </a>
+              <p class="text-dark font-space-small">{{ finding.component }}</p>
 
             </td>
             <td class="text-{{ finding.get_severity_display().lower() }} risk">
