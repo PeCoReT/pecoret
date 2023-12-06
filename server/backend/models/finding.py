@@ -184,7 +184,11 @@ class Finding(models.Model):
         return super().save(*args, **kwargs)
 
     def create_unique_id(self):
-        count = self.project.finding_set.count() + 1
+        last_id = self.project.finding_set.order_by('-unique_id').values('unique_id').first()
+        if not last_id:
+            count = 1
+        else:
+            count = int(last_id['unique_id'].split('-')[-1]) + 1
         unique_id = f'F-{count:05d}'
         return unique_id
 
