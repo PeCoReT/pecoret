@@ -34,4 +34,5 @@ jobs:
     - name: Run management command - sampledata
       run: |
         cd server
+        python manage.py migrate
         python manage.py sampledata --settings conf.settings_testing
