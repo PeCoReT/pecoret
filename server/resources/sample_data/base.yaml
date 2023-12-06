@@ -1,0 +1,18 @@
+project-types:
+  - name: Web Application Pentest
+  - name: Red Team Assessment
+  - name: System Level Pentest
+  - name: Thick Client Pentest
+  - name: Mobile Application Pentest
+  - name: Source Code Review
+  - name: Misc
+
+
+users:
+  - username: hschrader
+    first_name: Hank
+    last_name: Schrader
+    password: InitialPassword123
+    email: hschrader@pecoret.lan
+    groups:
+      - Management
