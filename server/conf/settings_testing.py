@@ -12,4 +12,3 @@ Q_CLUSTER = {
     "sync": True
 }
 
-SECRET_KEY = "testing"

@@ -8,7 +8,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-zwxlj(*k4)vb3wgkm%grj1grx&hc%ci&vj-5)tr=e7+j92(tf0"
+try:
+    from conf.secret_key import SECRET_KEY
+except ImportError:
+    # generate key
+    import secrets
+    with open(BASE_DIR / 'conf/secret_key.py', 'w') as f:
+        secret = secrets.token_hex(132)
+        f.write(f'SECRET_KEY = "{secret}"')
+    SECRET_KEY = secret
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -53,7 +62,7 @@ ROOT_URLCONF = "pecoret.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": ['templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
