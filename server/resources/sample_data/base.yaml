@@ -16,3 +16,10 @@ users:
     email: hschrader@pecoret.lan
     groups:
       - Management
+  - username: pentester1
+    first_name: Pentest
+    last_name: User
+    password: InitialPassword123
+    email: pentester1@pecoret.lan
+    groups:
+      - Pentester

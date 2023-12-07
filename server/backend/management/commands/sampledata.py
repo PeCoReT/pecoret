@@ -1,10 +1,9 @@
-from pathlib import Path
-
 import yaml
+from pathlib import Path
 from django.conf import settings
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
-
+from django.contrib.auth.models import Group
 from backend import models
 from backend.models.membership import Roles
 from backend.models.project import TestMethod
@@ -24,9 +23,24 @@ class Command(BaseCommand):
             self.stdout.write(f'Reading data from {path}')
             with open(path, 'r') as f:
                 self.data = yaml.safe_load(f)
+            self.create_users()
             self.create_project_types()
             self.create_companies()
             self.create_projects()
+
+    def create_users(self):
+        self.stdout.write('Creating users...')
+        for item in self.data.get('users', []):
+            name = item.pop('username')
+            password = item.pop('password')
+            groups = item.pop('groups', [])
+            user, created = models.User.objects.get_or_create(username=name, defaults=item)
+            # if created:
+            user.set_password(password)
+            for group_name in groups:
+                group = Group.objects.get(name=group_name)
+                user.groups.add(group)
+            user.save()
 
     def create_project_types(self):
         self.stdout.write('Creating project types...')
