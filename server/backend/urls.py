@@ -46,6 +46,7 @@ project_router.register(
     "mobile-applications", asset_viewsets.MobileApplicationViewSet, "mobile-application"
 )
 project_router.register("thick-clients", asset_viewsets.ThickClientViewSet, "thick-client")
+project_router.register('generic-assets', asset_viewsets.GenericAssetViewSet, 'generic-asset')
 
 project_router.register("findings", viewsets.FindingViewSet, "finding")
 project_router.register("accounts", viewsets.AccountViewSet, "account")

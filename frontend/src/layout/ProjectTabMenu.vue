@@ -90,6 +90,15 @@ export default {
                                     projectId: this.$route.params.projectId
                                 }
                             })
+                        },
+                        {
+                            label: 'Generic',
+                            route: this.$router.resolve({
+                                name: 'GenericAssetList',
+                                params: {
+                                    projectId: this.$route.params.projectId
+                                }
+                            })
                         }
                     ]
                 },

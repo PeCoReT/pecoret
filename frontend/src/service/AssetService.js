@@ -143,4 +143,33 @@ export default class AssetService {
         let url = '/projects/' + projectId + '/thick-clients/' + id + '/';
         return api.patch(url, data);
     }
+
+    getGenericAssets(api, projectId, params) {
+        let url = `/projects/${projectId}/generic-assets/`;
+        let config = {};
+        if (params) {
+            config['params'] = params;
+        }
+        return api.get(url, config);
+    }
+
+    deleteGenericAsset(api, projectId, id) {
+        let url = `/projects/${projectId}/generic-assets/${id}/`;
+        return api.delete(url);
+    }
+
+    createGenericAsset(api, projectId, data) {
+        let url = `/projects/${projectId}/generic-assets/`;
+        return api.post(url, data);
+    }
+
+    getGenericAsset(api, projectId, id) {
+        let url = `/projects/${projectId}/generic-assets/${id}/`;
+        return api.get(url);
+    }
+
+    patchGenericAsset(api, projectId, id, data) {
+        let url = `/projects/${projectId}/generic-assets/${id}/`;
+        return api.patch(url, data);
+    }
 }

@@ -1,0 +1,36 @@
+{% if project.genericasset_set.count() %}
+  <h4>{{ _('Other Assets') }}</h4>
+{% endif %}
+
+{% for asset in project.genericasset_set.all() %}
+  <div class="scope-asset">
+    <div class="header">
+      <span class="asset-logo">
+        <img src="file://images/assets/generic.svg" class="asset-logo">
+      </span>
+      <div class="asset-name">
+        <strong>{{ asset }}</strong>
+        {{ report_helpers.bleach_md(asset.description)|safe }}
+
+      </div>
+    </div>
+
+
+    <table class="table-width">
+      <tr>
+        <th>{{ _('Environment') }}</th>
+        <th>{{ _('Accessibility') }}</th>
+      </tr>
+      <tr>
+        <td>{{ asset.get_environment_display() | dynamic_trans }}</td>
+        <td>{{ asset.get_accessible_display() | dynamic_trans }}</td>
+      </tr>
+    </table>
+
+  </div>
+
+
+  {% if not loop.last %}
+    <hr />
+  {% endif %}
+{% endfor %}

@@ -5,7 +5,8 @@ from backend.serializers.assets.host import HostSerializer
 from backend.serializers.assets.service import MinimalServiceSerializer
 from backend.serializers.assets.mobile_application import MobileApplicationSerializer
 from backend.serializers.assets.thick_client import ThickClientSerializer
-from backend.models import Host, Service, MobileApplication, WebApplication, ThickClient
+from backend.serializers.assets.generic import GenericAssetSerializer
+from backend.models import Host, Service, MobileApplication, WebApplication, ThickClient, GenericAsset
 from pecoret.core.serializers import AssetGenericRelatedField
 
 
@@ -40,7 +41,8 @@ class AssetChecklistSerializer(ChecklistSerializer):
         Host: HostSerializer(),
         Service: MinimalServiceSerializer(),
         MobileApplication: MobileApplicationSerializer(),
-        ThickClient: ThickClientSerializer()
+        ThickClient: ThickClientSerializer(),
+        GenericAsset: GenericAssetSerializer()
     })
 
     class Meta:

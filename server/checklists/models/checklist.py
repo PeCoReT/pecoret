@@ -68,7 +68,8 @@ class AssetChecklist(BaseChecklist):
                         models.Q(app_label="backend", model="service") | \
                         models.Q(app_label="backend", model="host") | \
                         models.Q(app_label="backend", model="mobileapplication") | \
-                        models.Q(app_label="backend", model="thickclient")
+                        models.Q(app_label="backend", model="thickclient") | \
+                        models.Q(app_label="backend", model="genericasset")
 
     project = models.ForeignKey(
         "backend.Project", editable=False, on_delete=models.CASCADE

@@ -214,6 +214,16 @@ const router = createRouter({
                                     path: '/projects/:projectId/notes',
                                     name: 'ProjectNoteList',
                                     component: () => import('@/views/pages/projects/notes/NoteList.vue')
+                                },
+                                {
+                                    path: '/projects/:projectId/generic-assets',
+                                    name: 'GenericAssetList',
+                                    component: () => import('@/views/pages/projects/assets/GenericAssetList.vue')
+                                },
+                                {
+                                    path: '/projects/:projectId/generic-assets/:assetId',
+                                    name: 'GenericAssetDetail',
+                                    component: () => import('@/views/pages/projects/assets/GenericAssetDetail.vue')
                                 }
                             ]
                         }
