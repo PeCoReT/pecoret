@@ -17,4 +17,4 @@ nh3==0.2.14
 openpyxl==3.1.2
 defusedxml==0.7.1
 matplotlib==3.8.2
-django-extra-settings==0.10.0
+django-extra-settings==0.11.0
