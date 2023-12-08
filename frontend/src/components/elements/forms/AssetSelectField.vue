@@ -41,6 +41,11 @@ export default {
                     label: 'Thick Client',
                     value: 'thick_client',
                     url: 'thick-clients'
+                },
+                {
+                    label: 'Generic',
+                    value: 'generic_asset',
+                    url: 'generic-assets'
                 }
             ]
         };

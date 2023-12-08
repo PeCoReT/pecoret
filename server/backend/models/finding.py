@@ -104,7 +104,8 @@ class Finding(models.Model):
                         models.Q(app_label="backend", model="service") | \
                         models.Q(app_label="backend", model="host") | \
                         models.Q(app_label="backend", model="mobileapplication") | \
-                        models.Q(app_label="backend", model="thickclient")
+                        models.Q(app_label="backend", model="thickclient") | \
+                        models.Q(app_label="backend", model="genericasset")
 
     objects = FindingManager.from_queryset(FindingQuerySet)()
     project = models.ForeignKey(
