@@ -145,12 +145,12 @@ export default {
                 <template #content>
                     <DataView :value="latestFindings">
                         <template #list="slotProps">
-                            <div class="col-12 border-round border-1 hover:surface-hover" @click="onLatestFindingVisit(slotProps.data.pk)">
+                            <div class="col-12 border-round border-1 p-1 hover:surface-hover card m-0" @click="onLatestFindingVisit(item.pk)" v-for="(item, index) in slotProps.items" :key="index">
                                 <div class="flex p-4 gap-4">
-                                    <div class="flex justify-content-start w-full">{{ slotProps.data.vulnerability.name }} / {{ slotProps.data.name }}</div>
+                                    <div class="flex justify-content-start w-full">{{ item.vulnerability.name }} / {{ item.name }}</div>
 
                                     <div class="flex align-items-center justify-content-end">
-                                        <span class="severity-badge" :class="'severity-' + slotProps.data.severity.toLowerCase()">{{ slotProps.data.severity }}</span>
+                                        <span class="severity-badge" :class="'severity-' + item.severity.toLowerCase()">{{ item.severity }}</span>
                                     </div>
                                 </div>
                             </div>
