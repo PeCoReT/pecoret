@@ -37,7 +37,7 @@ class ErrorMixin:
             if self.get_project().require_cvss_score is not None:
                 score = ScoreChoices(self.get_project().require_cvss_score)
                 if score == ScoreChoices['CVSS31_BASE']:
-                    if finding.cvssbasescore.is_incomplete:
+                    if not finding.cvss_score_31:
                         error = ReportError(
                             "Missing CVSS base score", f"#finding-{finding.pk}-title")
                         self._add_error(error)
