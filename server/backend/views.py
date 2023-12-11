@@ -1,3 +1,4 @@
+import cvss
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
@@ -11,7 +12,10 @@ from drf_spectacular.utils import extend_schema
 from backend.serializers.user import UserMeSerializer
 from backend.utils import cvss4
 from backend.models.finding import Severity
-from backend.serializers.cvss_calculator import CVSS4CalculatorSerializer, CVSS4CalculatedSerializer
+from backend.serializers.cvss_calculator import (
+    CVSS4CalculatorSerializer, CVSS4CalculatedSerializer,
+    CVSS31CalculatorSerializer, CVSS31CalculatedSerializer
+)
 from .throttle import AuthFlowThrottle
 
 
@@ -133,5 +137,26 @@ class CVSS4CalculatorView(APIView):
         score, severity = cvss4.CVSS4Calculator().from_string(serializer.validated_data['vector'])
         data = {'score': score, 'severity': Severity[severity.upper()].label}
         serializer = CVSS4CalculatedSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class CVSS31CalculatorView(APIView):
+    """
+    calculates the severity and score based on a CVSS3.1 vector string
+    """
+    authentication_classes = [SessionAuthentication]
+
+    @extend_schema(request=CVSS31CalculatorSerializer, responses=CVSS31CalculatedSerializer)
+    @method_decorator(csrf_protect)
+    def post(self, request, **kwargs):
+        serializer = CVSS31CalculatorSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        c = cvss.CVSS3(serializer.validated_data['vector'])
+        score, severity = c.scores()[0], c.severities()[0]
+        if severity.upper() == 'NONE':
+            severity = 'Informational'
+        data = {'score': score, 'severity': Severity[severity.upper()].label}
+        serializer = CVSS31CalculatedSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -1,6 +1,7 @@
 import copy
 import re
 
+import cvss
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core import validators
@@ -15,13 +16,14 @@ from django_q.tasks import async_task
 
 from backend.tasks import mail
 from backend.utils import cvss4
-from .cvss_score import CVSSBaseScore
 from .cwe import CWE
 from .finding_timeline import FindingTimeline
 from .vulnerability import Severity, ProjectVulnerability
 
 CVSS_40_REGEX = (r'CVSS:4\.0\/AV:[N|A|L|P]\/AC:[L|H]\/AT:[N|P]\/PR:[N|L|H]\/UI:[N|P|A]\/VC:[H|L|N]\/'
                  r'VI:[H|L|N]\/VA:[H|L|N]\/SC:[H|L|N]\/SI:[H|L|N]\/SA:[H|L|N]')
+
+CVSS_31_REGEX = r'CVSS:3\.1/AV:[N|A|L|P]/AC:[L|H]/PR:[N|L|H]/UI:[N|R]/S:[C|U]/C:[N|L|H]/I:[N|L|H]/A:[N|L|H]'
 
 
 class FindingStatus(models.IntegerChoices):
@@ -146,6 +148,9 @@ class Finding(models.Model):
     cvss_score_40 = models.CharField(max_length=255, null=True, blank=True, validators=[validators.RegexValidator(
         regex=CVSS_40_REGEX
     )])
+    cvss_score_31 = models.CharField(max_length=255, null=True, blank=True, validators=[validators.RegexValidator(
+        regex=CVSS_31_REGEX
+    )])
     unique_id = models.CharField(max_length=16, blank=True)
 
     class Meta:
@@ -173,6 +178,11 @@ class Finding(models.Model):
     @property
     def cvss40_score(self):
         return cvss4.CVSS4Calculator().from_string(self.cvss_score_40)
+
+    @property
+    def cvss31_score(self):
+        c = cvss.CVSS3(self.cvss_score_31)
+        return c.scores()[0], c.severities()[0]
 
     def save(self, *args, **kwargs):
         if not self.finding_date:
@@ -244,19 +254,6 @@ def finding_timeline_on_save(sender, instance, created, **kwargs):
             title=title, text=text, finding=instance, user=instance.user
         )
         return
-
-
-@receiver(signals.post_save, sender=Finding)
-def init_scores(sender, instance, created, **kwargs):
-    """initialize scores (e.g. CVSSBaseScore), if new finding is created
-
-    Args:
-        sender (_type_): _description_
-        instance (_type_): _description_
-        created (_type_): _description_
-    """
-    if created:
-        CVSSBaseScore.objects.create(finding=instance)
 
 
 @receiver(signals.post_save, sender=Finding)
