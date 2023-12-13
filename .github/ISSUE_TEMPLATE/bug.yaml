@@ -1,6 +1,6 @@
 name: Bug Report
 description: File a bug report
-labels: ["Kind/Bug", "Priority/Medium"]
+labels: ["K: Bug", "P: Medium"]
 
 body:
   - type: markdown
@@ -10,38 +10,18 @@ body:
   - type: textarea
     id: what-happened
     attributes:
-      label: What happened?
-      description: Also tell us, what did you expect to happen?
+      label: Summary
+      description: Summarize what happened.
       placeholder: Tell us what you see!
     validations:
       required: true
   - type: textarea
-    attributes:
-      label: Current Behavior
-      description: A concise description of what you're experiencing.
-    validations:
-      required: false
-  - type: textarea
-    attributes:
-      label: Expected Behavior
-      description: A concise description of what you expected to happen.
-    validations:
-      required: false
-  - type: textarea
     id: steps-to-reproduce
     attributes:
       label: Steps to reproduce?
-      description: If you know it, please decribe the steps to reproduce the bug.
+      description: If you know it, please describe the steps to reproduce the bug.
     validations:
       required: false
-  - type: input
-    id: prevalence
-    attributes:
-      label: Bug prevalence
-      description: "How often do you or others encounter this bug?"
-      placeholder: "Example: Whenever I visit the user account page (1-2 times a week)"
-    validations:
-      required: true
   - type: textarea
     id: additional-information
     attributes:

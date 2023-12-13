@@ -1,11 +1,11 @@
 name: Task
-description: 'Anything that is not a bug or feature request'
-labels: ["Kind/Task", "Priority/Medium"]
+description: 'Anything else'
+labels: ["K: Task", "P: Medium"]
 
 
 body:
   - type: textarea
-    id: the-summary
+    id: summary
     attributes:
       label: Give a brief summary
     validations:
