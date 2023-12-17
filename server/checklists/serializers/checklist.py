@@ -1,5 +1,7 @@
 from rest_framework import serializers
+from pecoret.core.serializers import AssetGenericRelatedField, PrimaryKeyRelatedField
 from checklists.models import Checklist, AssetChecklist
+from checklists.serializers.category import CategorySerializer
 from backend.serializers.assets.web_application import WebApplicationSerializer
 from backend.serializers.assets.host import HostSerializer
 from backend.serializers.assets.service import MinimalServiceSerializer
@@ -7,7 +9,6 @@ from backend.serializers.assets.mobile_application import MobileApplicationSeria
 from backend.serializers.assets.thick_client import ThickClientSerializer
 from backend.serializers.assets.generic import GenericAssetSerializer
 from backend.models import Host, Service, MobileApplication, WebApplication, ThickClient, GenericAsset
-from pecoret.core.serializers import AssetGenericRelatedField
 
 
 class ChecklistIdField(serializers.Field):
@@ -23,7 +24,7 @@ class ChecklistIdField(serializers.Field):
 
 
 class ChecklistSerializer(serializers.ModelSerializer):
-    # categories = CategorySerializer(many=True, read_only=True)
+    categories = PrimaryKeyRelatedField(serializer=CategorySerializer, many=True)
 
     class Meta:
         model = Checklist
@@ -31,7 +32,7 @@ class ChecklistSerializer(serializers.ModelSerializer):
             "pk",
             "name",
             "checklist_id",
-            # "categories"
+            'categories'
         ]
 
 

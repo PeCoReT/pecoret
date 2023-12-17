@@ -1,10 +1,11 @@
 from rest_framework import serializers
+from pecoret.core.serializers import PrimaryKeyRelatedField
 from checklists.models import Category, AssetCategory
 from .item import ItemSerializer, AssetItemSerializer
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    items = ItemSerializer(many=True, read_only=True, source="item_set")
+    items = PrimaryKeyRelatedField(many=True, read_only=True, serializer=ItemSerializer, source='item_set')
 
     class Meta:
         model = Category
