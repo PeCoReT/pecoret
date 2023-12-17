@@ -1,3 +1,5 @@
+from pecoret.core.viewsets import PeCoReTReadOnlyModelViewSet, PeCoReTNoUpdateViewSet, PeCoReTModelViewSet
+from pecoret.core import permissions
 from checklists.models import Checklist, AssetChecklist
 from checklists.serializers.checklist import (
     ChecklistSerializer,
@@ -5,17 +7,17 @@ from checklists.serializers.checklist import (
     AssetChecklistCreateSerializer,
 )
 from checklists.filters.checklists import AssetChecklistFilter
-from pecoret.core.viewsets import PeCoReTReadOnlyModelViewSet, PeCoReTNoUpdateViewSet
-from pecoret.core import permissions
 
 
-class ChecklistViewSet(PeCoReTReadOnlyModelViewSet):
-    queryet = Checklist.objects.none()
+class ChecklistViewSet(PeCoReTModelViewSet):
+    queryset = Checklist.objects.none()
     permission_classes = [
         permissions.GroupPermission(
+            read_write_groups=[
+                permissions.Groups.GROUP_PENTESTER
+            ],
             read_only_groups=[
-                permissions.Groups.GROUP_MANAGEMENT,
-                permissions.Groups.GROUP_PENTESTER,
+                permissions.Groups.GROUP_MANAGEMENT
             ]
         )
     ]

@@ -1,0 +1,1 @@
+from pecoret.core.serializers import PrimaryKeyRelatedField

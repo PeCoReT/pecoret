@@ -8,6 +8,8 @@ app_name = "checklists"
 router = DefaultRouter()
 
 router.register("checklists", viewsets.ChecklistViewSet, "checklist")
+router.register('categories', viewsets.CategoryViewSet, 'category')
+router.register('items', viewsets.ItemViewSet, 'item')
 
 project_router = DefaultRouter()
 project_router.register("checklists", viewsets.AssetChecklistViewSet, "checklist")

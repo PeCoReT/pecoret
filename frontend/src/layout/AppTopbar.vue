@@ -50,6 +50,21 @@ export default {
                     route: this.$router.resolve({ name: 'CompanyList' })
                 });
             }
+            if (this.showChecklistButton === true) {
+                items.push({
+                    label: 'Checklists',
+                    items: [
+                        {
+                            label: 'Checklists',
+                            route: this.$router.resolve({ name: 'ChecklistList' })
+                        },
+                        {
+                            label: 'Categories',
+                            route: this.$router.resolve({ name: 'ChecklistCategoryList' })
+                        }
+                    ]
+                });
+            }
             if (this.showVulnerabilityTemplatesButton === true) {
                 items.push({
                     label: 'Vulnerability Templates',
@@ -129,6 +144,12 @@ export default {
                 return false;
             }
             return true;
+        },
+        showChecklistButton() {
+            if (this.authStore.groups.isPentester === true) {
+                return true;
+            }
+            return false;
         },
         showProjectButton() {
             if (this.authStore.groups.isVendor === true) {
