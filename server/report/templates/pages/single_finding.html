@@ -35,7 +35,12 @@
     {% if finding.project.require_cvss_score == 1 %}
       <tr>
         <th style="padding-right: 65px">{{ _('CVSS Base Score') }}</th>
-        <td> {{ finding.cvss31_score.0 }} - {{ finding.cvss31_score.1 | dynamic_trans }} ({{ finding.cvss_score_31 }})
+        <td>
+          {% if finding.cvss31_score %}
+            {{ finding.cvss31_score.0 }} - {{ finding.cvss31_score.1 | dynamic_trans }} ({{ finding.cvss_score_31 }})
+          {% else %}
+            Incomplete
+          {% endif %}
         </td>
       </tr>
     {% elif finding.project.require_cvss_score == 0 %}
