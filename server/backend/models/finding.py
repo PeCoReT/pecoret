@@ -88,6 +88,7 @@ class FindingManager(models.Manager):
     def copy_from_finding(self, finding):
         obj = self.model.objects.get(pk=finding.pk)
         obj.pk = None
+        obj.unique_id = None
         obj.save()
         for proof in finding.findingimageattachment_set.all():
             image_file = ImageFile(proof.image)
@@ -126,7 +127,6 @@ class Finding(models.Model):
     imported = models.BooleanField(default=False)
     finding_date = models.DateField(null=True, blank=True, default=None)
     name = models.CharField(max_length=256)
-    authenticated_test = models.BooleanField(default=False)
     user_account = models.ForeignKey(
         "backend.Account", on_delete=models.SET_NULL, null=True, blank=True
     )
@@ -183,6 +183,12 @@ class Finding(models.Model):
     def cvss31_score(self):
         c = cvss.CVSS3(self.cvss_score_31)
         return c.scores()[0], c.severities()[0]
+
+    @property
+    def authentication_required(self):
+        if self.user_account is None:
+            return False
+        return True
 
     def save(self, *args, **kwargs):
         if not self.finding_date:

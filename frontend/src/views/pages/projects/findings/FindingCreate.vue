@@ -26,8 +26,7 @@ export default {
                 severity: this.model.severity,
                 name: this.model.name,
                 status: 'Open',
-                vulnerability_id: this.model.vulnerability,
-                authenticated_test: this.model.authentication_required
+                vulnerability_id: this.model.vulnerability
             };
             if (this.model.user_account) {
                 data['user_account'] = this.model.user_account.pk;
@@ -116,10 +115,6 @@ export default {
                         <AssetSelectField v-model="model.component"></AssetSelectField>
 
                         <div class="field col-12">
-                            <InputSwitch v-model="model.authentication_required" id="auth_required"></InputSwitch>
-                            <label for="auth_required" class="ml-3">Authentication Required?</label>
-                        </div>
-                        <div class="field col-12" v-if="model.authentication_required">
                             <label for="account">Account</label>
                             <Dropdown :options="userAccountChoices" @focus="onUserAccountFocus" optionLabel="username" v-model="model.user_account"></Dropdown>
                         </div>

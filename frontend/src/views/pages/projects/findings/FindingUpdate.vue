@@ -67,15 +67,14 @@ export default {
                 exclude_from_report: this.model.exclude_from_report,
                 recommendation: this.model.recommendation,
                 date_retest: this.model.date_retest,
-                retest_results: this.model.retest_results,
-                authenticated_test: this.model.authenticated_test
+                retest_results: this.model.retest_results
             };
             if (this.model.user_account) {
                 data['user_account'] = this.model.user_account.pk;
             }
             this.service
                 .patchFinding(this.$api, this.projectId, this.findingId, data)
-                .then((response) => {
+                .then(() => {
                     this.$router.push({
                         name: 'FindingDetail',
                         params: {
@@ -114,10 +113,6 @@ export default {
                     </div>
                 </div>
                 <div class="flex flex-column gap-2 mt-3">
-                    <label for="auth_required">Authentication Required?</label>
-                    <InputSwitch v-model="model.authenticated_test" id="auth_required"></InputSwitch>
-                </div>
-                <div class="flex flex-column gap-2 mt-3" v-if="model.authenticated_test">
                     <label for="account">Account</label>
                     <Dropdown :options="userAccountChoices" optionLabel="username" v-model="model.user_account"></Dropdown>
                 </div>
