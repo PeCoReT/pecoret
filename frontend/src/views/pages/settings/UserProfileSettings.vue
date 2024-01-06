@@ -16,6 +16,11 @@ export default {
             new_email: {
                 password: null,
                 mail: null
+            },
+            change_password: {
+                old_password: null,
+                new_password: null,
+                new_password_confirm: null
             }
         };
     },
@@ -35,6 +40,24 @@ export default {
                     summary: 'Updated',
                     detail: 'Settings were updated successfully!',
                     life: 3000
+                });
+            });
+        },
+        changePassword() {
+            let url = '/users/change_password/';
+            let data = {
+                old_password: this.change_password.old_password,
+                new_password: this.change_password.new_password
+            };
+            this.$api.post(url, data).then((response) => {
+                this.change_password.old_password = null;
+                this.change_password.new_password = null;
+                this.change_password.new_password_confirm = null;
+                this.$toast.add({
+                    severity: 'success',
+                    summary: 'Password changed',
+                    life: 3000,
+                    detail: response.data.message
                 });
             });
         },
@@ -114,6 +137,34 @@ export default {
                 <template #footer>
                     <div class="flex justify-content-end mt-3">
                         <Button @click="changeEmail" label="Save"></Button>
+                    </div>
+                </template>
+            </Card>
+        </div>
+    </div>
+    <div class="grid">
+        <div class="col-12">
+            <Card>
+                <template #title>Change Password</template>
+                <template #content>
+                    <div class="grid formgrid p-fluid">
+                        <div class="field col-12">
+                            <label for="old_password">Current Password</label>
+                            <Password v-model="change_password.old_password" :feedback="false"></Password>
+                        </div>
+                        <div class="field col-12">
+                            <label for="new_password">New Password</label>
+                            <Password v-model="change_password.new_password" :feedback="false"></Password>
+                        </div>
+                        <div class="field col-12">
+                            <label for="new_password">New Password (confirm)</label>
+                            <Password v-model="change_password.new_password_confirm" :feedback="false"></Password>
+                        </div>
+                    </div>
+                </template>
+                <template #footer>
+                    <div class="flex justify-content-end mt-3">
+                        <Button @click="changePassword" label="Save" :disabled="change_password.new_password === null || change_password.new_password !== change_password.new_password_confirm"></Button>
                     </div>
                 </template>
             </Card>

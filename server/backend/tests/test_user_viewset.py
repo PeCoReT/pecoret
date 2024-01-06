@@ -109,3 +109,38 @@ class AccountActivationView(APITestCase, PeCoReTTestCaseMixin):
         headers = {"X-CSRFToken": "random"}
         response = self.client.post(self.url, self.data, headers=headers)
         # self.assertEqual(response.status_code, 400)
+
+
+class ChangePasswordView(APITestCase, PeCoReTTestCaseMixin):
+    def setUp(self):
+        self.init_mixin()
+        self.pentester1.set_password('test123')
+        self.pentester1.save()
+        self.url = self.get_url('backend:user-change-password')
+        self.data = {
+            'old_password': 'test123',
+            'new_password': 'test1234!Changemevvvv!?'
+        }
+
+    def test_working(self):
+        self.client.force_login(self.pentester1)
+        self.basic_status_code_check(self.url, self.client.post, 200, data=self.data)
+        user = User.objects.get(pk=self.pentester1.pk)
+        self.assertEqual(user.check_password('test1234!Changemevvvv!?'), True)
+        self.assertEqual(user.check_password('test123'), False)
+
+    def test_wrong_old_password(self):
+        self.data['old_password'] = 'invalid'
+        self.client.force_login(self.pentester1)
+        self.basic_status_code_check(self.url, self.client.post, 400, data=self.data)
+        user = User.objects.get(pk=self.pentester1.pk)
+        self.assertEqual(user.check_password('test1234!Changemevvvv!?'), False)
+        self.assertEqual(user.check_password('test123'), True)
+
+    def test_validate_new_password(self):
+        self.data['new_password'] = 'test'
+        self.client.force_login(self.pentester1)
+        self.basic_status_code_check(self.url, self.client.post, 400, data=self.data)
+        user = User.objects.get(pk=self.pentester1.pk)
+        self.assertEqual(user.check_password('test1234!Changemevvvv!?'), False)
+        self.assertEqual(user.check_password('test123'), True)

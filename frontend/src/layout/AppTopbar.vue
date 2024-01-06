@@ -170,7 +170,7 @@ export default {
                 this.$router.push({ name: 'Login' });
             });
         },
-        toggleMenu(event) {
+        toggleMenu() {
             this.topbarMenuActive = !this.topbarMenuActive;
         }
     },
