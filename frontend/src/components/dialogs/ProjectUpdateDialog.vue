@@ -2,6 +2,7 @@
 import PentestTypeSelectField from '../elements/forms/PentestTypeSelectField.vue';
 import CompanyService from '@/service/CompanyService';
 import ProjectService from '@/service/ProjectService';
+import { useAuthStore } from "@/store/auth";
 
 const projectService = new ProjectService();
 
@@ -17,6 +18,7 @@ export default {
         return {
             visible: false,
             loading: false,
+            authStore: useAuthStore(),
             model: this.project,
             projectId: this.$route.params.projectId,
             companyService: new CompanyService(),
@@ -99,6 +101,7 @@ export default {
             projectService
                 .patchProject(this.$api, this.projectId, data)
                 .then(() => {
+                    this.authStore.activateProject(this.model);
                     this.$emit('object-updated', this.model);
                     this.visible = false;
                 })
