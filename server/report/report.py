@@ -1,9 +1,11 @@
 import datetime
 from pathlib import Path
+from urllib.parse import urljoin
 
 import matplotlib as mpl
 import matplotlib.font_manager as font_manager
 import matplotlib.pyplot as plt
+from django.conf import settings
 from django.db.models import Count, Max, Q
 from django.utils.translation import gettext as _
 from extra_settings.models import Setting
@@ -28,23 +30,33 @@ SEVERITY_COLORS = {
 
 
 class ErrorMixin:
+    def build_url(self, path):
+        url = Setting.get('GENERAL_SITE_URL')
+        return urljoin(url, path)
+
     def check_finding_errors(self):
         # check finding errors
         for finding in Finding.objects.for_report(self.get_project()):
             if not finding.proof_text:
-                error = ReportError("Missing proof!", f"#finding-{finding.pk}-proofs")
+                url = self.build_url(
+                    settings.SITE_URLS['FINDING_DETAIL'].format(projectId=finding.project.pk, findingId=finding.pk))
+                error = ReportError("Missing proof!", f"#finding-{finding.pk}-proofs", edit_link=url)
                 self._add_error(error)
             if self.get_project().require_cvss_score is not None:
                 score = ScoreChoices(self.get_project().require_cvss_score)
                 if score == ScoreChoices['CVSS31_BASE']:
                     if not finding.cvss_score_31:
+                        url = self.build_url(settings.SITE_URLS['FINDING_SCORES'].format(projectId=finding.project.pk,
+                                                                                         findingId=finding.pk))
                         error = ReportError(
-                            "Missing CVSS base score", f"#finding-{finding.pk}-title")
+                            "Missing CVSS base score", f"#finding-{finding.pk}-title", edit_link=url)
                         self._add_error(error)
                 elif score == ScoreChoices['CVSS4_BASE']:
                     if not finding.cvss_score_40:
+                        url = self.build_url(settings.SITE_URLS['FINDING_SCORES'].format(projectId=finding.project.pk,
+                                                                                         findingId=finding.pk))
                         error = ReportError(
-                            "Missing CVSS base score", f"#finding-{finding.pk}-title")
+                            "Missing CVSS base score", f"#finding-{finding.pk}-title", edit_link=url)
                         self._add_error(error)
 
 

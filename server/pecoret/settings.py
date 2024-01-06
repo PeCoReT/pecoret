@@ -195,7 +195,8 @@ SITE_URLS = {
     "ACTIVATION": "/account-activation/{uid}/{token}",
     "ADVISORY_DETAIL": "/advisories/{advisoryId}",
     "FINDING_DETAIL": "/projects/{projectId}/findings/{findingId}",
-    "CHANGE_EMAIL": "/user/change-email/{uid}/{token}"
+    "CHANGE_EMAIL": "/user/change-email/{uid}/{token}",
+    'FINDING_SCORES': '/projects/{projectId}/findings/{findingId}/scores',
 }
 
 PASSWORD_HASHERS = [

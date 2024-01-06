@@ -136,6 +136,7 @@ class BaseReportType:
         return self.errors.get(section, [])
 
 
+
 class ProjectRelatedReportType(BaseReportType):
     """report type specific to project related reports.
     this type adds project related information to the renderer context.
