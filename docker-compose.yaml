@@ -2,7 +2,7 @@ version: '3'
 
 services:
   backend:
-    image: ghcr.io/pecoret/pecoret-server:latest
+    image: ghcr.io/pecoret/pecoret-server:dev
     environment:
       DB_NAME: pecoret
       DB_USER: pecoret
@@ -37,7 +37,7 @@ services:
 
 
   frontend:
-    image: ghcr.io/pecoret/pecoret-frontend:latest
+    image: ghcr.io/pecoret/pecoret-frontend:dev
     environment:
       VITE_APP_API_URL: http://localhost/api
     ports:
@@ -46,7 +46,7 @@ services:
       - backend
 
   worker:
-    image: ghcr.io/pecoret/pecoret-server:latest
+    image: ghcr.io/pecoret/pecoret-server:dev
     entrypoint: python3 manage.py qcluster
     environment:
       DB_NAME: pecoret
