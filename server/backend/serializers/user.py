@@ -61,7 +61,7 @@ class UserAdminUpdateSerializer(serializers.ModelSerializer):
 
 
 class UserMeSerializer(serializers.ModelSerializer):
-    # output all details of the logged in user
+    # output all details of the logged-in user
     groups = GroupSerializer(many=True, read_only=True)
 
     class Meta:
@@ -143,6 +143,28 @@ class ChangeEmailSerializer(serializers.Serializer):
         if request.user.check_password(value):
             return True
         self.fail("invalid_password")
+
+
+class PasswordChangeSerializer(serializers.Serializer):
+    """
+    serializer for the "Change Password" functionality.
+    check if the old password is valid
+    """
+    default_error_messages = {"invalid_password": "password incorrect!"}
+
+    old_password = serializers.CharField(required=True, allow_null=False, allow_blank=False)
+    new_password = serializers.CharField(required=True, allow_null=False, allow_blank=False)
+
+    def validate_old_password(self, value):
+        request = self.context['request']
+        if request.user.check_password(value):
+            return True
+        self.fail('invalid_password')
+
+    def validate_new_password(self, value):
+        # validate_password raises ValidationError already
+        validate_password(value, self.context['request'].user)
+        return value
 
 
 class ActivationSerializer(PasswordResetConfirmSerializer):

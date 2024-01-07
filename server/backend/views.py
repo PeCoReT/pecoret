@@ -31,7 +31,6 @@ class LoginResponseSerializer(serializers.Serializer):
 
 
 class LogoutSerializer(serializers.Serializer):
-    # pylint: disable=abstract-method
     """empty serializer. required to make spectacular happy
     """
 
