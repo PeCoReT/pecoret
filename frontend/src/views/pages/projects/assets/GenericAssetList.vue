@@ -132,7 +132,7 @@ export default {
                         <BlankSlate icon="fa fa-server" title="No assets!" text="No assets found!"></BlankSlate>
                     </template>
 
-                    <Column field="name" header="name">
+                    <Column field="Name" header="name">
                         <template #body="slotProps">
                             <router-link class="text-color underline" :to="{ name: 'GenericAssetDetail', params: { projectId: this.projectId, assetId: slotProps.data.pk } }">
                                 {{ slotProps.data.name }}
