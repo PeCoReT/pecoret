@@ -156,13 +156,13 @@ export default {
                     @filter="onFilter"
                 >
                     <template #header>
-                        <div class="flex justify-content-between flex-column sm:flex-row">
+                        <div class="grid">
                             <span class="p-input-icon-left mb-2">
                                 <i class="pi pi-search" />
                                 <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
                             </span>
+                            <Button v-if="selectedItems.length > 0" icon="fa fa-trash" outlined severity="danger" @click="bulkDeleteConfirm" class="mb-2 ml-2"></Button>
                         </div>
-                        <Button v-if="selectedItems.length > 0" icon="fa fa-trash" size="small" outlined severity="danger" @click="bulkDeleteConfirm"></Button>
                     </template>
                     <template #empty>
                         <BlankSlate title="No findings!" text="No findings here!" icon="fa fa-bug"></BlankSlate>
