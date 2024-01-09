@@ -2,7 +2,7 @@
 
 @page {
   size: a4 portrait;
-  margin: $page-margin-top $page-margin-right $page-margin-bottom $page-margin-left;
+  margin: var(--page-margin-top) var(--page-margin-right) var(--page-margin-bottom) var(--page-margin-left);
 
   @top-right {
     content: " ";
@@ -49,7 +49,6 @@
 }
 
 @page chapter {
-  background: #2c3e50;
 
   @top-left {
     content: none;
@@ -66,8 +65,8 @@
 
 
 html {
-  color: $text-color-primary;
-  font-size: $text-default-font-size;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-default);
   font-weight: 300;
   line-height: 1.5;
 }
@@ -80,7 +79,7 @@ body {
 h1 {
   page-break-before: always;
   font-size: 26px;
-  color: $color-heading-1;
+  color: var(--color-header-1);
 
   &::before {
     counter-increment: chapter;
@@ -91,7 +90,7 @@ h1 {
 
 h2 {
   font-size: 22px;
-  color: $color-heading-2;
+  color: var(--color-header-2);
 
   &::before {
     counter-increment: section;
@@ -104,7 +103,7 @@ h2 {
 
 h3 {
   font-size: 18px;
-  color: $color-heading-3;
+  color: var(--color-header-3);
 
   &::before {
     counter-increment: subsection;
@@ -114,7 +113,7 @@ h3 {
 
 h4, h5 {
   font-size: 16px;
-  color: $color-heading-4;
+  color: var(--color-header-4);
 }
 
 
@@ -130,7 +129,9 @@ table {
     border-collapse: collapse;
 
     td, th {
-      border: 1px solid black;
+      border-width: 1px;
+      border-style: solid;
+      border-color: var(--table-border-color);
       border-collapse: collapse;
       padding: 5px;
       text-align: left;
@@ -140,23 +141,23 @@ table {
 
 
 .text-critical {
-  color: $critical-color;
+  color: var(--color-critical);
 }
 
 .text-high {
-  color: $high-color;
+  color: var(--color-high);
 }
 
 .text-medium {
-  color: $medium-color;
+  color: var(--color-medium);
 }
 
 .text-low {
-  color: $low-color;
+  color: var(--color-low);
 }
 
 .text-informational {
-  color: $informational-color;
+  color: var(--color-informational);
 }
 
 .text-critical a, .text-high a, .text-medium a, .text-low a, .text-info a, .text-informational a {
@@ -169,9 +170,11 @@ code {
   padding: 1px 2px;
   font-family: monospace;
   font-size: 12px;
-  background-color: #e2e2e236;
+  background-color: var(--background-color-code);
   border-radius: 3px;
-  border: 1px solid #bbbbbb;
+  border-color: var(--border-color-code);
+  border-style: solid;
+  border-width: 1px;
 }
 
 
@@ -247,7 +250,7 @@ em {
 }
 
 .border-left-1 {
-  border-left: 1px solid $border-color;
+  border-left: 1px solid #000;
 }
 
 .pl-3 {
@@ -273,5 +276,5 @@ em {
 }
 
 .text-dark {
-  color: $text-color-dark;
+  color: var(--color-text-dark);
 }

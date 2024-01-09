@@ -4,18 +4,8 @@ from backend.models.vulnerability import Severity
 from pecoret.reporting import generators
 from pecoret.reporting.report_plugin import BaseReportPlugin
 from .charts import FindingBarChart
-from .report_errors import ReportErrorMixin
 from .excel import ExcelGenerator
-
-
-SEVERITY_COLORS = {
-    'critical': '#9c1720',
-    'high': '#d13c0f',
-    'medium': '#e8971e',
-    'low': '#2075f5',
-    'informational': '#059D1D',
-    'fixed': ' #43616f'
-}
+from .report_errors import ReportErrorMixin
 
 
 class ReportPlugin(ReportErrorMixin, BaseReportPlugin):
@@ -23,6 +13,17 @@ class ReportPlugin(ReportErrorMixin, BaseReportPlugin):
         models.Host, models.WebApplication,
         models.ThickClient, models.MobileApplication,
         models.GenericAsset
+    ]
+    SEVERITY_COLORS = {
+        'critical': '#9c1720',
+        'high': '#d13c0f',
+        'medium': '#e8971e',
+        'low': '#2075f5',
+        'informational': '#059D1D',
+        'fixed': ' #43616f'
+    }
+    css_files = [
+        'css/main.css'
     ]
 
     def export_project_pdf_report(self, report_document):
@@ -39,11 +40,12 @@ class ReportPlugin(ReportErrorMixin, BaseReportPlugin):
             'vulnerabilities': models.ProjectVulnerability.objects.for_project(project).filter(
                 pk__in=findings.values('vulnerability')),
             'charts': {
-                'findings_bar': FindingBarChart(findings, SEVERITY_COLORS),
+                'findings_bar': FindingBarChart(findings, self.SEVERITY_COLORS),
             },
             'settings': {
                 'GENERAL_COMPANY_NAME': Setting.get('GENERAL_COMPANY_NAME'),
-            }
+            },
+            'severity_colors': self.SEVERITY_COLORS
         }
         context = self.get_context(**data)
         context['report_errors'] = self.check_pdf_report_errors(context)
@@ -66,7 +68,8 @@ class ReportPlugin(ReportErrorMixin, BaseReportPlugin):
 
     def export_single_finding(self, finding):
         context = self.get_context(**{
-            'finding': finding, 'project': finding.project
+            'finding': finding, 'project': finding.project,
+            'severity_colors': self.SEVERITY_COLORS
         })
         context['report_errors'] = self.check_pdf_report_errors(context)
         generator = generators.PDFReportGenerator(self, context, language=finding.project.language)
@@ -78,7 +81,7 @@ class ReportPlugin(ReportErrorMixin, BaseReportPlugin):
         return generator.generate('advisory.md')
 
     def export_advisory_pdf(self, advisory):
-        context = self.get_context(**{'advisory': advisory})
+        context = self.get_context(**{'advisory': advisory, 'severity_colors': self.SEVERITY_COLORS})
         generator = generators.PDFReportGenerator(self, context)
         return generator.generate('advisory_export.html')
 
@@ -99,3 +102,7 @@ class ReportPlugin(ReportErrorMixin, BaseReportPlugin):
         for asset_class in self.project_report_asset_classes:
             assets += list(asset_class.objects.for_project(self.project))
         return assets
+
+    def on_preprocess(self, generator, **kwargs):
+        if isinstance(generator, generators.PDFReportGenerator):
+            generator.css_files += self.css_files

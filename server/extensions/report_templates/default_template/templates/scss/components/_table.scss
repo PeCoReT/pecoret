@@ -3,14 +3,16 @@
   border-collapse: collapse;
 
   td, th {
-    border-bottom: 1px solid $table-border-color;
+    border-bottom-color: var(--table-border-color);
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
     border-collapse: collapse;
     padding: 7px;
     text-align: left;
   }
 
   th {
-    border-top: 1px solid $table-border-color;
+    border-top: var(--table-border-color);
     border-collapse: collapse;
   }
 }

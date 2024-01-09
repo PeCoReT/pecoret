@@ -21,7 +21,7 @@
     font-weight: bold;
 
     a {
-      color: $toc-item-color-1;
+      color: var(--color-text-dark);
       font-size: 14px;
     }
   }
@@ -33,7 +33,7 @@
     padding-left: 6mm;
 
     a {
-      color: $toc-item-color-2;
+      color: var(--color-accent-3);
       font-size: 14px;
 
     }

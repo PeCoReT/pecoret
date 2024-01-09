@@ -19,13 +19,13 @@
 #cover {
   page-break-after: always;
   page: cover-page;
-  margin-left: $page-margin-left;
-  margin-right: $page-margin-right;
+  margin-left: var(--page-margin-left);
+  margin-right: var(--page-margin-right);
   margin-top: 80mm;
-  color: $text-color-cover;
+  color: var(--color-primary);
 
   a {
-    color: $text-color-cover;
+    color: var(--color-primary);
   }
 
   .title {
@@ -39,13 +39,13 @@
     margin-top: 1em;
     font-size: 40px;
     line-height: 1.2em;
-    color: $text-color-cover-secondary;
+    color: var(--color-secondary);
     text-align: center;
   }
 
   .date {
     margin-top: 25mm;
-    color: $text-color-cover-secondary;
+    color: var(--color-secondary);
     text-align: end;
 
   }
@@ -54,10 +54,10 @@
     position: absolute;
     bottom: 25mm;
     font-weight: 300;
-    color: $text-color-cover-secondary;
+    color: var(--color-secondary);
 
     a {
-      color: $text-color-cover-secondary;
+      color: var(--color-secondary);
     }
   }
 }
@@ -65,6 +65,6 @@
 a {
 
   &:hover {
-    background-color: $text-color-cover;
+    background-color: var(--color-primary);
   }
 }

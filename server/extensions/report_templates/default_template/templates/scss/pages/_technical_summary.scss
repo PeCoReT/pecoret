@@ -4,7 +4,7 @@
       content: target-counter(attr(href), chapter) "." target-counter(attr(href), section);
     }
     a {
-      color: $text-color-cover;
+      color: var(--color-primary);
     }
   }
 }

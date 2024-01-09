@@ -8,6 +8,8 @@ from pecoret.core.utils.markdown import bleach_md
 
 
 class BaseReportPlugin:
+    template_name = None
+
     def __init__(self, report_template):
         self.report_template = report_template
 
@@ -20,13 +22,24 @@ class BaseReportPlugin:
         kwargs.setdefault('now', datetime.datetime.now().strftime('%B %d, %Y'))
         return kwargs
 
+    def get_template_name(self):
+        if self.template_name is None:
+            return self.report_template.name
+        return self.template_name
+
     @property
     def template_package(self):
-        return f'extensions.report_templates.{self.report_template.name}'
+        return f'extensions.report_templates.{self.get_template_name()}'
 
     @property
     def template_directory(self):
-        return Path(settings.EXTENSIONS_DIRECTORY / f'report_templates/{self.report_template.name}/templates')
+        return Path(settings.EXTENSIONS_DIRECTORY / f'report_templates/{self.get_template_name()}/templates')
+
+    def on_preprocess(self, generator, **kwargs):
+        pass
+
+    def on_postprocess(self, generator, result):
+        pass
 
 
 class ReportPluginLoader:

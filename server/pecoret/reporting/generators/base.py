@@ -33,14 +33,13 @@ class BaseReportGenerator:
     def report_template(self):
         return self.report_plugin.report_template
 
-    def _preprocess(self):
+    def _preprocess(self, **kwargs):
         """
         pre-process the report before it is rendered
         :return: None
         """
         self._enable_i18n()
-        if self.preprocess_cb:
-            self.preprocess_cb()
+        self.report_plugin.on_preprocess(self, **kwargs)
 
     def _postprocess(self, result):
         """
@@ -48,8 +47,7 @@ class BaseReportGenerator:
 
         :return: None
         """
-        if self.postprocess_cb:
-            self.postprocess_cb(result)
+        self.report_plugin.on_postprocess(self, result)
 
     def generate(self, entry):
         """

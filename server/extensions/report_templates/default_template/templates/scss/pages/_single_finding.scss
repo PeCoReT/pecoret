@@ -20,7 +20,7 @@
     img {
         max-width: 100%;
         height: auto;
-        max-height: $page-content-height / 2;
+        max-height: calc(var(--page-content-height) / 2);
         margin-bottom: -6px;
     }
 

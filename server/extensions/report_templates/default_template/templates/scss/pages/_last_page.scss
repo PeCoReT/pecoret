@@ -1,9 +1,9 @@
 .last-page {
   page-break-before: always;
   page: cover-page;
-  margin-left: $page-margin-left;
-  margin-right: $page-margin-right;
-  color: $text-color-cover;
+  margin-left: var(--page-margin-left);
+  margin-right: var(--page-margin-right);
+  color: var(--color-primary);
   margin-top: 90mm;
 
   .end-of-report {

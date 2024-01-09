@@ -11,14 +11,11 @@ from .base import ReportGenerator
 class PDFReportGenerator(ReportGenerator):
     content_type = 'application/pdf'
     file_extension = 'pdf'
-    css_files = []
 
     def __init__(self, report_plugin, context, language=None, **kwargs):
         super().__init__(report_plugin, context, language=language, **kwargs)
         self.font_config = FontConfiguration()
-
-    def get_css_files(self):
-        return self.css_files.copy()
+        self.css_files = []
 
     def url_fetcher(self, url, *args, **kwargs):
         if url.startswith("file://"):
@@ -29,7 +26,7 @@ class PDFReportGenerator(ReportGenerator):
 
     def get_stylesheets(self):
         css_paths = []
-        for css in self.get_css_files():
+        for css in self.css_files:
             new_css_path = os.path.join(self.report_plugin.template_directory, css)
             css_paths.append(new_css_path)
         # append sass files
