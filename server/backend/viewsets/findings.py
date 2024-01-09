@@ -10,7 +10,7 @@ from backend.serializers.finding import (
     FindingAsAdvisorySerializer,
 )
 from backend.filters.finding import FindingFilter
-from backend.tasks.finding_export import export_single_finding
+from backend.tasks.reporting import export_single_finding
 from backend.models.advisory import Advisory
 from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions

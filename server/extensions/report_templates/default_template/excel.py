@@ -1,19 +1,14 @@
 import io
 from openpyxl import Workbook
-from backend import models
-from .base import ProjectRelatedReportType
+from pecoret.reporting.generators import ExcelGenerator as BaseExcelGenerator
 
 
-class PentestExcelReport(ProjectRelatedReportType):
-    content_type = "application/vnd.ms-excel"
-    file_extension = "xlsx"
-    default_title = "Pentest Excel"
-
-    def render_report(self):
+class ExcelGenerator(BaseExcelGenerator):
+    def generate(self, entry):
         workbook = Workbook()
         ws = workbook.active
-        ws.title = "Findings"
-        ws['A1'] = "ID"
+        ws.title = 'Findings'
+        ws['A1'] = 'ID'
         ws['B1'] = 'Name'
         ws['C1'] = 'Vulnerability'
         ws['D1'] = 'Severity'
@@ -21,7 +16,9 @@ class PentestExcelReport(ProjectRelatedReportType):
         ws['F1'] = 'Description'
         ws['G1'] = 'Recommendation'
         ws['H1'] = 'Status'
-        for finding in models.Finding.objects.for_project(self.get_project()):
+
+        findings = self.context['findings']
+        for finding in findings:
             if finding.recommendation:
                 recommendation = finding.recommendation
             else:
@@ -38,8 +35,4 @@ class PentestExcelReport(ProjectRelatedReportType):
             ])
         f = io.BytesIO()
         workbook.save(f)
-        return f.getvalue()
-
-    def get_context(self):
-        context = super().get_context()
-        return context
+        return f.getvalue(), self.content_type, self.file_extension

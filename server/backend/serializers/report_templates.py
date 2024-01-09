@@ -19,5 +19,4 @@ class ReportTemplateSerializer(ReportTemplateMinimalSerializer):
         fields = ReportTemplateMinimalSerializer.Meta.fields + [
             "date_created",
             "date_updated",
-            "path",
         ]

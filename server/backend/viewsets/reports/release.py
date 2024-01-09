@@ -1,12 +1,13 @@
 from django.http import HttpResponse
-from rest_framework.response import Response
-from rest_framework.decorators import action
 from django_q.tasks import async_task
-from backend.serializers.reports.release import ReportReleaseSerializer
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
 from backend.models.reports.report_release import ReportRelease, ReleaseType
+from backend.serializers.reports.release import ReportReleaseSerializer
 from backend.tasks.reporting import create_report_document_task
-from pecoret.core.viewsets import PeCoReTNoUpdateViewSet
 from pecoret.core import permissions
+from pecoret.core.viewsets import PeCoReTNoUpdateViewSet
 
 
 class ReportReleaseViewSet(PeCoReTNoUpdateViewSet):
@@ -36,7 +37,14 @@ class ReportReleaseViewSet(PeCoReTNoUpdateViewSet):
         response = HttpResponse(
             document.compiled_source, content_type=document.content_type
         )
-        filename = f"{document.name.lower()}-{ReleaseType(document.release_type).label.lower()}.{document.file_extension}"
+        if document.release_type == ReleaseType.PREVIEW:
+            release_type = 'preview'
+        elif document.release_type == ReleaseType.DRAFT:
+            release_type = f'{document.report.get_current_version()}-draft'
+        else:
+            release_type = document.report.get_current_version()
+        filename = (f'{self.request.project.company.name}-{self.request.project.name}-'
+                    f'{self.request.project.year}-{release_type}.{document.file_extension}')
         response["Content-Disposition"] = f'attachment; filename="{filename}"'
         return response
 

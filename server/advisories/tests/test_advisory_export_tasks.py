@@ -1,7 +1,7 @@
 from rest_framework.test import APITestCase
 from django_q.tasks import async_task, result
 from backend import models
-from backend.tasks.finding_export import export_advisory, export_advisory_markdown
+from backend.tasks.reporting import export_advisory, export_advisory_markdown
 from pecoret.core.test import PeCoReTTestCaseMixin
 
 

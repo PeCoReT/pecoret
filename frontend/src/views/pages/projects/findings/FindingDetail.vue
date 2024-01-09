@@ -135,7 +135,7 @@ export default {
             this.findingService
                 .downloadAsPDF(this.$api, this.projectId, this.findingId)
                 .then((response) => {
-                    const filename = 'finding_' + this.finding.internal_id + '.pdf';
+                    const filename = 'finding-' + this.finding.unique_id.toLowerCase() + '.pdf';
                     this.forceFileDownload(response, filename);
                 })
                 .finally(() => {

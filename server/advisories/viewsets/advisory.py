@@ -1,5 +1,4 @@
 from django.http.response import HttpResponse
-from django.conf import settings
 from rest_framework.decorators import action
 from backend.models.advisory import Advisory, Roles
 from advisories.serializers.advisory import (
@@ -9,8 +8,7 @@ from advisories.serializers.advisory import (
     AdvisoryDownloadSerializer
 )
 from advisories.serializers.timeline import AdvisoryTimelineSerializer
-from backend.models import ReportTemplate
-from backend.tasks.finding_export import export_advisory, export_advisory_markdown
+from backend.tasks.reporting import export_advisory, export_advisory_markdown
 from advisories.serializers.advisory_management import (
     AdvisoryAdvisoryManagementSerializer, AdvisoryManagementUpdateSerializer
 )

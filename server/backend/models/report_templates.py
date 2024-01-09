@@ -1,7 +1,8 @@
-from pathlib import Path
 from django.db import models
 from django.dispatch import receiver
+from django.core.validators import RegexValidator
 from django.core.exceptions import PermissionDenied, ValidationError
+from django.conf import settings
 
 
 class ReportTemplateStatus(models.IntegerChoices):
@@ -21,8 +22,7 @@ class ReportTemplate(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
     status = models.PositiveSmallIntegerField(choices=ReportTemplateStatus.choices,
                                               default=ReportTemplateStatus.ACTIVE)
-    name = models.CharField(max_length=64, unique=True)
-    path = models.CharField(max_length=128)
+    name = models.CharField(max_length=64, unique=True, validators=[RegexValidator(r'^[\w\_]*$')])
 
     def __str__(self):
         return self.name
@@ -45,9 +45,10 @@ class ReportTemplate(models.Model):
         """the path of the ``templates`` subdirectory of the report template.
 
         Returns:
-            str: path of the ``templates`` directory containing the jinja2 templates. 
+            str: path of the ``templates`` directory containing the jinja2 templates.
         """
-        return str(Path(self.path) / "templates/")
+        path = f'{self.name}/templates'
+        return str(path)
 
     class Meta:
         ordering = ["-date_created", "name"]
