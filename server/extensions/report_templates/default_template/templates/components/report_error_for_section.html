@@ -1,0 +1,9 @@
+{% if not report_document or report_document.get_release_type_display() == "Preview" %}
+  {% for error in report_plugin.get_errors_for_section(section) %}
+    {% if error.edit_link %}
+    <a class="text-color-error" target="_blank" href="{{ error.edit_link }}"><strong>Error: </strong>{{ error.message }}</a>
+    {% else %}
+        <p class="text-color-error"><strong>Error: </strong>{{ error.message }}</p>
+    {% endif %}
+  {% endfor %}
+{% endif %}

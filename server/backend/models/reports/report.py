@@ -8,14 +8,18 @@ class ReportVariant(models.IntegerChoices):
     PENTEST_EXCEL = 2, "Pentest Excel"
 
     @property
-    def variant_report_class_name(self):
+    def to_plugin_method(self):
         """required to receive the required class of the variant
 
         Returns:
             str: class name (e.g. PentestPDFReport)
         """
-        class_name = self._label_.replace(" ", "")
-        return f"{class_name}Report"
+        mappers = {
+            'Pentest PDF': 'export_project_pdf_report',
+            'Vulnerability CSV': 'export_vulnerability_csv',
+            'Pentest Excel': 'export_project_excel'
+        }
+        return mappers[self._label_]
 
 
 class ReportQuerySet(models.QuerySet):

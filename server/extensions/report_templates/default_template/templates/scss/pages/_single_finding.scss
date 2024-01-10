@@ -1,0 +1,40 @@
+.finding-details {
+  width: 100%;
+}
+
+.proofs {
+    .image-proof {
+        page-break-inside: avoid;
+    }
+
+    .image-container {
+        text-align: center;
+
+      img {
+        width: 100%;
+        max-weight: 100%;
+        height: auto;
+      }
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        max-height: calc(var(--page-content-height) / 2);
+        margin-bottom: -6px;
+    }
+
+    .caption {
+        text-align: center;
+        counter-increment: figures;
+        margin-top: 0.5em;
+
+      .figure-prefix {
+            &:after {
+                content: counter(figures) ":";
+                margin-right: 5px;
+                margin-left: 3px;
+            }
+        }
+    }
+}

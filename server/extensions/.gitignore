@@ -1,0 +1,3 @@
+report_templates/*
+!report_templates/default_template
+!report_templates/__init__.py

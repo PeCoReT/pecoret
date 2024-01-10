@@ -27,15 +27,8 @@ class RenderableLoader:
         return template_class
 
     def _import_template_module(self):
-        report_template_python_filepath = str(
-            Path(self.report_template.path) / "report.py"
-        )
-        spec = importlib.util.spec_from_file_location(
-            "report_template", report_template_python_filepath
-        )
-        report_module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(report_module)
-        return report_module
+        module = importlib.import_module('extensions.report_templates.' + self.report_template.name + '.report')
+        return module
 
     def load_template_class(self, class_name):
         """imports the custom report template from file path

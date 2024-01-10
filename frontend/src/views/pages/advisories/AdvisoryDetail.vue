@@ -43,20 +43,6 @@ export default {
                 { label: 'Medium', value: 'Medium' },
                 { label: 'Low', value: 'Low' },
                 { label: 'Informational', value: 'Informational' }
-            ],
-            downloadMenuItems: [
-                {
-                    label: 'Default PDF',
-                    command: () => {
-                        this.downloadAsPDF();
-                    }
-                },
-                {
-                    label: 'Default Markdown',
-                    command: () => {
-                        this.downloadAsMarkdown();
-                    }
-                }
             ]
         };
     },
@@ -86,9 +72,6 @@ export default {
             this.$api.get('/advisories/' + this.advisoryId + '/preview/', config).then((response) => {
                 this.previewData = response.data;
             });
-        },
-        toggleDownloadMenu(event) {
-            this.$refs.downloadMenu.toggle(event);
         },
         getAdvisory() {
             this.service.getAdvisory(this.$api, this.advisoryId).then((response) => {
@@ -134,35 +117,15 @@ export default {
             };
             this.patchAdvisory(data);
         },
-        forceFileDownload(response, title) {
-            let blob = new Blob([response.data], { type: 'application/pdf' });
+        forceFileDownload(response) {
+            let blob = new Blob([response.data], { type: response.headers['Content-Type'] });
+            let filename = response.headers['content-disposition'].split('filename=')[1].split(';')[0];
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', title);
+            link.setAttribute('download', filename);
             link.click();
             this.downloadPending = false;
-        },
-        forceMarkdownFileDownload(response, title) {
-            let blob = new Blob([response.data], { type: 'text/plain' });
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', title);
-            link.click();
-            this.downloadPending = false;
-        },
-        downloadAsMarkdown() {
-            this.downloadPending = true;
-            this.service
-                .downloadAdvisoryAsMarkdown(this.$api, this.advisoryId)
-                .then((response) => {
-                    const filename = 'advisory_' + this.advisoryId + '.md';
-                    this.forceMarkdownFileDownload(response, filename);
-                })
-                .finally(() => {
-                    this.downloadPending = false;
-                });
         },
         downloadAsPDF() {
             this.downloadPending = true;
@@ -173,8 +136,7 @@ export default {
             this.service
                 .downloadAdvisoryAsPDF(this.$api, this.advisoryId, params)
                 .then((response) => {
-                    const filename = 'advisory_' + this.advisoryId + '.pdf';
-                    this.forceFileDownload(response, filename);
+                    this.forceFileDownload(response);
                     this.exportTemplate = null;
                 })
                 .finally(() => {
@@ -235,8 +197,7 @@ export default {
             <div class="flex justify-content-end">
                 <Button icon="fa fa-eye" outlined label="Preview" @click="togglePreview"></Button>
 
-                <Button label="Download" icon="fa fa-download" outlined :loading="downloadPending" :disabled="downloadPending" @click="toggleDownloadMenu"></Button>
-                <Menu ref="downloadMenu" :model="downloadMenuItems" :popup="true"></Menu>
+                <Button label="Download" icon="fa fa-download" outlined :loading="downloadPending" :disabled="downloadPending" @click="downloadAsPDF"></Button>
                 <Button label="Edit" icon="fa fa-pen-to-square" outlined @click="this.$router.push({ name: 'AdvisoryUpdate', params: { advisoryId: this.advisoryId } })"></Button>
                 <Button label="Delete" severity="danger" @click="confirmDialogDelete" icon="fa fa-trash" outlined></Button>
             </div>

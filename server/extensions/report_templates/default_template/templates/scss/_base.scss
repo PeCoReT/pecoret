@@ -1,0 +1,280 @@
+@import '../fonts/roboto/style';
+
+@page {
+  size: a4 portrait;
+  margin: var(--page-margin-top) var(--page-margin-right) var(--page-margin-bottom) var(--page-margin-left);
+
+  @top-right {
+    content: " ";
+    background: url(file://images/logo.svg);
+    background-size: 60mm 10mm;
+    background-repeat: no-repeat;
+    height: 10mm;
+    width: 60mm;
+    margin-bottom: 8mm;
+    margin-right: -10mm;
+    background-position: right;
+  }
+
+}
+
+@page :blank {
+  @top-left {
+    background: none;
+    content: "";
+  }
+
+  @top-center {
+    content: none;
+  }
+
+  @top-right {
+    content: none;
+  }
+}
+
+@page no-chapter {
+  @top-left {
+    background: none;
+    content: none;
+  }
+
+  @top-center {
+    content: none !important;
+  }
+
+  @top-right {
+    content: none !important;
+  }
+}
+
+@page chapter {
+
+  @top-left {
+    content: none;
+  }
+
+  @top-center {
+    content: none;
+  }
+
+  @top-right {
+    content: none;
+  }
+}
+
+
+html {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-default);
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+body {
+  font-family: "Roboto";
+
+}
+
+h1 {
+  page-break-before: always;
+  font-size: 26px;
+  color: var(--color-header-1);
+
+  &::before {
+    counter-increment: chapter;
+    counter-set: section subsection;
+    content: counter(chapter) " ";
+  }
+}
+
+h2 {
+  font-size: 22px;
+  color: var(--color-header-2);
+
+  &::before {
+    counter-increment: section;
+    counter-set: subsection;
+    content: counter(chapter) "." counter(section) " ";
+  }
+
+  /*margin-bottom: 1.0 em;*/
+}
+
+h3 {
+  font-size: 18px;
+  color: var(--color-header-3);
+
+  &::before {
+    counter-increment: subsection;
+    content: counter(chapter) "." counter(section) "." counter(subsection) " ";
+  }
+}
+
+h4, h5 {
+  font-size: 16px;
+  color: var(--color-header-4);
+}
+
+
+.chapter {
+  /*border-bottom: 1px solid black;*/
+  margin-top: -1cm;
+}
+
+table {
+
+  &.table-bordered {
+    width: 100%;
+    border-collapse: collapse;
+
+    td, th {
+      border-width: 1px;
+      border-style: solid;
+      border-color: var(--table-border-color);
+      border-collapse: collapse;
+      padding: 5px;
+      text-align: left;
+    }
+  }
+}
+
+
+.text-critical {
+  color: var(--color-critical);
+}
+
+.text-high {
+  color: var(--color-high);
+}
+
+.text-medium {
+  color: var(--color-medium);
+}
+
+.text-low {
+  color: var(--color-low);
+}
+
+.text-informational {
+  color: var(--color-informational);
+}
+
+.text-critical a, .text-high a, .text-medium a, .text-low a, .text-info a, .text-informational a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+code {
+  display: inline;
+  padding: 1px 2px;
+  font-family: monospace;
+  font-size: 12px;
+  background-color: var(--background-color-code);
+  border-radius: 3px;
+  border-color: var(--border-color-code);
+  border-style: solid;
+  border-width: 1px;
+}
+
+
+pre code {
+  display: block;
+  padding: 8px;
+  margin-bottom: 8px;
+  white-space: pre-wrap;
+  line-height: 1.2em;
+  word-wrap: break-word;
+}
+
+
+.codehilite .linenos {
+  padding-right: 20px;
+}
+
+.draft {
+  z-index: -2;
+  background: url(file://images/draft.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.page-break-after {
+  page-break-after: always;
+}
+
+body {
+  counter-reset: chapter section subsection figures;
+}
+
+b {
+  font-weight: bold;
+}
+
+strong {
+  font-weight: bold;
+}
+
+i {
+  font-style: italic;
+}
+
+em {
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* helper classes */
+
+.flex {
+  display: flex;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  flex-direction: column;
+  flex: 1;
+}
+
+.border-left-1 {
+  border-left: 1px solid #000;
+}
+
+.pl-3 {
+  padding-left: 3rem;
+}
+
+.mt-default {
+  margin-top: 30px;
+}
+
+.mt-small {
+  margin-top: 10px;
+}
+
+.table-width {
+  width: 100%
+}
+
+.font-space-small {
+  line-height: normal !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.text-dark {
+  color: var(--color-text-dark);
+}

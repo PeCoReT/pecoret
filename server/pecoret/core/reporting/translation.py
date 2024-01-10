@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from django.utils.translation.trans_real import DjangoTranslation
 from django.conf import settings
 from backend.models.report_templates import ReportTemplate
@@ -11,8 +12,9 @@ def patch_django_translation():
     Source: https://stackoverflow.com/a/60221067
     """
     def _add_local_translations(self):
-        paths = ReportTemplate.objects.active().values_list("path", flat=True)
-        for path in reversed(paths):
+        template_names = ReportTemplate.objects.active().values_list('name', flat=True)
+        for name in reversed(template_names):
+            path = Path(settings.BASE_DIR, f'extensions/report_templates/{name}')
             locale_dir = os.path.join(path, "locale")
             translation = self._new_gnu_trans(locale_dir)
             self.merge(translation)

@@ -3,7 +3,7 @@ from django_q.tasks import async_task, result
 from backend import models
 from backend.models.reports.report_release import ReleaseType
 from backend.tasks.reporting import create_report_document_task
-from backend.tasks.finding_export import export_single_finding
+from backend.tasks.reporting import export_single_finding
 from pecoret.core.test import PeCoReTTestCaseMixin
 
 
