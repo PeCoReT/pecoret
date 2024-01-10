@@ -8,7 +8,7 @@ from advisories.serializers.advisory import (
     AdvisoryDownloadSerializer
 )
 from advisories.serializers.timeline import AdvisoryTimelineSerializer
-from backend.tasks.reporting import export_advisory, export_advisory_markdown
+from backend.tasks.reporting import export_advisory
 from advisories.serializers.advisory_management import (
     AdvisoryAdvisoryManagementSerializer, AdvisoryManagementUpdateSerializer
 )
@@ -63,7 +63,7 @@ class AdvisoryViewSet(PeCoReTModelViewSet):
                     read_only_roles=[Roles.READ_ONLY, Roles.VENDOR],
                 )()
             ]
-        if self.action in ["export_pdf", "export_markdown"]:
+        if self.action in "export_pdf":
             return [
                 permissions.AdvisoryPermission(
                     read_write_roles=[Roles.CREATOR],
@@ -142,23 +142,8 @@ class AdvisoryViewSet(PeCoReTModelViewSet):
         advisory = self.get_object()
         result = export_advisory(advisory, advisory.report_template)
         response = HttpResponse(result, content_type="application/pdf")
-        filename = f"advisory_{advisory.pk}"
+        filename = f"advisory-{advisory.pk}"
         response["Content-Disposition"] = f"attachment; filename={filename}.pdf"
-        return response
-
-    @action(detail=True, methods=["get"])
-    # pylint: disable=unused-argument
-    def export_markdown(self, _request, *args, **kwargs):
-        """export advisory details as Markdown attachment
-
-        Returns:
-            HttpResponse: Response with file attachment
-        """
-        advisory = self.get_object()
-        result = export_advisory_markdown(advisory, advisory.report_template)
-        response = HttpResponse(result, content_type="plain/text")
-        filename = f"advisory_{advisory.pk}.md"
-        response["Content-Disposition"] = f"attachment;filename={filename}"
         return response
 
     @action(detail=True, methods=["get"])

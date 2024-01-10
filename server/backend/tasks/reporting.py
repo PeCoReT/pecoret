@@ -29,11 +29,3 @@ def export_advisory(advisory, template):
     plugin = plugin_loader.load_plugin_from_report_template('export_advisory_pdf')
     result, content_type, extension = plugin.export_advisory_pdf(advisory)
     return result
-
-
-def export_advisory_markdown(advisory, template):
-    plugin_loader = ReportPluginLoader(template)
-    plugin = plugin_loader.load_plugin_from_report_template('export_advisory_markdown')
-    result, content_type, extension = plugin.export_advisory_markdown(advisory)
-    return result
-

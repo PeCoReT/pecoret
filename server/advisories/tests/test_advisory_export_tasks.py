@@ -1,7 +1,7 @@
 from rest_framework.test import APITestCase
 from django_q.tasks import async_task, result
 from backend import models
-from backend.tasks.reporting import export_advisory, export_advisory_markdown
+from backend.tasks.reporting import export_advisory
 from pecoret.core.test import PeCoReTTestCaseMixin
 
 
@@ -20,15 +20,6 @@ class ExportAdvisoryTask(APITestCase, PeCoReTTestCaseMixin):
         """
         task_id = async_task(
             export_advisory, self.advisory, self.report_template, sync=True
-        )
-        task_result = result(task_id, 200)
-        self.assertIsNotNone(task_result)
-
-    def test_markdown_export(self):
-        """test if markdown export of advisory works
-        """
-        task_id = async_task(
-            export_advisory_markdown, self.advisory, self.report_template, sync=True
         )
         task_result = result(task_id, 200)
         self.assertIsNotNone(task_result)

@@ -1,10 +1,8 @@
 from django.utils import translation
 from django.core.exceptions import ImproperlyConfigured
 from jinja2.sandbox import SandboxedEnvironment
-from jinja2 import PackageLoader
+from jinja2 import FileSystemLoader
 from pecoret.reporting.utils import dynamic_trans
-from pecoret.core.utils import image64
-from pecoret.core.utils.markdown import bleach_md
 
 
 class BaseReportGenerator:
@@ -20,7 +18,7 @@ class BaseReportGenerator:
         self.report_plugin = report_plugin
         self.preprocess_cb = preprocess_cb
         self.postprocess_cb = postprocess_cb
-        self.jinja_loader = PackageLoader(self.report_plugin.template_package, 'templates')
+        self.jinja_loader = FileSystemLoader(self.report_plugin.template_directory)
         self.jinja_env = SandboxedEnvironment(
             loader=self.jinja_loader,
             autoescape=self.jinja_autoescape,
@@ -47,7 +45,7 @@ class BaseReportGenerator:
 
         :return: None
         """
-        self.report_plugin.on_postprocess(self, result)
+        return self.report_plugin.on_postprocess(self, result)
 
     def generate(self, entry):
         """

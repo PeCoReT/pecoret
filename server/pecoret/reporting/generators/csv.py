@@ -8,5 +8,5 @@ class CSVGenerator(ReportGenerator):
     def generate(self, entry):
         self._preprocess()
         rendered = self.jinja_env.get_template(entry).render(self.context)
-        self._postprocess(rendered)
+        rendered = self._postprocess(rendered)
         return rendered.encode(), self.content_type, self.file_extension

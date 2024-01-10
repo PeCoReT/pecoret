@@ -75,11 +75,6 @@ class ReportPlugin(ReportErrorMixin, BaseReportPlugin):
         generator = generators.PDFReportGenerator(self, context, language=finding.project.language)
         return generator.generate('single_finding_export.html')
 
-    def export_advisory_markdown(self, advisory):
-        context = self.get_context(**{'advisory': advisory})
-        generator = generators.MarkdownGenerator(self, context)
-        return generator.generate('advisory.md')
-
     def export_advisory_pdf(self, advisory):
         context = self.get_context(**{'advisory': advisory, 'severity_colors': self.SEVERITY_COLORS})
         generator = generators.PDFReportGenerator(self, context)
