@@ -21,7 +21,7 @@ export default {
             totalRecords: 0,
             pagination: { page: 1, limit: 20 },
             filters: {
-                status: { value: 'Open' }
+                status: { value: 'Not Disclosed' }
             }
         };
     },
@@ -33,10 +33,7 @@ export default {
             return this.service.getStatusChoices();
         },
         showCreateButton() {
-            if (this.authStore.groups.isVendor === true) {
-                return false;
-            }
-            return true;
+            return this.authStore.groups.isVendor !== true;
         }
     },
     methods: {
@@ -152,7 +149,8 @@ export default {
                             <Dropdown v-model="filterModel.value" :options="statusChoices" placeholder="Select One" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Dropdown>
                         </template>
                     </Column>
-                    <Column field="is_draft" header="Is Draft?"></Column>
+                    <Column field="vulnerability_status" header="Vulnerability Status"></Column>
+                    <Column field="visibility" header="Visibility"></Column>
                     <Column field="date_planned_disclosure" header="Planned Disclosure"></Column>
                 </DataTable>
             </div>

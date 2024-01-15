@@ -1,6 +1,7 @@
 from rest_framework.test import APITestCase
 from pecoret.core.test import PeCoReTTestCaseMixin
 from backend.models.report_templates import ReportTemplate
+from backend.models.advisory import VisibilityChoices
 
 
 class AdvisoryExportViewTestCase(APITestCase, PeCoReTTestCaseMixin):
@@ -34,7 +35,7 @@ class AdvisoryExportViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.basic_status_code_check(self.url, self.client.get, 403)
 
     def test_management_draft(self):
-        self.advisory1.is_draft = True
+        self.advisory1.visibility = VisibilityChoices.MEMBERS
         self.advisory1.save()
         self.client.force_login(self.advisory_manager1)
         self.basic_status_code_check(self.url, self.client.get, 403)

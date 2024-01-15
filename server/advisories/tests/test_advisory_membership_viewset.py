@@ -106,7 +106,7 @@ class AdvisoryMembershipListView(APITestCase, PeCoReTTestCaseMixin):
         self.url = self.get_url(
             "advisories:membership-list", advisory=self.advisory2.pk
         )
-        users = [self.pentester2]
+        users = [self.pentester2, self.vendor2]
         for user in users:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.get, 200)
@@ -117,7 +117,6 @@ class AdvisoryMembershipListView(APITestCase, PeCoReTTestCaseMixin):
         )
         users = [
             self.vendor1,
-            self.vendor2,
             self.management2,
             self.management1,
             self.pentester1,

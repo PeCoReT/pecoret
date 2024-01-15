@@ -8,6 +8,7 @@ from backend.models import (
 )
 from backend.models.finding import FindingStatus, Severity
 from backend.models.account import Account
+from backend.models.advisory import VisibilityChoices
 from pecoret.core.test import PeCoReTTestCaseMixin
 
 
@@ -222,13 +223,13 @@ class FindingAsAdvisoryView(APITestCase, PeCoReTTestCaseMixin):
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
         # there is already one created during `setUp`
-        self.assertEqual(Advisory.objects.filter(is_draft=True).count(), 2)
+        self.assertEqual(Advisory.objects.filter(visibility=VisibilityChoices.MEMBERS).count(), 2)
 
     def test_management1(self):
         self.client.force_login(self.management1)
         self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
         # there is already one created during `setUp`
-        self.assertEqual(Advisory.objects.filter(is_draft=True).count(), 2)
+        self.assertEqual(Advisory.objects.filter(visibility=VisibilityChoices.MEMBERS).count(), 2)
 
     def test_forbidden(self):
         users = [

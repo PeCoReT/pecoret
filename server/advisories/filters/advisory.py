@@ -8,4 +8,4 @@ class AdvisoryFilter(filters.FilterSet):
 
     class Meta:
         model = Advisory
-        fields = ["status", "is_draft"]
+        fields = ["status"]

@@ -1,7 +1,7 @@
 from rest_framework.test import APITestCase
 from pecoret.core.test import PeCoReTTestCaseMixin
 from backend.models import VulnerabilityTemplate
-from backend.models.advisory import Severity, Advisory
+from backend.models.advisory import Severity, Advisory, VisibilityChoices
 from advisories.models.label import Label
 
 
@@ -122,7 +122,7 @@ class AdvisoryUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
                 vulnerability__vulnerability_id='new-test-vulnerability').exists(), True)
 
     def test_draft_status(self):
-        self.advisory1.is_draft = True
+        self.advisory1.visibility = VisibilityChoices.MEMBERS
         self.advisory1.save()
         self.client.force_login(self.advisory_manager1)
         self.basic_status_code_check(self.url, self.client.patch, 403, data=self.data)
@@ -189,7 +189,7 @@ class AdvisoryUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(self.url, self.client.patch, 200, data=self.data)
         # test with draft
-        draft = self.create_instance(Advisory, is_draft=True, user=self.pentester1)
+        draft = self.create_instance(Advisory, visibility=VisibilityChoices.MEMBERS, user=self.pentester1)
         self.url = self.get_url("advisories:advisory-detail", pk=draft.pk)
         self.basic_status_code_check(self.url, self.client.patch, 200, data=self.data)
 
