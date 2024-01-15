@@ -1,7 +1,7 @@
 from pecoret.core.serializers import ValuedChoiceField, VulnerabilityTemplateIdField
 from advisories.serializers.advisory import BaseAdvisorySerializer
 from backend.serializers.vulnerability import VulnerabilityTemplateSerializer
-from backend.models.advisory import AdvisoryStatusChoices
+from backend.models.advisory import AdvisoryStatusChoices, VisibilityChoices, VulnerabilityStatusChoices
 from .label import LabelSerializer
 from .fields import LabelField
 
@@ -13,10 +13,12 @@ class AdvisoryAdvisoryManagementSerializer(BaseAdvisorySerializer):
     labels = LabelSerializer(many=True, read_only=True)
     vulnerability = VulnerabilityTemplateSerializer()
     status = ValuedChoiceField(choices=AdvisoryStatusChoices.choices)
+    vulnerability_status = ValuedChoiceField(choices=VulnerabilityStatusChoices.choices)
+    visibility = ValuedChoiceField(choices=VisibilityChoices.choices)
 
     class Meta(BaseAdvisorySerializer.Meta):
         fields = BaseAdvisorySerializer.Meta.fields + [
-            "status", "vulnerability", "cve_id", "is_draft",
+            "status", "vulnerability", "cve_id", "visibility", 'vulnerability_status',
             "date_disclosure", "date_planned_disclosure", "labels"
         ]
 
@@ -24,12 +26,14 @@ class AdvisoryAdvisoryManagementSerializer(BaseAdvisorySerializer):
 class AdvisoryManagementUpdateSerializer(BaseAdvisorySerializer):
     vulnerability = VulnerabilityTemplateSerializer(read_only=True)
     status = ValuedChoiceField(choices=AdvisoryStatusChoices.choices)
+    vulnerability_status = ValuedChoiceField(choices=VulnerabilityStatusChoices.choices)
+    visibility = ValuedChoiceField(choices=VisibilityChoices.choices)
     labels = LabelField(serializer=LabelSerializer, many=True)
     vulnerability_id = VulnerabilityTemplateIdField(source="vulnerability_key")
 
     class Meta(BaseAdvisorySerializer.Meta):
         fields = BaseAdvisorySerializer.Meta.fields + [
-            "status", "vulnerability", "cve_id", "is_draft",
+            "status", "vulnerability", "cve_id", "visibility", 'vulnerability_status',
             "date_disclosure", "date_planned_disclosure", "labels",
             "vulnerability_id"
         ]

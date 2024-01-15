@@ -20,7 +20,7 @@ export default {
                 ordering: '-date_created'
             };
             this.service
-                .getAdvisories(this.$api, params)
+                .getInbox(this.$api, params)
                 .then((response) => {
                     this.items = response.data.results.slice(0, 5);
                 })
@@ -34,7 +34,7 @@ export default {
                 params: {
                     advisoryId: pk
                 }
-            })
+            });
         }
     }
 };
@@ -46,15 +46,17 @@ export default {
         <template #content>
             <DataView :value="items" v-if="loading === false">
                 <template #list="slotProps">
-                    <div class="col-12 border-round border-1 hover:surface-hover" @click="onLatestVisit(slotProps.data.pk)">
-                        <div class="flex p-4 gap-4">
-                            <div class="flex justify-content-start w-full">
-                                {{ slotProps.data.vulnerability.name }} / {{ slotProps.data.internal_name }} in
-                                {{ slotProps.data.product }}
-                            </div>
+                    <div v-for="(item, index) in slotProps.items" :key="index">
+                        <div class="col-12 border-round border-1 hover:surface-hover" @click="onLatestVisit(item.pk)">
+                            <div class="flex p-4 gap-4">
+                                <div class="flex justify-content-start w-full">
+                                    {{ item.vulnerability.name }} / {{ item.internal_name }} in
+                                    {{ item.product }}
+                                </div>
 
-                            <div class="flex align-items-center justify-content-end">
-                                <span class="severity-badge" :class="'severity-' + slotProps.data.severity.toLowerCase()">{{ slotProps.data.severity }}</span>
+                                <div class="flex align-items-center justify-content-end">
+                                    <span class="severity-badge" :class="'severity-' + item.severity.toLowerCase()">{{ item.severity }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -25,7 +25,7 @@ class AdvisoryManagementInboxViewSet(mixins.ListModelMixin, GenericViewSet):
         qs = self.get_queryset()
         data = {
             "inbox_count": qs.count(),
-            "inbox_open_count": qs.open().count(),
+            "inbox_unfixed_count": qs.unfixed().count(),
             "inbox_fixed_count": qs.fixed().count(),
             "inbox_wontfix_count": qs.wont_fix().count(),
             "inbox_next_disclosure_date": None

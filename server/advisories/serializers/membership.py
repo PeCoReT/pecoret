@@ -6,6 +6,7 @@ from backend.models.advisory_membership import AdvisoryMembership, Roles
 from backend.models.user import User
 from backend.tasks import mail
 from backend.serializers.user import BaseUserSerializer
+from backend.models.advisory import VisibilityChoices
 
 
 class AdvisoryMembershipSerializer(serializers.ModelSerializer):
@@ -19,7 +20,7 @@ class AdvisoryMembershipSerializer(serializers.ModelSerializer):
 
 class AdvisoryMembershipCreateSerializer(serializers.ModelSerializer):
     default_error_messages = {
-        "draft_not_sharable": "Draft advisories cannot be shared!"
+        "not_sharable": "Advisories with this visibility setting cannot be shared!"
     }
     role = ValuedChoiceField(choices=Roles.choices)
     email = serializers.EmailField(write_only=True)
@@ -52,6 +53,7 @@ class AdvisoryMembershipCreateSerializer(serializers.ModelSerializer):
                 # user with current username exists, so add numeral
                 User.objects.get(username=username)
                 name = username + str(idx)
+                idx += 1
             except User.DoesNotExist:
                 username = name
                 break
@@ -59,6 +61,6 @@ class AdvisoryMembershipCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         validated_data = super().validate(attrs)
-        if self.context["request"].advisory.is_draft:
-            self.fail("draft_not_sharable")
+        if self.context["request"].advisory.visibility == VisibilityChoices.MEMBERS:
+            self.fail("not_sharable")
         return validated_data

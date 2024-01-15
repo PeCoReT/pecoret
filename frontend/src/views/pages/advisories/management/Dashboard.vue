@@ -60,7 +60,7 @@ export default {
             <DetailCardWithIcon title="Inbox" :text="statistics.inbox_count" icon="fa fa-inbox"></DetailCardWithIcon>
         </div>
         <div class="col-12 md:col-6 lg:col-6 xl:col-3">
-            <DetailCardWithIcon title="Open" :text="statistics.inbox_open_count" icon="fa fa-bookmark"></DetailCardWithIcon>
+            <DetailCardWithIcon title="Unfixed" :text="statistics.inbox_unfixed_count" icon="fa fa-bookmark"></DetailCardWithIcon>
         </div>
         <div class="col-12 md:col-6 lg:col-6 xl:col-3">
             <DetailCardWithIcon title="Fixed" :text="statistics.inbox_fixed_count" icon="fa fa-check"></DetailCardWithIcon>

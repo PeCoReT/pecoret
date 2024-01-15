@@ -14,7 +14,7 @@ class InboxFilter(filters.FilterSet):
 
     class Meta:
         model = Advisory
-        fields = ["status", "is_draft", "labels"]
+        fields = ["status", "labels"]
 
     @property
     def qs(self):

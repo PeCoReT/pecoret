@@ -26,7 +26,7 @@ export default {
             totalRecords: 0,
             pagination: { page: 1, limit: 20 },
             filters: {
-                status: { value: 'Open' },
+                status: { value: 'Not Disclosed' },
                 labels: { value: null }
             },
             labelChoices: []

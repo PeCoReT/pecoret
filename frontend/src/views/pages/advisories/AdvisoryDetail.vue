@@ -1,5 +1,5 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService';
+import AdvisoryService, { AdvisoryStatusChoices, VisibilityChoices, VulnerabilityStatusChoices } from '@/service/AdvisoryService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import AdvisoryTabMenu from '@/components/pages/AdvisoryTabMenu.vue';
 import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
@@ -32,11 +32,9 @@ export default {
                     disabled: true
                 }
             ],
-            statusChoices: [
-                { title: 'Open', value: 'Open' },
-                { title: 'Fixed', value: 'Fixed' },
-                { title: "Won't Fix", value: 'Wont Fix' }
-            ],
+            vulnerabilityStatusChoices: VulnerabilityStatusChoices,
+            statusChoices: AdvisoryStatusChoices,
+            visibilityChoices: VisibilityChoices,
             severityChoices: [
                 { label: 'Critical', value: 'Critical' },
                 { label: 'High', value: 'High' },
@@ -190,7 +188,7 @@ export default {
     <div class="grid">
         <div class="col-6">
             <div class="flex justify-content-start">
-                <p class="text-xl">{{ advisory.vulnerability.name }} - {{ advisory.internal_name }} ({{ advisory.pk }})</p>
+                <p class="text-xl">{{ advisory.vulnerability.name }} - {{ advisory.internal_name }} ({{ advisory.pk }}) <span v-if="advisory.cve_id">/ {{ advisory.cve_id }}</span></p>
             </div>
         </div>
         <div class="col-6">
@@ -219,23 +217,25 @@ export default {
                         <DetailCardWithIcon title="Fixed Versions" icon="fa fa-screwdriver-wrench" class="surface-ground" :text="advisory.fixed_version || '-'"></DetailCardWithIcon>
                     </div>
                     <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="CVE-ID" icon="fa fa-barcode" class="surface-ground" :text="advisory.cve_id || '-'"></DetailCardWithIcon>
+                        <InfoCardWithForm class="surface-ground w-full" title="Visibility" icon="fa fa-file-pen">
+                            <Dropdown v-model="advisory.visibility" :options="visibilityChoices" optionLabel="label" optionValue="value" @change="patchAdvisory({ visibility: advisory.visibility })"></Dropdown>
+                        </InfoCardWithForm>
                     </div>
                 </div>
                 <div class="grid">
                     <div class="col-12 md:col-3">
-                        <InfoCardWithForm class="surface-ground w-full" title="Status" icon="fa fa-bookmark">
-                            <Dropdown v-model="advisory.status" :options="statusChoices" optionLabel="title" class="w-full" optionValue="value" @change="patchAdvisory({ status: advisory.status })"></Dropdown>
-                        </InfoCardWithForm>
-                    </div>
-                    <div class="col-12 md:col-3">
-                        <InfoCardWithForm class="surface-ground w-full" title="Is Draft?" icon="fa fa-file-pen">
-                            <InputSwitch v-model="advisory.is_draft" @change="patchAdvisory({ is_draft: advisory.is_draft })"></InputSwitch>
-                        </InfoCardWithForm>
-                    </div>
-                    <div class="col-12 md:col-3">
                         <InfoCardWithForm class="surface-ground w-full" title="Severity" icon="fa fa-shield-halved">
                             <Dropdown v-model="advisory.severity" :options="severityChoices" optionLabel="label" @change="patchAdvisory({ severity: advisory.severity })" optionValue="value"></Dropdown>
+                        </InfoCardWithForm>
+                    </div>
+                    <div class="col-12 md:col-3">
+                        <InfoCardWithForm class="surface-ground w-full" title="Vulnerability Status" icon="fa fa-file-pen">
+                            <Dropdown v-model="advisory.vulnerability_status" :options="vulnerabilityStatusChoices" optionLabel="label" optionValue="value" @change="patchAdvisory({ vulnerability_status: advisory.vulnerability_status })"></Dropdown>
+                        </InfoCardWithForm>
+                    </div>
+                    <div class="col-12 md:col-3">
+                        <InfoCardWithForm class="surface-ground w-full" title="Status" icon="fa fa-bookmark">
+                            <Dropdown v-model="advisory.status" :options="statusChoices" optionLabel="label" optionValue="value" @change="patchAdvisory({ status: advisory.status })"></Dropdown>
                         </InfoCardWithForm>
                     </div>
                     <div class="col-12 md:col-3">
