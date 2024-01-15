@@ -188,7 +188,9 @@ export default {
     <div class="grid">
         <div class="col-6">
             <div class="flex justify-content-start">
-                <p class="text-xl">{{ advisory.vulnerability.name }} - {{ advisory.internal_name }} ({{ advisory.pk }}) <span v-if="advisory.cve_id">/ {{ advisory.cve_id }}</span></p>
+                <p class="text-xl">
+                    {{ advisory.vulnerability.name }} - {{ advisory.internal_name }} ({{ advisory.pk }}) <span v-if="advisory.cve_id">/ {{ advisory.cve_id }}</span>
+                </p>
             </div>
         </div>
         <div class="col-6">
@@ -266,6 +268,7 @@ export default {
         </div>
 
         <div :class="containerCol" v-if="showPreview === true">
+            <ProgressBar v-if="!this.previewData && this.showPreview === true" mode="indeterminate" class="h-1rem"></ProgressBar>
             <iframe :src="previewUrl" v-if="this.previewData" :key="this.previewData" class="w-full h-full"></iframe>
         </div>
     </div>
