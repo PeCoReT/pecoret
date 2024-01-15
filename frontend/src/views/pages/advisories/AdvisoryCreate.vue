@@ -22,6 +22,18 @@ export default {
                     disabled: true
                 }
             ],
+            activeStep: 0,
+            stepItems: [
+                {
+                    label: 'Vendor & Description'
+                },
+                {
+                    label: 'Proof of Concept'
+                },
+                {
+                    label: 'Recommendation'
+                }
+            ],
             model: {
                 internal_name: null,
                 template: null,
@@ -30,14 +42,16 @@ export default {
                 fixed_version: null,
                 severity: null,
                 vendor_name: null,
-                vendor_url: null
+                vendor_url: null,
+                attachments: []
             },
             loading: false,
             templateChoices: []
         };
     },
     methods: {
-        create() {
+        async create() {
+            let proof_text = this.model.proof_text;
             this.loading = true;
             let data = {
                 internal_name: this.model.internal_name,
@@ -50,25 +64,28 @@ export default {
                 vendor_name: this.model.vendor_name,
                 vendor_url: this.model.vendor_url
             };
-            this.service
-                .createAdvisory(this.$api, data)
-                .then((response) => {
-                    this.$toast.add({
-                        severity: 'success',
-                        summary: 'Advisory created!',
-                        life: 3000,
-                        detail: 'Advisory was created successfully!'
-                    });
-                    this.$router.push({
-                        name: 'AdvisoryDetail',
-                        params: {
-                            advisoryId: response.data.pk
-                        }
-                    });
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
+            // create advisory first, so we can upload attachments afterward
+            let response = await this.service.createAdvisory(this.$api, data);
+            let response2 = null;
+            for (let i = 0; i < this.model.attachments.length; i++) {
+                let attachment = this.model.attachments[i];
+                let data = new FormData();
+                data.append('image', attachment);
+                response2 = await this.service.attachmentCreate(this.$api, response.data.pk, data);
+                // replace attachment link in proof_text
+                proof_text = proof_text.replace(`(${attachment.objectURL})`, `(${response2.data.image})`);
+            }
+            await this.service.patchAdvisory(this.$api, response.data.pk, { proof_text: proof_text });
+            this.$router.push({
+                name: 'AdvisoryDetail',
+                params: {
+                    advisoryId: response.data.pk
+                }
+            });
+            this.loading = false;
+        },
+        onAttachmentSelected(event) {
+            this.model.attachments.push(event.files[event.files.length - 1]);
         },
         preSelectTemplateValues() {
             this.templateChoices.forEach((item) => {
@@ -90,6 +107,19 @@ export default {
             this.templateService.getTemplates(this.$api, params).then((response) => {
                 this.templateChoices = response.data.results;
             });
+        },
+        copyLinkToClipboard(attachment) {
+            let md_data = `![${attachment.name}](${attachment.objectURL})`;
+            navigator.clipboard.writeText(md_data);
+            this.$toast.add({
+                severity: 'info',
+                summary: 'Copied to clipboard',
+                detail: 'Link copied to clipboard',
+                life: 2000
+            });
+        },
+        deleteAttachment(attachment) {
+            this.model.attachments = this.model.attachments.filter((item) => item.objectURL !== attachment.objectURL);
         }
     },
     mounted() {},
@@ -105,7 +135,9 @@ export default {
     <div class="grid">
         <div class="col-12">
             <div class="card">
-                <div class="p-fluid formgrid grid">
+                <Steps v-model:activeStep="activeStep" :model="stepItems" class="mb-3"></Steps>
+
+                <div class="p-fluid formgrid grid" v-if="activeStep === 0">
                     <div class="field col-12">
                         <label for="name">Internal Name</label>
                         <InputText id="name" v-model="model.internal_name"></InputText>
@@ -117,17 +149,13 @@ export default {
                     <div class="field col-12 md:col-6">
                         <SeveritySelectField v-model="model.severity"></SeveritySelectField>
                     </div>
-                    <div class="field col-12">
+                    <div class="field col-12 md:col-6">
                         <label for="product">Product</label>
                         <InputText id="product" v-model="model.product"></InputText>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="affected_versions">Affected Versions</label>
                         <InputText id="affected_versions" v-model="model.affected_versions"></InputText>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label for="fixed_versions">Fixed Version</label>
-                        <InputText id="fixed_version" v-model="model.fixed_version"></InputText>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="vendor_name">Vendor</label>
@@ -141,13 +169,70 @@ export default {
                         <label for="description">Description</label>
                         <MarkdownEditor v-model="model.description"></MarkdownEditor>
                     </div>
+                    <div class="mt-3 col-12">
+                        <div class="justify-content-end flex">
+                            <Button label="Next" @click="activeStep = 1"></Button>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-fluid formgrid grid" v-else-if="activeStep === 1">
+                    <div class="field col-12">
+                        <label for="proof">Proof</label>
+                        <MarkdownEditor id="proof" v-model="model.proof_text"></MarkdownEditor>
+                    </div>
+                    <div class="field col-12">
+                        <FileUpload name="attachments[]" :multiple="true" accept="image/*" :maxFileSize="1000000" @select="onAttachmentSelected">
+                            <template #header="{ chooseCallback }">
+                                <div class="row">
+                                    <div class="col">
+                                        <Button @click="chooseCallback()" icon="fa fa-upload pl-4 pr-4" outlined></Button>
+                                    </div>
+                                </div>
+                            </template>
+                            <template #content>
+                                <div v-if="model.attachments.length > 0">
+                                    <div class="flex flex-wrap gap-5">
+                                        <div v-for="file in model.attachments" :key="file.name" class="card flex flex-column border-1 surface-border align-items-center gap-4">
+                                            <div @click="copyLinkToClipboard(file)">
+                                                <img role="presentation" :alt="file.name" :src="file.objectURL" width="100" height="50" class="shadow-2" />
+                                            </div>
+                                            <span class="font-semibold">{{ file.name }}</span>
+                                            <Button @click="deleteAttachment(file)" label="Delete Attachment" class="p-0 m-0" link severity="danger"></Button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-else class="flex align-items-center justify-content-center flex-column">
+                                    <i class="pi pi-cloud-upload border-2 border-circle p-5 text-8xl text-400 border-400" />
+                                    <p class="mt-4 mb-0">Drag and drop files here to upload.</p>
+                                </div>
+                            </template>
+                        </FileUpload>
+                    </div>
+                    <div class="mt-3 col-12">
+                        <div class="grid">
+                            <div class="justify-content-end col-6 flex">
+                                <Button label="Back" @click="activeStep = 0" outlined></Button>
+                            </div>
+                            <div class="justify-content-end col-6 flex">
+                                <Button label="Next" @click="activeStep = 2"></Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-fluid formgrid grid" v-else-if="activeStep === 2">
                     <div class="field col-12">
                         <label for="recommendation">Recommendation</label>
                         <MarkdownEditor v-model="model.recommendation"></MarkdownEditor>
                     </div>
                     <div class="mt-3 col-12">
-                        <div class="justify-content-end flex">
-                            <Button label="Save" :loading="loading" @click="create"></Button>
+                        <div class="grid">
+                            <div class="justify-content-end col-6 flex">
+                                <Button label="Back" @click="activeStep = 1" outlined :disabled="loading"></Button>
+                            </div>
+                            <div class="justify-content-end col-6 flex">
+                                <Button label="Save" :loading="loading" @click="create"></Button>
+                            </div>
                         </div>
                     </div>
                 </div>

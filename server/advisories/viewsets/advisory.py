@@ -97,12 +97,10 @@ class AdvisoryViewSet(PeCoReTModelViewSet):
         if self.action == "list":
             return Advisory.objects.for_user(self.request.user)
         if self.request.user.groups.filter(name="Advisory Management").exists():
-            # allow advisory management users to update/delete/retrieve advisories (if not a draft)
-            # otherwise, return only the user's advisories in list and retrieve views
+            # allow advisory management users to update/delete/retrieve advisories (if visibility is set to team)
+            # otherwise, return only the user's advisories in retrieve views
             # advisory management users can get a list of submitted advisories from the "inbox" view.
-            return Advisory.objects.for_advisory_management(
-                include_user=self.request.user
-            )
+            return Advisory.objects.for_advisory_management(with_user=self.request.user)
         return Advisory.objects.for_user(self.request.user)
 
     def perform_create(self, serializer):

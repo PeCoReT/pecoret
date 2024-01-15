@@ -1,8 +1,11 @@
 from rest_framework import serializers
-from pecoret.core.serializers import ValuedChoiceField, VulnerabilityTemplateIdField, ActiveReportTemplateField
-from backend.models.advisory import Advisory, Severity, AdvisoryStatusChoices
+
+from backend.models.advisory import (
+    Advisory, Severity, AdvisoryStatusChoices, VisibilityChoices, VulnerabilityStatusChoices
+)
 from backend.serializers.user import MinimalUserSerializer
 from backend.serializers.vulnerability import VulnerabilityTemplateSerializer
+from pecoret.core.serializers import ValuedChoiceField, VulnerabilityTemplateIdField, ActiveReportTemplateField
 
 
 class BaseAdvisorySerializer(serializers.ModelSerializer):
@@ -14,7 +17,7 @@ class BaseAdvisorySerializer(serializers.ModelSerializer):
         model = Advisory
         fields = [
             "pk", "user",
-            "product", "affected_versions", "fixed_version", "severity",
+            "product", "affected_versions", "severity",
             "vendor_url", "vendor_name", "description", "internal_name",
             "recommendation", "date_created", "date_updated",
             "custom_report_title", "hide_advisory_id_in_report",
@@ -39,12 +42,14 @@ class AdvisoryCreateSerializer(BaseAdvisorySerializer):
 class AdvisorySerializer(BaseAdvisorySerializer):
     vulnerability = VulnerabilityTemplateSerializer()
     status = ValuedChoiceField(choices=AdvisoryStatusChoices.choices)
+    visibility = ValuedChoiceField(choices=VisibilityChoices.choices)
+    vulnerability_status = ValuedChoiceField(choices=VulnerabilityStatusChoices.choices)
     report_template = ActiveReportTemplateField(required=False)
 
     class Meta(BaseAdvisorySerializer.Meta):
-        fields = BaseAdvisorySerializer.Meta.fields + ["status", "vulnerability", "cve_id", "is_draft",
-                                                       "report_template",
-                                                       "date_disclosure", "date_planned_disclosure"]
+        fields = BaseAdvisorySerializer.Meta.fields + ["status", "vulnerability", "cve_id",
+                                                       "report_template", "fixed_version",
+                                                       "vulnerability_status", "visibility", "date_planned_disclosure"]
 
 
 class AdvisoryUpdateSerializer(AdvisorySerializer):

@@ -15,7 +15,7 @@
           }
 
           @bottom-center {
-              content: "{{ advisory.pk }} ({{ advisory.product }} {{ advisory.affected_versions }})";
+              content: "{% if not advisory.hide_advisory_id_in_report %}{{ advisory.pk }} ({{ advisory.product }} {{ advisory.affected_versions }}){% else %}{{ advisory.product }} {{ advisory.affected_versions }}{% endif %}";
               font-size: 10px;
               margin-top: -5px;
           }
@@ -47,7 +47,6 @@
     <thead>
     <tr>
       <th>Severity</th>
-      <th>Category</th>
       <th>Discovery</th>
       <th>Planned Disclosure</th>
       <th>Status</th>
@@ -58,19 +57,9 @@
       <td class="text-{{ advisory.get_severity_display().lower() }}">
         <strong>{{ advisory.get_severity_display().lower().capitalize() }}</strong>
       </td>
-      <td>{% if advisory.vulnerability.category %}{{
-        advisory.vulnerability.category}}{% else %}-{% endif %}</td>
       <td>{{ advisory.date_created.strftime("%B %d, %Y") }}</td>
       <td>{{ advisory.date_planned_disclosure.strftime("%B %d, %Y") }}</td>
-      {% if advisory.status == advisory.vulnerability.STATUS_CLOSED %}
-        {% if advisory.is_fixed %}
-          <td>Fixed</td>
-        {% else %}
-          <td>Unfixed</td>
-        {% endif %}
-      {% else %}
-        <td>Open</td>
-      {% endif %}
+      <td>{{ advisory.get_vulnerability_status_display() }}</td>
     </tr>
     </tbody>
   </table>
@@ -100,17 +89,17 @@
 </section>
 
 <section id="{{ advisory.pk }}-description">
-  <h4>Description:</h4>
+  <h4>Description</h4>
   {{ report_helpers.bleach_md(advisory.description)|safe }}
 </section>
 <section id="proofs-{{ advisory.pk }}" class="proofs">
-  <h4>Steps to reproduce:</h4>
+  <h4>Steps to reproduce</h4>
   {{ report_helpers.bleach_md(advisory.report_proof_text, allow_images=True)|safe }}
 
 </section>
 
 <section id="{{ advisory.pk }}-recommendation">
-  <h4>Recommendation:</h4>
+  <h4>Recommendation</h4>
   {{ report_helpers.bleach_md(advisory.recommendation)|safe }}
 </section>
 </body>

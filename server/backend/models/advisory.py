@@ -42,30 +42,46 @@ def default_report_template():
 
 
 class AdvisoryStatusChoices(models.IntegerChoices):
-    OPEN = 1, "Open"
+    NOT_DISCLOSED = 1, 'Not Disclosed'
+    DISCLOSED = 2, 'Disclosed'
+
+
+class VulnerabilityStatusChoices(models.IntegerChoices):
+    UNFIXED = 1, "Unfixed"
     FIXED = 2, "Fixed"
-    WONT_FIX = 3, "Wont Fix"
+    WONT_FIX = 3, "Won't Fix"
+
+
+class VisibilityChoices(models.IntegerChoices):
+    MEMBERS = 1, 'Members'
+    TEAM = 2, 'Team'
 
 
 class AdvisoryQuerySet(models.QuerySet):
     def for_user(self, user):
         return self.filter(advisorymembership__user=user)
 
-    def for_advisory_management(self, include_user=None):
-        if not include_user:
-            return self.filter(is_draft=False)
+    def for_advisory_management(self, with_user=None):
+        if not with_user:
+            return self.filter(visibility=VisibilityChoices.TEAM)
         return self.filter(
-            models.Q(advisorymembership__user=include_user) | models.Q(is_draft=False)
+            models.Q(advisorymembership__user=with_user) | models.Q(visibility=VisibilityChoices.TEAM)
         ).distinct()
 
-    def open(self):
-        return self.filter(status=AdvisoryStatusChoices.OPEN)
+    def disclosed(self):
+        return self.filter(status=AdvisoryStatusChoices.DISCLOSED)
+
+    def not_disclosed(self):
+        return self.filter(status=AdvisoryStatusChoices.NOT_DISCLOSED)
+
+    def unfixed(self):
+        return self.filter(status=VulnerabilityStatusChoices.UNFIXED)
 
     def fixed(self):
-        return self.filter(status=AdvisoryStatusChoices.FIXED)
+        return self.filter(status=VulnerabilityStatusChoices.FIXED)
 
     def wont_fix(self):
-        return self.filter(status=AdvisoryStatusChoices.WONT_FIX)
+        return self.filter(status=VulnerabilityStatusChoices.WONT_FIX)
 
     def count_by_user(self):
         return self.values("user__username").annotate(count=models.Count('pk')).order_by("-count")
@@ -109,7 +125,6 @@ class AdvisoryManager(models.Manager):
 
 
 class Advisory(TimestampedModel):
-    # pylint: disable=missing-class-docstring
     objects = AdvisoryManager.from_queryset(AdvisoryQuerySet)()
     advisory_id = models.CharField(
         max_length=28, primary_key=True, default=create_advisory_id
@@ -119,9 +134,6 @@ class Advisory(TimestampedModel):
     date_disclosure = models.DateField(blank=True, null=True)
     product = models.CharField(max_length=128)
     internal_name = models.CharField(max_length=64, default="")
-    status = models.PositiveSmallIntegerField(
-        choices=AdvisoryStatusChoices.choices, default=AdvisoryStatusChoices.OPEN
-    )
     affected_versions = models.CharField(max_length=128)
     fixed_version = models.CharField(max_length=128, blank=True, null=True)
     vulnerability = models.ForeignKey(
@@ -129,7 +141,6 @@ class Advisory(TimestampedModel):
     )
     severity = models.PositiveSmallIntegerField(choices=Severity.choices)
     cve_id = models.CharField(max_length=20, null=True, blank=True)
-    is_draft = models.BooleanField(default=True)
     vendor_url = models.URLField()
     vendor_name = models.CharField(max_length=128)
     description = models.TextField(null=True, blank=True)
@@ -140,10 +151,19 @@ class Advisory(TimestampedModel):
     proof_text = models.TextField(blank=True, default="")
     report_template = models.ForeignKey('backend.ReportTemplate', on_delete=CASCADE_REPORT_TEMPLATE_DEFAULT,
                                         default=default_report_template)
+    status = models.PositiveSmallIntegerField(
+        choices=AdvisoryStatusChoices.choices, default=AdvisoryStatusChoices.NOT_DISCLOSED
+    )
+    vulnerability_status = models.PositiveSmallIntegerField(
+        choices=VulnerabilityStatusChoices.choices, default=VulnerabilityStatusChoices.UNFIXED
+    )
+    visibility = models.PositiveSmallIntegerField(
+        choices=VisibilityChoices.choices, default=VisibilityChoices.MEMBERS
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.old_is_draft = self.is_draft
+        self.old_visibility = self.visibility
 
     def __str__(self):
         return self.advisory_id

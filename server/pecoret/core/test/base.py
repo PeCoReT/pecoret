@@ -1,19 +1,20 @@
-from django.urls import reverse_lazy
+from ddf import G
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
-from ddf import G
+from django.urls import reverse_lazy
 from extra_settings.models import Setting
+
 from backend.models import (
     User, Project, Membership, ReportTemplate, WebApplication,
     Finding
 )
+from backend.models import advisory
+from backend.models.advisory_membership import AdvisoryMembership
 from backend.models.api_token import APIToken, AccessChoices
+from backend.models.membership import Roles
 from checklists.models import (
     AssetChecklist
 )
-from backend.models.membership import Roles
-from backend.models import advisory
-from backend.models.advisory_membership import AdvisoryMembership
 
 
 class PeCoReTTestCaseMixin:
@@ -56,8 +57,10 @@ class PeCoReTTestCaseMixin:
         self.vendor1 = self.create_user("testvendor1", "changeme1234", group="Vendor")
         self.read_only_vendor = self.create_user("readonlyvendor1", "changeme1234", group="Vendor")
         self.vendor2 = self.create_user("testvendor2", "changeme1234", group="Vendor")
-        self.advisory1 = self.create_instance(advisory.Advisory, is_draft=False, user=self.pentester1)
-        self.advisory2 = self.create_instance(advisory.Advisory, is_draft=True, user=self.pentester2)
+        self.advisory1 = self.create_instance(advisory.Advisory, visibility=advisory.VisibilityChoices.TEAM,
+                                              user=self.pentester1)
+        self.advisory2 = self.create_instance(advisory.Advisory, visibility=advisory.VisibilityChoices.MEMBERS,
+                                              user=self.pentester2)
         self.assign_advisory_role(self.vendor1, advisory.Roles.VENDOR, self.advisory1)
         self.assign_advisory_role(self.read_only_vendor, advisory.Roles.READ_ONLY, self.advisory1)
 
