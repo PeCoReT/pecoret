@@ -19,7 +19,7 @@ from pecoret.core import permissions
 
 class AdvisoryViewSet(PeCoReTModelViewSet):
     """Handles ``Advisory`` model.
-    Here you can download markdown and pdf exports too.
+    Here you can download pdf exports too.
     """
 
     queryset = Advisory.objects.none()
