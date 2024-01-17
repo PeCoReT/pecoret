@@ -4,7 +4,7 @@ import matplotlib.font_manager as font_manager
 from pathlib import Path
 from matplotlib.ticker import MaxNLocator
 from django.utils.translation import gettext as _
-from pecoret.core.reporting.charts.base import Chart
+from pecoret.reporting.components.chart import Chart
 
 
 class FindingBarChart(Chart):

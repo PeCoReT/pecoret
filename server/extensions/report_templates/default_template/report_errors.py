@@ -4,7 +4,7 @@ from django.conf import settings
 from extra_settings.models import Setting
 
 from backend.models.project import ScoreChoices
-from pecoret.core.reporting.error import ReportError
+from pecoret.reporting.error import ReportError
 
 
 class ReportErrorMixin:
