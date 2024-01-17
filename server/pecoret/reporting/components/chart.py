@@ -1,5 +1,4 @@
 import io
-
 import matplotlib as mpl
 from django.utils.html import format_html
 
