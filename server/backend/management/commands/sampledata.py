@@ -54,8 +54,9 @@ class Command(BaseCommand):
         self.stdout.write('Creating checklists...')
         for data in self.data.get('checklist-categories', []):
             category_id = data.pop('id')
+            items = data.pop('items')
             category, _created = Category.objects.get_or_create(category_id=category_id, defaults=data)
-            for item in data.get('items', []):
+            for item in items:
                 item_id = item.pop('id')
                 Item.objects.get_or_create(item_id=item_id, category=category, defaults=item)
         for checklist in self.data.get('checklists', []):
