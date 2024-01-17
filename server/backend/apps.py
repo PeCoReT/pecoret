@@ -8,8 +8,11 @@ class BackendConfig(AppConfig):
     name = "backend"
 
     def ready(self):
+        # apply api schema fixes
+        import pecoret.schema  # noqa: E402
+
         # keep it here instead of the recommended pecoret.__init__
         # otherwise gunicorn will fail to load because settings module is not yet ready
         # patch translation
-        from pecoret.core.reporting.translation import patch_django_translation
+        from pecoret.reporting.translation import patch_django_translation
         patch_django_translation()
