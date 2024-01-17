@@ -7,6 +7,7 @@ from django.contrib.auth.models import Group
 from backend import models
 from backend.models.membership import Roles
 from backend.models.project import TestMethod
+from checklists.models import Category, Item, Checklist
 
 
 class Command(BaseCommand):
@@ -19,7 +20,7 @@ class Command(BaseCommand):
         self.stdout.write('Init cronjobs...')
         call_command('init_default_cronjobs')
         directory = Path(settings.BASE_DIR / 'resources/sample_data')
-        for path in Path(directory).rglob('*.yaml'):
+        for path in sorted(Path(directory).rglob('*.yaml')):
             self.stdout.write(f'Reading data from {path}')
             with open(path, 'r') as f:
                 self.data = yaml.safe_load(f)
@@ -27,6 +28,7 @@ class Command(BaseCommand):
             self.create_project_types()
             self.create_companies()
             self.create_projects()
+            self.create_checklists()
 
     def create_users(self):
         self.stdout.write('Creating users...')
@@ -47,6 +49,26 @@ class Command(BaseCommand):
         for item in self.data.get('project-types', []):
             name = item.pop('name')
             models.PentestType.objects.get_or_create(name=name, defaults=item)
+
+    def create_checklists(self):
+        self.stdout.write('Creating checklists...')
+        for data in self.data.get('checklist-categories', []):
+            category_id = data.pop('id')
+            category, _created = Category.objects.get_or_create(category_id=category_id, defaults=data)
+            for item in data.get('items', []):
+                item_id = item.pop('id')
+                Item.objects.get_or_create(item_id=item_id, category=category, defaults=item)
+        for checklist in self.data.get('checklists', []):
+            checklist_id = checklist.pop('id')
+            categories = checklist.pop('categories')
+            checklist, _created = Checklist.objects.get_or_create(checklist_id=checklist_id, defaults=checklist)
+            for category_id in categories:
+                try:
+                    category = Category.objects.get(category_id=category_id)
+                except Category.DoesNotExist:
+                    continue
+                checklist.categories.add(category)
+            checklist.save()
 
     def create_companies(self):
         self.stdout.write('Creating sample companies...')
