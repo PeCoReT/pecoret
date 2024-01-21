@@ -1,5 +1,9 @@
 from django.db import models
+from django.core.validators import RegexValidator
 from pecoret.core.models import PeCoReTBaseModel, TimestampedModel
+
+
+ID_REGEX = r'^[\w\d_-]*$'
 
 
 class ItemStatus(models.IntegerChoices):
@@ -15,7 +19,7 @@ class BaseItemQuerySet(models.QuerySet):
 class BaseItem(PeCoReTBaseModel, TimestampedModel):
     objects = BaseItemQuerySet.as_manager()
     name = models.CharField(max_length=128)
-    item_id = models.CharField(max_length=128)
+    item_id = models.CharField(max_length=128, validators=[RegexValidator(regex=ID_REGEX)])
     description = models.TextField()
     category = models.ForeignKey("checklists.Category", on_delete=models.CASCADE)
 

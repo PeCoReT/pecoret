@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from pecoret.core.models import PeCoReTBaseModel
@@ -7,11 +8,14 @@ from .category import AssetCategory
 from .item import AssetItem, Item
 
 
+ID_REGEX = r'^[\w\d_-]*$'
+
+
 class BaseChecklist(PeCoReTBaseModel):
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=128)
-    checklist_id = models.CharField(max_length=128, unique=True)
+    checklist_id = models.CharField(max_length=128, unique=True, validators=[RegexValidator(regex=ID_REGEX)])
     categories = models.ManyToManyField("checklists.Category")
 
     class Meta:

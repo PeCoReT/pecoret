@@ -1,11 +1,15 @@
+from django.core.validators import RegexValidator
 from django.db import models
 from pecoret.core.models import PeCoReTBaseModel, TimestampedModel
+
+
+ID_REGEX = r'^[\w\d_-]*$'
 
 
 class BaseCategory(PeCoReTBaseModel, TimestampedModel):
     name = models.CharField(max_length=128)
     summary = models.CharField(max_length=258, null=True, blank=True)
-    category_id = models.CharField(max_length=128)
+    category_id = models.CharField(max_length=128, validators=[RegexValidator(ID_REGEX)])
 
     class Meta:
         ordering = ["category_id"]
