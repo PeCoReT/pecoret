@@ -220,7 +220,7 @@ class FindingAsAdvisoryView(APITestCase, PeCoReTTestCaseMixin):
         }
 
     def test_function(self):
-        advisory = Advisory.objects.create_from_finding(self.finding1, self.data)
+        advisory = Advisory.objects.create_from_finding(self.finding1, **self.data)
         self.assertIsNotNone(advisory)
 
     def test_pentester1(self):
