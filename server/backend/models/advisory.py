@@ -114,10 +114,9 @@ class AdvisoryManager(models.Manager):
         else:
             advisory.recommendation = finding.vulnerability.recommendation
         for proof in finding.findingimageattachment_set.all():
-            image_file = ImageFile(proof.image)
+            image_file = ImageFile(proof.image, name=proof.name)
 
             ImageAttachment.objects.create(
-                caption=proof.caption,
                 advisory=advisory,
                 image=image_file
             )
