@@ -6,6 +6,8 @@ import CompanyUpdateDialog from '@/components/dialogs/CompanyUpdateDialog.vue';
 import CompanyTabMenu from '../../../components/pages/CompanyTabMenu.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 import markdown from '@/utils/markdown';
+import CompanyInformationUpdateDialog from "@/components/dialogs/CompanyInformationUpdateDialog.vue";
+import { useAuthStore } from "@/store/auth";
 
 export default {
     name: 'CompanyDetail',
@@ -18,6 +20,7 @@ export default {
                 { label: 'Company Detail', disabled: true }
             ],
             company: {},
+            authStore: useAuthStore(),
             companyInformation: [],
             reportTemplate: {}
         };
@@ -61,7 +64,7 @@ export default {
         this.getCompany();
         this.getCompanyInformation();
     },
-    components: { DetailCardWithIcon, CompanyInformationCreateDialog, CompanyUpdateDialog, CompanyTabMenu, BlankSlate }
+    components: { CompanyInformationUpdateDialog, DetailCardWithIcon, CompanyInformationCreateDialog, CompanyUpdateDialog, CompanyTabMenu, BlankSlate }
 };
 </script>
 
@@ -114,9 +117,10 @@ export default {
                             <template #footer>
                                 <hr />
                                 <div class="grid">
-                                    <div class="col-12 md:col-6">{{ info.user.username }} on {{ info.date_created }}</div>
+                                    <div class="col-12 md:col-6">{{ info.user.username }} on {{ info.date_created }}<span v-if="info.user_edit">; edited by {{ info.user_edit.username }} on {{ info.date_updated }}</span></div>
                                     <div class="col-12 md:col-6">
                                         <div class="flex justify-content-end">
+                                            <CompanyInformationUpdateDialog :information="info" @object-updated="getCompanyInformation"></CompanyInformationUpdateDialog>
                                             <Button size="small" icon="fa fa-trash" severity="danger" outlined @click="confirmDialogDelete(info.pk)"></Button>
                                         </div>
                                     </div>

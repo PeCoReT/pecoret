@@ -25,3 +25,6 @@ class CompanyInformationViewSet(PeCoReTModelViewSet):
 
     def get_queryset(self):
         return CompanyInformation.objects.for_company(self.request.company)
+
+    def perform_update(self, serializer):
+        serializer.save(user_edit=self.request.user, company=self.request.company)
