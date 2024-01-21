@@ -38,7 +38,8 @@ class TimestampedModel(models.Model):
 
 def CASCADE_USER_TO_GHOST(collector, field, sub_objs, using):
     for obj in sub_objs:
-        obj.user = User.objects.get(username="Ghost")
+        if obj.user:
+            obj.user = User.objects.get(username="Ghost")
     models.CASCADE(collector, field, sub_objs, using)
 
 

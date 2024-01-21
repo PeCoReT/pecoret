@@ -3,6 +3,7 @@ import CompanyTabMenu from '@/components/pages/CompanyTabMenu.vue';
 import CompanyService from '@/service/CompanyService';
 import ContactCreateDialog from '../../../components/dialogs/ContactCreateDialog.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
+import CompanyContactUpdateDialog from "@/components/dialogs/CompanyContactUpdateDialog.vue";
 
 export default {
     name: 'CompanyContactList',
@@ -77,7 +78,7 @@ export default {
             });
         }
     },
-    components: { BlankSlate, CompanyTabMenu, ContactCreateDialog }
+    components: { CompanyContactUpdateDialog, BlankSlate, CompanyTabMenu, ContactCreateDialog }
 };
 </script>
 
@@ -127,6 +128,7 @@ export default {
                         <Column field="role" header="Role"></Column>
                         <Column header="Actions">
                             <template #body="slotProps">
+                                <CompanyContactUpdateDialog :company="slotProps.data" @object-updated="this.getContacts"></CompanyContactUpdateDialog>
                                 <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                             </template>
                         </Column>

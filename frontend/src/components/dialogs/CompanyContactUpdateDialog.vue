@@ -2,21 +2,19 @@
 import CompanyService from '@/service/CompanyService';
 
 export default {
-    name: 'ContactCreateDialog',
-    emits: ['object-created'],
+    name: 'CompanyContactUpdateDialog',
+    props: {
+        company: {
+            required: true
+        }
+    },
+    emits: ['object-updated'],
     data() {
         return {
             visible: false,
-            companyService: new CompanyService(),
+            model: this.company,
             companyId: this.$route.params.companyId,
-            model: {
-                first_name: null,
-                last_name: null,
-                phone: null,
-                role: null,
-                pgp_public_key: null,
-                email: null
-            }
+            service: new CompanyService()
         };
     },
     methods: {
@@ -26,7 +24,7 @@ export default {
         open() {
             this.visible = true;
         },
-        create() {
+        patch() {
             let data = {
                 first_name: this.model.first_name,
                 last_name: this.model.last_name,
@@ -35,34 +33,36 @@ export default {
                 email: this.model.email,
                 role: this.model.role
             };
-            this.companyService.createContact(this.$api, this.companyId, data).then(() => {
-                this.$toast.add({
-                    severity: 'success',
-                    summary: 'Created!',
-                    detail: 'Contact created for company!',
-                    life: 3000
-                });
-                this.$emit('object-created');
+            this.service.patchContact(this.$api, this.companyId, this.company.pk, data).then(() => {
+                this.$emit('object-updated', this.model);
                 this.visible = false;
             });
         }
     },
-    components: {}
+    watch: {
+        company: {
+            immediate: true,
+            deep: true,
+            handler(value) {
+                this.model = value;
+            }
+        }
+    }
 };
 </script>
 
 <template>
-    <Button icon="fa fa-plus" label="Contact" @click="open" outlined></Button>
+    <Button icon="fa fa-pen-to-square" size="small" @click="open" outlined></Button>
 
-    <Dialog header="Create Contact" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
+    <Dialog header="Update Contact" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
         <div class="p-fluid formgrid grid">
             <div class="field col-12 md:col-6">
                 <label for="first_name">First Name</label>
-                <InputText id="first_name" v-model="model.first_name"></InputText>
+                <InputText id="first_name" type="text" v-model="model.first_name"></InputText>
             </div>
             <div class="field col-12 md:col-6">
                 <label for="last_name">Last Name</label>
-                <InputText id="last_name" v-model="model.last_name"></InputText>
+                <InputText id="last_name" type="text" v-model="model.last_name"></InputText>
             </div>
             <div class="field col-12">
                 <label for="email">E-Mail</label>
@@ -84,7 +84,7 @@ export default {
 
         <template #footer>
             <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
+            <Button label="Save" @click="patch" icon="pi pi-check" class="p-button-outlined"></Button>
         </template>
     </Dialog>
 </template>
