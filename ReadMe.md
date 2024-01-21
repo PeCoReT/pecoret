@@ -1,19 +1,66 @@
-# PeCoReT
+# PeCoReT - Pentest Collaboration and Reporting Tool
 
-*PeCoReT* (Pentest Collaboration and Reporting Tool) is an open source application to manage your pentest projects.
+Welcome to PeCoReT, the *Pentest Collaboration and Reporting Tool*!
+PeCoReT is designed to be a fully open-source collaboration platform tailored for pentest projects.
 
-The documentation is located at [https://pecoret.github.io](https://pecoret.github.io).
 
+For detailed information and usage instructions, please refer to the [documentation](https://pecoret.github.io).
 
 ## Features
-* No *pro* or premium features (free to use)
-* Unlimited projects and users
-* Customize different aspects of the application (e.g. report templates, vulnerability templates, checklists, ...)
-* Report generator based on weasyprint (no more Word documents ;))
-* Advisory management application to share 3rd party vulnerabilities with their vendors
-* Markdown support
-* Checklists (track progress of pentested assets)
-* REST-API
-* Project Notes
-* Multi language vulnerabilities
-* Open-Source and self-hosted
+
+* **Fully Open Source Collaboration:**
+
+   PeCoReT serves as a comprehensive open-source platform for collaborative pentest projects.   
+   Enjoy unrestricted access to all features without any limitations on the number of projects or users.
+
+* **Beautiful and Customizable Reports:**
+
+   Create visually appealing and customized reports that meet your specific requirements.  
+   PeCoReT supports various export formats, ensuring flexibility in presenting findings and recommendations.
+
+* **Multi-Language Vulnerabilities and Reports:**
+
+   Address the global landscape by managing and reporting vulnerabilities in various languages.   
+   PeCoReT supports multi-language vulnerabilities and reports to cater to diverse environments.
+
+* **No Limits for Projects or Users:**
+
+   Unlike other solutions, PeCoReT imposes no restrictions on the number of projects or users.   
+   Scale your pentest activities without constraints and collaborate seamlessly.
+
+* **Customization with Templates:**
+
+   Tailor the application to your needs with customizable templates.
+   Create custom report and vulnerability templates that align with your organization's standards and methodologies.
+
+* **Checklists:**
+
+   Track your progress during assessments with the built-in checklist feature.
+   Stay organized and ensure that all necessary steps are completed throughout the pentest process.
+
+* **Markdown Support:**
+
+   Leverage the power of Markdown in various text fields.
+   Write proofs, findings, and other documentation in Markdown for clear and consistent formatting.
+
+* **Advisory Application:**
+
+   Initiate the responsible disclosure process with the Advisory application.   
+   Submit vulnerabilities found in third-party applications, facilitating a secure and transparent communication channel with affected parties.
+
+* **REST-API:**
+
+   Integrate PeCoReT seamlessly into your workflow or tools using the REST-API.   
+   Automate tasks, streamline processes, and enhance efficiency in your security assessments.
+
+
+## Getting Started
+To start using PeCoReT, follow the [installation instructions at the documentation](https://pecoret.github.io/docs/category/installation/).
+
+
+## Contributions and Support
+PeCoReT welcomes contributions from the community.
+Feel free to open issues, submit pull requests, or join discussions.
+For support, refer to the [documentation](https://pecoret.github.io) or reach out to our community.
+
+Happy pentesting with PeCoReT! 🚀
