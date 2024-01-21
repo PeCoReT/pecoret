@@ -4,7 +4,7 @@ from backend.models import (
     VulnerabilityTemplate,
     Advisory,
     ProjectVulnerability,
-    ReportTemplate,
+    ReportTemplate
 )
 from backend.models.finding import FindingStatus, Severity
 from backend.models.account import Account
@@ -218,6 +218,10 @@ class FindingAsAdvisoryView(APITestCase, PeCoReTTestCaseMixin):
             "vendor_name": "Test Vendor",
             "affected_versions": "234.2",
         }
+
+    def test_function(self):
+        advisory = Advisory.objects.create_from_finding(self.finding1, self.data)
+        self.assertIsNotNone(advisory)
 
     def test_pentester1(self):
         self.client.force_login(self.pentester1)
