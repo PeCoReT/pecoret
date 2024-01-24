@@ -71,28 +71,30 @@ export default {
                     route: this.$router.resolve({ name: 'VulnerabilityTemplateList' })
                 });
             }
-            let advisories = { label: 'Advisories', items: [] };
-            advisories.items.push({
-                label: 'My Advisories',
-                route: this.$router.resolve({
-                    name: 'AdvisoryList'
-                })
-            });
-            if (this.authStore.groups.isAdvisoryManagement === true) {
+            if (this.showAdvisoriesButton === true) {
+                let advisories = { label: 'Advisories', items: [] };
                 advisories.items.push({
-                    label: 'Dashboard',
+                    label: 'My Advisories',
                     route: this.$router.resolve({
-                        name: 'AdvisoryManagementDashboard'
+                        name: 'AdvisoryList'
                     })
                 });
-                advisories.items.push({
-                    label: 'Labels',
-                    route: this.$router.resolve({
-                        name: 'AdvisoryManagementLabelList'
-                    })
-                });
+                if (this.authStore.groups.isAdvisoryManagement === true) {
+                    advisories.items.push({
+                        label: 'Dashboard',
+                        route: this.$router.resolve({
+                            name: 'AdvisoryManagementDashboard'
+                        })
+                    });
+                    advisories.items.push({
+                        label: 'Labels',
+                        route: this.$router.resolve({
+                            name: 'AdvisoryManagementLabelList'
+                        })
+                    });
+                }
+                items.push(advisories);
             }
-            items.push(advisories);
 
             if (this.authStore.groups.isAdmin === true) {
                 items.push({
@@ -140,7 +142,7 @@ export default {
             return true;
         },
         showVulnerabilityTemplatesButton() {
-            if (this.authStore.groups.isVendor === true) {
+            if (this.authStore.groups.isVendor === true || this.authStore.groups.isCustomer === true) {
                 return false;
             }
             return true;
@@ -153,6 +155,12 @@ export default {
         },
         showProjectButton() {
             if (this.authStore.groups.isVendor === true) {
+                return false;
+            }
+            return true;
+        },
+        showAdvisoriesButton() {
+            if (this.authStore.groups.isCustomer === true) {
                 return false;
             }
             return true;

@@ -25,6 +25,13 @@ class ProjectListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.assertEqual(j["count"], 1)
         self.assertEqual(j["results"][0]["pk"], self.project1.pk)
 
+    def test_customer(self):
+        self.client.force_login(self.customer1)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        j = response.json()
+        self.assertEqual(j["count"], 0)
+
     def test_pentester2(self):
         self.client.force_login(self.pentester2)
         response = self.client.get(self.url)

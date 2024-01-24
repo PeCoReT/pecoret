@@ -33,7 +33,13 @@ class ProjectViewSet(PeCoReTModelViewSet):
             return [permissions.PRESET_GROUP_MANAGEMENT()]
         elif self.action == "list":
             return [
-                permissions.PRESET_GROUP_PENTESTER_MANAGEMENT(),
+                permissions.GroupPermission(
+                    read_write_groups=[
+                        permissions.Groups.GROUP_MANAGEMENT,
+                        permissions.Groups.GROUP_PENTESTER
+                    ],
+                    read_only_groups=[permissions.Groups.CUSTOMER]
+                )
             ]
         elif self.action == "destroy":
             return [permissions.PRESET_GROUP_MANAGEMENT()]

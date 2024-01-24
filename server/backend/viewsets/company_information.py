@@ -14,7 +14,8 @@ class CompanyInformationViewSet(PeCoReTModelViewSet):
         permissions.CompanyPermission(
             read_write_groups=[
                 permissions.Groups.GROUP_PENTESTER,
-                permissions.Groups.GROUP_MANAGEMENT
+                permissions.Groups.GROUP_MANAGEMENT,
+                permissions.Groups.CUSTOMER
             ],
             read_only_groups=[]
         )

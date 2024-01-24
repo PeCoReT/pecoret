@@ -1,4 +1,4 @@
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, PermissionsMixin
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_str, force_bytes
 from django.utils.http import urlsafe_base64_encode
@@ -41,6 +41,7 @@ class UserUpdateViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.test_user = self.create_user("test_user123", "changeme1234")
         self.url = self.get_url("backend:user-detail", pk=self.test_user.pk)
+        self.data = {'is_active': False}
 
     def test_update_not_allowed(self):
         self.client.force_login(self.management1)
@@ -55,6 +56,16 @@ class UserUpdateViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(User.objects.get(username="test_user123").groups.values_list("pk", flat=True)),
                          data["groups"])
+
+    def test_forbidden(self):
+        users = [
+            self.management1, self.management2, self.advisory_manager1, self.vendor1,
+            self.vendor2, self.user1, self.pentester1,self.pentester2, self.customer2,
+            self.customer1
+        ]
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.patch, 403, data=self.data)
 
 
 class UserCreateViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
@@ -144,3 +155,41 @@ class ChangePasswordView(APITestCase, PeCoReTTestCaseMixin):
         user = User.objects.get(pk=self.pentester1.pk)
         self.assertEqual(user.check_password('test1234!Changemevvvv!?'), False)
         self.assertEqual(user.check_password('test123'), True)
+
+
+class UserProfileUpdateViewTest(APITestCase, PeCoReTTestCaseMixin):
+    def setUp(self) -> None:
+        self.init_mixin()
+        self.url = self.get_url('backend:user-update-profile')
+        self.data = {'first_name': 'TestUser'}
+
+    def test_allowed(self):
+        users = [
+            self.management1, self.management2, self.vendor1, self.vendor2, self.read_only_vendor,
+            self.read_only_vendor, self.pentester1, self.pentester2, self.advisory_manager1,
+            self.customer1, self.customer2
+        ]
+        for user in users:
+            self.client.force_login(user)
+            response = self.basic_status_code_check(self.url, self.client.patch, 200, data=self.data)
+            self.assertEqual(response.json()['first_name'], self.data['first_name'])
+
+    def test_forbidden_fields(self):
+        users = [
+            self.management1, self.management2, self.vendor1, self.vendor2, self.read_only_vendor,
+            self.read_only1, self.read_only_vendor, self.pentester1, self.pentester2, self.advisory_manager1,
+            self.customer2, self.customer1
+        ]
+        self.data['email'] = 'e@example.test'
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.patch, 200, data=self.data)
+            new_user = User.objects.get(pk=user.pk)
+            self.assertEqual(new_user.email, user.email)
+
+    def test_customer_cannot_change_company(self):
+        self.data['company'] = self.customer1.company.pk
+        self.client.force_login(self.customer1)
+        self.basic_status_code_check(self.url, self.client.patch, 200, data=self.data)
+        new_customer = User.objects.get(pk=self.customer1.pk)
+        self.assertEqual(self.customer1.company.pk, new_customer.company.pk)

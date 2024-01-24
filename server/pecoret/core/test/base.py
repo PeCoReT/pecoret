@@ -39,6 +39,13 @@ class PeCoReTTestCaseMixin:
         self.assign_project_role(self.management2, Roles.OWNER, self.project2)
         # non-grouped user
         self.user1 = self.create_user("user1", "changeme")
+        # customer
+        self.customer1 = self.create_user('customer1', 'changeme', group='Customer')
+        self.customer1.company = self.project1.company
+        self.customer1.save()
+        self.customer2 = self.create_user('customer2', 'changeme', group='Customer')
+        self.customer2.company = self.project2.company
+        self.customer2.save()
 
         # superuser
         self.superuser = self.create_user("superuser", "changeme", is_superuser=True, is_staff=True)

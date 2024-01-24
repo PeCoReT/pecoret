@@ -9,6 +9,7 @@ class Groups(object):
     GROUP_MANAGEMENT = "Management"
     ADVISORY_MANAGEMENT = "Advisory Management"
     VENDOR = "Vendor"
+    CUSTOMER = 'Customer'
 
 
 class GroupPermission(BasePermission, TokenPermissionMixin):

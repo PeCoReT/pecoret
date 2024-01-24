@@ -6,8 +6,8 @@ import CompanyUpdateDialog from '@/components/dialogs/CompanyUpdateDialog.vue';
 import CompanyTabMenu from '../../../components/pages/CompanyTabMenu.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 import markdown from '@/utils/markdown';
-import CompanyInformationUpdateDialog from "@/components/dialogs/CompanyInformationUpdateDialog.vue";
-import { useAuthStore } from "@/store/auth";
+import CompanyInformationUpdateDialog from '@/components/dialogs/CompanyInformationUpdateDialog.vue';
+import { useAuthStore } from '@/store/auth';
 
 export default {
     name: 'CompanyDetail',
@@ -19,10 +19,9 @@ export default {
                 { label: 'Companies', to: this.$router.resolve({ name: 'CompanyList' }) },
                 { label: 'Company Detail', disabled: true }
             ],
-            company: {},
+            company: { report_template: {} },
             authStore: useAuthStore(),
-            companyInformation: [],
-            reportTemplate: {}
+            companyInformation: []
         };
     },
     methods: {
@@ -32,7 +31,6 @@ export default {
         getCompany() {
             this.companyService.getCompany(this.companyId).then((response) => {
                 this.company = response.data;
-                this.getReportTemplate();
             });
         },
         confirmDialogDelete(id) {
@@ -48,12 +46,6 @@ export default {
                 }
             });
         },
-        getReportTemplate() {
-            let url = '/report-templates/' + this.company.report_template + '/';
-            this.$api.get(url).then((response) => {
-                this.reportTemplate = response.data;
-            });
-        },
         getCompanyInformation() {
             this.companyService.getCompanyInformation(this.companyId).then((response) => {
                 this.companyInformation = response.data.results;
@@ -64,7 +56,14 @@ export default {
         this.getCompany();
         this.getCompanyInformation();
     },
-    components: { CompanyInformationUpdateDialog, DetailCardWithIcon, CompanyInformationCreateDialog, CompanyUpdateDialog, CompanyTabMenu, BlankSlate }
+    components: {
+        CompanyInformationUpdateDialog,
+        DetailCardWithIcon,
+        CompanyInformationCreateDialog,
+        CompanyUpdateDialog,
+        CompanyTabMenu,
+        BlankSlate
+    }
 };
 </script>
 
@@ -104,7 +103,7 @@ export default {
                         <DetailCardWithIcon title="Country" icon="fa-earth" class="surface-ground" :text="company.country"></DetailCardWithIcon>
                     </div>
                     <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Report Template" icon="fa-file" class="surface-ground" :text="reportTemplate.name"></DetailCardWithIcon>
+                        <DetailCardWithIcon title="Report Template" icon="fa-file" class="surface-ground" :text="company.report_template.name"></DetailCardWithIcon>
                     </div>
                 </div>
                 <div class="grid">
@@ -117,7 +116,9 @@ export default {
                             <template #footer>
                                 <hr />
                                 <div class="grid">
-                                    <div class="col-12 md:col-6">{{ info.user.username }} on {{ info.date_created }}<span v-if="info.user_edit">; edited by {{ info.user_edit.username }} on {{ info.date_updated }}</span></div>
+                                    <div class="col-12 md:col-6">
+                                        {{ info.user.username }} on {{ info.date_created }}<span v-if="info.user_edit">; edited by {{ info.user_edit.username }} on {{ info.date_updated }}</span>
+                                    </div>
                                     <div class="col-12 md:col-6">
                                         <div class="flex justify-content-end">
                                             <CompanyInformationUpdateDialog :information="info" @object-updated="getCompanyInformation"></CompanyInformationUpdateDialog>

@@ -1,10 +1,11 @@
 <script>
-import AdminService from '@/service/AdminService'
-
+import AdminService from '@/service/AdminService';
+import CompanySelectField from '@/components/elements/forms/CompanySelectField.vue';
 
 export default {
-    name: "UserCreateDialog",
-    emits: ["object-created"],
+    name: 'UserCreateDialog',
+    components: { CompanySelectField },
+    emits: ['object-created'],
     data() {
         return {
             visible: false,
@@ -13,11 +14,26 @@ export default {
                 first_name: null,
                 last_name: null,
                 email: null,
-                groups: []
+                groups: [],
+                company: null
             },
             service: new AdminService(),
-            groupChoices: []
+            groupChoices: [],
+            customerGroupId: null
         };
+    },
+    computed: {
+        isCustomerSelected() {
+            if (this.customerGroupId === null) {
+                return false;
+            }
+            for (let i = 0; i < this.model.groups.length; i++) {
+                if (this.model.groups[i] === this.customerGroupId) {
+                    return true;
+                }
+            }
+            return false;
+        }
     },
     methods: {
         close() {
@@ -32,53 +48,63 @@ export default {
                 first_name: this.model.first_name,
                 last_name: this.model.last_name,
                 email: this.model.email,
-                groups: this.model.groups
-            }
+                groups: this.model.groups,
+                company: this.model.company
+            };
             this.service.createUser(this.$api, data).then((response) => {
                 this.$toast.add({
-                    severity: "success",
-                    summary: "User Created!",
+                    severity: 'success',
+                    summary: 'User Created!',
                     life: 3000,
-                    detail: "User created successfully!"
+                    detail: 'User created successfully!'
                 });
-                this.$emit("object-created", response.data);
+                this.$emit('object-created', response.data);
                 this.visible = false;
             });
         },
-        getGroups(){
+        getGroups() {
             this.service.getGroups(this.$api).then((response) => {
-                this.groupChoices = response.data.results
-            })
+                this.groupChoices = response.data.results;
+                this.groupChoices.forEach((group) => {
+                    if (group.name === 'Customer') {
+                        this.customerGroupId = group.pk;
+                    }
+                });
+            });
         }
-    },
-}
+    }
+};
 </script>
 
 <template>
     <Button icon="fa fa-plus" label="User" outlined @click="open"></Button>
 
     <Dialog header="Create User" v-model:visible="visible" modal :style="{ width: '70vw' }">
-        <div class="flex flex-column gap-2">
-            <label for="username">Username</label>
-            <InputText id="username" v-model="model.username"></InputText>
-        </div>
-        <div class="flex flex-column gap-2">
-            <label for="first_name">First Name</label>
-            <InputText id="first_name" v-model="model.first_name"></InputText>
-        </div>
-        <div class="flex flex-column gap-2">
-            <label for="last_name">Last Name</label>
-            <InputText id="last_name" v-model="model.last_name"></InputText>
-        </div>
-        <div class="flex flex-column gap-2">
-            <label for="email">E-Mail</label>
-            <InputText id="email" v-model="model.email"></InputText>
-        </div>
-        <div class="flex flex-column gap-2">
-            <label for="groups">Groups</label>
-            <MultiSelect id="groups" v-model="model.groups" :options="groupChoices"
-                @focus="getGroups" optionValue="pk"
-                optionLabel="name"></MultiSelect>
+        <div class="grid formgrid p-fluid">
+            <div class="field col-12">
+                <label for="username">Username</label>
+                <InputText id="username" v-model="model.username"></InputText>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label for="first_name">First Name</label>
+                <InputText id="first_name" v-model="model.first_name"></InputText>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label for="last_name">Last Name</label>
+                <InputText id="last_name" v-model="model.last_name"></InputText>
+            </div>
+            <div class="field col-12">
+                <label for="email">E-Mail</label>
+                <InputText id="email" v-model="model.email"></InputText>
+            </div>
+            <div class="field col-12">
+                <label for="groups">Groups</label>
+                <MultiSelect id="groups" v-model="model.groups" :options="groupChoices" @focus="getGroups" optionValue="pk" optionLabel="name"></MultiSelect>
+            </div>
+            <div class="field col-12" v-if="isCustomerSelected === true">
+                <label for="company">Company</label>
+                <CompanySelectField v-model="model.company"></CompanySelectField>
+            </div>
         </div>
 
         <template #footer>

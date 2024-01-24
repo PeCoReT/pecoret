@@ -7,7 +7,9 @@ from rest_framework.exceptions import PermissionDenied
 
 from backend.models.user import User
 from backend.utils.change_email_token_generator import change_email_token_generator
+from backend.serializers.company import CompanySerializer
 from pecoret.core.utils import decode_uid
+from pecoret.core.serializers import PrimaryKeyRelatedField
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -18,9 +20,11 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class BaseUserSerializer(serializers.ModelSerializer):
+    company = PrimaryKeyRelatedField(serializer=CompanySerializer)
+
     class Meta:
         model = User
-        fields = ["pk", "username", "first_name", "last_name", "is_active", "email", "groups"]
+        fields = ["pk", "username", "first_name", "last_name", "is_active", "email", "groups", 'company']
         read_only_fields = ["pk", "username", "is_active", "groups"]
 
 
@@ -41,7 +45,7 @@ class MinimalUserSerializer(serializers.ModelSerializer):
 class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["pk", "username", "first_name", "last_name", "email", "groups"]
+        fields = ["pk", "username", "first_name", "last_name", "email", "groups", 'company']
         read_only_Fields = ["pk", "username", "is_active"]
 
     def create(self, validated_data):
@@ -52,12 +56,28 @@ class UserCreateSerializer(serializers.ModelSerializer):
             user.groups.add(group)
         return user
 
+    def validate(self, attrs):
+        group = Group.objects.get(name='Customer')
+        if attrs.get('company') and group not in attrs['groups']:
+            raise ValidationError({'company': 'Only customers can have a company set.'})
+        if group in attrs['groups'] and not attrs.get('company'):
+            raise ValidationError({'company': 'Customers must have an associated company set.'})
+        return super().validate(attrs)
+
 
 class UserAdminUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["pk", "username", "first_name", "last_name", "email", "groups", "is_active"]
+        fields = ["pk", "username", "first_name", "last_name", "email", "groups", "is_active", 'company']
         read_only_fields = ["username"]
+
+    def validate(self, attrs):
+        group = Group.objects.get(name='Customer')
+        if attrs.get('company') and group not in attrs['groups']:
+            raise ValidationError({'company': 'Only customers can have a company set.'})
+        if group in attrs['groups'] and not attrs.get('company'):
+            raise ValidationError({'company': 'Customers must have an associated company set.'})
+        return super().validate(attrs)
 
 
 class UserMeSerializer(serializers.ModelSerializer):

@@ -60,6 +60,12 @@ class CompanyPermission(BasePermission, TokenPermissionMixin):
         if not company.exists():
             return False
         company = company.get()
+        if user.is_superuser:
+            request.company = company
+            return True
+        if user.is_customer and user.company.pk == company.pk:
+            request.company = company
+            return True
         if request.method not in SAFE_METHODS:
             allowed = self._check_read_write(request)
             if allowed:
