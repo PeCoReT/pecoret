@@ -11,7 +11,7 @@ class CompanyInformationCreateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_allowed(self):
         users = [
-            self.pentester1, self.management1, self.read_only1, self.management2
+            self.pentester1, self.management1, self.read_only1, self.management2, self.customer1
         ]
         for user in users:
             self.client.force_login(user)
@@ -19,7 +19,8 @@ class CompanyInformationCreateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.vendor1, self.vendor2, self.user1, self.advisory_manager1, self.pentester2
+            self.vendor1, self.vendor2, self.user1, self.advisory_manager1, self.pentester2,
+            self.customer2
         ]
         for user in users:
             self.client.force_login(user)
@@ -55,7 +56,7 @@ class CompanyInformationDestroyView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.advisory_manager1, self.user1, self.pentester2, self.vendor1, self.vendor2
+            self.advisory_manager1, self.user1, self.pentester2, self.vendor1, self.vendor2, self.customer2
         ]
         for user in users:
             self.client.force_login(user)
@@ -69,7 +70,8 @@ class CompanyInformationListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_allowed(self):
         users = [
-            self.pentester1, self.read_only1, self.management2, self.management1
+            self.pentester1, self.read_only1, self.management2, self.management1,
+            self.customer1
         ]
         for user in users:
             self.client.force_login(user)
@@ -77,7 +79,8 @@ class CompanyInformationListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.user1, self.advisory_manager1, self.vendor1, self.vendor2, self.pentester2
+            self.user1, self.advisory_manager1, self.vendor1, self.vendor2, self.pentester2,
+            self.customer2
         ]
         for user in users:
             self.client.force_login(user)

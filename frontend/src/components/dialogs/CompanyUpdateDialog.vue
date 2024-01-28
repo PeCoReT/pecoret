@@ -1,21 +1,22 @@
 <script>
-import CompanyService from "@/service/CompanyService";
-import ReportTemplateSelectField from "../elements/forms/ReportTemplateSelectField.vue";
-
+import CompanyService from '@/service/CompanyService';
+import ReportTemplateSelectField from '../elements/forms/ReportTemplateSelectField.vue';
+import { useAuthStore } from '@/store/auth';
 
 export default {
-    name: "CompanyUpdateDialog",
+    name: 'CompanyUpdateDialog',
     props: {
         company: {
             required: true
         }
     },
-    emits: ["object-updated"],
+    emits: ['object-updated'],
     data() {
         return {
             visible: false,
             model: this.company,
-            companyService: new CompanyService()
+            companyService: new CompanyService(),
+            authStore: useAuthStore()
         };
     },
     methods: {
@@ -34,17 +35,16 @@ export default {
                 street: this.model.street,
                 city: this.model.city,
                 zipcode: this.model.zipcode,
-                country: this.model.country,
-                report_template: this.model.report_template
+                country: this.model.country
             };
+            if (this.authStore.groups.isCustomer === false) {
+                data['report_template'] = this.model.report_template;
+            }
             this.companyService.patchCompany(this.$api, this.company.pk, data).then(() => {
-
                 if (this.model.logo) {
-                    this.companyService.uploadCompanyLogo(this.$api, this.company.pk, this.model.logo).then(() => {
-
-                    });
+                    this.companyService.uploadCompanyLogo(this.$api, this.company.pk, this.model.logo).then(() => {});
                 }
-                this.$emit("object-updated", this.model);
+                this.$emit('object-updated', this.model);
                 this.visible = false;
             });
         }
@@ -66,7 +66,6 @@ export default {
     <Button icon="fa fa-pen-to-square" label="Edit" @click="open" outlined></Button>
 
     <Dialog header="Update Company" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
-
         <div class="grid formgrid p-fluid">
             <div class="col-12 field">
                 <label for="name">Name</label>
@@ -89,7 +88,7 @@ export default {
                 <InputText id="country" type="text" v-model="model.country"></InputText>
             </div>
             <div class="col-12 field">
-                <ReportTemplateSelectField v-model="model.report_template"></ReportTemplateSelectField>
+                <ReportTemplateSelectField v-model="model.report_template" v-if="authStore.groups.isCustomer === false"></ReportTemplateSelectField>
             </div>
             <div class="col-12 field">
                 <FileUpload @select="getFileObject" mode="basic" accept="image/*"></FileUpload>

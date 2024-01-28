@@ -188,7 +188,19 @@ class ActiveReportTemplateField(serializers.Field):
 
     # pylint: disable=inconsistent-return-statements
     def to_internal_value(self, data):
+        import warnings
+        warnings.warn(DeprecationWarning(
+            'this field is deprecated and will be removed in the future.'
+            'Use "ActiveReportTemplateSerializerField" instead.'))
         qs = ReportTemplate.objects.active().filter(pk=data)
         if qs.exists():
             return qs.get()
         self.fail("invalid_template")
+
+
+class ActiveReportTemplateSerializerField(PrimaryKeyRelatedField):
+    def to_internal_value(self, data):
+        qs = ReportTemplate.objects.active().filter(pk=data)
+        if qs.exists():
+            return qs.get()
+        self.fail('invalid_template')

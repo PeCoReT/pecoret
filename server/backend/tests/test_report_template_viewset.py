@@ -50,6 +50,8 @@ class ReportTemplateCreateView(APITestCase, PeCoReTTestCaseMixin):
             self.management1,
             self.management2,
             self.advisory_manager1,
+            self.vendor2, self.vendor1,
+            self.customer2, self.customer1
         ]
         for user in users:
             self.client.force_login(user)
@@ -80,6 +82,8 @@ class ReportTemplateUpdateView(APITestCase, PeCoReTTestCaseMixin):
             self.management1,
             self.management2,
             self.advisory_manager1,
+            self.vendor1, self.vendor2,
+            self.customer1, self.customer2
         ]
         for user in users:
             self.client.force_login(user)
@@ -109,6 +113,8 @@ class ReportTemplateDestroyView(APITestCase, PeCoReTTestCaseMixin):
             self.management1,
             self.management2,
             self.advisory_manager1,
+            self.vendor2, self.vendor1,
+            self.customer1, self.customer2
         ]
         for user in users:
             self.client.force_login(user)

@@ -1,9 +1,11 @@
 from rest_framework import serializers
+from pecoret.core.serializers import ActiveReportTemplateSerializerField
 from backend.models import Company
+from .report_templates import ReportTemplateMinimalSerializer
 
 
 class CompanySerializer(serializers.ModelSerializer):
-    self = serializers.HyperlinkedIdentityField(view_name="backend:company-detail")
+    report_template = ActiveReportTemplateSerializerField(serializer=ReportTemplateMinimalSerializer)
 
     class Meta:
         model = Company
@@ -13,7 +15,6 @@ class CompanySerializer(serializers.ModelSerializer):
             "date_updated",
             "name",
             "street",
-            "self",
             "zipcode",
             "city",
             "country",
@@ -25,3 +26,15 @@ class CompanySerializer(serializers.ModelSerializer):
                 "write_only": True
             }
         }
+
+
+class CustomerCompanySerializer(CompanySerializer):
+    """
+    customers should not be able to access/change some fields
+    (e.g. report templates, which may reveal other customer names)
+    """
+    report_template = ActiveReportTemplateSerializerField(read_only=True, serializer=ReportTemplateMinimalSerializer)
+
+    class Meta:
+        fields = CompanySerializer.Meta.fields
+        model = Company
