@@ -1,11 +1,13 @@
 from rest_framework import serializers
-
 from backend.models.advisory import (
     Advisory, Severity, AdvisoryStatusChoices, VisibilityChoices, VulnerabilityStatusChoices
 )
+from backend.serializers.report_templates import ReportTemplateMinimalSerializer
 from backend.serializers.user import MinimalUserSerializer
 from backend.serializers.vulnerability import VulnerabilityTemplateSerializer
-from pecoret.core.serializers import ValuedChoiceField, VulnerabilityTemplateIdField, ActiveReportTemplateField
+from pecoret.core.serializers import (
+    ValuedChoiceField, VulnerabilityTemplateIdField, ActiveReportTemplateSerializerField
+)
 
 
 class BaseAdvisorySerializer(serializers.ModelSerializer):
@@ -30,7 +32,7 @@ class BaseAdvisorySerializer(serializers.ModelSerializer):
 
 class AdvisoryCreateSerializer(BaseAdvisorySerializer):
     vulnerability_id = VulnerabilityTemplateIdField(source="vulnerability_key")
-    report_template = ActiveReportTemplateField(required=False)
+    report_template = ActiveReportTemplateSerializerField(required=False, serializer=ReportTemplateMinimalSerializer)
 
     class Meta(BaseAdvisorySerializer.Meta):
         fields = BaseAdvisorySerializer.Meta.fields + ["vulnerability_id", "report_template"]
@@ -44,7 +46,7 @@ class AdvisorySerializer(BaseAdvisorySerializer):
     status = ValuedChoiceField(choices=AdvisoryStatusChoices.choices)
     visibility = ValuedChoiceField(choices=VisibilityChoices.choices)
     vulnerability_status = ValuedChoiceField(choices=VulnerabilityStatusChoices.choices)
-    report_template = ActiveReportTemplateField(required=False)
+    report_template = ActiveReportTemplateSerializerField(required=False, serializer=ReportTemplateMinimalSerializer)
 
     class Meta(BaseAdvisorySerializer.Meta):
         fields = BaseAdvisorySerializer.Meta.fields + ["status", "vulnerability", "cve_id",
@@ -55,14 +57,14 @@ class AdvisorySerializer(BaseAdvisorySerializer):
 class AdvisoryUpdateSerializer(AdvisorySerializer):
     vulnerability = VulnerabilityTemplateSerializer(read_only=True)
     vulnerability_id = VulnerabilityTemplateIdField(source="vulnerability_key")
-    report_template = ActiveReportTemplateField(required=False)
+    report_template = ActiveReportTemplateSerializerField(required=False, serializer=ReportTemplateMinimalSerializer)
 
     class Meta(AdvisorySerializer.Meta):
         fields = AdvisorySerializer.Meta.fields + ["vulnerability_id", "report_template"]
 
 
 class AdvisoryDownloadSerializer(serializers.Serializer):
-    template = ActiveReportTemplateField(required=False)
+    report_template = ActiveReportTemplateSerializerField(required=False, serializer=ReportTemplateMinimalSerializer)
 
     class Meta:
         fields = [

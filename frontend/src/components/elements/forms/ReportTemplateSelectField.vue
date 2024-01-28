@@ -3,31 +3,57 @@ export default {
     name: 'ReportTemplateSelectField',
     props: ['modelValue'],
     emits: ['update:modelValue'],
-    mounted() {
-        this.loadData()
-    },
     methods: {
-        change(){
-            this.$emit('update:modelValue', this.model)
+        change() {
+            this.$emit('update:modelValue', this.model);
         },
-        loadData(){
-            let url = "/report-templates/"
-            this.$api.get(url).then((response) => {
-                this.choices = response.data.results
-            })
+        onFocus() {
+            if (this.loaded === false) {
+                this.loadData();
+            }
+        },
+        loadData() {
+            this.loading = true;
+            let url = '/report-templates/';
+            this.$api
+                .get(url)
+                .then((response) => {
+                    this.choices = response.data.results;
+                    this.loaded = true;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         }
     },
     data() {
+        let model = this.modelValue;
+        if (this.modelValue && this.modelValue.pk) {
+            model = this.modelValue.pk;
+        }
         return {
-            model: this.modelValue,
-            choices: []
+            model: model,
+            choices: [],
+            loading: false,
+            loaded: false
+        };
+    },
+    watch: {
+        modelValue: {
+            immediate: true,
+            deep: true,
+            handler(value) {
+                if (this.choices.length === 0) {
+                    if (value && value.pk) {
+                        this.choices = [value];
+                    }
+                }
+            }
         }
     }
-}
+};
 </script>
 <template>
     <label for="report_template">Report Template</label>
-    <Dropdown v-model="model" :options="choices" optionLabel="name"
-        @change="change"
-        optionValue="pk" id="report_template"></Dropdown>
+    <Dropdown id="report_template" v-model="model" :options="choices" @focus="onFocus" optionLabel="name" optionValue="pk" @change="change" :loading="loading"></Dropdown>
 </template>
