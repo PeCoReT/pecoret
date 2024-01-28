@@ -7,7 +7,7 @@ class UserQuerySet(models.QuerySet):
     pass
 
 
-class UserManager(BaseUserManager):
+class UserManager(BaseUserManager.from_queryset(UserQuerySet)):
     pass
 
 
@@ -15,7 +15,7 @@ class User(AbstractUser):
     """
     Custom user class with unique emails
     """
-    objects = UserManager.from_queryset(UserQuerySet)()
+    objects = UserManager()
     email = models.EmailField(unique=True)
     new_email = models.EmailField(null=True, blank=True)
     company = models.ForeignKey('backend.Company', on_delete=models.CASCADE, null=True, blank=True)
