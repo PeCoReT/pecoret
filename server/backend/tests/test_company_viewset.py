@@ -55,6 +55,13 @@ class CompanyUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.patch, 403, data=self.data)
 
+    def test_customer_forbidden_fields(self):
+        self.client.force_login(self.customer1)
+        self.report_template = self.create_instance(ReportTemplate)
+        self.data = {'report_template': self.report_template.pk}
+        response = self.client.patch(self.url, self.data)
+        self.assertEqual(response.json()['report_template']['pk'], self.customer1.company.report_template.pk)
+
 
 class CompanyCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:

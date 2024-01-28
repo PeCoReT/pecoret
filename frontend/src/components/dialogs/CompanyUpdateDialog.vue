@@ -35,8 +35,7 @@ export default {
                 street: this.model.street,
                 city: this.model.city,
                 zipcode: this.model.zipcode,
-                country: this.model.country,
-                report_template: this.model.report_template
+                country: this.model.country
             };
             if (this.authStore.groups.isCustomer === false) {
                 data['report_template'] = this.model.report_template;

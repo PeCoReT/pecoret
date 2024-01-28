@@ -1,11 +1,10 @@
 <script>
-import CompanyService from '@/service/CompanyService'
-import ReportTemplateSelectField from '../elements/forms/ReportTemplateSelectField.vue'
-
+import CompanyService from '@/service/CompanyService';
+import ReportTemplateSelectField from '../elements/forms/ReportTemplateSelectField.vue';
 
 export default {
-    name: "CompanyCreateDialog",
-    emits: ["object-created"],
+    name: 'CompanyCreateDialog',
+    emits: ['object-created'],
     data() {
         return {
             visible: false,
@@ -30,20 +29,19 @@ export default {
                 report_template: this.model.report_template
             };
             this.service.createCompany(this.$api, data).then(() => {
-                this.$emit("object-created", this.model);
+                this.$emit('object-created', this.model);
                 this.visible = false;
             });
         }
     },
     components: { ReportTemplateSelectField }
-}
+};
 </script>
 
 <template>
     <Button icon="fa fa-plus" label="Company" @click="open" outlined></Button>
 
     <Dialog header="Create Company" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
-
         <div class="flex flex-column gap-2">
             <label for="name">Name</label>
             <InputText id="name" type="text" v-model="model.name"></InputText>
