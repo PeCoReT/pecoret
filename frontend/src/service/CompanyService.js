@@ -21,6 +21,11 @@ export default class CompanyService {
         return api.get(url);
     }
 
+    deleteCompany(api, id) {
+        let url = `/companies/${id}/`;
+        return api.delete(url);
+    }
+
     createCompany(api, data) {
         let url = '/companies/';
         return api.post(url, data);

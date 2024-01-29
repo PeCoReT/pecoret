@@ -1,10 +1,10 @@
 from backend.serializers.company import CompanySerializer, CustomerCompanySerializer
 from backend.models import Company
 from pecoret.core import permissions
-from pecoret.core.viewsets import PeCoReTNoDestroyViewSet
+from pecoret.core.viewsets import PeCoReTModelViewSet
 
 
-class CompanyViewSet(PeCoReTNoDestroyViewSet):
+class CompanyViewSet(PeCoReTModelViewSet):
     queryset = Company.objects.none()
     search_fields = ["name"]
     api_scope = "scope_companies"

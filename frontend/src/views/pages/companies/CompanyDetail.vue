@@ -46,6 +46,19 @@ export default {
                 }
             });
         },
+        confirmDialogDeleteCompany() {
+            this.$confirm.require({
+                message: 'Do you want to delete this item? This will remove all projects related to the company!',
+                header: 'Delete confirmation',
+                icon: 'fa fa-trash',
+                acceptClass: 'p-button-danger',
+                accept: () => {
+                    this.companyService.deleteCompany(this.$api, this.companyId).then(() => {
+                        this.$router.push({ name: 'CompanyList' });
+                    });
+                }
+            });
+        },
         getCompanyInformation() {
             this.companyService.getCompanyInformation(this.companyId).then((response) => {
                 this.companyInformation = response.data.results;
@@ -83,7 +96,7 @@ export default {
         <div class="col-6">
             <div class="flex justify-content-end">
                 <CompanyUpdateDialog :company="company" @object-updated="getCompany"></CompanyUpdateDialog>
-                <CompanyInformationCreateDialog @object-created="getCompanyInformation" :company-id="company.pk"></CompanyInformationCreateDialog>
+                <Button @click="confirmDialogDeleteCompany" outlined severity="danger" icon="fa fa-trash" label="Delete"></Button>
             </div>
         </div>
     </div>
@@ -108,7 +121,15 @@ export default {
                 </div>
                 <div class="grid">
                     <div class="col-12">
-                        <p class="text-xl">Company Information</p>
+                        <div class="grid">
+                            <div class="col-6">
+                                <p class="text-xl">Company Information</p>
+                            </div>
+                            <div class="col-6 flex justify-content-end">
+                                <CompanyInformationCreateDialog @object-created="getCompanyInformation" :company-id="company.pk"></CompanyInformationCreateDialog>
+                            </div>
+                        </div>
+
                         <Card v-for="info in companyInformation" :key="info.pk" class="surface-ground mt-3">
                             <template #content>
                                 <div v-html="renderMarkdown(info.text)"></div>
