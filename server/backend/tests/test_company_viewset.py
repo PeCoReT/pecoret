@@ -95,10 +95,17 @@ class CompanyDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.company = self.create_instance(Company)
         self.url = self.get_url("backend:company-detail", pk=self.company.pk)
 
-    def test_not_implemented(self):
+    def test_management_1(self):
         self.client.force_login(self.management1)
         response = self.client.delete(self.url)
-        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.status_code, 204)
+
+    def test_forbidden(self):
+        users = [
+            self.customer2, self.customer1, self.advisory_manager1,
+            self.vendor1, self.vendor2, self.read_only_vendor, self.read_only1,
+            self.pentester1, self.pentester2
+        ]
 
 
 class CompanyRetrieveViewTestCase(APITestCase, PeCoReTTestCaseMixin):
