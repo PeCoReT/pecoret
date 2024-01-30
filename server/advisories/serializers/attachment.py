@@ -11,7 +11,7 @@ class ImageAttachmentSerializer(serializers.ModelSerializer):
         ]
 
     def to_representation(self, instance):
-        repr = super().to_representation(instance)
-        repr["image"] = self.context["request"].build_absolute_uri(instance.get_preview_url())
-        repr["name"] = instance.name
-        return repr
+        rep = super().to_representation(instance)
+        rep["image"] = self.context["request"].build_absolute_uri(instance.get_preview_url())
+        rep["name"] = instance.name
+        return rep

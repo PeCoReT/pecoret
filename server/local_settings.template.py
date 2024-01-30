@@ -1,8 +1,6 @@
 from pecoret.settings import *
 
 
-# SECRET_KEY = "changeme!really!changeme!now"
-
 # ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 # CORS_ALLOWED_ORIGINS = ["https://pecoret.example.com"]
 # CSRF_TRUSTED_ORIGINS = []

@@ -5,13 +5,13 @@ from pecoret.core.serializers import ValuedChoiceField
 from backend.models.advisory_membership import AdvisoryMembership, Roles
 from backend.models.user import User
 from backend.tasks import mail
-from backend.serializers.user import BaseUserSerializer
+from backend.serializers.user import MinimalUserSerializer
 from backend.models.advisory import VisibilityChoices
 
 
 class AdvisoryMembershipSerializer(serializers.ModelSerializer):
     role = ValuedChoiceField(choices=Roles.choices)
-    user = BaseUserSerializer()
+    user = MinimalUserSerializer()
 
     class Meta:
         model = AdvisoryMembership

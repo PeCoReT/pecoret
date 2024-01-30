@@ -1,9 +1,9 @@
 from pecoret.core.serializers import ValuedChoiceField, VulnerabilityTemplateIdField
 from advisories.serializers.advisory import BaseAdvisorySerializer
+from advisories import fields
 from backend.serializers.vulnerability import VulnerabilityTemplateSerializer
 from backend.models.advisory import AdvisoryStatusChoices, VisibilityChoices, VulnerabilityStatusChoices
 from .label import LabelSerializer
-from .fields import LabelField
 
 
 class AdvisoryAdvisoryManagementSerializer(BaseAdvisorySerializer):
@@ -28,7 +28,7 @@ class AdvisoryManagementUpdateSerializer(BaseAdvisorySerializer):
     status = ValuedChoiceField(choices=AdvisoryStatusChoices.choices)
     vulnerability_status = ValuedChoiceField(choices=VulnerabilityStatusChoices.choices)
     visibility = ValuedChoiceField(choices=VisibilityChoices.choices)
-    labels = LabelField(serializer=LabelSerializer, many=True)
+    labels = fields.LabelField(serializer=LabelSerializer, many=True)
     vulnerability_id = VulnerabilityTemplateIdField(source="vulnerability_key")
 
     class Meta(BaseAdvisorySerializer.Meta):
