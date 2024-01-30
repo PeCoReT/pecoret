@@ -1,2 +1,2 @@
 django-dynamic-fixture==4.0.1
-pylint_django==2.5.3
+pylint_django==2.5.5
