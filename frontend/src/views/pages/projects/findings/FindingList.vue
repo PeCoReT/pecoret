@@ -5,6 +5,7 @@ import BlankSlate from '@/components/BlankSlate.vue';
 import FindingCopyDialog from '@/components/dialogs/FindingCopyDialog.vue';
 import { FilterMatchMode } from 'primevue/api';
 import AssetSelectField from '@/components/elements/forms/AssetSelectField.vue';
+import FindingCreateDialog from '@/components/projects/findings/FindingCreateDialog.vue';
 
 export default {
     name: 'FindingList',
@@ -114,7 +115,7 @@ export default {
                 });
         }
     },
-    components: { AssetSelectField, FindingCopyDialog, SeverityBadge, BlankSlate }
+    components: { FindingCreateDialog, AssetSelectField, FindingCopyDialog, SeverityBadge, BlankSlate }
 };
 </script>
 
@@ -130,7 +131,7 @@ export default {
         </div>
         <div class="col-6">
             <div class="flex justify-content-end">
-                <Button outlined @click="this.$router.push({ name: 'FindingCreate', params: { projectId: this.projectId } })" icon="fa fa-plus" label="Finding"></Button>
+                <FindingCreateDialog :project-id="this.projectId"></FindingCreateDialog>
             </div>
         </div>
     </div>

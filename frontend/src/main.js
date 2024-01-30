@@ -213,8 +213,8 @@ app.component('TriStateCheckbox', TriStateCheckbox);
 app.component('VirtualScroller', VirtualScroller);
 
 // custom components
-app.component("pBreadcrumb", pBreadcrumb);
-app.component("pTabMenu", pTabMenu);
-app.component("pMenu", pMenu);
+app.component('pBreadcrumb', pBreadcrumb);
+app.component('pTabMenu', pTabMenu);
+app.component('pMenu', pMenu);
 
 app.mount('#app');

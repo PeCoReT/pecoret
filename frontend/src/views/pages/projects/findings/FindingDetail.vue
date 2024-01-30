@@ -14,7 +14,7 @@ export default {
     },
     data() {
         return {
-            findingService: new FindingService(),
+            service: new FindingService(),
             projectId: this.$route.params.projectId,
             findingId: this.$route.params.findingId,
             finding: { user_account: {}, component: {} },
@@ -63,21 +63,25 @@ export default {
     },
     methods: {
         getFinding() {
-            this.findingService.getFinding(this.projectId, this.findingId).then((response) => {
+            this.service.getFinding(this.projectId, this.findingId).then((response) => {
                 this.finding = response.data;
                 if (response.data.user_account === null) {
                     this.finding.user_account = {};
                 }
+                this.breadcrumbs[this.breadcrumbs.length - 1] = {
+                    label: this.finding.unique_id,
+                    disabled: true
+                };
             });
         },
         deleteFinding() {
-            this.findingService.deleteFinding(this.$api, this.projectId, this.findingId).then(() => {
+            this.service.deleteFinding(this.$api, this.projectId, this.findingId).then(() => {
                 this.$toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Finding deleted!', life: 3000 });
                 this.$router.push({ name: 'FindingList', params: { projectId: this.projectId } });
             });
         },
         patchFindingData(data) {
-            this.findingService.patchFinding(this.$api, this.projectId, this.findingId, data).then((response) => {
+            this.service.patchFinding(this.$api, this.projectId, this.findingId, data).then((response) => {
                 this.finding = response.data;
                 if (response.data.user_account === null) {
                     this.finding.user_account = {};
@@ -132,7 +136,7 @@ export default {
         },
         downloadAsPDF() {
             this.downloadPending = true;
-            this.findingService
+            this.service
                 .downloadAsPDF(this.$api, this.projectId, this.findingId)
                 .then((response) => {
                     const filename = 'finding-' + this.finding.unique_id.toLowerCase() + '.pdf';
@@ -180,7 +184,7 @@ export default {
 
     <div class="grid">
         <div :class="containerCol">
-            <FindingTabMenu class="surface-card"></FindingTabMenu>
+            <FindingTabMenu class="surface-card" :finding="finding"></FindingTabMenu>
             <div class="card border-noround-top">
                 <div class="grid">
                     <div class="col-12 md:col-4">

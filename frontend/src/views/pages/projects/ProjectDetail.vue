@@ -1,15 +1,14 @@
 <script>
 import ProjectService from '@/service/ProjectService';
-import FindingService from '@/service/FindingService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
 import ProjectUpdateDialog from '@/components/dialogs/ProjectUpdateDialog.vue';
 import markdown from '@/utils/markdown';
 import DashboardSeverityChart from '@/components/pages/projects/DashboardSeverityChart.vue';
 import DashboardFindingsCount from '@/components/pages/projects/DashboardFindingsCount.vue';
+import LatestFindingsDashboard from '@/components/projects/LatestFindingsDashboard.vue';
 
 const projectService = new ProjectService();
-const findingService = new FindingService();
 
 export default {
     name: 'ProjectDetail',
@@ -17,7 +16,6 @@ export default {
         return {
             projectId: this.$route.params.projectId,
             project: {},
-            latestFindings: [],
             role: {},
             breadcrumbs: [
                 { label: 'Projects', to: this.$router.resolve({ name: 'ProjectList' }) },
@@ -32,12 +30,15 @@ export default {
     mounted() {
         this.getProject();
         this.getMembership();
-        this.getLatestFindings();
     },
     methods: {
         getProject() {
             projectService.getProject(this.projectId).then((response) => {
                 this.project = response.data;
+                this.breadcrumbs[this.breadcrumbs.length - 1] = {
+                    label: response.data.name,
+                    disabled: true
+                };
             });
         },
         renderMarkdown(text) {
@@ -49,16 +50,6 @@ export default {
         getMembership() {
             projectService.getProjectMembershipMe(this.projectId).then((response) => {
                 this.role = response.data;
-            });
-        },
-        getLatestFindings() {
-            let params = {
-                limit: 5,
-                page: 1,
-                ordering: '-date_created'
-            };
-            findingService.getFindings(this.$api, this.projectId, params).then((response) => {
-                this.latestFindings = response.data.results;
             });
         },
         getPentestTypeDisplay() {
@@ -78,15 +69,6 @@ export default {
         },
         pinProject() {
             projectService.pinProject(this.$api, this.projectId, this.project.pinned).then(() => {});
-        },
-        onLatestFindingVisit(pk) {
-            this.$router.push({
-                name: 'FindingDetail',
-                params: {
-                    projectId: this.projectId,
-                    findingId: pk
-                }
-            });
         }
     },
     computed: {
@@ -95,6 +77,7 @@ export default {
         }
     },
     components: {
+        LatestFindingsDashboard,
         DashboardFindingsCount,
         DetailCardWithIcon,
         ProjectUpdateDialog,
@@ -140,25 +123,7 @@ export default {
 
     <div class="grid">
         <div class="col-12 md:col-6 lg:col-6 xl:col-4">
-            <Card class="card">
-                <template #title>Lastest Findings</template>
-                <template #content>
-                    <DataView :value="latestFindings">
-                        <template #list="slotProps">
-                            <div class="col-12 border-round border-1 p-1 hover:surface-hover card m-0" @click="onLatestFindingVisit(item.pk)" v-for="(item, index) in slotProps.items" :key="index">
-                                <div class="flex p-4 gap-4">
-                                    <div class="flex justify-content-start w-full">{{ item.vulnerability.name }} / {{ item.name }}</div>
-
-                                    <div class="flex align-items-center justify-content-end">
-                                        <span class="severity-badge" :class="'severity-' + item.severity.toLowerCase()">{{ item.severity }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
-                    </DataView>
-                </template>
-            </Card>
-
+            <LatestFindingsDashboard :project-id="this.projectId"></LatestFindingsDashboard>
             <DashboardFindingsCount></DashboardFindingsCount>
         </div>
         <div class="col-12 md:col-6 lg:col-6 xl:col-4">

@@ -87,7 +87,7 @@ export default {
     <div class="grid">
         <div class="col-12">
             <div class="card">
-                <DataTable paginatior lazy dataKey="pk" :rowHover="items.length > 0" :value="items" :rows="pagination.limit" :totalRecords="totalRecords" filterDisplay="menu" :loading="loading" @page="onPage" @sort="onSort" @filter="onFilter">
+                <DataTable paginator lazy dataKey="pk" :rowHover="items.length > 0" :value="items" :rows="pagination.limit" :totalRecords="totalRecords" filterDisplay="menu" :loading="loading" @page="onPage" @sort="onSort" @filter="onFilter">
                     <template #header>
                         <div class="flex justify-content-between flex-column sm:flex-row">
                             <span class="p-input-icon-left mb-2">
