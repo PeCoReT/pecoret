@@ -6,6 +6,7 @@ import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
 import FindingAsAdvisoryDialog from '@/components/dialogs/FindingAsAdvisoryDialog.vue';
 import FileDrop from '@/components/elements/forms/FileDrop.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
+import FindingUpdateDialog from '@/components/projects/findings/FindingUpdateDialog.vue';
 
 export default {
     name: 'FindingDetail',
@@ -17,7 +18,7 @@ export default {
             service: new FindingService(),
             projectId: this.$route.params.projectId,
             findingId: this.$route.params.findingId,
-            finding: { user_account: {}, component: {} },
+            finding: { component: {} },
             showPreview: false,
             previewData: null,
             previewLoading: false,
@@ -59,15 +60,18 @@ export default {
         previewUrl() {
             let blob = new Blob([this.previewData], { type: 'application/pdf' });
             return URL.createObjectURL(blob);
+        },
+        userAccountDisplay() {
+            if (this.finding.user_account && this.finding.user_account.username !== '') {
+                return this.finding.user_account.username;
+            }
+            return '-';
         }
     },
     methods: {
         getFinding() {
             this.service.getFinding(this.projectId, this.findingId).then((response) => {
                 this.finding = response.data;
-                if (response.data.user_account === null) {
-                    this.finding.user_account = {};
-                }
                 this.breadcrumbs[this.breadcrumbs.length - 1] = {
                     label: this.finding.unique_id,
                     disabled: true
@@ -83,9 +87,6 @@ export default {
         patchFindingData(data) {
             this.service.patchFinding(this.$api, this.projectId, this.findingId, data).then((response) => {
                 this.finding = response.data;
-                if (response.data.user_account === null) {
-                    this.finding.user_account = {};
-                }
                 if (this.showPreview === true) {
                     this.getPreviewData();
                 }
@@ -148,6 +149,7 @@ export default {
         }
     },
     components: {
+        FindingUpdateDialog,
         MarkdownEditor,
         FindingTabMenu,
         DetailCardWithIcon,
@@ -176,7 +178,7 @@ export default {
                 <Button icon="fa fa-eye" outlined label="Preview" @click="togglePreview"></Button>
                 <Button label="Download" outlined icon="fa fa-download" :loading="downloadPending" :disabled="downloadPending" @click="downloadAsPDF"></Button>
                 <FindingAsAdvisoryDialog></FindingAsAdvisoryDialog>
-                <Button outlined icon="fa fa-pen-to-square" label="Edit" @click="this.$router.push({ name: 'FindingUpdate', params: { projectId: this.projectId, findingId: this.findingId } })"></Button>
+                <FindingUpdateDialog :finding="finding" :project-id="projectId" @object-updated="getFinding"></FindingUpdateDialog>
                 <Button label="Delete" severity="danger" outlined icon="fa fa-trash" @click="confirmDialogDelete"></Button>
             </div>
         </div>
@@ -191,7 +193,7 @@ export default {
                         <DetailCardWithIcon title="Asset" icon="fa-crosshairs" class="surface-ground" :text="finding.component.display_name"></DetailCardWithIcon>
                     </div>
                     <div class="col-12 md:col-4">
-                        <DetailCardWithIcon title="User Account" icon="fa-user" class="surface-ground" :text="finding.user_account.username || '-'"></DetailCardWithIcon>
+                        <DetailCardWithIcon title="User Account" icon="fa-user" class="surface-ground" :text="userAccountDisplay"></DetailCardWithIcon>
                     </div>
                     <div class="col-12 md:col-4">
                         <DetailCardWithIcon title="Status" icon="fa-bookmark" class="surface-ground" :text="finding.status"></DetailCardWithIcon>

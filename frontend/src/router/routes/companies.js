@@ -20,4 +20,5 @@ const companyRoutes = [
         ]
     }
 ];
+
 export default companyRoutes;

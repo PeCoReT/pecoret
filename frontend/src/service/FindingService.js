@@ -1,6 +1,16 @@
 import { api } from '@/plugins/axios';
 
+export const statusChoices = [
+    { title: 'Open', value: 'Open' },
+    { title: 'Fixed', value: 'Fixed' },
+    { title: "Won't Fix", value: 'Wont Fix' }
+];
+
 export default class FindingService {
+    getStatusChoices() {
+        return statusChoices;
+    }
+
     getFindings(api, projectId, params) {
         let url = '/projects/' + projectId + '/findings/';
         let config = {};

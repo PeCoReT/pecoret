@@ -16,5 +16,4 @@ const advisoryManagementRoutes = [
     }
 ];
 
-
 export default advisoryManagementRoutes;

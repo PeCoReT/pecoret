@@ -38,6 +38,13 @@ export default {
                             findingId: this.$route.params.findingId
                         }
                     })
+                },
+                {
+                    label: 'Retest',
+                    route: this.$router.resolve({
+                        name: 'FindingRetest',
+                        params: { projectId: this.$route.params.projectId, findingId: this.$route.params.findingId }
+                    })
                 }
             ]
         };

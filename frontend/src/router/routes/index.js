@@ -8,7 +8,7 @@ import vulnerabilityTemplateRoutes from '@/router/routes/vulnerabilityTemplates'
 import advisoryManagementRoutes from '@/router/routes/advisoryManagement';
 import userRoutes from '@/router/routes/user';
 
-const routes = [
+const bundledRoutes = [
     {
         path: '/',
         name: 'Home',
@@ -25,4 +25,4 @@ const routes = [
     ...userRoutes
 ];
 
-export default routes;
+export default bundledRoutes;

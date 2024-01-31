@@ -32,6 +32,12 @@ const projectRoutes = [
                         component: () => import('@/views/pages/projects/findings/CommentList.vue')
                     },
                     {
+                        path: '/projects/:projectId/findings/:findingId/retest',
+                        name: 'FindingRetest',
+                        props: true,
+                        component: () => import('@/views/pages/projects/findings/FindingRetest.vue')
+                    },
+                    {
                         path: '/projects/:projectId/findings/:findingId/scores',
                         name: 'FindingScoreList',
                         component: () => import('@/views/pages/projects/findings/ScoreList.vue')
@@ -140,11 +146,6 @@ const projectRoutes = [
                         path: '/projects/:projectId/services/:assetId',
                         name: 'ServiceDetail',
                         component: () => import('@/views/pages/projects/assets/ServiceDetail.vue')
-                    },
-                    {
-                        path: '/projects/:projectId/findings/:findingId/update',
-                        name: 'FindingUpdate',
-                        component: () => import('@/views/pages/projects/findings/FindingUpdate.vue')
                     },
                     {
                         path: '/projects/:projectId/checklists',
