@@ -59,15 +59,6 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
-        },
-        saveNewComment() {
-            let data = {
-                comment: this.model.comment
-            };
-            this.service.createComment(this.$api, this.projectId, this.findingId, data).then(() => {
-                this.model.comment = '';
-                this.getComments();
-            });
         }
     },
     mounted() {

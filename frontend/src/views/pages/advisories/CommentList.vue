@@ -2,6 +2,8 @@
 import AdvisoryService from '@/service/AdvisoryService';
 import AdvisoryTabMenu from '../../../components/pages/AdvisoryTabMenu.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
+import BlankSlate from '@/components/BlankSlate.vue';
+import AdvisoryCommentCreateDialog from '@/components/advisories/AdvisoryCommentCreateDialog.vue';
 
 export default {
     name: 'CommentList',
@@ -32,7 +34,6 @@ export default {
             ],
             advisoryId: this.$route.params.advisoryId,
             items: [],
-            activeEditableComment: null
         };
     },
     mounted() {
@@ -42,15 +43,6 @@ export default {
         getItems() {
             this.service.getComments(this.$api, this.advisoryId).then((response) => {
                 this.items = response.data.results;
-            });
-        },
-        saveNewComment() {
-            let data = {
-                comment: this.comment
-            };
-            this.service.createComment(this.$api, this.advisoryId, data).then(() => {
-                this.getItems();
-                this.comment = '';
             });
         },
         onClickEditComment(comment) {
@@ -65,7 +57,7 @@ export default {
             this.service.patchComment(this.$api, this.advisoryId, comment.pk, data);
         }
     },
-    components: { AdvisoryTabMenu, MarkdownEditor }
+    components: { AdvisoryCommentCreateDialog, AdvisoryTabMenu, MarkdownEditor, BlankSlate }
 };
 </script>
 
@@ -75,11 +67,21 @@ export default {
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
+    <div class="grid">
+        <div class="col-6">
+            <div class="justify-content-start flex"></div>
+        </div>
+        <div class="col-6">
+            <div class="flex justify-content-end">
+                <AdvisoryCommentCreateDialog :advisory-id="this.advisoryId" @object-created="getItems"></AdvisoryCommentCreateDialog>
+            </div>
+        </div>
+    </div>
 
     <div class="grid">
         <div class="col-12">
             <AdvisoryTabMenu class="surface-card"></AdvisoryTabMenu>
-            <div class="card border-noround-top">
+            <div class="card border-noround-top" v-if="items.length > 0">
                 <Card v-for="comment in items" :key="comment.pk" class="surface-ground border-200 border-1 border-round mt-3">
                     <template #header>
                         <div class="col-12 surface-card border-200 border-1 border-round">
@@ -110,11 +112,9 @@ export default {
                     </template>
                 </Card>
             </div>
-            <div class="card mt-3" v-if="!this.activeEditableComment">
-                <MarkdownEditor v-model="comment"></MarkdownEditor>
-                <div class="flex justify-content-end">
-                    <Button @click="saveNewComment" label="Save"></Button>
-                </div>
+
+            <div class="card border-noround-top" v-else>
+                <BlankSlate title="No comments" text="No comments found!" icon="fa fa-comments"></BlankSlate>
             </div>
         </div>
     </div>
