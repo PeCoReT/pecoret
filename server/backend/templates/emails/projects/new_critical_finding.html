@@ -12,7 +12,7 @@
 
 
   {% trans "The finding can be found here:" %}
-  {{ protocol }}://{{ domain }}{{ url|safe }}
+  {{ site_url }}{{ url|safe }}
 
   {% trans "Thanks for using our site!" %}
 
@@ -24,7 +24,7 @@
   <p>{% blocktrans %}You're receiving this email because a new critical finding was created in the project "
     {{ project }}".{% endblocktrans %}</p>
   <p>{% trans "The finding can be found here:" %}</p>
-  <p><a href="{{ protocol }}://{{ domain }}{{ url|safe }}">{{ protocol }}://{{ domain }}/{{ url|safe }}</a></p>
+  <p><a href="{{ site_url}}{{ url|safe }}">{{ site_url}}{{ url|safe }}</a></p>
 
   <p>{% trans "Thanks for using our site!" %}</p>
 
