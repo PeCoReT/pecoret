@@ -76,12 +76,12 @@ export default {
         <template #content="">
             <Skeleton v-if="attachmentsLoading === true"></Skeleton>
             <div v-if="attachments.length > 0">
-                <div class="flex flex-wrap gap-5">
-                    <div v-for="file in attachments" :key="file.pk" class="card flex flex-column border-1 surface-border align-items-center gap-4">
+                <div class="flex flex-wrap">
+                    <div v-for="file in attachments" :key="file.pk" class="card flex flex-column border-1 surface-border align-items-center gap-3 h-full ml-3 mr-3">
                         <div @click="copyLinkToClipboard(file)">
-                            <img role="presentation" :alt="file.name" :src="file.image" width="100" height="50" class="shadow-2" />
+                            <img role="presentation" :alt="file.name.substring(0, 32)" :src="file.image" width="50" height="50" class="shadow-2" />
                         </div>
-                        <span class="font-semibold">{{ file.name }}</span>
+                        <span class="font-semibold">{{ file.name.substring(0, 32) }}</span>
                         <Button @click="deleteAttachment(file)" label="Delete Attachment" class="p-0 m-0" link severity="danger"> </Button>
                     </div>
                 </div>
