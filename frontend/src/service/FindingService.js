@@ -50,6 +50,11 @@ export default class FindingService {
         return api.post(url, data);
     }
 
+    patchComment(api, projectId, findingId, commentId, data) {
+        let url = `/projects/${projectId}/findings/${findingId}/comments/${commentId}/`;
+        return api.patch(url, data);
+    }
+
     getTimeline(projectId, findingId) {
         let url = '/projects/' + projectId + '/findings/' + findingId + '/timelines/';
         return api.get(url);

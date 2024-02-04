@@ -1,9 +1,9 @@
 <script>
 import AdvisoryService from '@/service/AdvisoryService';
 import AdvisoryTabMenu from '../../../components/pages/AdvisoryTabMenu.vue';
-import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 import AdvisoryCommentCreateDialog from '@/components/advisories/AdvisoryCommentCreateDialog.vue';
+import CommentCard from '@/components/elements/CommentCard.vue';
 
 export default {
     name: 'CommentList',
@@ -33,7 +33,7 @@ export default {
                 }
             ],
             advisoryId: this.$route.params.advisoryId,
-            items: [],
+            items: []
         };
     },
     mounted() {
@@ -45,19 +45,20 @@ export default {
                 this.items = response.data.results;
             });
         },
-        onClickEditComment(comment) {
-            this.activeEditableComment = comment;
-            this.activeEditableComment.editMode = !this.activeEditableComment.editMode;
-            if (!this.activeEditableComment.editMode) {
-                this.activeEditableComment = null;
-            }
+        patchComment(pk, comment) {
+            let data = { comment: comment };
+            this.service.patchComment(this.$api, this.advisoryId, pk, data).then(() => {
+                this.getItems();
+            });
         },
-        patchComment(comment) {
-            let data = { comment: comment.comment };
-            this.service.patchComment(this.$api, this.advisoryId, comment.pk, data);
+        getUserEditUsername(comment) {
+            if (comment.user_edit) {
+                return comment.user_edit.username;
+            }
+            return comment.user_edit;
         }
     },
-    components: { AdvisoryCommentCreateDialog, AdvisoryTabMenu, MarkdownEditor, BlankSlate }
+    components: { CommentCard, AdvisoryCommentCreateDialog, AdvisoryTabMenu, BlankSlate }
 };
 </script>
 
@@ -82,35 +83,19 @@ export default {
         <div class="col-12">
             <AdvisoryTabMenu class="surface-card"></AdvisoryTabMenu>
             <div class="card border-noround-top" v-if="items.length > 0">
-                <Card v-for="comment in items" :key="comment.pk" class="surface-ground border-200 border-1 border-round mt-3">
-                    <template #header>
-                        <div class="col-12 surface-card border-200 border-1 border-round">
-                            <div class="grid">
-                                <div class="col-10">
-                                    <div class="flex justify-content-start">
-                                        {{ comment.user.username }} commented on
-                                        {{ comment.date_created }}
-                                    </div>
-                                </div>
-                                <div class="col-2">
-                                    <div class="flex justify-content-end">
-                                        <Button size="small" class="p-1 text-color" text icon="fa fa-ellipsis" @click="onClickEditComment(comment)"></Button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </template>
-                    <template #content>
-                        <div class="grid">
-                            <div class="col-12" v-if="!comment.editMode">
-                                {{ comment.comment }}
-                            </div>
-                            <div class="col-12" v-else>
-                                <MarkdownEditor v-model="comment.comment" @blur="patchComment(comment)"></MarkdownEditor>
-                            </div>
-                        </div>
-                    </template>
-                </Card>
+                <CommentCard
+                    :comment="comment.comment"
+                    :date="comment.date_created"
+                    :author="comment.user.username"
+                    :editedBy="getUserEditUsername(comment)"
+                    v-for="comment in items"
+                    :key="comment.pk"
+                    @comment-edited="
+                        (editedComment) => {
+                            patchComment(comment.pk, editedComment);
+                        }
+                    "
+                ></CommentCard>
             </div>
 
             <div class="card border-noround-top" v-else>

@@ -1,5 +1,5 @@
 from django.db import models
-from pecoret.core.models import TimestampedModel
+from pecoret.core.models import TimestampedModel, CASCADE_USER_TO_GHOST
 
 
 class FindingCommentQuerySet(models.QuerySet):
@@ -11,11 +11,12 @@ class FindingCommentQuerySet(models.QuerySet):
 
 
 class FindingComment(TimestampedModel):
-    # TODO: CASCADE to set to a "Ghost" user as github does
     objects = FindingCommentQuerySet.as_manager()
-    user = models.ForeignKey('backend.User', on_delete=models.PROTECT)
+    user = models.ForeignKey('backend.User', on_delete=CASCADE_USER_TO_GHOST)
     comment = models.TextField()
     finding = models.ForeignKey('backend.Finding', on_delete=models.CASCADE)
+    user_edit = models.ForeignKey('backend.User', null=True, blank=True, on_delete=CASCADE_USER_TO_GHOST,
+                                  related_name='finding_comment_edited_set')
 
     class Meta:
         ordering = ["date_created"]

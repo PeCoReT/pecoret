@@ -17,3 +17,6 @@ class FindingCommentViewSet(PeCoReTNoDestroyViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user, finding=self.request.finding)
+
+    def perform_update(self, serializer):
+        serializer.save(user_edit=self.request.user)
