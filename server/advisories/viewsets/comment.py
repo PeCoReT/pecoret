@@ -26,3 +26,6 @@ class AdvisoryCommentViewSet(PeCoReTNoDestroyViewSet):
 
     def perform_create(self, serializer):
         serializer.save(advisory=self.request.advisory, user=self.request.user)
+
+    def perform_update(self, serializer):
+        serializer.save(user_edit=self.request.user)
