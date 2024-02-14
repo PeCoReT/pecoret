@@ -64,9 +64,6 @@ export default {
         onFilter() {
             this.getItems();
         },
-        onRowClick(pk) {
-            this.$router.push({ name: 'AdvisoryDetail', params: { advisoryId: pk } });
-        },
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
