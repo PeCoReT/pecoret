@@ -49,11 +49,6 @@ class AdvisoryListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.assertEqual(response.json()["count"], 1)
         self.assertEqual(response.json()["results"][0]["pk"], self.advisory1.pk)
 
-    def test_advisory_serializer(self):
-        self.client.force_login(self.pentester1)
-        response = self.basic_status_code_check(self.url, self.client.get, 200)
-        self.assertEqual(response.json()["results"][0].get('labels'), None)
-
 
 class AdvisoryCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
@@ -72,6 +67,7 @@ class AdvisoryCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             "recommendation": "lorem ipsum",
             "vulnerability_id": "path-traversal",
             "internal_name": "test",
+            "labels": []
         }
 
     def test_forbidden(self):

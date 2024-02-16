@@ -4,7 +4,7 @@ import VulnerabilityTemplateService from '@/service/VulnerabilityTemplateService
 import SeveritySelectField from '@/components/elements/forms/SeveritySelectField.vue';
 import { useAuthStore } from '@/store/auth';
 import AdvisoryLabelSelectField from '@/components/elements/forms/AdvisoryLabelSelectField.vue';
-import ReportTemplateSelectField from "@/components/elements/forms/ReportTemplateSelectField.vue";
+import ReportTemplateSelectField from '@/components/elements/forms/ReportTemplateSelectField.vue';
 
 export default {
     name: 'AdvisoryUpdate',
@@ -57,6 +57,9 @@ export default {
                 vulnerability_id: this.model.template,
                 report_template: this.model.report_template
             };
+            if (this.model.report_template && this.model.report_template.pk) {
+                data['report_template'] = this.model.report_template.pk;
+            }
             if (this.authStore.groups.isAdvisoryManagement === true) {
                 data['labels'] = [];
                 this.model.labels.forEach((item) => {

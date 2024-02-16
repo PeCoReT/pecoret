@@ -10,7 +10,6 @@ class AdvisoryAdvisoryManagementSerializer(BaseAdvisorySerializer):
     """
     an ``AdvisorySerializer`` which adds more fields used by the AdvisoryManagement
     """
-    labels = LabelSerializer(many=True, read_only=True)
     vulnerability = VulnerabilityTemplateSerializer()
     status = ValuedChoiceField(choices=AdvisoryStatusChoices.choices)
     vulnerability_status = ValuedChoiceField(choices=VulnerabilityStatusChoices.choices)
@@ -19,7 +18,7 @@ class AdvisoryAdvisoryManagementSerializer(BaseAdvisorySerializer):
     class Meta(BaseAdvisorySerializer.Meta):
         fields = BaseAdvisorySerializer.Meta.fields + [
             "status", "vulnerability", "cve_id", "visibility", 'vulnerability_status',
-            "date_disclosure", "date_planned_disclosure", "labels"
+            "date_disclosure", "date_planned_disclosure"
         ]
 
 

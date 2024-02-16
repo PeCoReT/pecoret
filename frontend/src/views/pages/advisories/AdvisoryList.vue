@@ -3,6 +3,7 @@ import AdvisoryService from '@/service/AdvisoryService';
 import SeverityBadge from '@/components/SeverityBadge.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 import { useAuthStore } from '@/store/auth';
+import AdvisoryLabelBadge from '@/components/AdvisoryLabelBadge.vue';
 
 export default {
     name: 'AdvisoryList',
@@ -41,9 +42,6 @@ export default {
         onFilter() {
             this.getItems();
         },
-        onRowClick(pk) {
-            this.$router.push({ name: 'AdvisoryDetail', params: { advisoryId: pk } });
-        },
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
@@ -75,7 +73,7 @@ export default {
                 });
         }
     },
-    components: { SeverityBadge, BlankSlate }
+    components: { SeverityBadge, BlankSlate, AdvisoryLabelBadge }
 };
 </script>
 <template>
@@ -150,8 +148,12 @@ export default {
                         </template>
                     </Column>
                     <Column field="vulnerability_status" header="Vulnerability Status"></Column>
-                    <Column field="visibility" header="Visibility"></Column>
                     <Column field="date_planned_disclosure" header="Planned Disclosure"></Column>
+                    <Column header="Labels" field="labels" :showFilterMatchModes="false">
+                        <template #body="slotProps">
+                            <AdvisoryLabelBadge v-for="label in slotProps.data.labels" :label="label"></AdvisoryLabelBadge>
+                        </template>
+                    </Column>
                 </DataTable>
             </div>
         </div>

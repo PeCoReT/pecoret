@@ -9,7 +9,9 @@ class LabelListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_allowed(self):
         users = [
-            self.advisory_manager1
+            self.advisory_manager1,
+            self.pentester1, self.pentester2,
+            self.read_only1
         ]
         for user in users:
             self.client.force_login(user)
@@ -17,9 +19,8 @@ class LabelListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.pentester1, self.pentester2,
             self.management1, self.management2,
-            self.read_only1, self.vendor1, self.vendor2,
+            self.vendor1, self.vendor2,
             self.read_only_vendor, self.user1
         ]
         for user in users:

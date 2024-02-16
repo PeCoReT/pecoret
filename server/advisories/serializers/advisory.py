@@ -5,6 +5,8 @@ from backend.models.advisory import (
 from backend.serializers.report_templates import ReportTemplateMinimalSerializer
 from backend.serializers.user import MinimalUserSerializer
 from backend.serializers.vulnerability import VulnerabilityTemplateSerializer
+from advisories.fields import LabelField
+from .label import LabelSerializer
 from pecoret.core.serializers import (
     ValuedChoiceField, VulnerabilityTemplateIdField, ActiveReportTemplateSerializerField
 )
@@ -14,6 +16,7 @@ class BaseAdvisorySerializer(serializers.ModelSerializer):
     severity = ValuedChoiceField(choices=Severity.choices)
     vulnerability_id = serializers.ReadOnlyField()
     user = MinimalUserSerializer(read_only=True)
+    labels = LabelField(serializer=LabelSerializer, many=True, read_only=True)
 
     class Meta:
         model = Advisory
@@ -23,7 +26,7 @@ class BaseAdvisorySerializer(serializers.ModelSerializer):
             "vendor_url", "vendor_name", "description", "internal_name",
             "recommendation", "date_created", "date_updated",
             "custom_report_title", "hide_advisory_id_in_report",
-            "proof_text"
+            "proof_text", "labels"
         ]
         read_only_fields = [
             "pk", "user"
