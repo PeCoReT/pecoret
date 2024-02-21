@@ -2,6 +2,7 @@
 import ChecklistService from '@/service/ChecklistService';
 import ChecklistItemUpdate from '@/components/dialogs/ChecklistItemUpdate.vue';
 import ChecklistItemCreate from '@/components/dialogs/ChecklistItemCreate.vue';
+import markdown from '@/utils/markdown';
 
 export default {
     name: 'CategoryDetail',
@@ -10,6 +11,7 @@ export default {
         return {
             categoryId: this.$route.params.categoryId,
             service: new ChecklistService(),
+            loading: false,
             model: {},
             breadcrumbs: [
                 {
@@ -36,9 +38,18 @@ export default {
     },
     methods: {
         getCategory() {
-            this.service.getCategory(this.$api, this.categoryId).then((response) => {
-                this.model = response.data;
-            });
+            this.loading = true;
+            this.service
+                .getCategory(this.$api, this.categoryId)
+                .then((response) => {
+                    this.model = response.data;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        renderMarkdown(text) {
+            return markdown.renderMarkdown(text);
         },
         confirmDialogDelete() {
             this.$confirm.require({
@@ -106,23 +117,27 @@ export default {
 
                 <div class="grid">
                     <div class="col-12">
-                        <DataView :value="model.items">
-                            <template #list="slotProps">
-                                <div v-for="(item, index) in slotProps.items" :key="index">
-                                    <div class="card hover:surface-hover">
-                                        <div class="grid">
-                                            <div class="col-6">
-                                                {{ item.name }}
-                                            </div>
-                                            <div class="col-6 flex justify-content-end">
-                                                <ChecklistItemUpdate :item="item"></ChecklistItemUpdate>
-                                                <Button icon="fa fa-trash" outlined severity="danger" @click="confirmDialogDeleteItem(item.pk)"></Button>
-                                            </div>
+                        <Skeleton v-if="loading === true"></Skeleton>
+                        <Accordion v-else>
+                            <AccordionTab v-for="(item, index) in model.items" :key="index">
+                                <template #header>
+                                    <div class="col-10 m-1 p-1">
+                                        <span class="white-space-nowrap">{{ item.name }}</span>
+                                    </div>
+                                </template>
+                                <div class="grid">
+                                    <div class="col-10 m-3 p-1">
+                                        <span v-html="renderMarkdown(item.description)"></span>
+                                    </div>
+                                    <div class="col m-3 p-1">
+                                        <div class="flex justify-content-end">
+                                            <ChecklistItemUpdate :item="item"></ChecklistItemUpdate>
+                                            <Button icon="fa fa-trash" outlined severity="danger" @click="confirmDialogDeleteItem(item.pk)"></Button>
                                         </div>
                                     </div>
                                 </div>
-                            </template>
-                        </DataView>
+                            </AccordionTab>
+                        </Accordion>
                     </div>
                 </div>
             </div>
