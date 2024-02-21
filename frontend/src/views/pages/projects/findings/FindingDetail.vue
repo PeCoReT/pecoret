@@ -146,6 +146,10 @@ export default {
                 .finally(() => {
                     this.downloadPending = false;
                 });
+        },
+        patchFindingDate(findingDate) {
+            let data = { finding_date: findingDate.toISOString().split('T')[0] };
+            this.patchFindingData(data);
         }
     },
     components: {
@@ -207,7 +211,7 @@ export default {
                     </div>
                     <div class="col-12 md:col-3">
                         <InfoCardWithForm class="surface-ground" title="Finding Date" icon="fa-calendar">
-                            <Calendar v-model="finding.finding_date" @change="patchFindingData({ finding_date: finding.finding_date })"></Calendar>
+                            <Calendar v-model="finding.finding_date" @update:modelValue="patchFindingDate" dateFormat="yy-mm-dd"></Calendar>
                         </InfoCardWithForm>
                     </div>
                     <div class="col-12 md:col-3">
