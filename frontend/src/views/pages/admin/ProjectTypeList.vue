@@ -2,6 +2,7 @@
 import AdminService from '@/service/AdminService';
 import ProjectTypeUpdateDialog from '../../../components/dialogs/ProjectTypeUpdateDialog.vue';
 import ProjectTypeCreateDialog from '@/components/dialogs/ProjectTypeCreateDialog.vue';
+import BlankSlate from '@/components/BlankSlate.vue';
 
 export default {
     name: 'ProjectTypeList',
@@ -24,8 +25,6 @@ export default {
         this.getItems();
     },
     methods: {
-        onSort(event) {},
-        onFilter(event) {},
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
@@ -66,7 +65,7 @@ export default {
             });
         }
     },
-    components: { ProjectTypeUpdateDialog, ProjectTypeCreateDialog }
+    components: { ProjectTypeUpdateDialog, ProjectTypeCreateDialog, BlankSlate }
 };
 </script>
 
@@ -91,7 +90,7 @@ export default {
         <div class="col-12">
             <Card>
                 <template #content>
-                    <DataTable paginator dataKey rowHover :rows="pagination.limit" :value="items" lazy filterDisplay="menu" :totalRecords="totalRecords" :loading="loading" @page="onPage" responsiveLayout="scroll" @filter="onFilter" @sort="onSort">
+                    <DataTable paginator :rowHover="items.length > 0" :rows="pagination.limit" :value="items" lazy dataKey="pk" filterDisplay="menu" :totalRecords="totalRecords" :loading="loading" @page="onPage" responsiveLayout="scroll">
                         <Column field="name" header="Name"></Column>
                         <Column header="Actions">
                             <template #body="slotProps">
@@ -99,6 +98,9 @@ export default {
                                 <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                             </template>
                         </Column>
+                        <template #empty>
+                            <BlankSlate icon="fa fa-icons" title="No Project Types!" text="No project types found!"></BlankSlate>
+                        </template>
                     </DataTable>
                 </template>
             </Card>
