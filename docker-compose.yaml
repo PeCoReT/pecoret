@@ -11,14 +11,14 @@ services:
       DJANGO_SUPERUSER_USERNAME: admin
       DJANGO_SUPERUSER_PASSWORD: dontusethispasswordtoo
       DJANGO_SUPERUSER_EMAIL: admin@example.com
-      ALLOWED_HOSTS: backend,localhost
+      ALLOWED_HOSTS: localhost
     volumes:
       - ./volumes/server/conf:/app/conf
       - server-static:/app/static
-      # - ./default_templates:/app/resources/templates
     depends_on:
       db:
         condition: service_healthy
+
 
   db:
     image: postgres:alpine
@@ -41,7 +41,7 @@ services:
     environment:
       VITE_APP_API_URL: http://localhost/api
     ports:
-      - 80:80
+      - "127.0.0.1:80:80"
     depends_on:
       - backend
 
@@ -53,10 +53,6 @@ services:
       DB_USER: pecoret
       DB_PASSWORD: dontusethispassword
       SECRET_KEY: randomstuffhere
-      DJANGO_SUPERUSER_USERNAME: admin
-      DJANGO_SUPERUSER_PASSWORD: dontusethispasswordtoo
-      DJANGO_SUPERUSER_EMAIL: admin@example.com
-      ALLOWED_HOSTS: backend,localhost
     volumes:
       - ./volumes/server/conf:/app/conf
     depends_on:
@@ -65,4 +61,3 @@ services:
 
 volumes:
   server-static:
-  pg-data:
