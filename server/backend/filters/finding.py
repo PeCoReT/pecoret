@@ -14,6 +14,8 @@ class FindingFilter(filters.FilterSet):
     service = filters.ModelChoiceFilter(field_name="service", queryset=filter_model_by_project(models.Service))
     mobile_application = filters.ModelChoiceFilter(field_name='mobile_application',
                                                    queryset=filter_model_by_project(models.MobileApplication))
+    thick_client = filters.ModelChoiceFilter(field_name='thick_client',
+                                             queryset=filter_model_by_project(models.ThickClient))
 
     class Meta:
         model = Finding
