@@ -7,7 +7,6 @@ services:
       DB_NAME: pecoret
       DB_USER: pecoret
       DB_PASSWORD: dontusethispassword
-      SECRET_KEY: randomstuffhere
       DJANGO_SUPERUSER_USERNAME: admin
       DJANGO_SUPERUSER_PASSWORD: dontusethispasswordtoo
       DJANGO_SUPERUSER_EMAIL: admin@example.com
@@ -52,7 +51,6 @@ services:
       DB_NAME: pecoret
       DB_USER: pecoret
       DB_PASSWORD: dontusethispassword
-      SECRET_KEY: randomstuffhere
     volumes:
       - ./volumes/server/conf:/app/conf
     depends_on:
