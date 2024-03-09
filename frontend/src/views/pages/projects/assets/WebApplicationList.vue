@@ -121,20 +121,22 @@ export default {
                     :loading="loading"
                 >
                     <template #empty>
-                        <BlankSlate icon="fa fa-earth-europe" title="No web applications!" text="No web applications found!"> </BlankSlate>
+                        <BlankSlate icon="fa fa-earth-europe" title="No web applications!" text="No web applications found!"></BlankSlate>
                     </template>
                     <template #header>
                         <div class="flex justify-content-between flex-column sm:flex-row">
-                            <span class="p-input-icon-left mb-2">
-                                <i class="pi pi-search" />
+                            <IconField iconPosition="left">
+                                <InputIcon class="fa fa-search"></InputIcon>
                                 <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </span>
+                            </IconField>
                         </div>
                     </template>
 
                     <Column field="name" header="Name">
                         <template #body="slotProps">
-                            <router-link class="text-color underline" :to="{ name: 'WebApplicationDetail', params: { projectId: this.projectId, assetId: slotProps.data.pk } }"> {{ slotProps.data.name }}</router-link>
+                            <router-link class="text-color underline" :to="{ name: 'WebApplicationDetail', params: { projectId: this.projectId, assetId: slotProps.data.pk } }">
+                                {{ slotProps.data.name }}
+                            </router-link>
                         </template>
                     </Column>
                     <Column field="base_url" header="Base URL"></Column>
@@ -142,7 +144,7 @@ export default {
                     <Column field="accessible" header="Accessible"></Column>
                     <Column header="Actions">
                         <template #body="slotProps">
-                            <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="onDeleteConfirmDialog(slotProps.data.pk)"> </Button>
+                            <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="onDeleteConfirmDialog(slotProps.data.pk)"></Button>
                         </template>
                     </Column>
                 </DataTable>

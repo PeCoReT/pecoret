@@ -20,6 +20,7 @@ export default {
     methods: {
         getData() {
             this.service.getFinding(this.projectId, this.findingId).then((response) => {
+                this.finding = response.data;
                 this.model.status = response.data.status;
                 this.model.retest_results = response.data.retest_results;
                 this.model.date_retested = response.data.date_retested;
@@ -46,6 +47,7 @@ export default {
         return {
             service: new FindingService(),
             loading: false,
+            finding: { component: {} },
             model: {
                 retest_results: null,
                 date_retested: null,
@@ -85,7 +87,9 @@ export default {
     </div>
     <div class="grid">
         <div class="col-6">
-            <div class="justify-content-start flex"></div>
+            <div class="justify-content-start flex">
+                <strong class="text-lg" v-if="finding.vulnerability">{{ finding.vulnerability.name }} / {{ finding.name }}</strong>
+            </div>
         </div>
         <div class="col-6">
             <div class="flex justify-content-end"></div>

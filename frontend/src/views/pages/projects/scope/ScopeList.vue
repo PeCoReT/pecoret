@@ -111,10 +111,10 @@ export default {
                     </template>
                     <template #header>
                         <div class="flex justify-content-between flex-column sm:flex-row">
-                            <span class="p-input-icon-left mb-2">
-                                <i class="pi pi-search" />
+                            <IconField iconPosition="left">
+                                <InputIcon class="fa fa-search"></InputIcon>
                                 <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </span>
+                            </IconField>
                         </div>
                     </template>
                     <Column field="details" header="Details"></Column>

@@ -107,6 +107,8 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@/assets/styles.scss';
 
 import { registerPlugins } from '@/plugins';
+import IconField from "primevue/iconfield";
+import InputIcon from "primevue/inputicon";
 
 const app = createApp(App);
 registerPlugins(app);
@@ -163,6 +165,8 @@ app.component('Inplace', Inplace);
 app.component('InputMask', InputMask);
 app.component('InputNumber', InputNumber);
 app.component('InputSwitch', InputSwitch);
+app.component('IconField', IconField);
+app.component('InputIcon', InputIcon);
 app.component('InputText', InputText);
 app.component('Knob', Knob);
 app.component('Listbox', Listbox);

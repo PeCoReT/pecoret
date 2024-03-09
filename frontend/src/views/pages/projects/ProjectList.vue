@@ -56,9 +56,6 @@ export default {
                     this.loading = false;
                 });
         },
-        deleteProject(id) {
-            projectService.deleteProject(this.$api, id).then(() => {});
-        },
         bulkDeleteConfirm() {
             this.$confirm.require({
                 message: 'Do you want all selected projects?',
@@ -200,24 +197,24 @@ export default {
                     </template>
 
                     <template #header>
-                        <div class="flex justify-content-between flex-column sm:flex-row">
-                            <span class="p-input-icon-left mb-2">
-                                <i class="pi pi-search" />
+                        <div class="grid">
+                            <IconField iconPosition="left">
+                                <InputIcon class="fa fa-search"></InputIcon>
                                 <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </span>
-                            <Button v-if="selectedProjects.length > 0" icon="fa fa-trash" size="small" outlined severity="danger" @click="bulkDeleteConfirm"></Button>
+                            </IconField>
+                            <Button v-if="selectedProjects.length > 0" icon="fa fa-trash" size="small" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2"></Button>
                         </div>
                     </template>
                     <Column selectionMode="multiple" headerStyle=""></Column>
                     <Column field="name" header="Name" sortable>
                         <template #body="slotProps">
-                            <router-link class="text-color underline" :to="{ name: 'ProjectDetail', params: { projectId: slotProps.data.pk } }">[{{ slotProps.data.year }}] {{ slotProps.data.name }} </router-link>
+                            <router-link class="text-color underline" :to="{ name: 'ProjectDetail', params: { projectId: slotProps.data.pk } }"> [{{ slotProps.data.year }}] {{ slotProps.data.name }} </router-link>
                         </template>
                     </Column>
                     <Column field="company_name" header="Company"></Column>
                     <Column field="status" header="Status" :showFilterMatchModes="false">
                         <template #filter="{ filterModel }">
-                            <Dropdown v-model="filterModel.value" :options="statusChoices" placeholder="Select One" class="p-column-filter" showClear optionLabel="label" optionValue="value"> </Dropdown>
+                            <Dropdown v-model="filterModel.value" :options="statusChoices" placeholder="Select One" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Dropdown>
                         </template>
                     </Column>
                     <Column field="date_created" header="Created" sortable></Column>

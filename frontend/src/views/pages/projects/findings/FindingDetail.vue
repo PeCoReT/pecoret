@@ -7,6 +7,7 @@ import FindingAsAdvisoryDialog from '@/components/dialogs/FindingAsAdvisoryDialo
 import FileDrop from '@/components/elements/forms/FileDrop.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import FindingUpdateDialog from '@/components/projects/findings/FindingUpdateDialog.vue';
+import { findingStatusChoices, severityChoices } from '@/utils/constants';
 
 export default {
     name: 'FindingDetail',
@@ -35,18 +36,6 @@ export default {
                     disabled: true
                 }
             ],
-            severityOptions: [
-                { label: 'Critical', value: 'Critical' },
-                { label: 'High', value: 'High' },
-                { label: 'Medium', value: 'Medium' },
-                { label: 'Low', value: 'Low' },
-                { label: 'Informational', value: 'Informational' }
-            ],
-            statusChoices: [
-                { title: 'Open', value: 'Open' },
-                { title: 'Fixed', value: 'Fixed' },
-                { title: "Won't Fix", value: 'Wont Fix' }
-            ],
             downloadPending: false
         };
     },
@@ -69,6 +58,12 @@ export default {
         }
     },
     methods: {
+        findingStatusChoices() {
+            return findingStatusChoices;
+        },
+        severityChoices() {
+            return severityChoices;
+        },
         getFinding() {
             this.service.getFinding(this.projectId, this.findingId).then((response) => {
                 this.finding = response.data;
@@ -127,7 +122,7 @@ export default {
                 responseType: 'arraybuffer'
             };
             this.$api
-                .get('/projects/' + this.projectId + '/findings/' + this.findingId + '/preview/', config)
+                .get(`/projects/${this.projectId}/findings/${this.findingId}/preview/`, config)
                 .then((response) => {
                     this.previewData = response.data;
                 })
@@ -206,7 +201,7 @@ export default {
                 <div class="grid">
                     <div class="col-12 md:col-3">
                         <InfoCardWithForm class="surface-ground w-full" title="Status" icon="fa-bookmark">
-                            <Dropdown v-model="finding.status" :options="statusChoices" optionValue="value" @change="patchFindingData({ status: finding.status })" optionLabel="title" class="w-full"></Dropdown>
+                            <Dropdown v-model="finding.status" :options="findingStatusChoices()" optionValue="value" @change="patchFindingData({ status: finding.status })" optionLabel="title" class="w-full"></Dropdown>
                         </InfoCardWithForm>
                     </div>
                     <div class="col-12 md:col-3">
@@ -216,7 +211,7 @@ export default {
                     </div>
                     <div class="col-12 md:col-3">
                         <InfoCardWithForm class="surface-ground" title="Severity" icon="fa fa-shield-halved">
-                            <Dropdown v-model="finding.severity" :options="severityOptions" optionLabel="label" @change="patchFindingData({ severity: finding.severity })" optionValue="value"></Dropdown>
+                            <Dropdown v-model="finding.severity" :options="severityChoices()" optionLabel="label" @change="patchFindingData({ severity: finding.severity })" optionValue="value"></Dropdown>
                         </InfoCardWithForm>
                     </div>
                     <div class="col-12 md:col-3">

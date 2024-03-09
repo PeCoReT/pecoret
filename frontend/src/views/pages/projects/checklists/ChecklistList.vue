@@ -144,10 +144,10 @@ export default {
                 <div class="grid">
                     <div class="col-12 md:col">
                         <div class="flex justify-content-between flex-column sm:flex-row">
-                            <span class="p-input-icon-left mb-2">
-                                <i class="pi pi-search" />
+                            <IconField iconPosition="left">
+                                <InputIcon class="fa fa-search"></InputIcon>
                                 <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </span>
+                            </IconField>
                         </div>
                     </div>
                 </div>

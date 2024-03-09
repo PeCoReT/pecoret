@@ -1,5 +1,5 @@
 import os
-import xml.etree.ElementTree as ET
+from defusedxml import ElementTree as DET
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from backend.models import CWE
@@ -12,7 +12,7 @@ class Command(BaseCommand):
     namespace = "http://cwe.mitre.org/cwe-7"
 
     def handle(self, *args, **options):
-        tree = ET.parse(
+        tree = DET.parse(
             os.path.join(settings.BASE_DIR, "resources/cwec_v%s.xml" % self.cwe_version)
         )
         root = tree.getroot()

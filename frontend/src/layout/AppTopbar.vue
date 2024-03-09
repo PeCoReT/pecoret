@@ -50,25 +50,32 @@ export default {
                     route: this.$router.resolve({ name: 'CompanyList' })
                 });
             }
-            if (this.showChecklistButton === true) {
+            if (this.showChecklistButton === true || this.showVulnerabilityTemplatesButton === true) {
+                let knowledgeItems = [];
+                if (this.showVulnerabilityTemplatesButton === true) {
+                    knowledgeItems.push({
+                        label: 'Vulnerability Templates',
+                        route: this.$router.resolve({ name: 'VulnerabilityTemplateList' })
+                    });
+                }
+                if (this.showChecklistButton === true) {
+                    knowledgeItems.push({
+                        label: 'Checklists',
+                        items: [
+                            {
+                                label: 'Checklists',
+                                route: this.$router.resolve({ name: 'ChecklistList' })
+                            },
+                            {
+                                label: 'Categories',
+                                route: this.$router.resolve({ name: 'ChecklistCategoryList' })
+                            }
+                        ]
+                    });
+                }
                 items.push({
-                    label: 'Checklists',
-                    items: [
-                        {
-                            label: 'Checklists',
-                            route: this.$router.resolve({ name: 'ChecklistList' })
-                        },
-                        {
-                            label: 'Categories',
-                            route: this.$router.resolve({ name: 'ChecklistCategoryList' })
-                        }
-                    ]
-                });
-            }
-            if (this.showVulnerabilityTemplatesButton === true) {
-                items.push({
-                    label: 'Vulnerability Templates',
-                    route: this.$router.resolve({ name: 'VulnerabilityTemplateList' })
+                    label: 'Knowledge Base',
+                    items: knowledgeItems
                 });
             }
             if (this.showAdvisoriesButton === true) {
