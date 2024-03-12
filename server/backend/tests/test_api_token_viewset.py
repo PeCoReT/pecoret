@@ -12,7 +12,8 @@ class APITokenCreateView(APITestCase, PeCoReTTestCaseMixin):
             "scope_companies": "No Access",
             "scope_user": "No Access",
             "scope_all_projects": "No Access",
-            "scope_advisories": "No Access"
+            "scope_advisories": "No Access",
+            "scope_asmonitor": "No Access"
         }
 
     def test_allowed(self):

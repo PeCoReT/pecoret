@@ -1,10 +1,9 @@
 <script>
-import UserService from "@/service/UserService";
-
+import UserService from '@/service/UserService';
 
 export default {
-    name: "APITokenCreate",
-    emits: ["object-created"],
+    name: 'APITokenCreate',
+    emits: ['object-created'],
     data() {
         return {
             visible: false,
@@ -12,21 +11,25 @@ export default {
             model: {
                 name: null,
                 date_expire: null,
-                scope_all_projects: "No Access",
-                scope_user: "No Access",
-                scope_companies: "No Access",
-                scope_advisories: "No Access"
+                scope_all_projects: 'No Access',
+                scope_user: 'No Access',
+                scope_companies: 'No Access',
+                scope_asmonitor: 'No Access',
+                scope_advisories: 'No Access'
             },
             service: new UserService(),
             accessChoices: [
                 {
-                    label: "No Access", value: "No Access"
+                    label: 'No Access',
+                    value: 'No Access'
                 },
                 {
-                    label: "Read", value: "Read"
+                    label: 'Read',
+                    value: 'Read'
                 },
                 {
-                    label: "Read Write", value: "Read Write"
+                    label: 'Read Write',
+                    value: 'Read Write'
                 }
             ]
         };
@@ -41,12 +44,12 @@ export default {
         create() {
             this.service.createAPIToken(this.$api, this.model).then((response) => {
                 this.$toast.add({
-                    severity: "success",
-                    summary: "Created!",
+                    severity: 'success',
+                    summary: 'Created!',
                     life: 3000,
-                    detail: "API-Token created!"
+                    detail: 'API-Token created!'
                 });
-                this.$emit("object-created", response.data);
+                this.$emit('object-created', response.data);
                 this.visible = false;
             });
         }
@@ -69,27 +72,23 @@ export default {
             </div>
             <div class="field col-12 md:col-6">
                 <label for="scope_all_projects">Scope All Projects?</label>
-                <Dropdown v-model="this.model.scope_all_projects" :options="accessChoices" optionLabel="label"
-                          optionValue="value"
-                          class="w-full"></Dropdown>
+                <Dropdown v-model="this.model.scope_all_projects" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Dropdown>
             </div>
             <div class="field col-12 md:col-6">
                 <label for="scope_all_projects">Scope Companies?</label>
-                <Dropdown v-model="this.model.scope_companies" :options="accessChoices" optionLabel="label"
-                          optionValue="value"
-                          class="w-full"></Dropdown>
+                <Dropdown v-model="this.model.scope_companies" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Dropdown>
             </div>
             <div class="field col-12 md:col-6">
                 <label for="scope_all_projects">Scope User?</label>
-                <Dropdown v-model="this.model.scope_user" :options="accessChoices" optionLabel="label"
-                          optionValue="value"
-                          class="w-full"></Dropdown>
+                <Dropdown v-model="this.model.scope_user" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Dropdown>
             </div>
             <div class="field col-12 md:col-6">
                 <label for="scope_all_projects">Scope Advisories?</label>
-                <Dropdown v-model="this.model.scope_advisories" :options="accessChoices" optionLabel="label"
-                          optionValue="value"
-                          class="w-full"></Dropdown>
+                <Dropdown v-model="this.model.scope_advisories" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Dropdown>
+            </div>
+            <div class="field col-12">
+                <label for="scope_asmonitor">Scope Attack Surface?</label>
+                <Dropdown v-model="this.model.scope_asmonitor" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Dropdown>
             </div>
         </div>
 

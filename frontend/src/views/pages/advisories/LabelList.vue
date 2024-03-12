@@ -125,15 +125,15 @@ export default defineComponent({
                     v-model:filters="filters"
                 >
                     <template #header>
-                        <div class="flex justify-content-between flex-column sm:flex-row">
-                            <span class="p-input-icon-left mb-2">
-                                <i class="pi pi-search" />
+                        <div class="grid">
+                            <IconField iconPosition="left">
+                                <InputIcon class="fa fa-search"></InputIcon>
                                 <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </span>
+                            </IconField>
                         </div>
                     </template>
                     <template #empty>
-                        <BlankSlate icon="fa fa-tags" text="No labels found!" title="No labels!"> </BlankSlate>
+                        <BlankSlate icon="fa fa-tags" text="No labels found!" title="No labels!"></BlankSlate>
                     </template>
 
                     <Column field="name" header="Name"></Column>
@@ -145,7 +145,7 @@ export default defineComponent({
                     </Column>
                     <Column header="Actions">
                         <template #body="slotProps">
-                            <AdvisoryManagementLabelUpdateDialog :label="slotProps.data" @object-updated="getItems"> </AdvisoryManagementLabelUpdateDialog>
+                            <AdvisoryManagementLabelUpdateDialog :label="slotProps.data" @object-updated="getItems"></AdvisoryManagementLabelUpdateDialog>
                             <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                         </template>
                     </Column>
