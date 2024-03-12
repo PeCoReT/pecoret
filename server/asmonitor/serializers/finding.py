@@ -10,7 +10,7 @@ class FindingSerializer(serializers.ModelSerializer):
     target = PrimaryKeyRelatedField(serializer=TargetSerializer)
     severity = ValuedChoiceField(choices=Severity.choices)
     status = ValuedChoiceField(choices=Status.choices, required=False)
-    cwe = PrimaryKeyRelatedField(serializer=CWEMinimalSerializer, required=False)
+    cwe = PrimaryKeyRelatedField(serializer=CWEMinimalSerializer, required=False, allow_null=True)
 
     class Meta:
         model = Finding
