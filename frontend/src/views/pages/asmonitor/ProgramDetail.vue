@@ -5,9 +5,9 @@ import TargetCountCard from '@/components/asmonitor/programDashboard/TargetCount
 import HighestSeverityCard from '@/components/asmonitor/programDashboard/HighestSeverityCard.vue';
 import LatestTargetCard from '@/components/asmonitor/programDashboard/LatestTargetCard.vue';
 import ProgramUpdateDialog from '@/components/asmonitor/ProgramUpdateDialog.vue';
-import LatestFindings from "@/components/asmonitor/programDashboard/LatestFindings.vue";
-import FindingsByDatesChart from "@/components/asmonitor/programDashboard/FindingsByDatesChart.vue";
-import LatestTargets from "@/components/asmonitor/programDashboard/LatestTargets.vue";
+import LatestFindings from '@/components/asmonitor/programDashboard/LatestFindings.vue';
+import FindingsByDatesChart from '@/components/asmonitor/programDashboard/FindingsByDatesChart.vue';
+import LatestTargets from '@/components/asmonitor/programDashboard/LatestTargets.vue';
 
 export default {
     name: 'ProgramDetail.vue',
@@ -19,7 +19,7 @@ export default {
         LatestTargetCard,
         HighestSeverityCard,
         TargetCountCard,
-        FindingCount,
+        FindingCount
     },
     data() {
         return {
@@ -60,7 +60,11 @@ export default {
         </div>
     </div>
     <div class="grid">
-        <div class="col-6"></div>
+        <div class="col-6">
+            <div class="flex align-items-center">
+                <h5>{{ program.name }}</h5>
+            </div>
+        </div>
         <div class="col-6">
             <div class="flex justify-content-end">
                 <ProgramUpdateDialog :program="program"></ProgramUpdateDialog>
