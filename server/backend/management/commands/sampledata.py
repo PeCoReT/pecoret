@@ -1,12 +1,16 @@
-import yaml
 from pathlib import Path
+
+import yaml
 from django.conf import settings
+from django.contrib.auth.models import Group
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import Group
+
+from asmonitor import models as asmonitor_models
 from backend import models
 from backend.models.membership import Roles
 from backend.models.project import TestMethod
+from backend.models.finding import Severity
 from checklists.models import Category, Item, Checklist
 
 
@@ -29,6 +33,8 @@ class Command(BaseCommand):
             self.create_companies()
             self.create_projects()
             self.create_checklists()
+            self.create_technologies()
+            self.create_attack_surface_data()
 
     def create_users(self):
         self.stdout.write('Creating users...')
@@ -113,3 +119,53 @@ class Command(BaseCommand):
                 user = models.User.objects.get(username=username)
                 models.Membership.objects.get_or_create(user=user, project=project, defaults=member)
             self.create_project_assets(project, assets)
+
+    def create_technologies(self):
+        self.stdout.write('Create sample technologies...')
+        for item in self.data.get('technologies', []):
+            name = item.pop('name')
+            _tech, _created = models.Technology.objects.get_or_create(name=name, defaults={
+                'homepage': item.get('homepage'),
+                'cpe': item.get('cpe'),
+                'description': item.get('description')
+            })
+
+    def create_attack_surface_data(self):
+        if not self.data.get('attack-surface'):
+            return
+        self.stdout.write('Create Attack Surface Dashboard data...')
+        for data in self.data.get('attack-surface', {}).get('tags', []):
+            _tag, _created = asmonitor_models.Tag.objects.get_or_create(name=data['name'], defaults={
+                'description': data['description'],
+                'color': data['color']
+            })
+
+        for data in self.data['attack-surface'].get('programs', []):
+            program, _created = asmonitor_models.Program.objects.get_or_create(name=data['name'], defaults={
+                'description': data.get('description')
+            })
+            for target_data in data.get('targets', []):
+                target, created = asmonitor_models.Target.objects.get_or_create(name=target_data['name'],
+                                                                                ip=target_data['ip'],
+                                                                                program=program)
+                for tech_data in target_data.get('technologies', []):
+                    tech, _created = models.Technology.objects.get_or_create(name=tech_data['name'], defaults={
+                        'description': tech_data.get('description'),
+                        'cpe': tech_data.get('cpe'), 'homepage': tech_data.get('homepage')
+                    })
+                    target.technologies.add(tech)
+                for tag_data in target_data.get('tags', []):
+                    tag, _created = asmonitor_models.Tag.objects.get_or_create(name=tag_data['name'], defaults={
+                        'description': data.get('description'),
+                        'color': data.get('color')
+                    })
+                    target.tags.add(tag)
+                target.save()
+                for finding_data in target_data.get('findings', []):
+                    _finding, _created = asmonitor_models.Finding.objects.get_or_create(name=finding_data['name'],
+                                                                                        program=program,
+                                                                                        target=target, defaults={
+                            'severity': Severity[finding_data['severity'].upper()].value,
+                            'proof_text': finding_data['proof_text'],
+                            'user': models.User.objects.get(username=finding_data['user'])
+                        })

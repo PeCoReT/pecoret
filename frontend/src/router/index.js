@@ -9,6 +9,8 @@ import companyRoutes from '@/router/routes/companies';
 import vulnerabilityTemplateRoutes from '@/router/routes/vulnerabilityTemplates';
 import advisoryRoutes from '@/router/routes/advisories';
 import userRoutes from '@/router/routes/user';
+import asmonitorRoutes from '@/router/routes/asmonitor';
+import technologyRoutes from "@/router/routes/technologies";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -30,7 +32,9 @@ const router = createRouter({
                 ...vulnerabilityTemplateRoutes,
                 ...checklistRoutes,
                 ...companyRoutes,
-                ...userRoutes
+                ...userRoutes,
+                ...asmonitorRoutes,
+                ...technologyRoutes
             ]
         },
         ...baseRoutes

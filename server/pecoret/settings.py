@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     "extra_settings",
     "backend.apps.BackendConfig",
     "advisories.apps.AdvisoriesConfig",
-    "checklists.apps.ChecklistsConfig"
+    "checklists.apps.ChecklistsConfig",
+    "asmonitor.apps.AsmonitorConfig"
 ]
 
 MIDDLEWARE = [

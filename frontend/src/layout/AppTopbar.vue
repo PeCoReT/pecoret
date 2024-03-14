@@ -2,6 +2,7 @@
 import { useAuthStore } from '@/store/auth';
 import ProjectTabMenu from './ProjectTabMenu.vue';
 import AuthService from '../service/AuthService';
+import ProgramTabMenu from '@/components/asmonitor/ProgramTabMenu.vue';
 
 export default {
     name: 'AppTopbar',
@@ -57,6 +58,10 @@ export default {
                         label: 'Vulnerability Templates',
                         route: this.$router.resolve({ name: 'VulnerabilityTemplateList' })
                     });
+                    knowledgeItems.push({
+                        label: 'Technologies',
+                        route: this.$router.resolve({ name: 'TechnologyList' })
+                    });
                 }
                 if (this.showChecklistButton === true) {
                     knowledgeItems.push({
@@ -101,6 +106,32 @@ export default {
                     });
                 }
                 items.push(advisories);
+            }
+
+            if (this.showASMonitorButton === true) {
+                items.push({
+                    label: 'Attack Surface',
+                    items: [
+                        {
+                            label: 'Programs',
+                            route: this.$router.resolve({
+                                name: 'ASMonitorProgramList'
+                            })
+                        },
+                        {
+                            label: 'Findings',
+                            route: this.$router.resolve({
+                                name: 'ASMonitorGlobalFindingList'
+                            })
+                        },
+                        {
+                            label: 'Tags',
+                            route: this.$router.resolve({
+                                name: 'ASMonitorTagList'
+                            })
+                        }
+                    ]
+                });
             }
 
             if (this.authStore.groups.isAdmin === true) {
@@ -172,6 +203,12 @@ export default {
             }
             return true;
         },
+        showASMonitorButton() {
+            if (this.authStore.groups.isPentester === true) {
+                return true;
+            }
+            return false;
+        },
         topbarMenuClasses() {
             return {
                 'layout-topbar-menu-mobile-active': this.topbarMenuActive
@@ -189,7 +226,7 @@ export default {
             this.topbarMenuActive = !this.topbarMenuActive;
         }
     },
-    components: { ProjectTabMenu }
+    components: { ProgramTabMenu, ProjectTabMenu }
 };
 </script>
 
@@ -213,4 +250,5 @@ export default {
         </template>
     </Menubar>
     <ProjectTabMenu v-if="this.$route.params.projectId"></ProjectTabMenu>
+    <ProgramTabMenu v-else-if="this.$route.params.programId"></ProgramTabMenu>
 </template>

@@ -6,7 +6,8 @@ from django.conf import settings
 urlpatterns = [
     path('api/', include('backend.urls')),
     path('api/', include('checklists.urls')),
-    path('api/', include('advisories.urls'))
+    path('api/', include('advisories.urls')),
+    path('api/', include('asmonitor.urls'))
 ]
 
 if settings.DEBUG:

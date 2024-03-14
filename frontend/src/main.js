@@ -107,8 +107,8 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@/assets/styles.scss';
 
 import { registerPlugins } from '@/plugins';
-import IconField from "primevue/iconfield";
-import InputIcon from "primevue/inputicon";
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
 
 const app = createApp(App);
 registerPlugins(app);

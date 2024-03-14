@@ -156,20 +156,20 @@ export default {
 </script>
 <template>
     <div class="border-0 border-round">
-        <textarea class="p-3" :value="modelValue" @blur="handleBlur($event.target.value)" @input="handleInput($event.target.value)" />
+        <textarea class="p-3 p-inputtext p-component" :value="modelValue" @blur="handleBlur($event.target.value)" @input="handleInput($event.target.value)" />
     </div>
 </template>
 <style>
 @import '@/../node_modules/easymde/dist/easymde.min.css';
 
 .CodeMirror {
-    background: var(--surface-b) !important;
+    background: var(--surface-ground) !important;
     color: inherit !important;
-    border: 1px solid var(--surface-border) !important;
+    border: 1px solid var(--surface-100) !important;
 }
 
 .editor-preview {
-    background: var(--surface-b) !important;
+    background: var(--surface-ground) !important;
     color: inherit !important;
 }
 
@@ -178,9 +178,9 @@ export default {
 }
 
 .editor-toolbar {
-    border-top: 1px solid var(--surface-border);
-    border-left: 1px solid var(--surface-border);
-    border-right: 1px solid var(--surface-border);
+    border-top: 1px solid var(--surface-100);
+    border-left: 1px solid var(--surface-100);
+    border-right: 1px solid var(--surface-100);
 }
 
 .CodeMirror-cursor {
@@ -202,7 +202,8 @@ export default {
 }
 
 .editor-preview pre {
-    background: var(--surface-a);
+    background: var(--surface-50);
     padding: 1em;
+    border-radius: 5px;
 }
 </style>

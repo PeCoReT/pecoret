@@ -14,6 +14,6 @@ const baseRoutes = [
         name: 'AccountActivation',
         component: () => import('@/views/pages/auth/AccountActivation.vue')
     }
-]
+];
 
 export default baseRoutes;

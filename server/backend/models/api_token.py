@@ -59,13 +59,15 @@ class APIToken(models.Model):
     name = models.CharField(max_length=128)
     key = models.CharField(max_length=255, editable=False)
 
-    # scope
+    # not yet in use
     project = models.ForeignKey('backend.Project', on_delete=models.CASCADE, null=True)
+    # scope
     scope_advisories = models.PositiveSmallIntegerField(choices=AccessChoices.choices, default=AccessChoices.NO_ACCESS)
     scope_companies = models.PositiveSmallIntegerField(choices=AccessChoices.choices, default=AccessChoices.NO_ACCESS)
     scope_all_projects = models.PositiveSmallIntegerField(choices=AccessChoices.choices,
                                                           default=AccessChoices.NO_ACCESS)
     scope_user = models.PositiveSmallIntegerField(choices=AccessChoices.choices, default=AccessChoices.NO_ACCESS)
+    scope_asmonitor = models.PositiveSmallIntegerField(choices=AccessChoices.choices, default=AccessChoices.NO_ACCESS)
 
     def is_expired(self):
         if not self.date_expire:

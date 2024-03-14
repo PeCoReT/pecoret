@@ -7,7 +7,7 @@ import AppTopbar from './AppTopbar.vue';
     <div class="layout-wrapper layout-static">
         <app-topbar></app-topbar>
 
-        <div class="p-container">
+        <div class="p-container-fluid">
             <div class="layout-main">
                 <Toast />
                 <ConfirmDialog></ConfirmDialog>
@@ -18,5 +18,3 @@ import AppTopbar from './AppTopbar.vue';
         <div class="layout-mask"></div>
     </div>
 </template>
-
-<style lang="scss" scoped></style>

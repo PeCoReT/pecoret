@@ -19,7 +19,7 @@ router.register(
 router.register("companies", viewsets.CompanyViewSet, "company")
 router.register("cwes", viewsets.CWEViewSet, "cwe")
 router.register("report-templates", viewsets.ReportTemplateViewSet, "report-template")
-
+router.register('technologies', viewsets.TechnologyViewSet, 'technology')
 router.register("users", viewsets.UserViewSet, "user")
 router.register("groups", viewsets.GroupViewSet, "group")
 
