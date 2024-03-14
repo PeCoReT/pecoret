@@ -1,0 +1,30 @@
+technologies:
+  - name: Wordpress
+    homepage: https://wordpress.com
+
+
+attack-surface:
+  tags:
+    - name: php
+      description: Is running some PHP application
+      color: '#55ab65'
+    - name: cve
+      description: Affected by at least one CVE
+      color: '#902ea6'
+
+  programs:
+    - name: Breaking Bad Bug Bounty
+      targets:
+        - name: shop.hermanos.es
+          ip: 10.192.10.10
+        - name: blog.hermanos.es
+          ip: 10.192.10.19
+          technologies:
+            - name: Wordpress
+          tags:
+            - name: php
+          findings:
+            - name: SQL-Injection
+              severity: Critical
+              proof_text: lorem ipsum
+              user: hschrader

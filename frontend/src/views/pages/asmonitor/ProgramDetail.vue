@@ -7,10 +7,12 @@ import LatestTargetCard from '@/components/asmonitor/programDashboard/LatestTarg
 import ProgramUpdateDialog from '@/components/asmonitor/ProgramUpdateDialog.vue';
 import LatestFindings from "@/components/asmonitor/programDashboard/LatestFindings.vue";
 import FindingsByDatesChart from "@/components/asmonitor/programDashboard/FindingsByDatesChart.vue";
+import LatestTargets from "@/components/asmonitor/programDashboard/LatestTargets.vue";
 
 export default {
     name: 'ProgramDetail.vue',
     components: {
+        LatestTargets,
         FindingsByDatesChart,
         LatestFindings,
         ProgramUpdateDialog,
@@ -82,6 +84,7 @@ export default {
     <div class="grid">
         <div class="col-12 md:col-6">
             <LatestFindings :program-id="program.pk"></LatestFindings>
+            <LatestTargets :program-id="program.pk"></LatestTargets>
         </div>
         <div class="col-12 md:col-6">
             <FindingsByDatesChart :program-id="program.pk"></FindingsByDatesChart>
