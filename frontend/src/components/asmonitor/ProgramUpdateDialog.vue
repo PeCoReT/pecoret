@@ -1,23 +1,33 @@
 <script>
 import ASMonitorService from '@/service/ASMonitorService';
 import ModalDialog from '@/components/elements/dialogs/ModalDialog.vue';
+import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
-    name: 'TagUpdateDialog',
-    components: { ModalDialog },
-    emits: ['object-updated'],
+    name: 'ProgramUpdateDialog',
+    components: { ModalDialog, MarkdownEditor },
     props: {
-        tag: {
+        program: {
             required: true
         }
     },
+    emits: ['object-updated'],
     data() {
         return {
             showDialog: false,
-            model: this.tag,
+            model: this.program,
             loading: false,
             service: new ASMonitorService()
         };
+    },
+    watch: {
+        program: {
+            deep: true,
+            immediate: true,
+            handler(value) {
+                this.model = value;
+            }
+        }
     },
     methods: {
         open() {
@@ -26,18 +36,14 @@ export default {
         patch() {
             let data = {
                 name: this.model.name,
-                description: this.model.description,
-                color: this.model.color
+                description: this.model.description
             };
-            if (this.model.color.substring(0, 1) !== '#') {
-                data = `#${this.model.color}`;
-            }
-            this.service.patchTag(this.$api, this.tag.pk, data).then(() => {
+            this.service.patchProgram(this.$api, this.program.pk, data).then(() => {
                 this.$toast.add({
                     severity: 'success',
-                    summary: 'Tag updated!',
+                    summary: 'Program updated!',
                     life: 3000,
-                    detail: 'Tag updated successfully'
+                    detail: 'Program updated successfully'
                 });
                 this.$emit('object-updated');
                 this.showDialog = false;
@@ -48,9 +54,9 @@ export default {
 </script>
 
 <template>
-    <Button icon="fa fa-edit" size="small" outlined @click="open"></Button>
+    <Button icon="fa fa-edit" label="Program" outlined @click="open"></Button>
 
-    <ModalDialog v-model:loading="loading" header="Update Tag" v-model="showDialog" @onSave="patch">
+    <ModalDialog v-model:loading="loading" header="Update Program" v-model="showDialog" @onSave="patch">
         <div class="p-fluid grid formgrid">
             <div class="field col-12">
                 <label for="name">Name</label>
@@ -58,11 +64,7 @@ export default {
             </div>
             <div class="field col-12">
                 <label for="description">Description</label>
-                <InputText id="description" maxlength="254" v-model="model.description"></InputText>
-            </div>
-            <div class="field col-12">
-                <label for="color" class="mr-3">Color</label>
-                <ColorPicker v-model="model.color"></ColorPicker>
+                <MarkdownEditor id="description" v-model="model.description"></MarkdownEditor>
             </div>
         </div>
     </ModalDialog>

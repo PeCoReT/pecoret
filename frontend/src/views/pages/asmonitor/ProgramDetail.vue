@@ -1,14 +1,24 @@
 <script>
 import ASMonitorService from '@/service/ASMonitorService';
-import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
-import FindingCount from "@/components/asmonitor/programDashboard/FindingCount.vue";
-import TargetCountCard from "@/components/asmonitor/programDashboard/TargetCountCard.vue";
-import HighestSeverityCard from "@/components/asmonitor/programDashboard/HighestSeverityCard.vue";
-import LatestTargetCard from "@/components/asmonitor/programDashboard/LatestTargetCard.vue";
+import FindingCount from '@/components/asmonitor/programDashboard/FindingCount.vue';
+import TargetCountCard from '@/components/asmonitor/programDashboard/TargetCountCard.vue';
+import HighestSeverityCard from '@/components/asmonitor/programDashboard/HighestSeverityCard.vue';
+import LatestTargetCard from '@/components/asmonitor/programDashboard/LatestTargetCard.vue';
+import ProgramUpdateDialog from '@/components/asmonitor/ProgramUpdateDialog.vue';
+import LatestFindings from "@/components/asmonitor/programDashboard/LatestFindings.vue";
+import FindingsByDatesChart from "@/components/asmonitor/programDashboard/FindingsByDatesChart.vue";
 
 export default {
     name: 'ProgramDetail.vue',
-    components: { LatestTargetCard, HighestSeverityCard, TargetCountCard, FindingCount, MarkdownEditor },
+    components: {
+        FindingsByDatesChart,
+        LatestFindings,
+        ProgramUpdateDialog,
+        LatestTargetCard,
+        HighestSeverityCard,
+        TargetCountCard,
+        FindingCount,
+    },
     data() {
         return {
             program: {},
@@ -48,6 +58,14 @@ export default {
         </div>
     </div>
     <div class="grid">
+        <div class="col-6"></div>
+        <div class="col-6">
+            <div class="flex justify-content-end">
+                <ProgramUpdateDialog :program="program"></ProgramUpdateDialog>
+            </div>
+        </div>
+    </div>
+    <div class="grid">
         <div class="col-12 md:col-3">
             <FindingCount :program-id="program.pk"></FindingCount>
         </div>
@@ -62,19 +80,11 @@ export default {
         </div>
     </div>
     <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <div class="grid formgrid p-fluid">
-                    <div class="field col-12">
-                        <label for="name">Name</label>
-                        <InputText id="name" v-model="program.name"></InputText>
-                    </div>
-                    <div class="field col-12">
-                        <label for="description">Description</label>
-                        <MarkdownEditor v-model="program.description"></MarkdownEditor>
-                    </div>
-                </div>
-            </div>
+        <div class="col-12 md:col-6">
+            <LatestFindings :program-id="program.pk"></LatestFindings>
+        </div>
+        <div class="col-12 md:col-6">
+            <FindingsByDatesChart :program-id="program.pk"></FindingsByDatesChart>
         </div>
     </div>
 </template>

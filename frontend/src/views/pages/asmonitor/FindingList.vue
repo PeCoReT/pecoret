@@ -20,14 +20,22 @@ export default {
             pagination: { page: 1, limit: 20 },
             loading: false,
             totalRecords: 0,
-            programId: this.$route.params.programId
+            programId: this.$route.params.programId,
+            targetChoices: [],
+            filters: {
+                target: { value: null },
+                'target.name': { value: null }
+            }
         };
     },
     methods: {
         getItems() {
             this.loading = true;
+            let params = {
+                target: this.filters['target.name'].value
+            };
             this.service
-                .getFindings(this.$api, this.programId)
+                .getFindings(this.$api, this.programId, params)
                 .then((response) => {
                     this.items = response.data.results;
                 })
@@ -58,6 +66,14 @@ export default {
             this.$router.push({
                 name: 'ASMonitorFindingDetail',
                 params: { programId: this.programId, findingId: row.data.pk }
+            });
+        },
+        targetFilter(event) {
+            let params = {
+                search: event.value
+            };
+            this.service.getTargets(this.$api, this.programId, params).then((response) => {
+                this.targetChoices = response.data.results;
             });
         },
         confirmDialogDelete(id) {
@@ -103,7 +119,21 @@ export default {
     <div class="grid">
         <div class="col-12">
             <div class="card">
-                <DataTable @row-click="onRowClick" :paginator="true" dataKey="pk" :rowHover="this.items.length > 0" :rows="pagination.limit" :value="items" :loading="loading" :lazy="true" :totalRecords="totalRecords" @page="onPage">
+                <DataTable
+                    filterDisplay="menu"
+                    @filter="getItems"
+                    @row-click="onRowClick"
+                    :paginator="true"
+                    dataKey="pk"
+                    :rowHover="this.items.length > 0"
+                    :rows="pagination.limit"
+                    :value="items"
+                    :loading="loading"
+                    :lazy="true"
+                    :totalRecords="totalRecords"
+                    v-model:filters="filters"
+                    @page="onPage"
+                >
                     <template #empty>
                         <BlankSlate title="No findings!" text="No targets found!" icon="fa fa-bug"></BlankSlate>
                     </template>
@@ -121,7 +151,22 @@ export default {
                             <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
                         </template>
                     </Column>
-                    <Column field="target.name" header="Target"></Column>
+                    <Column field="target.name" header="Target" :showFilterMatchModes="false">
+                        <template #filter="{ filterModel }">
+                            <Dropdown
+                                v-model="filterModel.value"
+                                :options="targetChoices"
+                                @filter="targetFilter"
+                                placeholder="Select target"
+                                filter
+                                @focus="targetFilter"
+                                class="p-column-filter"
+                                showClear
+                                optionLabel="name"
+                                optionValue="pk"
+                            ></Dropdown>
+                        </template>
+                    </Column>
                     <Column field="status" header="Status"></Column>
                     <Column header="Actions">
                         <template #body="slotProps">

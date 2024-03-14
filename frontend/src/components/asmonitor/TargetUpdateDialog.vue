@@ -32,7 +32,7 @@ export default {
             deep: true,
             handler(value) {
                 this.model = value;
-                if (value.technologies) {
+                if (value.technologies && this.technologies.length < 1) {
                     for (let i = 0; i < value.technologies.length; i++) {
                         this.technologies.push(value.technologies[i].pk);
                     }

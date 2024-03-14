@@ -18,6 +18,11 @@ export default class ASMonitorService {
         return api.get(url);
     }
 
+    patchProgram(api, id, data) {
+        let url = `/asmonitor/programs/${id}/`;
+        return api.patch(url, data);
+    }
+
     deleteProgram(api, id) {
         let url = `/asmonitor/programs/${id}/`;
         return api.delete(url);
@@ -49,6 +54,11 @@ export default class ASMonitorService {
             config['params'] = params;
         }
         return api.get(url, config);
+    }
+
+    patchTag(api, id, data) {
+        let url = `/asmonitor/tags/${id}/`;
+        return api.patch(url, data);
     }
 
     createTarget(api, programId, data) {
@@ -102,5 +112,10 @@ export default class ASMonitorService {
         }
         let url = '/asmonitor/findings/';
         return api.get(url, config);
+    }
+
+    getFindingsByDateStats(api, programId) {
+        let url = `/asmonitor/programs/${programId}/stats_findings_by_date/`;
+        return api.get(url);
     }
 }
