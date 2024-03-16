@@ -1,12 +1,13 @@
 <script>
 import FindingService from '@/service/FindingService';
 import SeverityBadge from '@/components/SeverityBadge.vue';
-import BlankSlate from '@/components/BlankSlate.vue';
 import FindingCopyDialog from '@/components/dialogs/FindingCopyDialog.vue';
 import { FilterMatchMode } from 'primevue/api';
 import AssetSelectField from '@/components/elements/forms/AssetSelectField.vue';
 import FindingCreateDialog from '@/components/projects/findings/FindingCreateDialog.vue';
 import FindingBulkEditDialog from '@/components/projects/findings/FindingBulkEditDialog.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'FindingList',
@@ -114,104 +115,90 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
+        },
+        onRowClick(row) {
+            this.$router.push({
+                name: 'FindingDetail',
+                params: {
+                    projectId: this.projectId,
+                    findingId: row.data.pk
+                }
+            });
         }
     },
     components: {
+        GenericDataTable,
+        BaseListLayout,
         FindingBulkEditDialog,
         FindingCreateDialog,
         AssetSelectField,
         FindingCopyDialog,
         SeverityBadge,
-        BlankSlate
     }
 };
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
-    <div class="grid">
-        <div class="col-6">
-            <div class="justify-content-start flex"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <FindingCreateDialog :project-id="this.projectId"></FindingCreateDialog>
-            </div>
-        </div>
-    </div>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <FindingCreateDialog :project-id="this.projectId"></FindingCreateDialog>
+        </template>
+        <template #table>
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-text="No findings here!"
+                blank-slate-title="No findings!"
+                blank-slate-icon="fa fa-bugs"
+                :model-value="findings"
+                v-model:filters="filters"
+                v-model:selection="selectedItems"
+                @page="onPage"
+                @row-click="onRowClick"
+                @filter="onFilter"
+                @sort="onSort"
+                :filter="true"
+                filter-display="menu"
+            >
+                <template #header>
+                    <div class="grid">
+                        <IconField iconPosition="left">
+                            <InputIcon class="fa fa-search"></InputIcon>
+                            <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
+                        </IconField>
+                        <Button v-if="selectedItems.length > 0" icon="fa fa-trash" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2 mb-2"></Button>
+                        <FindingBulkEditDialog :findings="selectedItems" @object-updated="getFindings"></FindingBulkEditDialog>
+                    </div>
+                </template>
+                <Column selectionMode="multiple" headerStyle=""></Column>
 
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable
-                    :paginator="true"
-                    dataKey="pk"
-                    :rows="pagination.limit"
-                    :value="findings"
-                    :rowHover="findings.length > 0"
-                    v-model:selection="selectedItems"
-                    v-model:filters="filters"
-                    filterDisplay="menu"
-                    :lazy="true"
-                    responsiveLayout="scroll"
-                    :totalRecords="totalRecords"
-                    :loading="loading"
-                    @page="onPage"
-                    @sort="onSort"
-                    @filter="onFilter"
-                >
-                    <template #header>
-                        <div class="grid">
-                            <IconField iconPosition="left">
-                                <InputIcon class="fa fa-search"></InputIcon>
-                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </IconField>
-                            <Button v-if="selectedItems.length > 0" icon="fa fa-trash" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2"></Button>
-                            <FindingBulkEditDialog :findings="selectedItems" @object-updated="getFindings"></FindingBulkEditDialog>
-                        </div>
+                <Column field="name" header="Name"></Column>
+                <Column field="severity" header="Severity">
+                    <template #body="slotProps">
+                        <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
                     </template>
-                    <template #empty>
-                        <BlankSlate title="No findings!" text="No findings here!" icon="fa fa-bug"></BlankSlate>
+                </Column>
+                <Column field="component.display_name" filterField="component" header="Asset" :showFilterMatchModes="false">
+                    <template #filter="{ filterModel }">
+                        <AssetSelectField v-model="filterModel.value"></AssetSelectField>
                     </template>
-                    <Column selectionMode="multiple" headerStyle=""></Column>
-
-                    <Column field="name" header="Name">
-                        <template #body="slotProps">
-                            <router-link class="text-color underline" :to="{ name: 'FindingDetail', params: { projectId: this.projectId, findingId: slotProps.data.pk } }">
-                                {{ slotProps.data.name }}
-                            </router-link>
-                        </template>
-                    </Column>
-                    <Column field="severity" header="Severity">
-                        <template #body="slotProps">
-                            <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
-                        </template>
-                    </Column>
-                    <Column field="component.display_name" filterField="component" header="Asset" :showFilterMatchModes="false">
-                        <template #filter="{ filterModel }">
-                            <AssetSelectField v-model="filterModel.value"></AssetSelectField>
-                        </template>
-                    </Column>
-                    <Column field="vulnerability.name" header="Vulnerability"></Column>
-                    <Column field="unique_id" header="ID"></Column>
-                    <Column field="status" header="Status"></Column>
-                    <Column field="finding_date" header="Date"></Column>
-                    <Column field="needs_review" header="Needs Review" :showFilterMatchModes="false">
-                        <template #filter="{ filterModel }">
-                            <TriStateCheckbox v-model="filterModel.value"></TriStateCheckbox>
-                        </template>
-                    </Column>
-                    <Column header="Actions">
-                        <template #body="slotProps">
-                            <FindingCopyDialog :finding="slotProps.data.pk" @object-created="getFindings"></FindingCopyDialog>
-                        </template>
-                    </Column>
-                </DataTable>
-            </div>
-        </div>
-    </div>
+                </Column>
+                <Column field="vulnerability.name" header="Vulnerability"></Column>
+                <Column field="unique_id" header="ID"></Column>
+                <Column field="status" header="Status"></Column>
+                <Column field="finding_date" header="Date"></Column>
+                <Column field="needs_review" header="Needs Review" :showFilterMatchModes="false">
+                    <template #filter="{ filterModel }">
+                        <TriStateCheckbox v-model="filterModel.value"></TriStateCheckbox>
+                    </template>
+                </Column>
+                <Column header="Actions">
+                    <template #body="slotProps">
+                        <FindingCopyDialog :finding="slotProps.data.pk" @object-created="getFindings"></FindingCopyDialog>
+                    </template>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>

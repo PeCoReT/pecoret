@@ -2,7 +2,8 @@
 import ReportService from '@/service/ReportService';
 import ReportTabMenu from '../../../../components/pages/ReportTabMenu.vue';
 import VersionHistoryCreateDialog from '../../../../components/dialogs/VersionHistoryCreateDialog.vue';
-import BlankSlate from '@/components/BlankSlate.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'VersionHistoryList',
@@ -46,8 +47,6 @@ export default {
         this.getItems();
     },
     methods: {
-        onSort(event) {},
-        onFilter(event) {},
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
@@ -80,7 +79,7 @@ export default {
             });
         },
         deleteChangeHistoryItem(versionId) {
-            this.reportService.deleteChangeHistoryItem(this.$api, this.projectId, this.reportId, versionId).then((response) => {
+            this.reportService.deleteChangeHistoryItem(this.$api, this.projectId, this.reportId, versionId).then(() => {
                 this.$toast.add({
                     severity: 'info',
                     summary: 'Deleted',
@@ -91,37 +90,29 @@ export default {
             });
         }
     },
-    components: { ReportTabMenu, VersionHistoryCreateDialog, BlankSlate }
+    components: { GenericDataTable, BaseListLayout, ReportTabMenu, VersionHistoryCreateDialog }
 };
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <VersionHistoryCreateDialog @object-created="getItems"></VersionHistoryCreateDialog>
+        </template>
 
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <VersionHistoryCreateDialog @object-created="getItems"></VersionHistoryCreateDialog>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
+        <template #default>
             <ReportTabMenu class="surface-card"></ReportTabMenu>
 
             <div class="card border-noround-top">
-                <DataTable paginator lazy dataKey="pk" :value="items" :rows="pagination.limit" :totalRecords="totalRecords" filterDisplay="menu" :loading="loading" @page="onPage" @sort="onSort" :rowHover="items.length > 0" @filter="onFilter">
-                    <template #empty>
-                        <BlankSlate icon="fa fa-clock-rotate-left" title="Version History" text="No version history found!"></BlankSlate>
-                    </template>
+                <GenericDataTable
+                    :total-records="totalRecords"
+                    :loading="loading"
+                    :pagination="pagination"
+                    blank-slate-text="No version history found!"
+                    blank-slate-title="No Version History!"
+                    blank-slate-icon="fa fa-clock-rotate-left"
+                    :model-value="items"
+                >
                     <Column field="version" header="Version"></Column>
                     <Column field="change" header="Change"></Column>
                     <Column field="date" header="Date"></Column>
@@ -131,8 +122,8 @@ export default {
                             <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                         </template>
                     </Column>
-                </DataTable>
+                </GenericDataTable>
             </div>
-        </div>
-    </div>
+        </template>
+    </BaseListLayout>
 </template>

@@ -1,7 +1,8 @@
 <script>
 import ProjectService from '@/service/ProjectService';
 import ProjectContactCreateDialog from '../../../../components/dialogs/ProjectContactCreateDialog.vue';
-import BlankSlate from '@/components/BlankSlate.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'ContactList',
@@ -25,8 +26,6 @@ export default {
         this.getItems();
     },
     methods: {
-        onSort(event) {},
-        onFilter(event) {},
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
@@ -70,48 +69,29 @@ export default {
             });
         }
     },
-    components: { ProjectContactCreateDialog, BlankSlate }
+    components: { GenericDataTable, BaseListLayout, ProjectContactCreateDialog}
 };
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <ProjectContactCreateDialog @object-created="getItems"></ProjectContactCreateDialog>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable paginator lazy dataKey="pk" :rowHover="this.items.length > 0" :value="items" :rows="pagination.limit" :totalRecords="totalRecords" filterDisplay="menu" :loading="loading" @page="onPage" @sort="onSort" @filter="onFilter">
-                    <template #empty>
-                        <BlankSlate icon="fa fa-id-card" title="No contacts!" text="No contacts found!"></BlankSlate>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <ProjectContactCreateDialog @object-created="getItems"></ProjectContactCreateDialog>
+        </template>
+        <template #table>
+            <GenericDataTable :total-records="totalRecords" :loading="loading" :pagination="pagination" blank-slate-text="No contacts found!" blank-slate-title="No Contacts!" blank-slate-icon="fa fa-id-card" :model-value="items" @page="onPage">
+                <Column field="name" header="Name">
+                    <template #body="slotProps"> {{ slotProps.data.contact.first_name }} {{ slotProps.data.contact.last_name }} </template>
+                </Column>
+                <Column field="contact.email" header="E-Mail"></Column>
+                <Column field="contact.phone" header="Phone"></Column>
+                <Column field="contact.role" header="Role"></Column>
+                <Column header="Actions">
+                    <template #body="slotProps">
+                        <Button size="small" outlined severity="danger" icon="fa fa-trash" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                     </template>
-                    <Column field="name" header="Name">
-                        <template #body="slotProps"> {{ slotProps.data.contact.first_name }} {{ slotProps.data.contact.last_name }} </template>
-                    </Column>
-                    <Column field="contact.email" header="E-Mail"></Column>
-                    <Column field="contact.phone" header="Phone"></Column>
-                    <Column field="contact.role" header="Role"></Column>
-                    <Column header="Actions">
-                        <template #body="slotProps">
-                            <Button size="small" outlined severity="danger" icon="fa fa-trash" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
-                        </template>
-                    </Column>
-                </DataTable>
-            </div>
-        </div>
-    </div>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>

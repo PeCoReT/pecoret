@@ -1,6 +1,8 @@
 <script>
 import ContributorService from '@/service/ContributorService';
 import ContributorCreateDialog from '../../../../components/dialogs/ContributorCreateDialog.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'ContributorList',
@@ -24,8 +26,6 @@ export default {
         this.getItems();
     },
     methods: {
-        onSort(event) {},
-        onFilter(event) {},
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
@@ -69,46 +69,30 @@ export default {
             });
         }
     },
-    components: { ContributorCreateDialog }
+    components: { GenericDataTable, BaseListLayout, ContributorCreateDialog }
 };
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <ContributorCreateDialog @object-created="getItems"></ContributorCreateDialog>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable paginatior lazy dataKey="pk" rowHover :value="items" :rows="pagination.limit" :totalRecords="totalRecords" filterDisplay="menu" :loading="loading" @page="onPage" @sort="onSort" @filter="onFilter">
-                    <Column field="user.username" header="User"></Column>
-                    <Column field="role" header="Role"></Column>
-                    <Column field="active_until" header="Membership Expiry">
-                        <template #body="slotProps">
-                            {{ slotProps.data.active_until || 'Never' }}
-                        </template>
-                    </Column>
-                    <Column header="Actions">
-                        <template #body="slotProps">
-                            <Button size="small" outlined severity="danger" icon="fa fa-trash" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
-                        </template>
-                    </Column>
-                </DataTable>
-            </div>
-        </div>
-    </div>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <ContributorCreateDialog @object-created="getItems"></ContributorCreateDialog>
+        </template>
+        <template #table>
+            <GenericDataTable :total-records="totalRecords" :loading="loading" :pagination="pagination" blank-slate-text="No Contributors!" blank-slate-title="No contributors found!" blank-slate-icon="fa fa-users" :model-value="items" @page="onPage">
+                <Column field="user.username" header="User"></Column>
+                <Column field="role" header="Role"></Column>
+                <Column field="active_until" header="Membership Expiry">
+                    <template #body="slotProps">
+                        {{ slotProps.data.active_until || 'Never' }}
+                    </template>
+                </Column>
+                <Column header="Actions">
+                    <template #body="slotProps">
+                        <Button size="small" outlined severity="danger" icon="fa fa-trash" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
+                    </template>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>

@@ -1,12 +1,13 @@
 <script>
-import BlankSlate from '@/components/BlankSlate.vue';
 import ProjectService from '@/service/ProjectService';
 import ProjectFileCreateDialog from '@/components/dialogs/ProjectFileCreateDialog.vue';
 import forceFileDownload from '@/utils/file';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'ProjectFileList',
-    components: { BlankSlate, ProjectFileCreateDialog },
+    components: { GenericDataTable, BaseListLayout, ProjectFileCreateDialog },
     data() {
         return {
             breadcrumbs: [
@@ -27,9 +28,10 @@ export default {
         this.getItems();
     },
     methods: {
-        onSort() {},
-        onFilter() {},
-        onPage(event) {},
+        onPage() {
+            this.pagination.page = event.page + 1;
+            this.getItems();
+        },
         getItems() {
             this.loading = true;
             let params = {
@@ -69,41 +71,31 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <ProjectFileCreateDialog @object-created="this.getItems"></ProjectFileCreateDialog>
+        </template>
+        <template #table>
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-text="No project files found!"
+                blank-slate-title="No Project Files!"
+                blank-slate-icon="fa fa-file"
+                :model-value="items"
+                @page="onPage"
+            >
+                <Column field="name" header="Name"></Column>
 
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <ProjectFileCreateDialog @object-created="this.getItems"></ProjectFileCreateDialog>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable paginator lazy dataKey="pk" :value="items" :rows="pagination.limit" :rowHover="this.items.length > 0" :totalRecords="totalRecords" filterDisplay="menu" :loading="loading" @page="onPage" @sort="onSort" @filter="onFilter">
-                    <template #empty>
-                        <BlankSlate icon="fa fa-file" title="No files!" text="No project files found!"></BlankSlate>
+                <Column field="date_created" header="Date created"></Column>
+                <Column header="Actions">
+                    <template #body="slotProps">
+                        <Button size="small" outlined icon="fa fa-download" @click="downloadFile(slotProps.data.pk)"></Button>
+                        <Button size="small" outlined severity="danger" icon="fa fa-trash" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                     </template>
-                    <Column field="name" header="Name"></Column>
-
-                    <Column field="date_created" header="Date created"></Column>
-                    <Column header="Actions">
-                        <template #body="slotProps">
-                            <Button size="small" outlined icon="fa fa-download" @click="downloadFile(slotProps.data.pk)"></Button>
-                            <Button size="small" outlined severity="danger" icon="fa fa-trash" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
-                        </template>
-                    </Column>
-                </DataTable>
-            </div>
-        </div>
-    </div>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>

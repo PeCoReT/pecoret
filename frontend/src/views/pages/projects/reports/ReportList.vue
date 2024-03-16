@@ -1,7 +1,8 @@
 <script>
 import ReportService from '@/service/ReportService';
 import ReportCreateDialog from '@/components/dialogs/ReportCreateDialog.vue';
-import BlankSlate from '@/components/BlankSlate.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'ReportList',
@@ -25,8 +26,6 @@ export default {
         this.getItems();
     },
     methods: {
-        onSort() {},
-        onFilter() {},
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
@@ -60,57 +59,52 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
+        },
+        onRowClick(row) {
+            this.$router.push({
+                name: 'ReportDetail',
+                params: {
+                    projectId: this.projectId,
+                    reportId: row.data.pk
+                }
+            });
         }
     },
-    components: { ReportCreateDialog, BlankSlate }
+    components: { GenericDataTable, BaseListLayout, ReportCreateDialog }
 };
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <ReportCreateDialog @object-created="getItems"></ReportCreateDialog>
+        </template>
+        <template #table>
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-text="No reports found!"
+                blank-slate-title="No Reports!"
+                blank-slate-icon="fa fa-file"
+                :model-value="items"
+                @rowClick="onRowClick"
+                @page="onPage"
+            >
+                <template #header>
+                    <div class="grid">
+                        <IconField iconPosition="left">
+                            <InputIcon class="fa fa-search"></InputIcon>
+                            <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
+                        </IconField>
+                    </div>
+                </template>
+                <Column field="name" header="Name"> </Column>
+                <Column field="variant" header="Variant"></Column>
+                <Column field="template.name" header="Template"></Column>
+                <Column field="author.username" header="Author"></Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <ReportCreateDialog @object-created="getItems"></ReportCreateDialog>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable paginator lazy dataKey="pk" :rowHover="items.length > 0" :value="items" :rows="pagination.limit" :totalRecords="totalRecords" filterDisplay="menu" :loading="loading" @page="onPage" @sort="onSort" @filter="onFilter">
-                    <template #header>
-                        <div class="flex justify-content-between flex-column sm:flex-row">
-                            <IconField iconPosition="left">
-                                <InputIcon class="fa fa-search"></InputIcon>
-                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </IconField>
-                        </div>
-                    </template>
-                    <template #empty>
-                        <BlankSlate icon="fa fa-file" text="No reports!" title="No reports found!"></BlankSlate>
-                    </template>
-                    <Column field="name" header="Name">
-                        <template #body="slotProps">
-                            <router-link class="text-color underline" :to="{ name: 'ReportDetail', params: { projectId: this.projectId, reportId: slotProps.data.pk } }">
-                                {{ slotProps.data.name }}
-                            </router-link>
-                        </template>
-                    </Column>
-                    <Column field="variant" header="Variant"></Column>
-                    <Column field="template.name" header="Template"></Column>
-                    <Column field="author.username" header="Author"></Column>
-                </DataTable>
-            </div>
-        </div>
-    </div>
 </template>

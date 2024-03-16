@@ -1,17 +1,19 @@
 <script>
 import { defineComponent } from 'vue';
 import AdvisoryService from '@/service/AdvisoryService';
-import BlankSlate from '@/components/BlankSlate.vue';
 import AdvisoryManagementLabelCreateDialog from '@/components/dialogs/AdvisoryManagementLabelCreateDialog.vue';
 import AdvisoryLabelBadge from '@/components/AdvisoryLabelBadge.vue';
 import AdvisoryManagementLabelUpdateDialog from '@/components/dialogs/advisory-management/AdvisoryManagementLabelUpdateDialog.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default defineComponent({
     name: 'LabelList',
     components: {
+        GenericDataTable,
+        BaseListLayout,
         AdvisoryManagementLabelUpdateDialog,
         AdvisoryManagementLabelCreateDialog,
-        BlankSlate,
         AdvisoryLabelBadge
     },
     data() {
@@ -34,8 +36,6 @@ export default defineComponent({
         this.getItems();
     },
     methods: {
-        onSort(event) {},
-        onFilter(event) {},
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
@@ -89,70 +89,47 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <AdvisoryManagementLabelCreateDialog @object-created="getItems"></AdvisoryManagementLabelCreateDialog>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable
-                    paginator
-                    lazy
-                    dataKey="pk"
-                    :value="items"
-                    :rows="pagination.limit"
-                    :row-hover="items.length > 0"
-                    :totalRecords="totalRecords"
-                    filterDisplay="menu"
-                    :loading="loading"
-                    @sort="onSort"
-                    @page="onPage"
-                    @filter="onFilter"
-                    v-model:filters="filters"
-                >
-                    <template #header>
-                        <div class="grid">
-                            <IconField iconPosition="left">
-                                <InputIcon class="fa fa-search"></InputIcon>
-                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </IconField>
-                        </div>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <AdvisoryManagementLabelCreateDialog @object-created="getItems"></AdvisoryManagementLabelCreateDialog>
+        </template>
+        <template #table>
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-text="No labels found!"
+                blank-slate-title="No Labels!"
+                blank-slate-icon="fa fa-tags"
+                :model-value="items"
+                @page="onPage"
+                v-model:filters="filters"
+                filter-display="menu"
+            >
+                <template #header>
+                    <div class="grid">
+                        <IconField iconPosition="left">
+                            <InputIcon class="fa fa-search"></InputIcon>
+                            <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
+                        </IconField>
+                    </div>
+                </template>
+                <Column field="name" header="Name"></Column>
+                <Column field="description" header="Description"></Column>
+                <Column header="Preview">
+                    <template #body="slotProps">
+                        <AdvisoryLabelBadge :label="slotProps.data"></AdvisoryLabelBadge>
                     </template>
-                    <template #empty>
-                        <BlankSlate icon="fa fa-tags" text="No labels found!" title="No labels!"></BlankSlate>
+                </Column>
+                <Column header="Actions">
+                    <template #body="slotProps">
+                        <AdvisoryManagementLabelUpdateDialog :label="slotProps.data" @object-updated="getItems"></AdvisoryManagementLabelUpdateDialog>
+                        <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                     </template>
-
-                    <Column field="name" header="Name"></Column>
-                    <Column field="description" header="Description"></Column>
-                    <Column header="Preview">
-                        <template #body="slotProps">
-                            <AdvisoryLabelBadge :label="slotProps.data"></AdvisoryLabelBadge>
-                        </template>
-                    </Column>
-                    <Column header="Actions">
-                        <template #body="slotProps">
-                            <AdvisoryManagementLabelUpdateDialog :label="slotProps.data" @object-updated="getItems"></AdvisoryManagementLabelUpdateDialog>
-                            <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
-                        </template>
-                    </Column>
-                </DataTable>
-            </div>
-        </div>
-    </div>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>
 
 <style scoped></style>

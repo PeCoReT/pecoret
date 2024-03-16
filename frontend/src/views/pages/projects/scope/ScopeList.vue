@@ -1,7 +1,8 @@
 <script>
 import ProjectScopeService from '@/service/ProjectScopeService';
 import ProjectScopeCreateDialog from '@/components/dialogs/ProjectScopeCreateDialog.vue';
-import BlankSlate from '../../../../components/BlankSlate.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'ScopeList',
@@ -20,8 +21,6 @@ export default {
         };
     },
     methods: {
-        onSort(event) {},
-        onFilter(event) {},
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
@@ -80,52 +79,25 @@ export default {
                 });
         }
     },
-    components: { BlankSlate, ProjectScopeCreateDialog }
+    components: { GenericDataTable, BaseListLayout, ProjectScopeCreateDialog }
 };
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <ProjectScopeCreateDialog @object-created="getItems"></ProjectScopeCreateDialog>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable paginator lazy dataKey="pk" :value="items" :rows="pagination.limit" :rowHover="items.length > 0" :totalRecords="totalRecords" filterDisplay="menu" :loading="loading" @sort="onSort" @page="onPage" @filter="onFilter">
-                    <template #empty>
-                        <BlankSlate icon="fa fa-star" text="No scopes!" title="No scopes found!"></BlankSlate>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <ProjectScopeCreateDialog @object-created="getItems"></ProjectScopeCreateDialog>
+        </template>
+        <template #table>
+            <GenericDataTable :total-records="totalRecords" :loading="loading" :pagination="pagination" blank-slate-text="No scopes found!" blank-slate-title="No Scopes!" blank-slate-icon="fa fa-start" :model-value="items" @page="onPage">
+                <Column field="details" header="Details"></Column>
+                <Column field="permission" header="Permission"></Column>
+                <Column header="Actions">
+                    <template #body="slotProps">
+                        <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                     </template>
-                    <template #header>
-                        <div class="flex justify-content-between flex-column sm:flex-row">
-                            <IconField iconPosition="left">
-                                <InputIcon class="fa fa-search"></InputIcon>
-                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </IconField>
-                        </div>
-                    </template>
-                    <Column field="details" header="Details"></Column>
-                    <Column field="permission" header="Permission"></Column>
-                    <Column header="Actions">
-                        <template #body="slotProps">
-                            <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
-                        </template>
-                    </Column>
-                </DataTable>
-            </div>
-        </div>
-    </div>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>

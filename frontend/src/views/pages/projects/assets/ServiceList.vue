@@ -2,10 +2,12 @@
 import AssetService from '@/service/AssetService';
 import BlankSlate from '@/components/BlankSlate.vue';
 import ServiceCreateDialog from '@/components/dialogs/ServiceCreateDialog.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'ServiceList',
-    components: { BlankSlate, ServiceCreateDialog },
+    components: { GenericDataTable, BaseListLayout, BlankSlate, ServiceCreateDialog },
     data() {
         return {
             assetService: new AssetService(),
@@ -54,11 +56,18 @@ export default {
                     this.loading = false;
                 });
         },
-        onSort(event) {},
-        onFilter(event) {},
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
+        },
+        onRowClick(row) {
+            this.$router.push({
+                name: 'ServiceDetail',
+                params: {
+                    projectId: this.projectId,
+                    assetId: row.data.pk
+                }
+            });
         },
         onDeleteConfirmDialog(id) {
             this.$confirm.require({
@@ -87,67 +96,42 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <ServiceCreateDialog @object-created="getItems"></ServiceCreateDialog>
-            </div>
-        </div>
-    </div>
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable
-                    paginator
-                    dataKey="pk"
-                    lazy
-                    :rows="pagination.limit"
-                    :value="items"
-                    filterDisplay="menu"
-                    responsiveLayout="scroll"
-                    @sort="onSort"
-                    @filter="onFilter"
-                    @page="onPage"
-                    :totalRecords="totalRecords"
-                    :loading="loading"
-                    :rowHover="items.length > 0"
-                >
-                    <template #header>
-                        <div class="flex justify-content-between flex-column sm:flex-row">
-                          <IconField iconPosition="left">
-                                <InputIcon class="fa fa-search"></InputIcon>
-                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </IconField>
-                        </div>
-                    </template>
-                    <template #empty>
-                        <BlankSlate icon="fa fa-network-wired" text="No services found!" title="No services!"></BlankSlate>
-                    </template>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <ServiceCreateDialog @object-created="getItems"></ServiceCreateDialog>
+        </template>
+        <template #table>
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-text="No service found!"
+                blank-slate-title="No Services!"
+                blank-slate-icon="fa fa-network-wired"
+                :model-value="items"
+                @rowClick="onRowClick"
+                @page="onPage"
+            >
+                <template #header>
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <IconField iconPosition="left">
+                            <InputIcon class="fa fa-search"></InputIcon>
+                            <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
+                        </IconField>
+                    </div>
+                </template>
 
-                    <Column field="name" header="Name">
-                        <template #body="slotProps">
-                            <router-link class="text-color underline" :to="{ name: 'ServiceDetail', params: { projectId: this.projectId, assetId: slotProps.data.pk } }"> {{ slotProps.data.name }}</router-link>
-                        </template>
-                    </Column>
-                    <Column field="port" header="Port"></Column>
-                    <Column field="protocol" header="Protocol"></Column>
-                    <Column field="state" header="State"></Column>
-                    <Column field="host.name" header="Host"></Column>
-                    <Column header="Actions">
-                        <template #body="slotProps">
-                            <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="onDeleteConfirmDialog(slotProps.data.pk)"> </Button>
-                        </template>
-                    </Column>
-                </DataTable>
-            </div>
-        </div>
-    </div>
+                <Column field="name" header="Name"></Column>
+                <Column field="port" header="Port"></Column>
+                <Column field="protocol" header="Protocol"></Column>
+                <Column field="state" header="State"></Column>
+                <Column field="host.name" header="Host"></Column>
+                <Column header="Actions">
+                    <template #body="slotProps">
+                        <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="onDeleteConfirmDialog(slotProps.data.pk)"></Button>
+                    </template>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>

@@ -53,8 +53,6 @@ export default {
                     this.loading = false;
                 });
         },
-        onSort(event) {},
-        onFilter(event) {},
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
@@ -75,6 +73,15 @@ export default {
                         });
                         this.getItems();
                     });
+                }
+            });
+        },
+        onRowClick(row) {
+            this.$router.push({
+                name: 'WebApplicationDetail',
+                params: {
+                    projectId: this.projectId,
+                    assetId: row.data.pk
                 }
             });
         }
@@ -114,11 +121,10 @@ export default {
                     filterDisplay="menu"
                     :rowHover="items.length > 0"
                     responsiveLayout="scroll"
-                    @sort="onSort"
-                    @filter="onFilter"
                     @page="onPage"
                     :totalRecords="totalRecords"
                     :loading="loading"
+                    @row-click="onRowClick"
                 >
                     <template #empty>
                         <BlankSlate icon="fa fa-earth-europe" title="No web applications!" text="No web applications found!"></BlankSlate>
@@ -134,9 +140,7 @@ export default {
 
                     <Column field="name" header="Name">
                         <template #body="slotProps">
-                            <router-link class="text-color underline" :to="{ name: 'WebApplicationDetail', params: { projectId: this.projectId, assetId: slotProps.data.pk } }">
-                                {{ slotProps.data.name }}
-                            </router-link>
+                            {{ slotProps.data.name }}
                         </template>
                     </Column>
                     <Column field="base_url" header="Base URL"></Column>
