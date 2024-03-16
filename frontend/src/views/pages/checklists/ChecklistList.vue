@@ -1,10 +1,11 @@
 <script>
 import ChecklistService from '@/service/ChecklistService';
-import BlankSlate from '@/components/BlankSlate.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'ChecklistList',
-    components: { BlankSlate },
+    components: { GenericDataTable, BaseListLayout },
     data() {
         return {
             breadcrumbs: [
@@ -55,48 +56,43 @@ export default {
                     });
                 }
             });
+        },
+        onRowClick(row) {
+            this.$router.push({
+                name: 'ChecklistUpdate',
+                params: {
+                    checklistId: row.data.pk
+                }
+            });
         }
     }
 };
 </script>
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-6"></div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <Button outlined @click="this.$router.push({ name: 'ChecklistCreate' })" icon="fa fa-plus" label="Checklist"></Button>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable :paginator="true" dataKey="pk" :rowHover="items.length > 0" :rows="pagination.limit" :value="items" filterDisplay="menu" :lazy="true" :loading="loading" @page="onPage" :totalRecords="totalRecords">
-                    <Column field="checklist_id" header="Checklist ID">
-                        <template #body="slotProps">
-                            <router-link class="text-color underline" :to="{ name: 'ChecklistUpdate', params: { checklistId: slotProps.data.pk } }">
-                                {{ slotProps.data.checklist_id }}
-                            </router-link>
-                        </template>
-                    </Column>
-                    <Column field="name" header="Name"></Column>
-                    <Column header="Actions">
-                        <template #body="slotProps">
-                            <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="onDeleteConfirmDialog(slotProps.data.pk)"></Button>
-                        </template>
-                    </Column>
-                    <template #empty>
-                        <BlankSlate icon="fa fa-check" title="No Checklists!" text="No Checklists found!"></BlankSlate>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <Button outlined @click="this.$router.push({ name: 'ChecklistCreate' })" icon="fa fa-plus" label="Checklist"></Button>
+        </template>
+        <template #table>
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-text="No checklists found!"
+                blank-slate-title="No Checklists!"
+                blank-slate-icon="fa fa-check"
+                :model-value="items"
+                @page="onPage"
+                @rowClick="onRowClick"
+            >
+                <Column field="name" header="Name"></Column>
+                <Column field="checklist_id" header="Checklist ID"></Column>
+                <Column header="Actions">
+                    <template #body="slotProps">
+                        <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="onDeleteConfirmDialog(slotProps.data.pk)"></Button>
                     </template>
-                </DataTable>
-            </div>
-        </div>
-    </div>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>

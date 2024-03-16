@@ -1,12 +1,12 @@
 <script>
 import ASMonitorService from '@/service/ASMonitorService';
-import PBreadcrumb from '@/components/Breadcrumb.vue';
-import BlankSlate from '@/components/BlankSlate.vue';
 import ProgramCreateDialog from '@/components/asmonitor/ProgramCreateDialog.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'ProgramList',
-    components: { ProgramCreateDialog, BlankSlate, PBreadcrumb },
+    components: { GenericDataTable, BaseListLayout, ProgramCreateDialog },
     data() {
         return {
             breadcrumbs: [
@@ -93,46 +93,41 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs" />
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-6"></div>
-        <div class="col-6">
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #head-right>
             <div class="flex justify-content-end">
                 <ProgramCreateDialog @object-created="getItems"></ProgramCreateDialog>
             </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable @row-click="onRowClick" :paginator="true" dataKey="pk" :rowHover="this.items.length > 0" :rows="pagination.limit" :value="items" :lazy="true" :totalRecords="totalRecords" :loading="loading" @page="onPage">
-                    <template #empty>
-                        <BlankSlate title="No Programs!" text="No programs found!" icon="fa fa-shield"></BlankSlate>
+        </template>
+        <template #table>
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-text="No programs found!"
+                blank-slate-title="No Programs!"
+                blank-slate-icon="fa fa-shield"
+                :model-value="this.items"
+                @row-click="onRowClick"
+                @page="onPage"
+            >
+                <template #header>
+                    <div class="grid">
+                        <IconField iconPosition="left">
+                            <InputIcon class="fa fa-search"></InputIcon>
+                            <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
+                        </IconField>
+                    </div>
+                </template>
+                <Column field="name" header="Name"></Column>
+                <Column field="date_created" header="Created"></Column>
+                <Column field="date_updated" header="Updated"></Column>
+                <Column header="Actions">
+                    <template #body="slotProps">
+                        <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                     </template>
-                    <template #header>
-                        <div class="grid">
-                            <IconField iconPosition="left">
-                                <InputIcon class="fa fa-search"></InputIcon>
-                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </IconField>
-                        </div>
-                    </template>
-                    <Column field="name" header="Name"></Column>
-                    <Column field="date_created" header="Created"></Column>
-                    <Column field="date_updated" header="Updated"></Column>
-                    <Column header="Actions">
-                        <template #body="slotProps">
-                            <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
-                        </template>
-                    </Column>
-                </DataTable>
-            </div>
-        </div>
-    </div>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>

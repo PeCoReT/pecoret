@@ -1,8 +1,9 @@
 <script>
 import AdvisoryService from '@/service/AdvisoryService';
 import SeverityBadge from '@/components/SeverityBadge.vue';
-import BlankSlate from '@/components/BlankSlate.vue';
 import AdvisoryLabelBadge from '@/components/AdvisoryLabelBadge.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'AdvisoryInbox',
@@ -85,6 +86,14 @@ export default {
                 this.labelChoices = response.data.results;
             });
         },
+        onRowClick(row) {
+            this.$router.push({
+                name: 'AdvisoryDetail',
+                params: {
+                    advisoryId: row.data.pk
+                }
+            });
+        },
         getItems() {
             this.loading = true;
             let params = {
@@ -104,91 +113,62 @@ export default {
                 });
         }
     },
-    components: { SeverityBadge, BlankSlate, AdvisoryLabelBadge }
+    components: { GenericDataTable, BaseListLayout, SeverityBadge, AdvisoryLabelBadge }
 };
 </script>
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #table>
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-text="No advisories found!"
+                blank-slate-title="No Advisories"
+                blank-slate-icon="fa fa-bugs"
+                :model-value="items"
+                @page="onPage"
+                v-model:filters="filters"
+                filter-display="menu"
+                @rowClick="onRowClick"
+            >
+                <template #header>
+                    <div class="grid">
+                        <IconField iconPosition="left">
+                            <InputIcon class="fa fa-search"></InputIcon>
+                            <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
+                        </IconField>
+                    </div>
+                </template>
 
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end"></div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable
-                    paginator
-                    lazy
-                    dataKey="pk"
-                    :value="items"
-                    :rows="pagination.limit"
-                    :rowHover="items.length > 0"
-                    :totalRecords="totalRecords"
-                    filterDisplay="menu"
-                    :loading="loading"
-                    removableSort
-                    @sort="onSort"
-                    @page="onPage"
-                    @filter="onFilter"
-                    v-model:filters="filters"
-                >
-                    <template #header>
-                        <div class="flex justify-content-between flex-column sm:flex-row">
-                            <span class="p-input-icon-left mb-2">
-                                <i class="pi pi-search" />
-                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </span>
-                        </div>
+                <Column field="pk" header="ID"> </Column>
+                <Column field="internal_name" header="Internal Name"></Column>
+                <Column field="vulnerability.name" header="Vulnerability"></Column>
+                <Column field="severity" header="Severity">
+                    <template #body="slotProps">
+                        <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
                     </template>
-                    <template #empty>
-                        <BlankSlate icon="fa fa-bugs" text="No advisories found in inbox!" title="No advisories!"></BlankSlate>
+                </Column>
+                <Column header="Product">
+                    <template #body="slotProps"> {{ slotProps.data.product }} (by {{ slotProps.data.vendor_name }}) </template>
+                </Column>
+                <Column field="status" header="Status" :showFilterMatchModes="false">
+                    <template #filter="{ filterModel }">
+                        <Dropdown v-model="filterModel.value" :options="statusChoices" placeholder="Select One" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Dropdown>
                     </template>
-
-                    <Column field="pk" header="ID">
-                        <template #body="slotProps">
-                            <router-link class="text-color underline" :to="{ name: 'AdvisoryDetail', params: { advisoryId: slotProps.data.pk } }">
-                                {{ slotProps.data.pk }}
-                            </router-link>
-                        </template>
-                    </Column>
-                    <Column field="internal_name" header="Internal Name"></Column>
-                    <Column field="vulnerability.name" header="Vulnerability"></Column>
-                    <Column field="severity" header="Severity">
-                        <template #body="slotProps">
-                            <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
-                        </template>
-                    </Column>
-                    <Column header="Product">
-                        <template #body="slotProps"> {{ slotProps.data.product }} (by {{ slotProps.data.vendor_name }}) </template>
-                    </Column>
-                    <Column field="status" header="Status" :showFilterMatchModes="false">
-                        <template #filter="{ filterModel }">
-                            <Dropdown v-model="filterModel.value" :options="statusChoices" placeholder="Select One" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Dropdown>
-                        </template>
-                    </Column>
-                    <Column field="user.username" header="User"></Column>
-                    <Column field="date_planned_disclosure" header="Planned Disclosure" sortable></Column>
-                    <Column header="Labels" field="labels" :showFilterMatchModes="false">
-                        <template #body="slotProps">
-                            <AdvisoryLabelBadge v-for="label in slotProps.data.labels" :label="label"></AdvisoryLabelBadge>
-                        </template>
-                        <template #filter="{ filterModel }">
-                            <MultiSelect v-model="filterModel.value" :options="labelChoices" @filter="labelFilter" placeholder="Select labels" filter @focus="labelFilter" class="p-column-filter" showClear optionLabel="name" optionValue="pk">
-                            </MultiSelect>
-                        </template>
-                    </Column>
-                </DataTable>
-            </div>
-        </div>
-    </div>
+                </Column>
+                <Column field="user.username" header="User"></Column>
+                <Column field="date_planned_disclosure" header="Planned Disclosure" sortable></Column>
+                <Column header="Labels" field="labels" :showFilterMatchModes="false">
+                    <template #body="slotProps">
+                        <AdvisoryLabelBadge v-for="label in slotProps.data.labels" :label="label" :key="label.pk"></AdvisoryLabelBadge>
+                    </template>
+                    <template #filter="{ filterModel }">
+                        <MultiSelect v-model="filterModel.value" :options="labelChoices" @filter="labelFilter" placeholder="Select labels" filter @focus="labelFilter" class="p-column-filter" showClear optionLabel="name" optionValue="pk">
+                        </MultiSelect>
+                    </template>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>

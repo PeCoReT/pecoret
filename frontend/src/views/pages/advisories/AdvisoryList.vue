@@ -1,9 +1,10 @@
 <script>
 import AdvisoryService from '@/service/AdvisoryService';
 import SeverityBadge from '@/components/SeverityBadge.vue';
-import BlankSlate from '@/components/BlankSlate.vue';
 import { useAuthStore } from '@/store/auth';
 import AdvisoryLabelBadge from '@/components/AdvisoryLabelBadge.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'AdvisoryList',
@@ -55,6 +56,14 @@ export default {
                 this.totalRecords = response.data.count;
             });
         },
+        onRowClick(row) {
+            this.$router.push({
+                name: 'AdvisoryDetail',
+                params: {
+                    advisoryId: row.data.pk
+                }
+            });
+        },
         getItems() {
             this.loading = true;
             let params = {
@@ -73,89 +82,63 @@ export default {
                 });
         }
     },
-    components: { SeverityBadge, BlankSlate, AdvisoryLabelBadge }
+    components: { GenericDataTable, BaseListLayout, SeverityBadge, AdvisoryLabelBadge }
 };
 </script>
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <Button outlined icon="fa fa-plus" label="Advisory" v-if="showCreateButton === true" @click="this.$router.push({ name: 'AdvisoryCreate' })"></Button>
+        </template>
+        <template #table>
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-text="No advisories found!"
+                blank-slate-title="No Advisories!"
+                blank-slate-icon="fa fa-bugs"
+                :model-value="items"
+                v-model:filters="filters"
+                @page="onPage"
+                @rowClick="onRowClick"
+                @filter="onFilter"
+                filter-display="menu"
+                :filter="true"
+            >
+                <template #header>
+                    <div class="grid">
+                        <IconField iconPosition="left">
+                            <InputIcon class="fa fa-search"></InputIcon>
+                            <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
+                        </IconField>
+                    </div>
+                </template>
 
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <Button outlined icon="fa fa-plus" label="Advisory" v-if="showCreateButton === true" @click="this.$router.push({ name: 'AdvisoryCreate' })"></Button>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable
-                    paginator
-                    lazy
-                    dataKey="pk"
-                    :value="items"
-                    :rows="pagination.limit"
-                    :totalRecords="totalRecords"
-                    filterDisplay="menu"
-                    :loading="loading"
-                    @sort="onSort"
-                    @page="onPage"
-                    @filter="onFilter"
-                    :rowHover="items.length > 0"
-                    v-model:filters="filters"
-                >
-                    <template #header>
-                        <div class="flex justify-content-between flex-column sm:flex-row">
-                            <IconField iconPosition="left">
-                                <InputIcon class="fa fa-search"></InputIcon>
-                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </IconField>
-                        </div>
+                <Column field="pk" header="ID"></Column>
+                <Column field="internal_name" header="Internal Name"></Column>
+                <Column field="vulnerability.name" header="Vulnerability"></Column>
+                <Column field="severity" header="Severity">
+                    <template #body="slotProps">
+                        <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
                     </template>
-
-                    <template #empty>
-                        <BlankSlate icon="fa fa-bugs" text="No advisories found in inbox!" title="No advisories!"></BlankSlate>
+                </Column>
+                <Column header="Product">
+                    <template #body="slotProps"> {{ slotProps.data.product }} (by {{ slotProps.data.vendor_name }}) </template>
+                </Column>
+                <Column field="status" header="Status" :showFilterMatchModes="false">
+                    <template #filter="{ filterModel }">
+                        <Dropdown v-model="filterModel.value" :options="statusChoices" placeholder="Select One" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Dropdown>
                     </template>
-
-                    <Column field="pk" header="ID">
-                        <template #body="slotProps">
-                            <router-link class="text-color underline" :to="{ name: 'AdvisoryDetail', params: { advisoryId: slotProps.data.pk } }">
-                                {{ slotProps.data.pk }}
-                            </router-link>
-                        </template>
-                    </Column>
-                    <Column field="internal_name" header="Internal Name"></Column>
-                    <Column field="vulnerability.name" header="Vulnerability"></Column>
-                    <Column field="severity" header="Severity">
-                        <template #body="slotProps">
-                            <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
-                        </template>
-                    </Column>
-                    <Column header="Product">
-                        <template #body="slotProps"> {{ slotProps.data.product }} (by {{ slotProps.data.vendor_name }}) </template>
-                    </Column>
-                    <Column field="status" header="Status" :showFilterMatchModes="false">
-                        <template #filter="{ filterModel }">
-                            <Dropdown v-model="filterModel.value" :options="statusChoices" placeholder="Select One" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Dropdown>
-                        </template>
-                    </Column>
-                    <Column field="vulnerability_status" header="Vulnerability Status"></Column>
-                    <Column field="date_planned_disclosure" header="Planned Disclosure"></Column>
-                    <Column header="Labels" field="labels" :showFilterMatchModes="false">
-                        <template #body="slotProps">
-                            <AdvisoryLabelBadge v-for="label in slotProps.data.labels" :label="label"></AdvisoryLabelBadge>
-                        </template>
-                    </Column>
-                </DataTable>
-            </div>
-        </div>
-    </div>
+                </Column>
+                <Column field="vulnerability_status" header="Vulnerability Status"></Column>
+                <Column field="date_planned_disclosure" header="Planned Disclosure"></Column>
+                <Column header="Labels" field="labels" :showFilterMatchModes="false">
+                    <template #body="slotProps">
+                        <AdvisoryLabelBadge v-for="label in slotProps.data.labels" :label="label"></AdvisoryLabelBadge>
+                    </template>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>

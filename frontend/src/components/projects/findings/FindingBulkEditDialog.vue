@@ -65,7 +65,7 @@ export default {
         <div class="p-fluid formgrid grid">
             <div class="field col-12">
                 <label>Severity</label>
-                <Dropdown show-clear v-model="fields.severity" :options="severityChoices" optionValue="value" optionLabel="label" class="w-full"></Dropdown>
+                <Dropdown show-clear v-model="fields.severity" :options="severityChoices()" optionValue="value" optionLabel="label" class="w-full"></Dropdown>
             </div>
         </div>
         <div class="p-fluid formgrid grid">

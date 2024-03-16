@@ -135,6 +135,14 @@ export default {
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getProjects();
+        },
+        onRowClick(row) {
+            this.$router.push({
+                name: 'ProjectDetail',
+                params: {
+                    projectId: row.data.pk
+                }
+            });
         }
     },
     components: { ProjectCreateDialog, BlankSlate }
@@ -191,6 +199,7 @@ export default {
                     v-model:filters="filters"
                     @sort="onSort($event)"
                     @filter="onFilter($event)"
+                    @row-click="onRowClick"
                 >
                     <template #empty>
                         <BlankSlate title="No projects!" text="No projects found!" icon="fa fa-box"></BlankSlate>
@@ -208,7 +217,7 @@ export default {
                     <Column selectionMode="multiple" headerStyle=""></Column>
                     <Column field="name" header="Name" sortable>
                         <template #body="slotProps">
-                            <router-link class="text-color underline" :to="{ name: 'ProjectDetail', params: { projectId: slotProps.data.pk } }"> [{{ slotProps.data.year }}] {{ slotProps.data.name }} </router-link>
+                            [{{ slotProps.data.year }}] {{ slotProps.data.name }}
                         </template>
                     </Column>
                     <Column field="company_name" header="Company"></Column>

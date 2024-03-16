@@ -125,7 +125,7 @@ export default {
                     @filter="onFilter"
                 >
                     <template #header>
-                        <div class="flex justify-content-between flex-column sm:flex-row">
+                        <div class="grid">
                             <IconField iconPosition="left">
                                 <InputIcon class="fa fa-search"></InputIcon>
                                 <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />

@@ -2,7 +2,8 @@
 import UserAccountService from '@/service/UserAccountService';
 import UserAccountCreateDialog from '@/components/dialogs/UserAccountCreateDialog.vue';
 import UserAccountUpdateDialog from '@/components/dialogs/UserAccountUpdateDialog.vue';
-import BlankSlate from '@/components/BlankSlate.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'UserAccountList',
@@ -80,51 +81,41 @@ export default {
             });
         }
     },
-    components: { UserAccountCreateDialog, UserAccountUpdateDialog, BlankSlate }
+    components: { GenericDataTable, BaseListLayout, UserAccountCreateDialog, UserAccountUpdateDialog }
 };
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <UserAccountCreateDialog @object-created="getItems"></UserAccountCreateDialog>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable paginator lazy dataKey="pk" :value="items" :rows="pagination.limit" :rowHover="this.items.length > 0" :totalRecords="totalRecords" filterDisplay="menu" :loading="loading" @page="onPage" @sort="onSort" @filter="onFilter">
-                    <template #empty>
-                        <BlankSlate icon="fa fa-users" title="No accounts!" text="No user accounts found!"></BlankSlate>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <UserAccountCreateDialog @object-created="getItems"></UserAccountCreateDialog>
+        </template>
+        <template #table>
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-text="No user accounts found!"
+                blank-slate-title="No User Accounts!"
+                blank-slate-icon="fa fa-users"
+                :model-value="items"
+                @page="onPage"
+            >
+                <Column field="username" header="Username"></Column>
+                <Column field="password" header="Password">
+                    <template #body=""> ***</template>
+                </Column>
+                <Column field="role" header="Role"></Column>
+                <Column field="description" header="Description"></Column>
+                <Column field="compromised" header="Compromised"></Column>
+                <Column header="Actions">
+                    <template #body="slotProps">
+                        <Button size="small" outlined icon="fa fa-copy" @click="copyToClipboard(slotProps.data.password)"></Button>
+                        <UserAccountUpdateDialog :account="slotProps.data" @object-updated="this.getItems"></UserAccountUpdateDialog>
+                        <Button size="small" outlined severity="danger" icon="fa fa-trash" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                     </template>
-                    <Column field="username" header="Username"></Column>
-                    <Column field="password" header="Password">
-                        <template #body=""> *** </template>
-                    </Column>
-                    <Column field="role" header="Role"></Column>
-                    <Column field="description" header="Description"></Column>
-                    <Column field="compromised" header="Compromised"></Column>
-                    <Column header="Actions">
-                        <template #body="slotProps">
-                            <Button size="small" outlined icon="fa fa-copy" @click="copyToClipboard(slotProps.data.password)"></Button>
-                            <UserAccountUpdateDialog :account="slotProps.data" @object-updated="this.getItems"></UserAccountUpdateDialog>
-                            <Button size="small" outlined severity="danger" icon="fa fa-trash" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
-                        </template>
-                    </Column>
-                </DataTable>
-            </div>
-        </div>
-    </div>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>

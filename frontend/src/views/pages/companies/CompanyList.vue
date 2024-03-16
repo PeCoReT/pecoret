@@ -1,7 +1,8 @@
 <script>
 import CompanyService from '@/service/CompanyService';
 import CompanyCreateDialog from '../../../components/dialogs/CompanyCreateDialog.vue';
-import BlankSlate from '@/components/BlankSlate.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'CompanyList',
@@ -12,8 +13,7 @@ export default {
             items: [],
             loading: false,
             totalRecords: 0,
-            pagination: { page: 1, limit: 20 },
-            projectId: this.$route.params.projectId
+            pagination: { page: 1, limit: 20 }
         };
     },
     mounted() {
@@ -48,76 +48,54 @@ export default {
                     this.loading = false;
                 });
         },
-        onSort() {},
-        onFilter() {},
+        onRowClick(row) {
+            this.$router.push({
+                name: 'CompanyDetail',
+                params: {
+                    companyId: row.data.pk
+                }
+            });
+        },
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getCompanies();
         }
     },
-    components: { CompanyCreateDialog, BlankSlate }
+    components: { GenericDataTable, BaseListLayout, CompanyCreateDialog }
 };
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <CompanyCreateDialog @object-created="getCompanies"></CompanyCreateDialog>
+        </template>
+        <template #table>
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-text="No companies found!"
+                blank-slate-title="No Companies!"
+                blank-slate-icon="fa fa-globe"
+                :model-value="items"
+                @page="onPage"
+                @rowClick="onRowClick"
+            >
+                <template #header>
+                    <div class="grid">
+                        <IconField iconPosition="left">
+                            <InputIcon class="fa fa-search"></InputIcon>
+                            <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
+                        </IconField>
+                    </div>
+                </template>
 
-    <div class="grid">
-        <div class="col-6"></div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <CompanyCreateDialog @object-created="getCompanies"></CompanyCreateDialog>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable
-                    :paginator="true"
-                    dataKey="pk"
-                    :rowHover="items.length > 0"
-                    :rows="pagination.limit"
-                    :value="items"
-                    filterDisplay="menu"
-                    :lazy="true"
-                    responsiveLayout="scroll"
-                    :totalRecords="totalRecords"
-                    :loading="loading"
-                    @page="onPage"
-                    @sort="onSort"
-                    @filter="onFilter"
-                >
-                    <template #header>
-                        <div class="flex justify-content-between flex-column sm:flex-row">
-                            <IconField iconPosition="left">
-                                <InputIcon class="fa fa-search"></InputIcon>
-                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </IconField>
-                        </div>
-                    </template>
-
-                    <template #empty>
-                        <BlankSlate title="No companies!" text="No companies found!" icon="fa fa-globe"></BlankSlate>
-                    </template>
-
-                    <Column field="name" header="Name">
-                        <template #body="slotProps">
-                            <router-link class="text-color underline" :to="{ name: 'CompanyDetail', params: { companyId: slotProps.data.pk } }">
-                                {{ slotProps.data.name }}
-                            </router-link>
-                        </template>
-                    </Column>
-                    <Column field="street" header="Street"></Column>
-                    <Column field="city" header="City"></Column>
-                    <Column field="country" header="Country"></Column>
-                </DataTable>
-            </div>
-        </div>
-    </div>
+                <Column field="name" header="Name"> </Column>
+                <Column field="street" header="Street"></Column>
+                <Column field="city" header="City"></Column>
+                <Column field="country" header="Country"></Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>
