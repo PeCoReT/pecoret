@@ -1,12 +1,13 @@
 <script>
 import ASMonitorService from '@/service/ASMonitorService';
-import BlankSlate from '@/components/BlankSlate.vue';
 import FindingCreateDialog from '@/components/asmonitor/FindingCreateDialog.vue';
 import SeverityBadge from '@/components/SeverityBadge.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'FindingList',
-    components: { FindingCreateDialog, BlankSlate, SeverityBadge },
+    components: { GenericDataTable, BaseListLayout, FindingCreateDialog, SeverityBadge },
     data() {
         return {
             breadcrumbs: [
@@ -103,78 +104,45 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs" />
-        </div>
-    </div>
-    <div class="grid">
-        <div class="col-6"></div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <FindingCreateDialog @object-created="getItems"></FindingCreateDialog>
-            </div>
-        </div>
-    </div>
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable
-                    filterDisplay="menu"
-                    @filter="getItems"
-                    @row-click="onRowClick"
-                    :paginator="true"
-                    dataKey="pk"
-                    :rowHover="this.items.length > 0"
-                    :rows="pagination.limit"
-                    :value="items"
-                    :loading="loading"
-                    :lazy="true"
-                    :totalRecords="totalRecords"
-                    v-model:filters="filters"
-                    @page="onPage"
-                >
-                    <template #empty>
-                        <BlankSlate title="No findings!" text="No targets found!" icon="fa fa-bug"></BlankSlate>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <FindingCreateDialog @object-created="getItems"></FindingCreateDialog>
+        </template>
+        <template #table>
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-text="No findings here!"
+                blank-slate-title="No Findings!"
+                blank-slate-icon="fa fa-bugs"
+                :model-value="items"
+                v-model:filters="filters"
+                @page="onPage"
+                @row-click="onRowClick"
+                @filter="getItems"
+                filterDisplay="menu"
+                :show-search="true"
+                @search="onGlobalSearch"
+            >
+                <Column field="name" header="Name"></Column>
+                <Column field="severity" header="Severity">
+                    <template #body="slotProps">
+                        <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
                     </template>
-                    <template #header>
-                        <div class="grid">
-                            <IconField iconPosition="left">
-                                <InputIcon class="fa fa-search"></InputIcon>
-                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </IconField>
-                        </div>
+                </Column>
+                <Column field="target.name" header="Target" :showFilterMatchModes="false">
+                    <template #filter="{ filterModel }">
+                        <Dropdown v-model="filterModel.value" :options="targetChoices" @filter="targetFilter" placeholder="Select target" filter @focus="targetFilter" class="p-column-filter" showClear optionLabel="name" optionValue="pk"></Dropdown>
                     </template>
-                    <Column field="name" header="Name"></Column>
-                    <Column field="severity" header="Severity">
-                        <template #body="slotProps">
-                            <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
-                        </template>
-                    </Column>
-                    <Column field="target.name" header="Target" :showFilterMatchModes="false">
-                        <template #filter="{ filterModel }">
-                            <Dropdown
-                                v-model="filterModel.value"
-                                :options="targetChoices"
-                                @filter="targetFilter"
-                                placeholder="Select target"
-                                filter
-                                @focus="targetFilter"
-                                class="p-column-filter"
-                                showClear
-                                optionLabel="name"
-                                optionValue="pk"
-                            ></Dropdown>
-                        </template>
-                    </Column>
-                    <Column field="status" header="Status"></Column>
-                    <Column header="Actions">
-                        <template #body="slotProps">
-                            <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
-                        </template>
-                    </Column>
-                </DataTable>
-            </div>
-        </div>
-    </div>
+                </Column>
+                <Column field="status" header="Status"></Column>
+                <Column header="Actions">
+                    <template #body="slotProps">
+                        <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
+                    </template>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>

@@ -4,7 +4,7 @@ import BlankSlate from '@/components/BlankSlate.vue';
 export default {
     name: 'GenericDataTable',
     components: { BlankSlate },
-    emits: ['rowClick', 'page', 'filter', 'sort', 'update:selection', 'update:filters', 'update:modelValue'],
+    emits: ['rowClick', 'page', 'filter', 'sort', 'update:selection', 'update:filters', 'update:modelValue', 'search'],
     props: {
         modelValue: {
             required: true
@@ -41,12 +41,18 @@ export default {
         selection: {
             required: false,
             default: null
+        },
+        showSearch: {
+            required: false,
+            default: false
+        },
+        removableSort: {
+            required: false
         }
     },
     data() {
         return {
             items: this.modelValue,
-            paginationModel: this.pagination,
             filterModel: this.filters,
             selectedItems: this.selection
         };
@@ -69,6 +75,9 @@ export default {
         },
         onUpdateFilters() {
             this.$emit('update:filters', this.filterModel);
+        },
+        onSearch(data) {
+            this.$emit('search', data);
         }
     },
     watch: {
@@ -111,6 +120,7 @@ export default {
         @page="onPage"
         @filter="onFilter"
         @sort="onSort"
+        :removable-sort="removableSort"
         :filter="filter"
         :filterDisplay="filterDisplay"
         v-model:filters="filterModel"
@@ -124,7 +134,14 @@ export default {
             </slot>
         </template>
         <template #header>
-            <slot name="header"></slot>
+            <slot name="header">
+                <div class="grid" v-if="showSearch === true">
+                    <IconField iconPosition="left">
+                        <InputIcon class="fa fa-search"></InputIcon>
+                        <InputText @update:modelValue="onSearch" placeholder="Keyword Search" style="width: 100%" />
+                    </IconField>
+                </div>
+            </slot>
         </template>
         <slot></slot>
     </DataTable>

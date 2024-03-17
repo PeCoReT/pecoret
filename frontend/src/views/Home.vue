@@ -5,10 +5,16 @@ export default {
     name: 'Home',
     created() {
         const authStore = useAuthStore();
-        if (!authStore.isAuthenticated) {
+        if (authStore.isAuthenticated !== true) {
             this.$router.push({ name: 'Login' });
         } else {
-            this.$router.push({ name: 'ProjectList' });
+            if (authStore.groups.isAdmin === true) {
+                this.$router.push({
+                    name: 'AdminSettings'
+                });
+            } else {
+                this.$router.push({ name: 'ProjectList' });
+            }
         }
     }
 };

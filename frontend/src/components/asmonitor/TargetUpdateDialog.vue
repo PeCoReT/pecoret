@@ -67,6 +67,9 @@ export default {
                 tags: this.model.tags,
                 technologies: this.technologies
             };
+            if (this.model.tags.length > 0 && this.model.tags[0].pk) {
+                delete data.tags;
+            }
             this.service
                 .patchTarget(this.$api, this.programId, this.target.pk, data)
                 .then(() => {

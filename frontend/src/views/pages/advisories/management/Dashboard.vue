@@ -1,15 +1,17 @@
 <script>
 import AdvisoryService from '@/service/AdvisoryService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
-import TopSubmitterDashboard from '@/components/pages/advisories/management/TopSubmitterDashboard.vue';
-import TopVulnerabilitiesDashboard from '@/components/pages/advisories/management/TopVulnerabilitiesDashboard.vue';
-import TopProductsDashboard from '@/components/pages/advisories/management/TopProductsDashboard.vue';
-import TopVendorsDashboard from '@/components/pages/advisories/management/TopVendorsDashboard.vue';
+import TopSubmitterDashboard from '@/components/advisories/TopSubmitterDashboard.vue';
+import TopVulnerabilitiesDashboard from '@/components/advisories/TopVulnerabilitiesDashboard.vue';
+import TopProductsDashboard from '@/components/advisories/TopProductsDashboard.vue';
+import TopVendorsDashboard from '@/components/advisories/TopVendorsDashboard.vue';
 import LatestSubmissionsDashboard from '@/components/pages/advisories/management/LatestSubmissionsDashboard.vue';
+import BaseLayout from '@/layout/base/BaseLayout.vue';
 
 export default {
     name: 'AdvisoryManagementDashboard',
     components: {
+        BaseLayout,
         LatestSubmissionsDashboard,
         TopVendorsDashboard,
         TopProductsDashboard,
@@ -43,19 +45,7 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
-            <div class="flex justify-content-end"></div>
-        </div>
-    </div>
-
-    <div class="grid">
+    <BaseLayout :breadcrumbs="breadcrumbs">
         <div class="col-12 md:col-6 lg:col-6 xl:col-3">
             <DetailCardWithIcon title="Inbox" :text="statistics.inbox_count" icon="fa fa-inbox"></DetailCardWithIcon>
         </div>
@@ -68,7 +58,7 @@ export default {
         <div class="col-12 md:col-6 lg:col-6 xl:col-3">
             <DetailCardWithIcon title="Won't Fix" :text="statistics.inbox_wontfix_count" icon="fa fa-clipboard-question"></DetailCardWithIcon>
         </div>
-    </div>
+    </BaseLayout>
 
     <div class="grid">
         <div class="col-12 md:col-6 lg:col-6 xl:col-4">

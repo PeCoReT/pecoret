@@ -1,13 +1,14 @@
 <script>
 import ASMonitorService from '@/service/ASMonitorService';
-import BlankSlate from '@/components/BlankSlate.vue';
 import TagCreateDialog from '@/components/asmonitor/TagCreateDialog.vue';
 import AdvisoryLabelBadge from '@/components/AdvisoryLabelBadge.vue';
 import TagUpdateDialog from '@/components/asmonitor/TagUpdateDialog.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'TagList',
-    components: { TagUpdateDialog, TagCreateDialog, BlankSlate, AdvisoryLabelBadge },
+    components: { GenericDataTable, BaseListLayout, TagUpdateDialog, TagCreateDialog, AdvisoryLabelBadge },
     data() {
         return {
             breadcrumbs: [
@@ -86,52 +87,37 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
-    <div class="grid">
-        <div class="col-6"></div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <TagCreateDialog @object-created="this.getItems"></TagCreateDialog>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable :striped-rows="true" :paginator="true" dataKey="pk" :rowHover="items.length > 0" :rows="pagination.limit" :value="items" filterDisplay="menu" :lazy="true" :loading="loading" @page="onPage" :totalRecords="totalRecords">
-                    <template #empty>
-                        <BlankSlate icon="fa fa-tags" title="No Tags!" text="No Tags found!"></BlankSlate>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <TagCreateDialog @object-created="this.getItems"></TagCreateDialog>
+        </template>
+        <template #table>
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-text="No tags found!"
+                blank-slate-title="No Tags!"
+                blank-slate-icon="fa fa-tags"
+                :model-value="items"
+                @page="onPage"
+                :show-search="true"
+                @search="onGlobalSearch"
+            >
+                <Column field="name" header="Name"></Column>
+                <Column field="description" header="Description"></Column>
+                <Column header="Preview">
+                    <template #body="slotProps">
+                        <AdvisoryLabelBadge :label="slotProps.data"></AdvisoryLabelBadge>
                     </template>
-                    <template #header>
-                        <div class="grid">
-                            <IconField iconPosition="left">
-                                <InputIcon class="fa fa-search"></InputIcon>
-                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </IconField>
-                        </div>
+                </Column>
+                <Column header="Actions">
+                    <template #body="slotProps">
+                        <TagUpdateDialog :tag="slotProps.data" @object-updated="getItems"></TagUpdateDialog>
+                        <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                     </template>
-                    <Column field="name" header="Name"></Column>
-                    <Column field="description" header="Description"></Column>
-                    <Column header="Preview">
-                        <template #body="slotProps">
-                            <AdvisoryLabelBadge :label="slotProps.data"></AdvisoryLabelBadge>
-                        </template>
-                    </Column>
-                    <Column header="Actions">
-                        <template #body="slotProps">
-                            <TagUpdateDialog :tag="slotProps.data" @object-updated="getItems"></TagUpdateDialog>
-                            <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
-                        </template>
-                    </Column>
-                </DataTable>
-            </div>
-        </div>
-    </div>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>
-
-<style scoped></style>

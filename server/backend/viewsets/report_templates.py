@@ -9,7 +9,17 @@ class ReportTemplateViewSet(PeCoReTModelViewSet):
     queryset = ReportTemplate.objects.none()
     search_fields = ["name"]
     api_scope = None
-    permission_classes = [permissions.PRESET_GROUP_SUPERUSER_OR_READ_ONLY]
+    permission_classes = [
+        permissions.GroupPermission(
+            read_write_groups=[
+                permissions.Groups.SUPERUSER
+            ],
+            read_only_groups=[
+                permissions.Groups.GROUP_MANAGEMENT,
+                permissions.Groups.GROUP_PENTESTER
+            ]
+        )
+    ]
 
     def get_queryset(self):
         if self.request.user.is_superuser:

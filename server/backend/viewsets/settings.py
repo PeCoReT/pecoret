@@ -1,11 +1,11 @@
+from extra_settings.models import Setting
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework import status
-from extra_settings.models import Setting
-from pecoret.core.viewsets import GenericViewSet
-from pecoret.core.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin
-from pecoret.core import permissions
 from backend.serializers.settings import SettingSerializer
+from pecoret.core import permissions
+from pecoret.core.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin
+from pecoret.core.viewsets import GenericViewSet
 
 
 class SettingViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
@@ -13,7 +13,9 @@ class SettingViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, Gener
     api_scope = None
     permission_classes = [
         permissions.GroupPermission(
-            read_write_groups=[], read_only_groups=[]
+            read_write_groups=[
+                permissions.Groups.SUPERUSER
+            ], read_only_groups=[]
         )
     ]
     serializer_class = SettingSerializer

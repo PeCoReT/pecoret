@@ -31,7 +31,10 @@ export default {
                 labels: [],
                 datasets: [
                     {
-                        data: []
+                        data: [],
+                        backgroundColor: [getComputedStyle(document.body).getPropertyValue('--blue-400')],
+                        fill: [getComputedStyle(document.body).getPropertyValue('--blue-400')],
+                        borderColor: [getComputedStyle(document.body).getPropertyValue('--blue-400')]
                     }
                 ]
             },

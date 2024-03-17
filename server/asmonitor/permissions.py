@@ -33,9 +33,6 @@ class ASMonitorGroupPermission(GroupPermission):
         return self.has_object_permission(request, view, None)
 
     def has_object_permission(self, request, view, obj):
-        # always allow superuser
-        if request.user.is_superuser:
-            return True
         if request.method not in SAFE_METHODS:
             allowed = self._check_read_write(request, view)
             if allowed:

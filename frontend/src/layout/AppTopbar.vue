@@ -209,11 +209,6 @@ export default {
             }
             return false;
         },
-        topbarMenuClasses() {
-            return {
-                'layout-topbar-menu-mobile-active': this.topbarMenuActive
-            };
-        }
     },
     methods: {
         onLogout() {
@@ -222,9 +217,6 @@ export default {
                 this.$router.push({ name: 'Login' });
             });
         },
-        toggleMenu() {
-            this.topbarMenuActive = !this.topbarMenuActive;
-        }
     },
     components: { ProgramTabMenu, ProjectTabMenu }
 };
@@ -238,7 +230,7 @@ export default {
             </router-link>
         </template>
         <template #item="{ label, item, props, root, hasSubmenu }">
-            <router-link class="flex" v-bind="props.action" v-slot="routerProps" :to="item.route" v-if="item.route">
+            <router-link class="flex" v-bind="props.action" :to="item.route" v-if="item.route">
                 <span v-bind="props.icon" />
                 <span v-bind="props.label">{{ label }}</span>
             </router-link>
