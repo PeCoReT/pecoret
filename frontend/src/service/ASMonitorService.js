@@ -13,9 +13,36 @@ const StatusChoices = [
     }
 ];
 
+const SeverityChoices = [
+    {
+        name: 'Critical',
+        value: 'Critical'
+    },
+    {
+        name: 'High',
+        value: 'High'
+    },
+    {
+        name: 'Medium',
+        value: 'Medium'
+    },
+    {
+        name: 'Low',
+        value: 'Low'
+    },
+    {
+        name: 'Informational',
+        value: 'Informational'
+    }
+];
+
 export default class ASMonitorService {
     getStatusChoices() {
         return StatusChoices;
+    }
+
+    getSeverityChoices() {
+        return SeverityChoices;
     }
 
     getPrograms(api, params) {

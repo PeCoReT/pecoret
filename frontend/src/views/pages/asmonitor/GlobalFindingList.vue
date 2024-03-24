@@ -23,7 +23,7 @@ export default {
             totalRecords: 0,
             filters: {
                 status: { value: null },
-                'target.name': { value: null }
+                severity: { value: null }
             }
         };
     },
@@ -31,9 +31,10 @@ export default {
         getItems() {
             this.loading = true;
             let params = {
-                status: this.filters['status'].value,
+                status: this.filters.status.value,
                 page: this.pagination.page,
-                limit: this.pagination.limit
+                limit: this.pagination.limit,
+                severity: this.filters.severity.value
             };
             this.service
                 .getGlobalFindings(this.$api, params)
@@ -119,9 +120,12 @@ export default {
                 @filter="getItems"
             >
                 <Column field="name" header="Name"></Column>
-                <Column field="severity" header="Severity">
+                <Column field="severity" header="Severity" :show-filter-match-modes="false">
                     <template #body="slotProps">
                         <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
+                    </template>
+                    <template #filter="{ filterModel }">
+                        <Dropdown v-model="filterModel.value" :options="service.getSeverityChoices()" class="p-column-filter" showClear optionLabel="name" optionValue="value"></Dropdown>
                     </template>
                 </Column>
                 <Column field="target.name" header="Target"></Column>

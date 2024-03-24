@@ -4,10 +4,11 @@ import FindingCreateDialog from '@/components/asmonitor/FindingCreateDialog.vue'
 import SeverityBadge from '@/components/SeverityBadge.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
+import FindingBulkEditDialog from '@/components/asmonitor/dialogs/FindingBulkEditDialog.vue';
 
 export default {
     name: 'FindingList',
-    components: { GenericDataTable, BaseListLayout, FindingCreateDialog, SeverityBadge },
+    components: { FindingBulkEditDialog, GenericDataTable, BaseListLayout, FindingCreateDialog, SeverityBadge },
     data() {
         return {
             breadcrumbs: [
@@ -18,14 +19,18 @@ export default {
             ],
             service: new ASMonitorService(),
             items: [],
+            selectedItems: [],
             pagination: { page: 1, limit: 20 },
             loading: false,
             totalRecords: 0,
+            deleteButtonLoading: false,
+
             programId: this.$route.params.programId,
             targetChoices: [],
             filters: {
-                target: { value: null },
-                'target.name': { value: null }
+                'target.name': { value: null },
+                status: { value: null },
+                severity: { value: null }
             }
         };
     },
@@ -33,12 +38,17 @@ export default {
         getItems() {
             this.loading = true;
             let params = {
-                target: this.filters['target.name'].value
+                target: this.filters['target.name'].value,
+                status: this.filters.status.value,
+                page: this.pagination.page,
+                limit: this.pagination.limit,
+                severity: this.filters.severity.value
             };
             this.service
                 .getFindings(this.$api, this.programId, params)
                 .then((response) => {
                     this.items = response.data.results;
+                    this.totalRecords = response.data.count;
                 })
                 .finally(() => {
                     this.loading = false;
@@ -95,6 +105,30 @@ export default {
                     });
                 }
             });
+        },
+        bulkDeleteConfirm() {
+            this.$confirm.require({
+                message: 'Do you want to delete all selected items?',
+                header: 'Delete confirmation',
+                icon: 'fa fa-trash',
+                acceptClass: 'p-button-danger',
+                accept: () => {
+                    this.deleteButtonLoading = true;
+                    this.loading = true;
+                    let itemsDeleted = 0;
+                    this.selectedItems.forEach((item) => {
+                        this.service.deleteFinding(this.$api, this.programId, item.pk).then(() => {
+                            itemsDeleted++;
+                            if (itemsDeleted === this.selectedItems.length) {
+                                this.loading = false;
+                                this.deleteButtonLoading = false;
+                                this.selectedItems = [];
+                                this.getItems();
+                            }
+                        });
+                    });
+                }
+            });
         }
     },
     mounted() {
@@ -123,12 +157,21 @@ export default {
                 @filter="getItems"
                 filterDisplay="menu"
                 :show-search="true"
+                v-model:selection="selectedItems"
                 @search="onGlobalSearch"
             >
+                <template #bulk-edit>
+                    <Button v-if="selectedItems.length > 0" icon="fa fa-trash" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2 mb-2"></Button>
+                    <FindingBulkEditDialog :findings="selectedItems" @object-updated="getItems" :programId="this.programId"></FindingBulkEditDialog>
+                </template>
+                <Column selectionMode="multiple" headerStyle=""></Column>
                 <Column field="name" header="Name"></Column>
-                <Column field="severity" header="Severity">
+                <Column field="severity" header="Severity" :show-filter-match-modes="false">
                     <template #body="slotProps">
                         <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
+                    </template>
+                    <template #filter="{ filterModel }">
+                        <Dropdown v-model="filterModel.value" :options="service.getSeverityChoices()" class="p-column-filter" showClear optionLabel="name" optionValue="value"></Dropdown>
                     </template>
                 </Column>
                 <Column field="target.name" header="Target" :showFilterMatchModes="false">
@@ -136,7 +179,11 @@ export default {
                         <Dropdown v-model="filterModel.value" :options="targetChoices" @filter="targetFilter" placeholder="Select target" filter @focus="targetFilter" class="p-column-filter" showClear optionLabel="name" optionValue="pk"></Dropdown>
                     </template>
                 </Column>
-                <Column field="status" header="Status"></Column>
+                <Column field="status" header="Status" :showFilterMatchModes="false">
+                    <template #filter="{ filterModel }">
+                        <Dropdown v-model="filterModel.value" :options="service.getStatusChoices()" class="p-column-filter" showClear optionLabel="name" optionValue="value"></Dropdown>
+                    </template>
+                </Column>
                 <Column header="Actions">
                     <template #body="slotProps">
                         <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>

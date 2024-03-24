@@ -140,6 +140,7 @@ export default {
                         <InputIcon class="fa fa-search"></InputIcon>
                         <InputText @update:modelValue="onSearch" placeholder="Keyword Search" style="width: 100%" />
                     </IconField>
+                    <slot name="bulk-edit"></slot>
                 </div>
             </slot>
         </template>

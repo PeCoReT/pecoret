@@ -133,7 +133,7 @@ export default {
         FindingCreateDialog,
         AssetSelectField,
         FindingCopyDialog,
-        SeverityBadge,
+        SeverityBadge
     }
 };
 </script>
