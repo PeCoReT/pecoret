@@ -1,9 +1,10 @@
-from pecoret.core.viewsets import PeCoReTModelViewSet
+from pecoret.core.viewsets import PeCoReTModelViewSet, GenericViewSet
+from pecoret.core.mixins import ListModelMixin
 from pecoret.core import permissions
 from asmonitor.permissions import ASMonitorGroupPermission
 from asmonitor.models import Target
 from asmonitor.filters.target import TargetFilter
-from asmonitor.serializers.target import TargetSerializer
+from asmonitor.serializers.target import TargetSerializer, GlobalTargetSerializer
 
 
 class TargetViewSet(PeCoReTModelViewSet):
@@ -26,3 +27,19 @@ class TargetViewSet(PeCoReTModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(program=self.request.program)
+
+
+class GlobalTargetViewSet(ListModelMixin, GenericViewSet):
+    queryset = Target.objects.all()
+    serializer_class = GlobalTargetSerializer
+    search_fields = ['name', 'ip']
+    ordering_fields = ['name', 'date_updated', 'date_created', 'last_seen']
+    filterset_class = TargetFilter
+    api_scope = 'scope_asmonitor'
+    permission_classes = [
+        ASMonitorGroupPermission(
+            read_write_groups=[
+                permissions.Groups.GROUP_PENTESTER
+            ]
+        )
+    ]

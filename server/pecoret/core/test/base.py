@@ -71,8 +71,30 @@ class PeCoReTTestCaseMixin:
         self.assign_advisory_role(self.vendor1, advisory.Roles.VENDOR, self.advisory1)
         self.assign_advisory_role(self.read_only_vendor, advisory.Roles.READ_ONLY, self.advisory1)
 
-    def create_api_token(self, user, **kwargs):
+    def create_api_token(self, user, date_expire=None, **kwargs):
         return APIToken.objects.create_token(user=user, **kwargs)
+
+    def api_token_check(self, user, scope, url, func, status_r, status_w, status_n, **kwargs):
+        token_w, token_r, token_n = self.create_api_tokens_scope(user, scope=scope)
+        self.set_token_header(token_n)
+        self.basic_status_code_check(url, func, status_n, **kwargs)
+        self.set_token_header(token_r)
+        self.basic_status_code_check(url, func, status_r, **kwargs)
+        self.set_token_header(token_w)
+        self.basic_status_code_check(url, func, status_w, **kwargs)
+
+    def create_api_tokens_scope(self, user, scope):
+        """
+        creates a set of API tokens for a given scope with all available permissions
+
+        :param user:
+        :param scope:
+        :return:
+        """
+        _, token_r = self.create_api_token(user, **{scope: self.api_access_choices.READ})
+        _, token_w = self.create_api_token(user, **{scope: self.api_access_choices.READ_WRITE})
+        _, token_n = self.create_api_token(user, **{scope: self.api_access_choices.NO_ACCESS})
+        return token_w, token_r, token_n
 
     def assign_advisory_role(self, user, role, advisory):
         return G(AdvisoryMembership, user=user, role=role, advisory=advisory)
@@ -113,19 +135,6 @@ class PeCoReTTestCaseMixin:
 
     def get_content_type_for_model(self, model):
         return ContentType.objects.get_for_model(model)
-
-    def basic_permission_checks(self, url, user_status_map, req_func, data=None, debug=False):
-        for u in user_status_map:
-            user = u[0]
-            status_code = u[1]
-            self.client.force_login(user)
-            if data is None:
-                response = req_func(url)
-            else:
-                response = req_func(url, data)
-            if debug:
-                print(response.json())
-            self.assertEqual(response.status_code, status_code, msg="Usermap: %s" % str(u))
 
     def basic_status_code_check(self, url, req_func, status_code, data=None, debug=False, format="json"):
         if data is None:

@@ -35,7 +35,8 @@ class GlobalFindingList(ListModelMixin, GenericViewSet):
     serializer_class = GlobalFindingSerializer
     filterset_class = FindingFilter
     search_fields = ['name']
-    api_scope = 'asmonitor'
+    ordering_fields = ['severity', 'date_updated', 'date_created']
+    api_scope = 'scope_asmonitor'
     permission_classes = [
         ASMonitorGroupPermission(
             read_write_groups=[

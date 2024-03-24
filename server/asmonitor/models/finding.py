@@ -33,7 +33,7 @@ class Finding(TimestampedModel):
 
     def clean(self):
         if self.target.program.pk != self.program.pk:
-            raise ValidationError({"component": "component does not belong to project"})
+            raise ValidationError({"target": "target does not belong to project"})
         return super().clean()
 
     def save(self, *args, **kwargs):

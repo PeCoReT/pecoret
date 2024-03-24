@@ -28,3 +28,67 @@ attack-surface:
               severity: Critical
               proof_text: lorem ipsum
               user: hschrader
+
+    - name: "DefendShield Initiative"
+      targets:
+        - name: "https://api.internal.example.com"
+          ip: "172.17.0.10"
+          technologies:
+            - name: "WebApp"
+            - name: "API"
+          findings:
+            - name: "Broken Access Control"
+              severity: "High"
+              user: "bjackson"
+              proof_text: "Accessing unauthorized endpoint: https://example.com/api/admin"
+            - name: "Insecure Deserialization"
+              severity: "High"
+              user: "cwilson"
+              proof_text: "Exploiting insecure deserialization vulnerability: serialized-object-here"
+            - name: "XML External Entity (XXE)"
+              severity: "High"
+              user: "dlewis"
+              proof_text: "Uploading malicious XML payload to extract sensitive data via contact form"
+    - name: "ThreatGuard Program"
+      targets:
+        - name: "https://app2.corp.example.com"
+          ip: "192.168.2.10"
+          technologies:
+            - name: "WebApp"
+          findings:
+            - name: "Cross-Site Scripting (XSS)"
+              severity: "Medium"
+              user: "jharris"
+              proof_text: "<script>alert('XSS vulnerability found!');</script>"
+            - name: "Insecure Session Management"
+              severity: "High"
+              user: "kroberts"
+              proof_text: "Session ID predictable: '123456'"
+        - name: "https://secure.example.com"
+          ip: "10.0.0.10"
+          technologies:
+            - name: "WordPress"
+            - name: "Authentication"
+          findings:
+            - name: "Broken Authentication"
+              severity: "High"
+              user: "jharris"
+              proof_text: "Accessing admin panel with user credentials: admin/admin123"
+            - name: "Session Fixation"
+              severity: "Medium"
+              user: "jharris"
+              proof_text: "Setting session ID to '123456789' via URL parameter"
+        - name: "https://portal.example.com"
+          ip: "10.0.0.14"
+          technologies:
+            - name: "Nextcloud"
+            - name: "Authentication"
+          findings:
+            - name: "Broken Authentication"
+              severity: "Critical"
+              user: "panderson"
+              proof_text: "Accessing admin panel with user credentials: admin/admin123"
+            - name: "Session Fixation"
+              severity: "Medium"
+              user: "kroberts"
+              proof_text: "Setting session ID to '123456789' via URL parameter"

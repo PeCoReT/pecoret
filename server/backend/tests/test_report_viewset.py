@@ -10,15 +10,22 @@ class ReportListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.url = self.get_url("backend:report-list", project=self.project1.pk)
 
-    def test_permissions(self):
-        user_status_map = [
-            (self.pentester1, 200),
-            (self.management1, 200),
-            (self.pentester2, 403),
-            (self.read_only1, 200),
-            (self.user1, 403),
+    def test_allowed(self):
+        users = [
+            self.pentester1, self.management1, self.read_only1
         ]
-        self.basic_permission_checks(self.url, user_status_map, self.client.get)
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.get, 200)
+
+    def test_forbidden(self):
+        users = [
+            self.pentester2, self.user1, self.management2, self.customer1, self.customer2,
+            self.advisory_manager1, self.vendor2, self.vendor1, self.read_only_vendor
+        ]
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.get, 403)
 
 
 class ReportCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
@@ -48,17 +55,22 @@ class ReportCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(self.url, self.client.post, 400, data=self.data)
 
-    def test_permissions(self):
-        user_status_map = [
-            (self.pentester1, 201),
-            (self.management1, 201),
-            (self.pentester2, 403),
-            (self.read_only1, 403),
-            (self.user1, 403),
+    def test_allowed(self):
+        users = [
+            self.pentester1, self.management1
         ]
-        self.basic_permission_checks(
-            self.url, user_status_map, self.client.post, data=self.data
-        )
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
+
+    def test_forbidden(self):
+        users = [
+            self.pentester2, self.read_only1, self.user1, self.customer1, self.customer2,
+            self.read_only_vendor, self.advisory_manager1, self.management2
+        ]
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.post, 403, data=self.data)
 
     def test_foreign_author(self):
         data = self.data
@@ -81,17 +93,23 @@ class ReportUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         )
         self.data = {"name": "test2"}
 
-    def test_basic_permissions(self):
-        user_status_map = [
-            (self.pentester1, 200),
-            (self.management1, 200),
-            (self.pentester2, 403),
-            (self.read_only1, 403),
-            (self.user1, 403),
+    def test_allowed(self):
+        users = [
+            self.pentester1, self.management1
         ]
-        self.basic_permission_checks(
-            self.url, user_status_map, self.client.patch, data=self.data
-        )
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.patch, 200, data=self.data)
+
+    def test_forbidden(self):
+        users = [
+            self.pentester2, self.management2, self.advisory_manager1, self.read_only1,
+            self.read_only_vendor, self.customer1, self.customer2, self.vendor1,
+            self.vendor2, self.user1
+        ]
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.patch, 403, data=self.data)
 
     def test_change_report_variant(self):
         """ensure that report variant cannot be changed after report was created"""
@@ -109,19 +127,22 @@ class ReportDeleteViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
             "backend:report-detail", project=self.project1.pk, pk=self.report1.pk
         )
 
-    def test_permissions(self):
-        user_status_map = [
-            (self.pentester1, 204),
-            (self.pentester2, 403),
-            (self.read_only1, 403),
-            (self.read_only1, 403),
+    def test_pentester(self):
+        self.client.force_login(self.pentester1)
+        self.basic_status_code_check(self.url, self.client.delete, 204)
+
+    def test_forbidden(self):
+        users = [
+            self.pentester2, self.user1, self.read_only1, self.read_only_vendor,
+            self.customer1, self.management2, self.customer2, self.advisory_manager1
         ]
-        self.basic_permission_checks(self.url, user_status_map, self.client.delete)
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.delete, 403)
 
     def test_management(self):
-        # would fail if instance is already deleted by pentester1
-        user_status_map = [(self.management1, 204)]
-        self.basic_permission_checks(self.url, user_status_map, self.client.delete)
+        self.client.force_login(self.management1)
+        self.basic_status_code_check(self.url, self.client.delete, 204)
 
 
 class ReportDetailViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):

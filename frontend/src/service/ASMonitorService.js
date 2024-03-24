@@ -1,4 +1,23 @@
+const StatusChoices = [
+    {
+        name: 'Open',
+        value: 'Open'
+    },
+    {
+        name: 'Fixed',
+        value: 'Fixed'
+    },
+    {
+        name: 'Wont Fix',
+        value: 'Wont Fix'
+    }
+];
+
 export default class ASMonitorService {
+    getStatusChoices() {
+        return StatusChoices;
+    }
+
     getPrograms(api, params) {
         let url = '/asmonitor/programs/';
         let config = {};

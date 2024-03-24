@@ -20,16 +20,26 @@ export default {
             items: [],
             pagination: { page: 1, limit: 20 },
             loading: false,
-            totalRecords: 0
+            totalRecords: 0,
+            filters: {
+                status: { value: null },
+                'target.name': { value: null }
+            }
         };
     },
     methods: {
         getItems() {
             this.loading = true;
+            let params = {
+                status: this.filters['status'].value,
+                page: this.pagination.page,
+                limit: this.pagination.limit
+            };
             this.service
-                .getGlobalFindings(this.$api)
+                .getGlobalFindings(this.$api, params)
                 .then((response) => {
                     this.items = response.data.results;
+                    this.totalRecords = response.data.count;
                 })
                 .finally(() => {
                     this.loading = false;
@@ -103,6 +113,10 @@ export default {
                 @page="onPage"
                 :show-search="true"
                 @search="onGlobalSearch"
+                @rowClick="onRowClick"
+                filterDisplay="menu"
+                v-model:filters="filters"
+                @filter="getItems"
             >
                 <Column field="name" header="Name"></Column>
                 <Column field="severity" header="Severity">
@@ -111,7 +125,11 @@ export default {
                     </template>
                 </Column>
                 <Column field="target.name" header="Target"></Column>
-                <Column field="status" header="Status"></Column>
+                <Column field="status" header="Status" :showFilterMatchModes="false">
+                    <template #filter="{ filterModel }">
+                        <Dropdown v-model="filterModel.value" :options="service.getStatusChoices()" class="p-column-filter" showClear optionLabel="name" optionValue="value"></Dropdown>
+                    </template>
+                </Column>
                 <Column header="Actions">
                     <template #body="slotProps">
                         <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.program.pk, slotProps.data.pk)"></Button>

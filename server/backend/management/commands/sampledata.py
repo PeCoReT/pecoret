@@ -43,8 +43,8 @@ class Command(BaseCommand):
             password = item.pop('password')
             groups = item.pop('groups', [])
             user, created = models.User.objects.get_or_create(username=name, defaults=item)
-            # if created:
-            user.set_password(password)
+            if created:
+                user.set_password(password)
             for group_name in groups:
                 group = Group.objects.get(name=group_name)
                 user.groups.add(group)

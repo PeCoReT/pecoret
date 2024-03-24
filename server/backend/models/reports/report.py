@@ -26,9 +26,6 @@ class ReportQuerySet(models.QuerySet):
     def for_project(self, project):
         return self.filter(project=project)
 
-    def for_projects(self, projects):
-        return self.filter(project_pk__in=projects.values("pk"))
-
 
 class Report(models.Model):
     objects = ReportQuerySet.as_manager()

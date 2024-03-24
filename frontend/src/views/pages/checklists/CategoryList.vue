@@ -1,13 +1,12 @@
 <script>
 import ChecklistService from '@/service/ChecklistService';
-import BlankSlate from '@/components/BlankSlate.vue';
 import ChecklistCategoryCreate from '@/components/dialogs/ChecklistCategoryCreate.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'CategoryList',
-    components: { GenericDataTable, BaseListLayout, ChecklistCategoryCreate, BlankSlate },
+    components: { GenericDataTable, BaseListLayout, ChecklistCategoryCreate },
     data() {
         return {
             breadcrumbs: [
@@ -44,7 +43,7 @@ export default {
             };
             this.service.getCategories(this.$api, params).then((response) => {
                 this.items = response.data.results;
-                this.totalRecords = response.data.counts;
+                this.totalRecords = response.data.count;
             });
         },
         onDeleteConfirmDialog(id) {

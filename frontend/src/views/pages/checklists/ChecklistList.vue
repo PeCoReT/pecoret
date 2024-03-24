@@ -35,7 +35,7 @@ export default {
             };
             this.service.getChecklists(this.$api, params).then((response) => {
                 this.items = response.data.results;
-                this.totalRecords = response.data.counts;
+                this.totalRecords = response.data.count;
             });
         },
         onDeleteConfirmDialog(id) {

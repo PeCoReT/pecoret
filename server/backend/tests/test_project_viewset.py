@@ -59,15 +59,22 @@ class ProjectDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.url = self.get_url("backend:project-detail", pk=self.project1.pk)
 
-    def test_permissions(self):
-        user_status_map = [
-            (self.pentester1, 403),
-            (self.management1, 204),
-            (self.pentester2, 403),
-            (self.user1, 403),
-            (self.read_only1, 403),
+    def test_allowed(self):
+        users = [
+            self.management1
         ]
-        self.basic_permission_checks(self.url, user_status_map, self.client.delete)
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.delete, 204)
+
+    def test_forbidden(self):
+        users = [
+            self.customer2, self.customer1, self.vendor1, self.vendor2, self.read_only_vendor,
+            self.advisory_manager1, self.pentester2, self.pentester1, self.user1, self.read_only1
+        ]
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.delete, 403)
 
 
 class ProjectDetailViewTestCase(APITestCase, PeCoReTTestCaseMixin):
@@ -75,15 +82,22 @@ class ProjectDetailViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.url = self.get_url("backend:project-detail", pk=self.project1.pk)
 
-    def test_permissions(self):
-        user_status_map = [
-            (self.pentester1, 200),
-            (self.management1, 200),
-            (self.pentester2, 403),
-            (self.read_only1, 200),
-            (self.user1, 403),
+    def test_allowed(self):
+        users = [
+            self.pentester1, self.management1, self.read_only1
         ]
-        self.basic_permission_checks(self.url, user_status_map, self.client.get)
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.get, 200)
+
+    def test_forbidden(self):
+        users = [
+            self.customer2, self.customer1, self.vendor1, self.vendor2, self.advisory_manager1,
+            self.pentester2, self.user1, self.read_only_vendor, self.management2
+        ]
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.get, 403)
 
 
 class ProjectCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
