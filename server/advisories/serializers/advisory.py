@@ -26,7 +26,7 @@ class BaseAdvisorySerializer(serializers.ModelSerializer):
             "vendor_url", "vendor_name", "description", "internal_name",
             "recommendation", "date_created", "date_updated",
             "custom_report_title", "hide_advisory_id_in_report",
-            "proof_text", "labels"
+            "proof_text", "labels", "researchers"
         ]
         read_only_fields = [
             "pk", "user"

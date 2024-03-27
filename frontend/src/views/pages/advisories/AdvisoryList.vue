@@ -39,7 +39,6 @@ export default {
         }
     },
     methods: {
-        onSort() {},
         onFilter() {
             this.getItems();
         },
@@ -105,16 +104,9 @@ export default {
                 @filter="onFilter"
                 filter-display="menu"
                 :filter="true"
+                @search="onGlobalSearch"
+                :show-search="true"
             >
-                <template #header>
-                    <div class="grid">
-                        <IconField iconPosition="left">
-                            <InputIcon class="fa fa-search"></InputIcon>
-                            <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                        </IconField>
-                    </div>
-                </template>
-
                 <Column field="pk" header="ID"></Column>
                 <Column field="internal_name" header="Internal Name"></Column>
                 <Column field="vulnerability.name" header="Vulnerability"></Column>
@@ -135,7 +127,7 @@ export default {
                 <Column field="date_planned_disclosure" header="Planned Disclosure"></Column>
                 <Column header="Labels" field="labels" :showFilterMatchModes="false">
                     <template #body="slotProps">
-                        <AdvisoryLabelBadge v-for="label in slotProps.data.labels" :label="label"></AdvisoryLabelBadge>
+                        <AdvisoryLabelBadge v-for="label in slotProps.data.labels" :label="label" :key="label.pk"></AdvisoryLabelBadge>
                     </template>
                 </Column>
             </GenericDataTable>

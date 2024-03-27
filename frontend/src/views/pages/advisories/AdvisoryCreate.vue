@@ -43,6 +43,7 @@ export default {
                 severity: null,
                 vendor_name: null,
                 vendor_url: null,
+                researchers: null,
                 attachments: []
             },
             loading: false,
@@ -62,7 +63,8 @@ export default {
                 fixed_version: this.model.fixed_version,
                 severity: this.model.severity,
                 vendor_name: this.model.vendor_name,
-                vendor_url: this.model.vendor_url
+                vendor_url: this.model.vendor_url,
+                researchers: this.model.researchers
             };
             // create advisory first, so we can upload attachments afterward
             let response = await this.service.createAdvisory(this.$api, data);
@@ -164,6 +166,11 @@ export default {
                     <div class="field col-12 md:col-6">
                         <label for="vendor_url">Vendor URL</label>
                         <InputText id="vendor_url" v-model="model.vendor_url"></InputText>
+                    </div>
+                    <div class="field col-12">
+                        <label for="researchers">Researchers</label>
+                        <InputText id="researchers" v-model="model.researchers"></InputText>
+                        <small id="researchers-help">Overwrites the researchers section in the report (default: your display name).</small>
                     </div>
                     <div class="field col-12">
                         <label for="description">Description</label>
