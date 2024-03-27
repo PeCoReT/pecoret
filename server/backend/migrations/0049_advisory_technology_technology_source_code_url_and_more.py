@@ -8,9 +8,10 @@ def migrate_vendor_to_tech(apps, schema_editor):
     Advisory = apps.get_model("backend", "Advisory")
     Technology = apps.get_model("backend", "Technology")
     for advisory in Advisory.objects.all():
-        technology, _created = Technology.objects.get_or_create(name=advisory.product, vendor=advisory.vendor_name,
+        technology, _created = Technology.objects.get_or_create(name=advisory.product,
                                                                 defaults={
-                                                                    'homepage': advisory.vendor_url
+                                                                    'homepage': advisory.vendor_url,
+                                                                    'vendor': advisory.vendor_name,
                                                                 })
         advisory.technology = technology
         advisory.save()
