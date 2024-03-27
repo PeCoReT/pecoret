@@ -1,11 +1,12 @@
 <script>
 import UserService from '@/service/UserService';
-import BlankSlate from '@/components/BlankSlate.vue';
 import APITokenCreate from '@/components/dialogs/APITokenCreate.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'APITokenList',
-    components: { APITokenCreate, BlankSlate },
+    components: { GenericDataTable, BaseListLayout, APITokenCreate },
     data() {
         return {
             breadcrumbs: [
@@ -23,8 +24,6 @@ export default {
         };
     },
     methods: {
-        onSort() {},
-        onFilter() {},
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
@@ -52,6 +51,21 @@ export default {
                 life: 3000
             });
         },
+        onGlobalSearch(query) {
+            this.loading = true;
+            let params = {
+                search: query
+            };
+            this.service
+                .getAPITokens(this.$api, params)
+                .then((response) => {
+                    this.totalRecords = response.data.count;
+                    this.items = response.data.results;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
         onDeleteConfirmDialog(id) {
             this.$confirm.require({
                 message: 'Do you want to delete this api token?',
@@ -78,74 +92,53 @@ export default {
 };
 </script>
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <APITokenCreate @object-created="showTokenKey"></APITokenCreate>
+        </template>
 
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <APITokenCreate @object-created="showTokenKey"></APITokenCreate>
-            </div>
-        </div>
-    </div>
+        <template #table>
+            <div class="grid" v-if="tokenKey">
+                <div class="col-12">
+                    <Message
+                        @close="
+                            () => {
+                                this.tokenKey = null;
+                            }
+                        "
+                    >
+                        <div class="row">
+                            <div class="col">
+                                {{ tokenKey }}
 
-    <div class="grid" v-if="tokenKey">
-        <div class="col-12">
-            <Message
-                @close="
-                    () => {
-                        this.tokenKey = null;
-                    }
-                "
-            >
-                <div class="row">
-                    <div class="col">
-                        {{ tokenKey }}
-
-                        <Button class="ml-5 p-0" icon="fa fa-copy" outlined @click="copyToClipboard"></Button>
-                    </div>
+                                <Button class="ml-5 p-0" icon="fa fa-copy" outlined @click="copyToClipboard"></Button>
+                            </div>
+                        </div>
+                    </Message>
                 </div>
-            </Message>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable
-                    :paginator="true"
-                    dataKey="pk"
-                    :rowHover="items.length > 0"
-                    :rows="pagination.limit"
-                    :value="items"
-                    filterDisplay="menu"
-                    :lazy="true"
-                    :loading="loading"
-                    @sort="onSort"
-                    @filter="onFilter"
-                    @page="onPage"
-                    :totalRecords="totalRecords"
-                >
-                    <Column field="name" header="Name"></Column>
-                    <Column field="prefix" header="Prefix"></Column>
-                    <Column field="date_last_used" header="Last used"></Column>
-                    <Column field="date_created" header="Date created"></Column>
-                    <Column header="Actions">
-                        <template #body="slotProps">
-                            <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="onDeleteConfirmDialog(slotProps.data.pk)"></Button>
-                        </template>
-                    </Column>
-                    <template #empty>
-                        <BlankSlate icon="fa fa-fingerprint" title="No API-Tokens!" text="No API-Tokens found!"></BlankSlate>
-                    </template>
-                </DataTable>
             </div>
-        </div>
-    </div>
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-text="No API-Tokens found!"
+                blank-slate-title="No API-Tokens!"
+                blank-slate-icon="fa fa-fingerprint"
+                :model-value="items"
+                @search="onGlobalSearch"
+                @page="onPage"
+                :show-search="true"
+            >
+                <Column field="name" header="Name"></Column>
+                <Column field="prefix" header="Prefix"></Column>
+                <Column field="date_last_used" header="Last used"></Column>
+                <Column field="date_created" header="Date created"></Column>
+                <Column header="Actions">
+                    <template #body="slotProps">
+                        <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="onDeleteConfirmDialog(slotProps.data.pk)"></Button>
+                    </template>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>

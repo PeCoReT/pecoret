@@ -4,11 +4,9 @@ import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
 import ProjectUpdateDialog from '@/components/dialogs/ProjectUpdateDialog.vue';
 import markdown from '@/utils/markdown';
-import DashboardSeverityChart from '@/components/pages/projects/DashboardSeverityChart.vue';
-import DashboardFindingsCount from '@/components/pages/projects/DashboardFindingsCount.vue';
+import DashboardSeverityChart from '@/components/projects/DashboardSeverityChart.vue';
+import DashboardFindingsCount from '@/components/projects/DashboardFindingsCount.vue';
 import LatestFindingsDashboard from '@/components/projects/LatestFindingsDashboard.vue';
-
-const projectService = new ProjectService();
 
 export default {
     name: 'ProjectDetail',
@@ -16,6 +14,7 @@ export default {
         return {
             projectId: this.$route.params.projectId,
             project: {},
+            service: new ProjectService(),
             role: {},
             breadcrumbs: [
                 { label: 'Projects', to: this.$router.resolve({ name: 'ProjectList' }) },
@@ -33,7 +32,7 @@ export default {
     },
     methods: {
         getProject() {
-            projectService.getProject(this.projectId).then((response) => {
+            this.service.getProject(this.projectId).then((response) => {
                 this.project = response.data;
                 this.breadcrumbs[this.breadcrumbs.length - 1] = {
                     label: response.data.name,
@@ -48,7 +47,7 @@ export default {
             return markdown.renderMarkdown(text);
         },
         getMembership() {
-            projectService.getProjectMembershipMe(this.projectId).then((response) => {
+            this.service.getProjectMembershipMe(this.projectId).then((response) => {
                 this.role = response.data;
             });
         },
@@ -63,12 +62,12 @@ export default {
             return pentestTypeNames.join(', ');
         },
         patchProject(data) {
-            projectService.patchProject(this.$api, this.projectId, data).then((response) => {
+            this.service.patchProject(this.$api, this.projectId, data).then((response) => {
                 this.project = response.data;
             });
         },
         pinProject() {
-            projectService.pinProject(this.$api, this.projectId, this.project.pinned).then(() => {});
+            this.service.pinProject(this.$api, this.projectId, this.project.pinned).then(() => {});
         }
     },
     computed: {

@@ -16,7 +16,9 @@ export default {
             service: new ProjectNoteService(),
             saveLoading: false,
             previousSelected: null,
-            authStore: useAuthStore()
+            authStore: useAuthStore(),
+            pagination: { limit: 25, page: 1 },
+            totalRecords: 0
         };
     },
     computed: {
@@ -32,10 +34,24 @@ export default {
     mounted() {
         this.getNotes();
     },
+    beforeRouteLeave() {
+        if (this.selectedNote) {
+            this.service.unlockNote(this.$api, this.projectId, this.selectedNote.pk).then(() => {});
+        }
+    },
     methods: {
+        onPage(event) {
+            this.pagination.page = event.page + 1;
+            this.getNotes();
+        },
         getNotes() {
-            this.service.getNotes(this.$api, this.projectId).then((response) => {
+            let params = {
+                page: this.pagination.page,
+                limit: this.pagination.limit
+            };
+            this.service.getNotes(this.$api, this.projectId, params).then((response) => {
                 this.notes = response.data.results;
+                this.totalRecords = response.data.count;
             });
         },
         createNote() {
@@ -170,6 +186,7 @@ export default {
                         </div>
                     </template>
                 </Listbox>
+                <Paginator :rows="pagination.limit" :totalRecords="totalRecords" @page="onPage"></Paginator>
             </div>
             <div class="col-9">
                 <div class="grid formgrid p-fluid">

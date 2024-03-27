@@ -8,7 +8,7 @@ export default {
     name: 'CompanyList',
     data() {
         return {
-            companyService: new CompanyService(),
+            service: new CompanyService(),
             breadcrumbs: [{ label: 'Companies', disabled: true }],
             items: [],
             loading: false,
@@ -24,7 +24,7 @@ export default {
             let params = {
                 search: query
             };
-            this.companyService
+            this.service
                 .getCompanies(params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
@@ -38,7 +38,7 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.companyService
+            this.service
                 .getCompanies(data)
                 .then((response) => {
                     this.totalRecords = response.data.count;
@@ -81,17 +81,10 @@ export default {
                 :model-value="items"
                 @page="onPage"
                 @rowClick="onRowClick"
+                :show-search="true"
+                @search="onGlobalSearch"
             >
-                <template #header>
-                    <div class="grid">
-                        <IconField iconPosition="left">
-                            <InputIcon class="fa fa-search"></InputIcon>
-                            <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                        </IconField>
-                    </div>
-                </template>
-
-                <Column field="name" header="Name"> </Column>
+                <Column field="name" header="Name"></Column>
                 <Column field="street" header="Street"></Column>
                 <Column field="city" header="City"></Column>
                 <Column field="country" header="Country"></Column>

@@ -1,7 +1,7 @@
 <script>
 import ReportService from '@/service/ReportService';
-import ReportTabMenu from '../../../../components/pages/ReportTabMenu.vue';
-import VersionHistoryCreateDialog from '../../../../components/dialogs/VersionHistoryCreateDialog.vue';
+import ReportTabMenu from '@/components/projects/reporting/ReportTabMenu.vue';
+import VersionHistoryCreateDialog from '@/components/dialogs/VersionHistoryCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 

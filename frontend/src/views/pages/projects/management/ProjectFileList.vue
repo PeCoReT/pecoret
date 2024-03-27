@@ -28,7 +28,7 @@ export default {
         this.getItems();
     },
     methods: {
-        onPage() {
+        onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
         },

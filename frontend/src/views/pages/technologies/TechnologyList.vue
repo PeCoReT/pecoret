@@ -1,12 +1,13 @@
 <script>
 import TechnologyService from '@/service/TechnologyService';
-import BlankSlate from '@/components/BlankSlate.vue';
 import TechnologyCreateDialog from '@/components/knowledgebase/TechnologyCreateDialog.vue';
 import TechnologyUpdateDialog from '@/components/knowledgebase/TechnologyUpdateDialog.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'TechnologyList',
-    components: { TechnologyUpdateDialog, TechnologyCreateDialog, BlankSlate },
+    components: { GenericDataTable, BaseListLayout, TechnologyUpdateDialog, TechnologyCreateDialog },
     data() {
         return {
             service: new TechnologyService(),
@@ -79,50 +80,34 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <TechnologyCreateDialog @object-created="getItems"></TechnologyCreateDialog>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable paginator lazy dataKey="pk" :value="items" :rows="pagination.limit" :row-hover="items.length > 0" :totalRecords="totalRecords" :loading="loading" @page="onPage">
-                    <template #empty>
-                        <BlankSlate title="No Technologies!" text="No technologies found!" icon="fa fa-microchip"></BlankSlate>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <TechnologyCreateDialog @object-created="getItems"></TechnologyCreateDialog>
+        </template>
+        <template #table>
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-text="No technologies found!"
+                blank-slate-title="No Technologies!"
+                blank-slate-icon="fa fa-microship"
+                :model-value="items"
+                @page="onPage"
+                :show-search="true"
+                @search="onGlobalSearch"
+            >
+                <Column field="name" header="Name"></Column>
+                <Column field="cpe" header="CPE"></Column>
+                <Column field="homepage" header="Homepage"></Column>
+                <Column field="date_updated" header="Updated"></Column>
+                <Column header="Actions">
+                    <template #body="slotProps">
+                        <TechnologyUpdateDialog :technology="slotProps.data" @object-updated="getItems"></TechnologyUpdateDialog>
+                        <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                     </template>
-                    <template #header>
-                        <div class="grid">
-                            <IconField iconPosition="left">
-                                <InputIcon class="fa fa-search"></InputIcon>
-                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </IconField>
-                        </div>
-                    </template>
-                    <Column field="name" header="Name"></Column>
-                    <Column field="cpe" header="CPE"></Column>
-                    <Column field="homepage" header="Homepage"></Column>
-                    <Column field="date_updated" header="Updated"></Column>
-                    <Column header="Actions">
-                        <template #body="slotProps">
-                            <TechnologyUpdateDialog :technology="slotProps.data" @object-updated="getItems"></TechnologyUpdateDialog>
-                            <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
-                        </template>
-                    </Column>
-                </DataTable>
-            </div>
-        </div>
-    </div>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>

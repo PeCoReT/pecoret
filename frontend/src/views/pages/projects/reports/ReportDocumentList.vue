@@ -1,7 +1,7 @@
 <script>
 import ReportService from '@/service/ReportService';
-import ReportTabMenu from '../../../../components/pages/ReportTabMenu.vue';
-import ReportDocumentCreateDialog from '../../../../components/dialogs/ReportDocumentCreateDialog.vue';
+import ReportTabMenu from '@/components/projects/reporting/ReportTabMenu.vue';
+import ReportDocumentCreateDialog from '@/components/dialogs/ReportDocumentCreateDialog.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 
 export default {
@@ -181,12 +181,12 @@ export default {
         },
         createPreviewDocument() {
             let data = { name: 'Preview', release_type: 'Preview' };
-            this.reportService.createReportDocument(this.$api, this.projectId, this.reportId, data).then((response) => {
+            this.reportService.createReportDocument(this.$api, this.projectId, this.reportId, data).then(() => {
                 this.getPreviewReportDocument();
             });
         },
         deleteDocument(documentId) {
-            this.reportService.deleteReportDocument(this.$api, this.projectId, this.reportId, documentId).then((response) => {
+            this.reportService.deleteReportDocument(this.$api, this.projectId, this.reportId, documentId).then(() => {
                 this.$toast.add({
                     severity: 'info',
                     summary: 'Deleted',

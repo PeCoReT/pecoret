@@ -2,7 +2,7 @@
 import ReportService from '@/service/ReportService';
 import ProjectService from '@/service/ProjectService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
-import ReportTabMenu from '@/components/pages/ReportTabMenu.vue';
+import ReportTabMenu from '@/components/projects/reporting/ReportTabMenu.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
