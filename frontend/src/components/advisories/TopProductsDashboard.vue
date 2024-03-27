@@ -50,7 +50,11 @@ export default {
                 .getTopProducts(this.$api)
                 .then((response) => {
                     response.data.forEach((item) => {
-                        this.chartData.labels.push(item['product'] + ' (by ' + item['vendor_name'] + ')');
+                        let name = item['technology__name'];
+                        if (item['technology__vendor']) {
+                            name = `${item['technology__name']} (by ${item['technology__vendor']})`;
+                        }
+                        this.chartData.labels.push(name);
                         this.chartData.datasets[0].data.push(item['count']);
                     });
                     for (let i = 0; i < this.chartColors.length; i++) {

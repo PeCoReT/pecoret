@@ -1,6 +1,6 @@
 from rest_framework.test import APITestCase
 from pecoret.core.test import PeCoReTTestCaseMixin
-from backend.models import VulnerabilityTemplate
+from backend.models import VulnerabilityTemplate, Technology
 from backend.models.advisory import Severity, Advisory, VisibilityChoices
 from advisories.models.label import Label
 
@@ -54,14 +54,13 @@ class AdvisoryCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url("advisories:advisory-list")
+        self.tech = self.create_instance(Technology)
         self.create_instance(VulnerabilityTemplate, vulnerability_id="path-traversal")
         self.data = {
-            "product": "Test Product",
+            "technology": self.tech.pk,
             "affected_versions": "1.0",
             "fixed_version": None,
             "severity": Severity.LOW.label,
-            "vendor_url": "https://example.com",
-            "vendor_name": "Test Vendor",
             "description": "lorem ipsum",
             "proofs": "lorem ipsum",
             "recommendation": "lorem ipsum",

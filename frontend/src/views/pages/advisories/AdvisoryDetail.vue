@@ -16,7 +16,7 @@ export default {
             service: new AdvisoryService(),
             advisoryId: this.$route.params.advisoryId,
             authStore: useAuthStore(),
-            advisory: { vulnerability: {} },
+            advisory: { vulnerability: {}, technology: {} },
             exportTemplate: null,
             downloadPending: false,
             dataLoaded: false,
@@ -164,6 +164,12 @@ export default {
         }
     },
     computed: {
+        productDisplay() {
+            if (this.advisory.technology && this.advisory.technology.vendor) {
+                return `${this.advisory.technology.name} (by ${this.advisory.technology.vendor})`;
+            }
+            return `${this.advisory.technology.name} (by Unknown)`;
+        },
         containerCol() {
             if (this.showPreview === true) {
                 return 'col-6';
@@ -210,7 +216,7 @@ export default {
             <div class="card border-noround-top" v-if="dataLoaded">
                 <div class="grid">
                     <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Product" icon="fa fa-cart-shopping" class="surface-ground" :text="advisory.product + '(by ' + advisory.vendor_name + ')'"></DetailCardWithIcon>
+                        <DetailCardWithIcon title="Product" icon="fa fa-cart-shopping" class="surface-ground" :text="productDisplay"></DetailCardWithIcon>
                     </div>
                     <div class="col-12 md:col-3">
                         <DetailCardWithIcon title="Affected Versions" icon="fa fa-circle-exclamation" class="surface-ground" :text="advisory.affected_versions"></DetailCardWithIcon>

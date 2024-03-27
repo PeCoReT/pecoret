@@ -31,6 +31,6 @@ class AdvisoryMembershipViewSet(PeCoReTNoUpdateViewSet):
         instance = serializer.save(advisory=self.request.advisory)
         context = {
             "advisoryId": self.request.advisory.pk,
-            "vendor_name": self.request.advisory.vendor_name,
+            "vendor_name": self.request.advisory.technology.vendor,
         }
         async_task(mail.send_advisory_shared_mail, context, instance.user.email)

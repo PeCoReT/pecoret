@@ -50,7 +50,7 @@ export default {
                 .getTopVendors(this.$api)
                 .then((response) => {
                     response.data.forEach((item) => {
-                        this.chartData.labels.push(item['vendor_name']);
+                        this.chartData.labels.push(item['technology__vendor']);
                         this.chartData.datasets[0].data.push(item['count']);
                     });
                     const documentStyle = getComputedStyle(document.body);

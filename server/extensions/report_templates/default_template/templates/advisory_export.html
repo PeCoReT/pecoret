@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8">
   <title>{{ advisory.pk }}</title>
-  <meta name="description" content="{{ advisory.pk }}">
+  <meta
+    name="description"
+    content="{{ advisory.pk }}">
 
   <style>
       @page {
@@ -15,7 +17,7 @@
           }
 
           @bottom-center {
-              content: "{% if not advisory.hide_advisory_id_in_report %}{{ advisory.pk }} ({{ advisory.product }} {{ advisory.affected_versions }}){% else %}{{ advisory.product }} {{ advisory.affected_versions }}{% endif %}";
+              content: "{% if not advisory.hide_advisory_id_in_report %}{{ advisory.pk }} ({{ advisory.technology.name }} {{ advisory.affected_versions }}){% else %}{{ advisory.technology.name }} {{ advisory.affected_versions }}{% endif %}";
               font-size: 10px;
               margin-top: -5px;
           }
@@ -35,15 +37,20 @@
 <!-- Header Table -->
 <section id="vuln-{{ advisory.pk }}-header">
   <h3 id="vuln-{{ advisory.pk }}-title">
-            <span class="fa-layers text-{{ advisory.get_severity_display().lower() }}">
-                <i class="fas fa-bookmark"></i>
-                <span class="fa-layers-text" data-fa-transform="shrink-8 down-3" style="font-weight:900"></span>
-            </span>
+    <span class="fa-layers text-{{ advisory.get_severity_display().lower() }}">
+        <i class="fas fa-bookmark"></i>
+        <span
+          class="fa-layers-text"
+          data-fa-transform="shrink-8 down-3"
+          style="font-weight:900"></span>
+    </span>
     {{ advisory.vulnerability.name }}{% if not advisory.hide_advisory_id_in_report %} -
       {{ advisory.get_advisory_id_display() }}{% endif %}
   </h3>
 
-  <table style="width: 100%" id="intro-detail-table">
+  <table
+    style="width: 100%"
+    id="intro-detail-table">
     <thead>
     <tr>
       <th>Severity</th>
@@ -66,8 +73,13 @@
 
   <table style="margin-top: 30px;">
     <tr>
-      <th style="padding-right: 65px">Vendor / Product</th>
-      <td>{{ advisory.vendor_name }} / {{ advisory.product }}</td>
+      {% if advisory.technology.vendor %}
+        <th style="padding-right: 65px">Vendor / Product</th>
+        <td>{{ advisory.vendor_name }} / {{ advisory.product }}</td>
+      {% else %}
+        <th style="padding-right: 65px">Product</th>
+        <td>{{ advisory.technology.name }}</td>
+      {% endif %}
     </tr>
     <tr>
       <th>Affected Versions</th>
@@ -92,7 +104,9 @@
   <h4>Description</h4>
   {{ report_helpers.bleach_md(advisory.description)|safe }}
 </section>
-<section id="proofs-{{ advisory.pk }}" class="proofs">
+<section
+  id="proofs-{{ advisory.pk }}"
+  class="proofs">
   <h4>Steps to reproduce</h4>
   {{ report_helpers.bleach_md(advisory.report_proof_text, allow_images=True)|safe }}
 

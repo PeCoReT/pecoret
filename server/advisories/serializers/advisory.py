@@ -1,15 +1,18 @@
 from rest_framework import serializers
+
+from advisories.fields import LabelField
 from backend.models.advisory import (
     Advisory, Severity, AdvisoryStatusChoices, VisibilityChoices, VulnerabilityStatusChoices
 )
 from backend.serializers.report_templates import ReportTemplateMinimalSerializer
 from backend.serializers.user import MinimalUserSerializer
 from backend.serializers.vulnerability import VulnerabilityTemplateSerializer
-from advisories.fields import LabelField
-from .label import LabelSerializer
+from backend.serializers.technology import TechnologySerializer
 from pecoret.core.serializers import (
-    ValuedChoiceField, VulnerabilityTemplateIdField, ActiveReportTemplateSerializerField
+    ValuedChoiceField, VulnerabilityTemplateIdField, ActiveReportTemplateSerializerField,
+    PrimaryKeyRelatedField
 )
+from .label import LabelSerializer
 
 
 class BaseAdvisorySerializer(serializers.ModelSerializer):
@@ -17,13 +20,13 @@ class BaseAdvisorySerializer(serializers.ModelSerializer):
     vulnerability_id = serializers.ReadOnlyField()
     user = MinimalUserSerializer(read_only=True)
     labels = LabelField(serializer=LabelSerializer, many=True, read_only=True)
+    technology = PrimaryKeyRelatedField(serializer=TechnologySerializer)
 
     class Meta:
         model = Advisory
         fields = [
-            "pk", "user",
-            "product", "affected_versions", "severity",
-            "vendor_url", "vendor_name", "description", "internal_name",
+            "pk", "user", "affected_versions", "severity",
+            "description", "internal_name", "technology",
             "recommendation", "date_created", "date_updated",
             "custom_report_title", "hide_advisory_id_in_report",
             "proof_text", "labels", "researchers"

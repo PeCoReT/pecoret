@@ -5,6 +5,7 @@ import SeveritySelectField from '@/components/elements/forms/SeveritySelectField
 import { useAuthStore } from '@/store/auth';
 import AdvisoryLabelSelectField from '@/components/elements/forms/AdvisoryLabelSelectField.vue';
 import ReportTemplateSelectField from '@/components/elements/forms/ReportTemplateSelectField.vue';
+import TechnologySelectField from '@/components/elements/forms/TechnologySelectField.vue';
 
 export default {
     name: 'AdvisoryUpdate',
@@ -46,11 +47,9 @@ export default {
             this.loading = true;
             let data = {
                 internal_name: this.model.internal_name,
-                product: this.model.product,
+                technology: this.model.technology,
                 affected_versions: this.model.affected_versions,
                 fixed_version: this.model.fixed_version,
-                vendor_name: this.model.vendor_name,
-                vendor_url: this.model.vendor_url,
                 hide_advisory_id_in_report: this.model.hide_advisory_id_in_report,
                 custom_report_title: this.model.custom_report_title,
                 cve_id: this.model.cve_id,
@@ -60,6 +59,9 @@ export default {
             };
             if (this.model.report_template && this.model.report_template.pk) {
                 data['report_template'] = this.model.report_template.pk;
+            }
+            if (this.model.technology && this.model.technology.pk) {
+                data['technology'] = this.model.technology.pk;
             }
             if (this.authStore.groups.isAdvisoryManagement === true) {
                 data['labels'] = [];
@@ -115,7 +117,7 @@ export default {
     mounted() {
         this.getAdvisory();
     },
-    components: { ReportTemplateSelectField, SeveritySelectField, AdvisoryLabelSelectField }
+    components: { TechnologySelectField, ReportTemplateSelectField, SeveritySelectField, AdvisoryLabelSelectField }
 };
 </script>
 <template>
@@ -145,7 +147,7 @@ export default {
                     </div>
                     <div class="field col-12">
                         <label for="product">Product</label>
-                        <InputText id="product" v-model="model.product"></InputText>
+                        <TechnologySelectField v-model="model.technology"></TechnologySelectField>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="affected_versions">Affected Versions</label>
@@ -154,14 +156,6 @@ export default {
                     <div class="field col-12 md:col-6">
                         <label for="fixed_versions">Fixed Version</label>
                         <InputText id="fixed_versions" v-model="model.fixed_version"></InputText>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label for="vendor_name">Vendor</label>
-                        <InputText id="vendor_name" v-model="model.vendor_name"></InputText>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label for="vendor_url">Vendor URL</label>
-                        <InputText id="vendor_url" v-model="model.vendor_url"></InputText>
                     </div>
                     <div class="field col-12" v-if="authStore.groups.isAdvisoryManagement === true">
                         <AdvisoryLabelSelectField v-model="model.labels"></AdvisoryLabelSelectField>

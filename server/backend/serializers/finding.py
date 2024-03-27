@@ -8,6 +8,7 @@ from backend.serializers.assets.thick_client import ThickClientSerializer
 from backend.serializers.assets.service import MinimalServiceSerializer
 from backend.serializers.assets.mobile_application import MobileApplicationSerializer
 from backend.serializers.assets.generic import GenericAssetSerializer
+from backend.serializers.fields.technology import TechnologyField
 from pecoret.core.serializers import (
     ValuedChoiceField,
     AssetGenericRelatedField,
@@ -96,7 +97,5 @@ class FindingCreateSerializer(FindingSerializer):
 
 
 class FindingAsAdvisorySerializer(serializers.Serializer):
-    product = serializers.CharField()
-    vendor_url = serializers.URLField()
-    vendor_name = serializers.CharField()
+    technology = TechnologyField()
     affected_versions = serializers.CharField()
