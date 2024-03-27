@@ -1,13 +1,14 @@
+from django.db.models import Count
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework import status
-from django.db.models import Count
-from pecoret.core.viewsets import GenericViewSet
-from pecoret.core import mixins
-from pecoret.core import permissions
-from backend.models import Advisory
+
 from advisories.filters import InboxFilter
 from advisories.serializers.advisory_management import AdvisoryAdvisoryManagementSerializer
+from backend.models import Advisory
+from pecoret.core import mixins
+from pecoret.core import permissions
+from pecoret.core.viewsets import GenericViewSet
 
 
 class AdvisoryManagementInboxViewSet(mixins.ListModelMixin, GenericViewSet):
@@ -46,10 +47,12 @@ class AdvisoryManagementInboxViewSet(mixins.ListModelMixin, GenericViewSet):
 
     @action(detail=False, methods=["get"])
     def top_products(self, request, *args, **kwargs):
-        qs = self.get_queryset().values("product", "vendor_name").annotate(count=Count('pk')).order_by("-count")
+        qs = self.get_queryset().values("technology__name", "technology__vendor").annotate(count=Count('pk')).order_by(
+            "-count")
         return Response(list(qs)[:10])
 
     @action(detail=False, methods=["get"])
     def top_vendors(self, request, *args, **kwargs):
-        qs = self.get_queryset().values("vendor_name").annotate(count=Count('pk')).order_by("-count")
+        qs = self.get_queryset().filter(technology__vendor__isnull=False).values("technology__vendor").annotate(
+            count=Count('pk')).order_by("-count")
         return Response(list(qs)[:10])

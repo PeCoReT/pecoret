@@ -116,7 +116,7 @@ export default {
                     </template>
                 </Column>
                 <Column header="Product">
-                    <template #body="slotProps"> {{ slotProps.data.product }} (by {{ slotProps.data.vendor_name }}) </template>
+                    <template #body="slotProps">{{ slotProps.data.technology.name }}</template>
                 </Column>
                 <Column field="status" header="Status" :showFilterMatchModes="false">
                     <template #filter="{ filterModel }">

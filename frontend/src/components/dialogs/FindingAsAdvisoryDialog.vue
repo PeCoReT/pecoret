@@ -1,5 +1,6 @@
 <script>
 import FindingService from '@/service/FindingService';
+import TechnologySelectField from "@/components/elements/forms/TechnologySelectField.vue";
 
 export default {
     name: 'FindingAsAdvisoryDialog',
@@ -11,10 +12,8 @@ export default {
             findingId: this.$route.params.findingId,
             loading: false,
             model: {
-                product: null,
-                affected_versions: null,
-                vendor_name: null,
-                vendor_url: null
+                technology: null,
+                affected_versions: null
             },
             service: new FindingService()
         };
@@ -29,11 +28,8 @@ export default {
         create() {
             this.loading = true;
             let data = {
-                product: this.model.product,
-                affected_versions: this.model.affected_versions,
-                affected_product: this.model.affected_product,
-                vendor_name: this.model.vendor_name,
-                vendor_url: this.model.vendor_url
+                technology: this.model.technology,
+                affected_versions: this.model.affected_versions
             };
             this.service
                 .findingAsAdvisory(this.$api, this.projectId, this.findingId, data)
@@ -52,7 +48,7 @@ export default {
                 });
         }
     },
-    components: {}
+    components: { TechnologySelectField }
 };
 </script>
 
@@ -63,15 +59,7 @@ export default {
         <div class="p-fluid formgrid grid">
             <div class="field col-12">
                 <label for="product">Product</label>
-                <InputText id="product" v-model="model.product"></InputText>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="vendor">Vendor</label>
-                <InputText id="vendor" v-model="model.vendor_name"></InputText>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="vendor_url">Vendor-URL</label>
-                <InputText type="url" v-model="model.vendor_url"></InputText>
+                <TechnologySelectField v-model="model.technology"></TechnologySelectField>
             </div>
             <div class="field col-12">
                 <label for="versions">Affected Versions</label>

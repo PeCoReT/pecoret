@@ -1,18 +1,22 @@
 <div id="cover">
   <div class="cover-container">
     <div class="title">{{ _('Vulnerability Report') }}</div>
-    <div class="project">{{ advisory.product }}</div>
+    <div class="project">{{ advisory.technology.name }}</div>
     <p class="date">{{ now }}</p>
   </div>
 
   <table class="footer">
     <tr>
       <td>{{ _('Receipient') }}:</td>
-      <td>{{ advisory.vendor_name }}</td>
+      {% if advisory.technology.vendor %}
+      <td>{{ advisory.technology.vendor }}</td>
+      {% else %}
+      <td>{{ advisory.technology.name }}</td>
+      {% endif %}
     </tr>
     <tr>
       <td>{{ _('Researcher') }}:</td>
-      <td>{{ advisory.user.report_display_name }}</td>
+      <td>{{ advisory.get_researchers() }}</td>
     </tr>
     {% if not advisory.hide_advisory_id_in_report %}
       <tr>

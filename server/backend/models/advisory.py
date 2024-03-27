@@ -1,5 +1,5 @@
 import re
-
+import warnings
 from django.core.files.images import ImageFile
 from django.db import models
 from django.dispatch import receiver
@@ -13,6 +13,7 @@ from .advisory_timeline import AdvisoryTimeline
 from .finding import Severity
 from .report_templates import ReportTemplate
 from .vulnerability import VulnerabilityTemplate
+from .technology import Technology
 
 
 def create_advisory_id():
@@ -108,6 +109,7 @@ class AdvisoryManager(models.Manager):
         data["vulnerability"] = VulnerabilityTemplate.objects.get(
             vulnerability_id=finding.vulnerability.vulnerability_id
         )
+        data['technology'] = Technology.objects.get(pk=data['technology'])
         advisory = self.create(**data)
         if finding.recommendation:
             advisory.recommendation = finding.recommendation
@@ -131,7 +133,6 @@ class Advisory(TimestampedModel):
     user = models.ForeignKey("backend.User", on_delete=models.PROTECT)
     date_planned_disclosure = models.DateField()
     date_disclosure = models.DateField(blank=True, null=True)
-    product = models.CharField(max_length=128)
     internal_name = models.CharField(max_length=64, default="")
     affected_versions = models.CharField(max_length=128)
     fixed_version = models.CharField(max_length=128, blank=True, null=True)
@@ -140,8 +141,7 @@ class Advisory(TimestampedModel):
     )
     severity = models.PositiveSmallIntegerField(choices=Severity.choices)
     cve_id = models.CharField(max_length=20, null=True, blank=True)
-    vendor_url = models.URLField()
-    vendor_name = models.CharField(max_length=128)
+    technology = models.ForeignKey('backend.Technology', on_delete=models.PROTECT)
     description = models.TextField(null=True, blank=True)
     recommendation = models.TextField(null=True, blank=True)
     labels = models.ManyToManyField('advisories.Label', blank=True)
@@ -177,6 +177,21 @@ class Advisory(TimestampedModel):
     def get_advisory_id_display(self):
         prefix = Setting.get('ADVISORY_ID_PREFIX')
         return f"{prefix}{self.advisory_id}"
+
+    @property
+    def vendor_url(self):
+        warnings.warn('Use `technology.homepage` field instead', DeprecationWarning)
+        return self.technology.homepage
+
+    @property
+    def vendor_name(self):
+        warnings.warn('Use `technology.vendor` field instead', DeprecationWarning)
+        return self.technology.vendor
+
+    @property
+    def product(self):
+        warnings.warn('Use `technology.name` field instead', DeprecationWarning)
+        return self.technology.name
 
     @property
     def vulnerability_key(self):

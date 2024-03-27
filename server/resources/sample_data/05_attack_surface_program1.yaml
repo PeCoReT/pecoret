@@ -1,5 +1,5 @@
 technologies:
-  - name: Wordpress
+  - name: WordPress
     homepage: https://wordpress.com
 
 
@@ -20,7 +20,7 @@ attack-surface:
         - name: blog.hermanos.es
           ip: 10.192.10.19
           technologies:
-            - name: Wordpress
+            - name: WordPress
           tags:
             - name: php
           findings:
@@ -34,8 +34,7 @@ attack-surface:
         - name: "https://api.internal.example.com"
           ip: "172.17.0.10"
           technologies:
-            - name: "WebApp"
-            - name: "API"
+            - name: "WordPress"
           findings:
             - name: "Broken Access Control"
               severity: "High"
@@ -54,7 +53,7 @@ attack-surface:
         - name: "https://app2.corp.example.com"
           ip: "192.168.2.10"
           technologies:
-            - name: "WebApp"
+            - name: "Gambio"
           findings:
             - name: "Cross-Site Scripting (XSS)"
               severity: "Medium"
@@ -68,7 +67,6 @@ attack-surface:
           ip: "10.0.0.10"
           technologies:
             - name: "WordPress"
-            - name: "Authentication"
           findings:
             - name: "Broken Authentication"
               severity: "High"
@@ -82,7 +80,6 @@ attack-surface:
           ip: "10.0.0.14"
           technologies:
             - name: "Nextcloud"
-            - name: "Authentication"
           findings:
             - name: "Broken Authentication"
               severity: "Critical"

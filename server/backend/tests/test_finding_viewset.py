@@ -4,7 +4,8 @@ from backend.models import (
     VulnerabilityTemplate,
     Advisory,
     ProjectVulnerability,
-    ReportTemplate
+    ReportTemplate,
+    Technology
 )
 from backend.models.finding import FindingStatus, Severity
 from backend.models.account import Account
@@ -212,10 +213,9 @@ class FindingAsAdvisoryView(APITestCase, PeCoReTTestCaseMixin):
         self.url = self.get_url(
             "backend:finding-as-advisory", project=self.project1.pk, pk=self.finding1.pk
         )
+        self.tech = self.create_instance(Technology)
         self.data = {
-            "product": "Test Product",
-            "vendor_url": "https://asdfasdf.com",
-            "vendor_name": "Test Vendor",
+            "technology": self.tech.pk,
             "affected_versions": "234.2",
         }
 

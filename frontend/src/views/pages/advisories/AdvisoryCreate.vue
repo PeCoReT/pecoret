@@ -3,6 +3,7 @@ import AdvisoryService from '@/service/AdvisoryService';
 import VulnerabilityTemplateService from '@/service/VulnerabilityTemplateService';
 import SeveritySelectField from '@/components/elements/forms/SeveritySelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
+import TechnologySelectField from '@/components/elements/forms/TechnologySelectField.vue';
 
 export default {
     name: 'AdvisoryCreate',
@@ -41,11 +42,11 @@ export default {
                 affected_versions: null,
                 fixed_version: null,
                 severity: null,
-                vendor_name: null,
-                vendor_url: null,
+                technology: null,
                 researchers: null,
                 attachments: []
             },
+            descriptionCustomized: false,
             loading: false,
             templateChoices: []
         };
@@ -62,8 +63,7 @@ export default {
                 affected_versions: this.model.affected_versions,
                 fixed_version: this.model.fixed_version,
                 severity: this.model.severity,
-                vendor_name: this.model.vendor_name,
-                vendor_url: this.model.vendor_url,
+                technology: this.model.technology,
                 researchers: this.model.researchers
             };
             // create advisory first, so we can upload attachments afterward
@@ -97,6 +97,12 @@ export default {
                 }
             });
         },
+        setDescription(item) {
+            // set a default description based on the technology description
+            if (this.descriptionCustomized === false || (this.descriptionCustomized === true && this.description === '')) {
+                this.model.description = item.description;
+            }
+        },
         onFocusTemplate() {
             this.templateService.getTemplates(this.$api).then((response) => {
                 this.templateChoices = response.data.results;
@@ -125,7 +131,7 @@ export default {
         }
     },
     mounted() {},
-    components: { SeveritySelectField, MarkdownEditor }
+    components: { TechnologySelectField, SeveritySelectField, MarkdownEditor }
 };
 </script>
 <template>
@@ -153,19 +159,11 @@ export default {
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="product">Product</label>
-                        <InputText id="product" v-model="model.product"></InputText>
+                        <TechnologySelectField v-model="model.technology" @change="setDescription"></TechnologySelectField>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="affected_versions">Affected Versions</label>
                         <InputText id="affected_versions" v-model="model.affected_versions"></InputText>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label for="vendor_name">Vendor</label>
-                        <InputText id="vendor_name" v-model="model.vendor_name"></InputText>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label for="vendor_url">Vendor URL</label>
-                        <InputText id="vendor_url" v-model="model.vendor_url"></InputText>
                     </div>
                     <div class="field col-12">
                         <label for="researchers">Researchers</label>
