@@ -159,6 +159,8 @@ class Advisory(TimestampedModel):
     visibility = models.PositiveSmallIntegerField(
         choices=VisibilityChoices.choices, default=VisibilityChoices.MEMBERS
     )
+    # overwrites the default "user" display name in the research section of the PDF
+    researchers = models.CharField(max_length=512, null=True, blank=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -166,6 +168,11 @@ class Advisory(TimestampedModel):
 
     def __str__(self):
         return self.advisory_id
+
+    def get_researchers(self):
+        if self.researchers:
+            return self.researchers
+        return self.user.report_display_name
 
     def get_advisory_id_display(self):
         prefix = Setting.get('ADVISORY_ID_PREFIX')

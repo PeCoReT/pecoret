@@ -54,6 +54,7 @@ export default {
                 hide_advisory_id_in_report: this.model.hide_advisory_id_in_report,
                 custom_report_title: this.model.custom_report_title,
                 cve_id: this.model.cve_id,
+                researchers: this.model.researchers,
                 vulnerability_id: this.model.template,
                 report_template: this.model.report_template
             };
@@ -127,16 +128,20 @@ export default {
         <div class="col-12">
             <div class="card">
                 <div class="p-fluid formgrid grid" v-if="loaded">
-                    <div class="field col-12">
+                    <div class="field col-12 md:col-6">
                         <label for="template">Vulnerability Template</label>
                         <Dropdown :options="templateChoices" optionLabel="name" optionValue="vulnerability_id" @focus="onFocusTemplate" filter @filter="onFilterTemplate" v-model="model.template"></Dropdown>
                     </div>
-                    <div class="field col-12">
+                    <div class="field col-12 md:col-6">
                         <label for="name">Internal Name</label>
                         <InputText id="name" v-model="model.internal_name"></InputText>
                     </div>
-                    <div class="field col-12">
+                    <div class="field col-12 md:col-6">
                         <SeveritySelectField v-model="model.severity"></SeveritySelectField>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="cve-id">CVE-ID</label>
+                        <InputText id="cve-id" v-model="model.cve_id"></InputText>
                     </div>
                     <div class="field col-12">
                         <label for="product">Product</label>
@@ -161,16 +166,17 @@ export default {
                     <div class="field col-12" v-if="authStore.groups.isAdvisoryManagement === true">
                         <AdvisoryLabelSelectField v-model="model.labels"></AdvisoryLabelSelectField>
                     </div>
-                    <div class="field col-12">
+                    <div class="field col-12 md:col-6">
                         <ReportTemplateSelectField v-model="model.report_template"></ReportTemplateSelectField>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="custom_title">Custom Report Title</label>
                         <InputText id="custom_title" v-model="model.custom_report_title"></InputText>
                     </div>
-                    <div class="field col-12 md:col-6">
-                        <label for="cve-id">CVE-ID</label>
-                        <InputText id="cve-id" v-model="model.cve_id"></InputText>
+                    <div class="field col-12">
+                        <label for="researchers">Researchers</label>
+                        <InputText id="researchers" v-model="model.researchers"></InputText>
+                        <small id="researchers-help">Overwrites the researchers section in the report (default: your display name).</small>
                     </div>
                     <div class="field col-12">
                         <InputSwitch v-model="model.hide_advisory_id_in_report" id="hide_id"></InputSwitch>

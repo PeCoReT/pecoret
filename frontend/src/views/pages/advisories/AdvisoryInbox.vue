@@ -131,16 +131,9 @@ export default {
                 v-model:filters="filters"
                 filter-display="menu"
                 @rowClick="onRowClick"
+                :show-search="true"
+                @search="onGlobalSearch"
             >
-                <template #header>
-                    <div class="grid">
-                        <IconField iconPosition="left">
-                            <InputIcon class="fa fa-search"></InputIcon>
-                            <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                        </IconField>
-                    </div>
-                </template>
-
                 <Column field="pk" header="ID"> </Column>
                 <Column field="internal_name" header="Internal Name"></Column>
                 <Column field="vulnerability.name" header="Vulnerability"></Column>
