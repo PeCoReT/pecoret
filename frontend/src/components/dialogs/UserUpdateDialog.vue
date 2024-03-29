@@ -47,7 +47,8 @@ export default {
                 first_name: this.model.first_name,
                 last_name: this.model.last_name,
                 email: this.model.email,
-                groups: this.model.groups
+                groups: this.model.groups,
+                is_active: this.model.is_active
             };
             if (this.isCustomerSelected === true) {
                 data['company'] = this.model.company;
@@ -108,6 +109,10 @@ export default {
             <div class="field col-12" v-if="isCustomerSelected === true">
                 <label for="company">Company</label>
                 <CompanySelectField v-model="model.company"></CompanySelectField>
+            </div>
+            <div class="field col-12">
+                <label for="">Is Active?</label>
+                <InputSwitch v-model="model.is_active"></InputSwitch>
             </div>
         </div>
 

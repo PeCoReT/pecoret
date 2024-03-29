@@ -105,15 +105,9 @@ export default defineComponent({
                 @page="onPage"
                 v-model:filters="filters"
                 filter-display="menu"
+                :show-search="true"
+                @search="onGlobalSearch"
             >
-                <template #header>
-                    <div class="grid">
-                        <IconField iconPosition="left">
-                            <InputIcon class="fa fa-search"></InputIcon>
-                            <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                        </IconField>
-                    </div>
-                </template>
                 <Column field="name" header="Name"></Column>
                 <Column field="description" header="Description"></Column>
                 <Column header="Preview">

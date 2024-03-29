@@ -1,7 +1,9 @@
 <script>
 import AdminService from '@/service/AdminService';
-import UserCreateDialog from '../../../components/dialogs/UserCreateDialog.vue';
-import UserUpdateDialog from '../../../components/dialogs/UserUpdateDialog.vue';
+import UserCreateDialog from '@/components/dialogs/UserCreateDialog.vue';
+import UserUpdateDialog from '@/components/dialogs/UserUpdateDialog.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'UserList',
@@ -24,8 +26,6 @@ export default {
         this.getItems();
     },
     methods: {
-        onSort(event) {},
-        onFilter(event) {},
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
@@ -35,6 +35,21 @@ export default {
             let params = {
                 page: this.pagination.page,
                 limit: this.pagination.limit
+            };
+            this.service
+                .getUsers(this.$api, params)
+                .then((response) => {
+                    this.totalRecords = response.data.count;
+                    this.items = response.data.results;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        onSearch(query) {
+            this.loading = true;
+            let params = {
+                search: query
             };
             this.service
                 .getUsers(this.$api, params)
@@ -66,45 +81,42 @@ export default {
             });
         }
     },
-    components: { UserCreateDialog, UserUpdateDialog }
+    components: { GenericDataTable, BaseListLayout, UserCreateDialog, UserUpdateDialog }
 };
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
-    <div class="grid">
-        <div class="col-6">
-            <div class="justify-content-start flex"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <UserCreateDialog @object-created="getItems"></UserCreateDialog>
-            </div>
-        </div>
-    </div>
-    <div class="grid">
-        <div class="col-12">
-            <Card>
-                <template #content>
-                    <DataTable paginator dataKey rowHover :rows="pagination.limit" :value="items" filterDisplay="menu" lazy responsiveLayout="scroll" :totalRecords="totalRecords" :loading="loading" @page="onPage" @sort="onSort" @filter="onFilter">
-                        <Column field="username" header="Username"></Column>
-                        <Column field="first_name" header="First Name"></Column>
-                        <Column field="last_name" header="Last Name"></Column>
-                        <Column field="email" header="E-Mail"></Column>
-                        <Column field="is_active" header="Is Active?"></Column>
-                        <Column header="Actions">
-                            <template #body="slotProps">
-                                <UserUpdateDialog :user="slotProps.data"></UserUpdateDialog>
-                                <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
-                            </template>
-                        </Column>
-                    </DataTable>
-                </template>
-            </Card>
-        </div>
-    </div>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <UserCreateDialog @object-created="getItems"></UserCreateDialog>
+        </template>
+        <template #table>
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-text="No users found!"
+                blank-slate-title="No Users!"
+                :model-value="items"
+                blank-slate-icon="fa fa-users"
+                @page="onPage"
+                @search="onSearch"
+                :show-search="true"
+                :show-refresh-button="true"
+                @refresh="getItems"
+            >
+                <Column field="username" header="Username"></Column>
+                <Column field="first_name" header="First Name"></Column>
+                <Column field="last_name" header="Last Name"></Column>
+                <Column field="email" header="E-Mail"></Column>
+                <Column field="is_active" header="Is Active?"></Column>
+                <Column header="Actions">
+                    <template #body="slotProps">
+                        <UserUpdateDialog :user="slotProps.data"></UserUpdateDialog>
+                        <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
+                    </template>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>

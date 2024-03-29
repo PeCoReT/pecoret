@@ -4,7 +4,7 @@ import BlankSlate from '@/components/BlankSlate.vue';
 export default {
     name: 'GenericDataTable',
     components: { BlankSlate },
-    emits: ['rowClick', 'page', 'filter', 'sort', 'update:selection', 'update:filters', 'update:modelValue', 'search'],
+    emits: ['rowClick', 'page', 'filter', 'sort', 'update:selection', 'update:filters', 'update:modelValue', 'search', 'refresh'],
     props: {
         modelValue: {
             required: true
@@ -48,6 +48,10 @@ export default {
         },
         removableSort: {
             required: false
+        },
+        showRefreshButton: {
+            required: false,
+            default: false
         }
     },
     data() {
@@ -78,6 +82,9 @@ export default {
         },
         onSearch(data) {
             this.$emit('search', data);
+        },
+        onRefresh(){
+            this.$emit('refresh');
         }
     },
     watch: {
@@ -135,12 +142,19 @@ export default {
         </template>
         <template #header>
             <slot name="header">
-                <div class="grid" v-if="showSearch === true">
-                    <IconField iconPosition="left">
-                        <InputIcon class="fa fa-search"></InputIcon>
-                        <InputText @update:modelValue="onSearch" placeholder="Keyword Search" style="width: 100%" />
-                    </IconField>
-                    <slot name="bulk-edit"></slot>
+                <div class="grid">
+                    <div class="flex col pl-0">
+                        <div v-if="showSearch === true">
+                            <IconField iconPosition="left">
+                                <InputIcon class="fa fa-search"></InputIcon>
+                                <InputText @update:modelValue="onSearch" placeholder="Keyword Search" style="width: 100%" />
+                            </IconField>
+                        </div>
+                        <slot name="bulk-edit"></slot>
+                    </div>
+                    <div v-if="showRefreshButton === true" class="justify-content-end flex col pr-0">
+                        <Button @click="onRefresh" icon="fa fa-refresh" rounded outlined severity="secondary"></Button>
+                    </div>
                 </div>
             </slot>
         </template>

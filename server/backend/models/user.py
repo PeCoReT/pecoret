@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as BaseUserManager
+from django.core.exceptions import ValidationError
 
 
 class UserQuerySet(models.QuerySet):
@@ -32,3 +33,18 @@ class User(AbstractUser):
     @property
     def is_customer(self):
         return self.groups.filter(name="Customer").exists()
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def delete(self, using=None, keep_parents=False):
+        if self.username == 'Ghost':
+            raise ValidationError({'username': 'Ghost user cannot be removed'})
+        return super().delete(using=using, keep_parents=keep_parents)
+
+    def clean(self):
+        if self.username == 'Ghost':
+            if self.is_active is True:
+                raise ValidationError({'is_active': 'Ghost user cannot be activated'})
+        return super().clean()
