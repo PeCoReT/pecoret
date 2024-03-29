@@ -59,7 +59,7 @@ export default {
             this.timer = setInterval(this.getItems, 5 * 1000);
         },
         startAutoUpdatePreviewDocument() {
-            this.timerPreviewDocument = setInterval(this.getPreviewReportDocument, 5 * 1000);
+            this.timerPreviewDocument = setInterval(this.getPreviewReportDocument, 3 * 1000);
         },
         cancelAutpUpdatePreviewDocument() {
             clearInterval(this.timerPreviewDocument);
@@ -69,8 +69,6 @@ export default {
             clearInterval(this.timer);
             this.timer = '';
         },
-        onSort() {},
-        onFilter() {},
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
@@ -168,6 +166,17 @@ export default {
                     this.previewDownloadLoading = false;
                 });
         },
+        getDocumentStatus(document) {
+            if (document.task && !document.task.started && document.task_id) {
+                return 'Status: Scheduled...';
+            } else if (document.task && document.task.success === true) {
+                return 'Status: Document built successfully!';
+            } else if (document.task && document.task.success === false) {
+                return 'Status: Failed building document!';
+            } else {
+                return 'Status: Unknown!';
+            }
+        },
         confirmDialogDelete(documentId) {
             this.$confirm.require({
                 message: 'Do you want to delete this document?',
@@ -224,7 +233,9 @@ export default {
             <ReportTabMenu class="surface-card"></ReportTabMenu>
             <div class="card border-noround-top">
                 <div class="grid">
-                    <div class="col-6"></div>
+                    <div class="col-6">
+                        <span v-if="this.previewDocument && this.previewDocument.pk">{{ this.getDocumentStatus(this.previewDocument )}}</span>
+                    </div>
                     <div class="col-6">
                         <div class="flex justify-content-end">
                             <Button label="Download" icon="fa fa-download" class="mr-2" :disabled="!previewDocument.pk" outlined @click="downloadDocument(previewDocument.pk, true)" :loading="previewDownloadLoading"></Button>
@@ -242,7 +253,7 @@ export default {
                 <div class="grid" v-if="this.previewDocument !== null">
                     <div class="col-6 col-offset-6">
                         <div class="flex justify-content-end">
-                            <small>Created at {{ this.previewDocument.date_created }}</small>
+                            <small v-if="this.previewDocument && this.previewDocument.pk">Created at {{ this.previewDocument.date_created }}</small>
                         </div>
                     </div>
                 </div>
@@ -252,6 +263,11 @@ export default {
                     </template>
                     <Column field="name" header="Header"></Column>
                     <Column field="release_type" header="Release Type"></Column>
+                    <Column header="Status">
+                        <template #body="slotProps">
+                            {{ this.getDocumentStatus(slotProps.data) }}
+                        </template>
+                    </Column>
                     <Column header="Actions">
                         <template #body="slotProps">
                             <Button size="small" outlined icon="fa fa-download" :loading="getDocumentLoadingIndicator(slotProps.data)" :disabled="!slotProps.data.task" label="Download" @click="downloadDocument(slotProps.data.pk)"></Button>
