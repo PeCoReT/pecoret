@@ -1,7 +1,7 @@
 <script>
 import ModalDialog from '@/components/elements/dialogs/ModalDialog.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
-import TechnologyService from "@/service/TechnologyService";
+import TechnologyService from '@/service/TechnologyService';
 
 export default {
     name: 'TechnologyCreateDialog',
@@ -14,7 +14,8 @@ export default {
                 name: null,
                 description: null,
                 cpe: null,
-                homepage: null
+                homepage: null,
+                source_code_url: null
             },
             loading: false,
             service: new TechnologyService()
@@ -55,6 +56,10 @@ export default {
             <div class="field col-12 md:col-6">
                 <label for="homepage">Homepage</label>
                 <InputText v-model="model.homepage"></InputText>
+            </div>
+            <div class="field col-12">
+                <label for="source_code_url">Source Code URL</label>
+                <InputText v-model="model.source_code_url"></InputText>
             </div>
             <div class="field col-12">
                 <label for="description">Description</label>

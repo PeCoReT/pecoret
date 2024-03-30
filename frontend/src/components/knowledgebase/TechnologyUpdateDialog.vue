@@ -38,7 +38,8 @@ export default {
                 name: this.model.name,
                 description: this.model.description,
                 cpe: this.model.cpe,
-                homepage: this.model.homepage
+                homepage: this.model.homepage,
+                source_code_url: this.model.source_code_url
             };
             this.service.patchTechnology(this.$api, this.technology.pk, data).then(() => {
                 this.$toast.add({
@@ -70,6 +71,10 @@ export default {
             <div class="field col-12 md:col-6">
                 <label for="homepage">Homepage</label>
                 <InputText v-model="model.homepage"></InputText>
+            </div>
+            <div class="field col-12">
+                <label for="source_code_url">Source Code URL</label>
+                <InputText v-model="model.source_code_url"></InputText>
             </div>
             <div class="field col-12">
                 <label for="description">Description</label>
