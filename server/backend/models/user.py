@@ -35,7 +35,7 @@ class User(AbstractUser):
         return self.groups.filter(name="Customer").exists()
 
     def save(self, *args, **kwargs):
-        self.full_clean()
+        self.clean()
         return super().save(*args, **kwargs)
 
     def delete(self, using=None, keep_parents=False):
