@@ -2,7 +2,17 @@ from django.db import models
 from pecoret.core.models import TimestampedModel
 
 
+class TechnologyQuerySet(models.QuerySet):
+    def with_source_code(self, value: bool):
+        if value is True:
+            return self.filter(source_code_url__isnull=False)
+        elif value is False:
+            return self.filter(source_code_url__isnull=True)
+        return self.all()
+
+
 class Technology(TimestampedModel):
+    objects = TechnologyQuerySet.as_manager()
     name = models.CharField(max_length=256, unique=True)
     description = models.TextField(null=True, blank=True)
     cpe = models.CharField(max_length=256, null=True, blank=True)
