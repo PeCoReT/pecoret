@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from backend.models.advisory_timeline import AdvisoryTimeline
+from advisories.models.advisory_timeline import AdvisoryTimeline
 
 
 class AdvisoryTimelineSerializer(serializers.ModelSerializer):

@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from advisories.filters import InboxFilter
 from advisories.serializers.advisory_management import AdvisoryAdvisoryManagementSerializer
-from backend.models import Advisory
+from advisories.models import Advisory
 from pecoret.core import mixins
 from pecoret.core import permissions
 from pecoret.core.viewsets import GenericViewSet

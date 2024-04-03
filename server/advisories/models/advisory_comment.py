@@ -10,7 +10,7 @@ class AdvisoryCommentQuerySet(models.QuerySet):
 
 class AdvisoryComment(TimestampedModel):
     objects = AdvisoryCommentQuerySet.as_manager()
-    advisory = models.ForeignKey('backend.Advisory', on_delete=models.CASCADE)
+    advisory = models.ForeignKey('advisories.Advisory', on_delete=models.CASCADE)
     comment = models.TextField()
     user = models.ForeignKey('backend.User', on_delete=models.SET_NULL, null=True)
     user_edit = models.ForeignKey('backend.User', null=True, blank=True, on_delete=CASCADE_USER_TO_GHOST,
@@ -21,3 +21,4 @@ class AdvisoryComment(TimestampedModel):
 
     class Meta:
         ordering = ["date_created"]
+        db_table = 'backend_advisorycomment'

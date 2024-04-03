@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from advisories.fields import LabelField
-from backend.models.advisory import (
+from advisories.models.advisory import (
     Advisory, Severity, AdvisoryStatusChoices, VisibilityChoices, VulnerabilityStatusChoices
 )
 from backend.serializers.report_templates import ReportTemplateMinimalSerializer

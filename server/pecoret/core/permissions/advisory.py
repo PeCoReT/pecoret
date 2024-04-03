@@ -1,6 +1,7 @@
 from rest_framework.permissions import SAFE_METHODS
-from backend.models import Advisory, AdvisoryMembership, APIToken
-from backend.models.advisory import VisibilityChoices
+from backend.models import APIToken
+from advisories.models import AdvisoryMembership
+from advisories.models.advisory import VisibilityChoices, Advisory
 from .base import BasePermission
 from .token.base import TokenPermissionMixin
 

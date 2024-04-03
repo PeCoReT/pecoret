@@ -8,12 +8,12 @@ from extra_settings.models import Setting
 
 from advisories.models.attachment import ImageAttachment
 from pecoret.core.models import TimestampedModel, CASCADE_REPORT_TEMPLATE_DEFAULT
-from .advisory_membership import AdvisoryMembership, Roles
-from .advisory_timeline import AdvisoryTimeline
-from .finding import Severity
-from .report_templates import ReportTemplate
-from .vulnerability import VulnerabilityTemplate
-from .technology import Technology
+from advisories.models.advisory_membership import AdvisoryMembership, Roles
+from advisories.models.advisory_timeline import AdvisoryTimeline
+from backend.models.finding import Severity
+from backend.models.report_templates import ReportTemplate
+from backend.models.vulnerability import VulnerabilityTemplate
+from backend.models.technology import Technology
 
 
 def create_advisory_id():
@@ -228,6 +228,7 @@ class Advisory(TimestampedModel):
 
     class Meta:
         ordering = ["-advisory_id", "date_updated"]
+        db_table = 'backend_advisory'
 
 
 @receiver(models.signals.post_save, sender=Advisory)

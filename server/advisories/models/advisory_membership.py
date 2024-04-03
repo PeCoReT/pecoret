@@ -18,7 +18,7 @@ class AdvisoryMembershipQuerySet(models.QuerySet):
 class AdvisoryMembership(TimestampedModel, PeCoReTBaseModel):
     objects = AdvisoryMembershipQuerySet.as_manager()
     user = models.ForeignKey('backend.User', on_delete=models.CASCADE)
-    advisory = models.ForeignKey('backend.Advisory', on_delete=models.CASCADE)
+    advisory = models.ForeignKey('advisories.Advisory', on_delete=models.CASCADE)
     active_until = models.DateTimeField(blank=True, default=None, null=True)
     role = models.PositiveSmallIntegerField(choices=Roles.choices, default=Roles.READ_ONLY)
 
@@ -27,6 +27,7 @@ class AdvisoryMembership(TimestampedModel, PeCoReTBaseModel):
         unique_together = [
             ("user", "advisory")
         ]
+        db_table = 'backend_advisorymembership'
 
     def clean(self):
         try:

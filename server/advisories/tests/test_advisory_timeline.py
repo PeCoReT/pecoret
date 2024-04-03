@@ -1,6 +1,6 @@
 from rest_framework.test import APITestCase
 from pecoret.core.test import PeCoReTTestCaseMixin
-from backend.models.advisory_timeline import AdvisoryTimeline
+from advisories.models.advisory_timeline import AdvisoryTimeline
 
 
 class AdvisoryTimelineCreateView(APITestCase, PeCoReTTestCaseMixin):

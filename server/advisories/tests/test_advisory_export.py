@@ -1,7 +1,7 @@
 from rest_framework.test import APITestCase
 from pecoret.core.test import PeCoReTTestCaseMixin
 from backend.models.report_templates import ReportTemplate
-from backend.models.advisory import VisibilityChoices
+from advisories.models.advisory import VisibilityChoices
 
 
 class AdvisoryExportViewTestCase(APITestCase, PeCoReTTestCaseMixin):

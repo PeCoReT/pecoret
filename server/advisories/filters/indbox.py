@@ -2,7 +2,7 @@ from django_filters import widgets
 from django_filters import rest_framework as filters
 from pecoret.core.utils.filters import ChoiceFilter
 from advisories.models.label import Label
-from backend.models.advisory import Advisory, AdvisoryStatusChoices
+from advisories.models.advisory import Advisory, AdvisoryStatusChoices
 
 
 class InboxFilter(filters.FilterSet):

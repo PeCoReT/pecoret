@@ -36,9 +36,3 @@ from .assets.web_application import WebApplication
 from .assets.mobile_application import MobileApplication
 from .assets.thick_client import ThickClient
 from .assets.generic import GenericAsset
-
-# advisory
-from .advisory import Advisory
-from .advisory_timeline import AdvisoryTimeline
-from .advisory_membership import AdvisoryMembership
-from .advisory_comment import AdvisoryComment

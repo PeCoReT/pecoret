@@ -1,7 +1,7 @@
 from django.core import mail
 from rest_framework.test import APITestCase
 from pecoret.core.test import PeCoReTTestCaseMixin
-from backend.models.advisory_membership import Roles
+from advisories.models.advisory_membership import Roles
 
 
 class AdvisoryMembershipCreateView(APITestCase, PeCoReTTestCaseMixin):

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from backend.models.advisory_comment import AdvisoryComment
+from advisories.models.advisory_comment import AdvisoryComment
 from backend.serializers.user import MinimalUserSerializer
 
 
