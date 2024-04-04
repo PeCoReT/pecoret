@@ -1,4 +1,4 @@
-import backend.models.advisory
+import advisories.models.advisory
 from django.db import migrations, models
 import pecoret.core.models
 
@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='advisory',
             name='report_template',
-            field=models.ForeignKey(default=backend.models.advisory.default_report_template, on_delete=pecoret.core.models.CASCADE_REPORT_TEMPLATE_DEFAULT, to='backend.reporttemplate'),
+            field=models.ForeignKey(default=advisories.models.advisory.default_report_template, on_delete=pecoret.core.models.CASCADE_REPORT_TEMPLATE_DEFAULT, to='backend.reporttemplate'),
         ),
     ]

@@ -2,7 +2,7 @@ from pecoret.core.serializers import ValuedChoiceField, VulnerabilityTemplateIdF
 from advisories.serializers.advisory import BaseAdvisorySerializer
 from advisories import fields
 from backend.serializers.vulnerability import VulnerabilityTemplateSerializer
-from backend.models.advisory import AdvisoryStatusChoices, VisibilityChoices, VulnerabilityStatusChoices
+from advisories.models.advisory import AdvisoryStatusChoices, VisibilityChoices, VulnerabilityStatusChoices
 from .label import LabelSerializer
 
 

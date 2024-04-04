@@ -2,14 +2,13 @@ from rest_framework.test import APITestCase
 from django.core import mail
 from backend.models import (
     VulnerabilityTemplate,
-    Advisory,
     ProjectVulnerability,
     ReportTemplate,
     Technology
 )
 from backend.models.finding import FindingStatus, Severity
 from backend.models.account import Account
-from backend.models.advisory import VisibilityChoices
+from advisories.models.advisory import VisibilityChoices, Advisory
 from pecoret.core.test import PeCoReTTestCaseMixin
 
 

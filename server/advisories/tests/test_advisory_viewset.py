@@ -1,7 +1,7 @@
 from rest_framework.test import APITestCase
 from pecoret.core.test import PeCoReTTestCaseMixin
 from backend.models import VulnerabilityTemplate, Technology
-from backend.models.advisory import Severity, Advisory, VisibilityChoices
+from advisories.models.advisory import Severity, Advisory, VisibilityChoices
 from advisories.models.label import Label
 
 

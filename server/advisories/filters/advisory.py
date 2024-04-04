@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from backend.models.advisory import Advisory, AdvisoryStatusChoices
+from advisories.models.advisory import Advisory, AdvisoryStatusChoices
 from pecoret.core.utils.filters import ChoiceFilter
 
 

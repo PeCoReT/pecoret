@@ -1,6 +1,6 @@
 from django.http.response import HttpResponse
 from rest_framework.decorators import action
-from backend.models.advisory import Advisory, Roles
+from advisories.models.advisory import Advisory, Roles
 from advisories.serializers.advisory import (
     AdvisorySerializer,
     AdvisoryCreateSerializer,

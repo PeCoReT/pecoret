@@ -1,5 +1,5 @@
 from rest_framework.test import APITestCase
-from backend.models import AdvisoryComment
+from advisories.models import AdvisoryComment
 from pecoret.core.test import PeCoReTTestCaseMixin
 
 

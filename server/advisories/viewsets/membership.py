@@ -1,7 +1,6 @@
 from django_q.tasks import async_task
-from backend.models.advisory_membership import AdvisoryMembership
 from backend.tasks import mail
-from backend.models.advisory_membership import Roles
+from advisories.models.advisory_membership import AdvisoryMembership, Roles
 from advisories.serializers.membership import (
     AdvisoryMembershipSerializer,
     AdvisoryMembershipCreateSerializer,

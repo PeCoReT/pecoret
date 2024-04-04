@@ -4,7 +4,7 @@ from pecoret.core import permissions
 from pecoret.core.viewsets import PeCoReTModelViewSet
 from advisories.models.attachment import ImageAttachment
 from advisories.serializers.attachment import ImageAttachmentSerializer
-from backend.models.advisory_membership import Roles
+from advisories.models.advisory_membership import Roles
 
 
 class ImageAttachmentViewSet(PeCoReTModelViewSet):

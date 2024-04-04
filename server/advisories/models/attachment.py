@@ -26,7 +26,7 @@ class ImageAttachmentQuerySet(models.QuerySet):
 
 class ImageAttachment(TimestampedModel):
     objects = ImageAttachmentQuerySet.as_manager()
-    advisory = models.ForeignKey('backend.Advisory', on_delete=models.CASCADE)
+    advisory = models.ForeignKey('advisories.Advisory', on_delete=models.CASCADE)
     image = models.ImageField(max_length=256, upload_to=upload_path)
     name = models.CharField(max_length=128)
 

@@ -8,8 +8,8 @@ from backend.models import (
     User, Project, Membership, ReportTemplate, WebApplication,
     Finding
 )
-from backend.models import advisory
-from backend.models.advisory_membership import AdvisoryMembership
+from advisories.models import advisory
+from advisories.models.advisory_membership import AdvisoryMembership
 from backend.models.api_token import APIToken, AccessChoices
 from backend.models.membership import Roles
 from checklists.models import (

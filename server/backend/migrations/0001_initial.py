@@ -1,4 +1,4 @@
-import backend.models.advisory
+import advisories.models.advisory
 from django.conf import settings
 import django.contrib.auth.models
 import django.contrib.auth.validators
@@ -154,7 +154,7 @@ class Migration(migrations.Migration):
                 (
                     "advisory_id",
                     models.CharField(
-                        default=backend.models.advisory.create_advisory_id,
+                        default=advisories.models.advisory.create_advisory_id,
                         max_length=28,
                         primary_key=True,
                         serialize=False,

@@ -1,5 +1,5 @@
-from backend.models.advisory_timeline import AdvisoryTimeline
-from backend.models.advisory_membership import Roles
+from advisories.models.advisory_timeline import AdvisoryTimeline
+from advisories.models.advisory_membership import Roles
 from advisories.serializers.timeline import AdvisoryTimelineSerializer
 from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions

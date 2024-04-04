@@ -2,11 +2,11 @@ from django.contrib.auth.models import Group
 from django_q.tasks import async_task
 from rest_framework import serializers
 from pecoret.core.serializers import ValuedChoiceField
-from backend.models.advisory_membership import AdvisoryMembership, Roles
 from backend.models.user import User
 from backend.tasks import mail
 from backend.serializers.user import MinimalUserSerializer
-from backend.models.advisory import VisibilityChoices
+from advisories.models.advisory import VisibilityChoices
+from advisories.models.advisory_membership import AdvisoryMembership, Roles
 
 
 class AdvisoryMembershipSerializer(serializers.ModelSerializer):
