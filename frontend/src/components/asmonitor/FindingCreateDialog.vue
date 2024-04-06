@@ -4,10 +4,11 @@ import ASMonitorService from '@/service/ASMonitorService';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import SeveritySelectField from '@/components/elements/forms/SeveritySelectField.vue';
 import VulnerabilityService from '@/service/VulnerabilityService';
+import TagSelectField from '@/components/asmonitor/TagSelectField.vue';
 
 export default {
     name: 'FindingCreateDialog',
-    components: { MarkdownEditor, ModalDialog, SeveritySelectField },
+    components: { TagSelectField, MarkdownEditor, ModalDialog, SeveritySelectField },
     emits: ['object-created'],
     data() {
         return {
@@ -17,7 +18,8 @@ export default {
                 severity: null,
                 cwe: null,
                 proof_text: null,
-                target: null
+                target: null,
+                tags: null
             },
             targetChoices: null,
             cweChoices: null,
@@ -91,6 +93,10 @@ export default {
             <div class="field col-12">
                 <label for="cwe">CWE-ID</label>
                 <Dropdown id="cwe" filter optionLabel="name" optionValue="pk" :options="cweChoices" v-model="model.cwe" @filter="onFilterCWE" @focus="getCWEchoices"></Dropdown>
+            </div>
+            <div class="field col-12">
+                <label for="tags">Tags</label>
+                <TagSelectField v-model="model.tags"></TagSelectField>
             </div>
             <div class="field col-12">
                 <label for="description">Proof</label>

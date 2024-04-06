@@ -13,7 +13,7 @@ class TargetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Target
         fields = [
-            'pk', 'name', 'ip', 'description', 'technologies', 'tags', 'date_updated', 'date_created'
+            'pk', 'name', 'ip', 'description', 'technologies', 'tags', 'date_updated', 'date_created', 'last_seen'
         ]
 
 

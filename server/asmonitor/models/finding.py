@@ -27,6 +27,7 @@ class Finding(TimestampedModel):
     target = models.ForeignKey('asmonitor.Target', on_delete=models.CASCADE)
     status = models.PositiveSmallIntegerField(choices=Status.choices, default=Status.OPEN)
     program = models.ForeignKey('asmonitor.Program', on_delete=models.CASCADE)
+    tags = models.ManyToManyField('asmonitor.Tag', blank=True)
 
     class Meta:
         ordering = ['-date_created']

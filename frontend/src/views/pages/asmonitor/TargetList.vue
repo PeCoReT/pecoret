@@ -79,6 +79,7 @@ export default {
             this.service
                 .getTargets(this.$api, this.programId, data)
                 .then((response) => {
+                    this.totalRecords = response.data.count;
                     this.items = response.data.results;
                 })
                 .finally(() => {
