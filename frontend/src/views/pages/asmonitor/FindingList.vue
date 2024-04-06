@@ -5,10 +5,11 @@ import SeverityBadge from '@/components/SeverityBadge.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 import FindingBulkEditDialog from '@/components/asmonitor/dialogs/FindingBulkEditDialog.vue';
+import TagBadgeButton from '@/components/asmonitor/TagBadgeButton.vue';
 
 export default {
     name: 'FindingList',
-    components: { FindingBulkEditDialog, GenericDataTable, BaseListLayout, FindingCreateDialog, SeverityBadge },
+    components: { TagBadgeButton, FindingBulkEditDialog, GenericDataTable, BaseListLayout, FindingCreateDialog, SeverityBadge },
     data() {
         return {
             breadcrumbs: [
@@ -182,6 +183,11 @@ export default {
                 <Column field="status" header="Status" :showFilterMatchModes="false">
                     <template #filter="{ filterModel }">
                         <Dropdown v-model="filterModel.value" :options="service.getStatusChoices()" class="p-column-filter" showClear optionLabel="name" optionValue="value"></Dropdown>
+                    </template>
+                </Column>
+                <Column field="tags" header="Tags" :showFilterMatchModes="false">
+                    <template #body="slotProps">
+                        <TagBadgeButton :label="tag" v-for="tag in slotProps.data.tags" :key="tag.pk"></TagBadgeButton>
                     </template>
                 </Column>
                 <Column header="Actions">

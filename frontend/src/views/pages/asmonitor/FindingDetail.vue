@@ -4,10 +4,11 @@ import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
 import { findingStatusChoices, severityChoices } from '@/utils/constants';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
+import FindingUpdateDialog from '@/components/asmonitor/dialogs/FindingUpdateDialog.vue';
 
 export default {
     name: 'FindingDetail',
-    components: { MarkdownEditor, InfoCardWithForm, DetailCardWithIcon },
+    components: { FindingUpdateDialog, MarkdownEditor, InfoCardWithForm, DetailCardWithIcon },
     data() {
         return {
             finding: { target: {}, cwe: {} },
@@ -42,7 +43,14 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.deleteFinding();
+                    this.service.deleteFinding(this.$api, this.programId, this.findingId).then(() => {
+                        this.$router.push({
+                            name: 'ASMonitorFindingList',
+                            params: {
+                                programId: this.programId
+                            }
+                        });
+                    });
                 }
             });
         },
@@ -77,6 +85,7 @@ export default {
         <div class="col-6"></div>
         <div class="col-6">
             <div class="flex justify-content-end">
+                <FindingUpdateDialog :finding="finding" :program-id="this.programId" @object-updated="getFinding"></FindingUpdateDialog>
                 <Button label="Delete" severity="danger" outlined icon="fa fa-trash" @click="confirmDialogDelete"></Button>
             </div>
         </div>
