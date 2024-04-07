@@ -9,15 +9,15 @@ class APITokenSerializer(serializers.ModelSerializer):
     scope_companies = ValuedChoiceField(AccessChoices.choices)
     scope_advisories = ValuedChoiceField(AccessChoices.choices)
     scope_asmonitor = ValuedChoiceField(AccessChoices.choices)
+    scope_knowledgebase = ValuedChoiceField(AccessChoices.choices)
 
     class Meta:
         model = APIToken
         fields = [
             "pk", "name", "date_last_used", "date_created",
-            "prefix", "scope_advisories",
+            "prefix", "scope_advisories", "scope_user",
             "scope_all_projects", "scope_companies",
-            "scope_user",
-            "scope_asmonitor", "date_expire"
+            "scope_asmonitor", "scope_knowledgebase", "date_expire"
         ]
         read_only_fields = ["date_last_used"]
 
