@@ -8,7 +8,7 @@ from backend.filters.technology import TechnologyFilter
 class TechnologyViewSet(PeCoReTModelViewSet):
     queryset = Technology.objects.all()
     search_fields = ['cpe', 'name']
-    api_scope = 'scope_misc'
+    api_scope = 'scope_knowledgebase'
     serializer_class = TechnologySerializer
     filterset_class = TechnologyFilter
     permission_classes = [

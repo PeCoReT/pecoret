@@ -1,7 +1,7 @@
 from django.contrib.auth.hashers import check_password, make_password
-from django.utils.crypto import get_random_string
-from django.utils import timezone
 from django.db import models
+from django.utils import timezone
+from django.utils.crypto import get_random_string
 
 
 class AccessChoices(models.IntegerChoices):
@@ -68,6 +68,8 @@ class APIToken(models.Model):
                                                           default=AccessChoices.NO_ACCESS)
     scope_user = models.PositiveSmallIntegerField(choices=AccessChoices.choices, default=AccessChoices.NO_ACCESS)
     scope_asmonitor = models.PositiveSmallIntegerField(choices=AccessChoices.choices, default=AccessChoices.NO_ACCESS)
+    scope_knowledgebase = models.PositiveSmallIntegerField(choices=AccessChoices.choices,
+                                                           default=AccessChoices.NO_ACCESS)
 
     def is_expired(self):
         if not self.date_expire:

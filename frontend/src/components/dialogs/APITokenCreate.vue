@@ -15,7 +15,8 @@ export default {
                 scope_user: 'No Access',
                 scope_companies: 'No Access',
                 scope_asmonitor: 'No Access',
-                scope_advisories: 'No Access'
+                scope_advisories: 'No Access',
+                scope_knowledgebase: 'No Access'
             },
             service: new UserService(),
             accessChoices: [
@@ -89,6 +90,10 @@ export default {
             <div class="field col-12">
                 <label for="scope_asmonitor">Scope Attack Surface?</label>
                 <Dropdown v-model="this.model.scope_asmonitor" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Dropdown>
+            </div>
+            <div class="field col-12">
+                <label for="scope_kb">Scope Knowledge Base?</label>
+                <Dropdown v-model="this.model.scope_knowledgebase" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Dropdown>
             </div>
         </div>
 
