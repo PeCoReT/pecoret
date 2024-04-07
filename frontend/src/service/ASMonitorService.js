@@ -164,4 +164,13 @@ export default class ASMonitorService {
         let url = `/asmonitor/programs/${programId}/stats_findings_by_date/`;
         return api.get(url);
     }
+
+    getGlobalTargets(api, params) {
+        let config = {};
+        if (params) {
+            config['params'] = params;
+        }
+        let url = '/asmonitor/targets/';
+        return api.get(url, config);
+    }
 }
