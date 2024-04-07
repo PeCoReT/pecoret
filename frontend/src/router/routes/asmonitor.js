@@ -36,6 +36,11 @@ const asmonitorRoutes = [
                 path: '/attack-surface/findings',
                 name: 'ASMonitorGlobalFindingList',
                 component: () => import('@/views/pages/asmonitor/GlobalFindingList.vue')
+            },
+            {
+                path: '/attack-surface/targets',
+                name: 'ASMonitorGlobalTargetList',
+                component: () => import('@/views/pages/asmonitor/GlobalTargetList.vue')
             }
         ]
     }
