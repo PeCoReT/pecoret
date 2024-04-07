@@ -15,7 +15,8 @@ export default {
                 description: null,
                 cpe: null,
                 homepage: null,
-                source_code_url: null
+                source_code_url: null,
+                vendor: null
             },
             loading: false,
             service: new TechnologyService()
@@ -56,6 +57,10 @@ export default {
             <div class="field col-12 md:col-6">
                 <label for="homepage">Homepage</label>
                 <InputText v-model="model.homepage"></InputText>
+            </div>
+            <div class="field col-12">
+                <label for="vendor">Vendor</label>
+                <InputText v-model="model.vendor"></InputText>
             </div>
             <div class="field col-12">
                 <label for="source_code_url">Source Code URL</label>

@@ -7,6 +7,6 @@ class TechnologySerializer(serializers.ModelSerializer):
     class Meta:
         model = Technology
         fields = [
-            'pk', 'name', 'homepage', 'date_created', 'date_updated',
+            'pk', 'name', 'homepage', 'date_created', 'date_updated', 'vendor',
             'cpe', 'description', 'source_code_url', 'source_code_available'
         ]
