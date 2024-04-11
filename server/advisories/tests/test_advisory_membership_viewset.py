@@ -1,7 +1,8 @@
 from django.core import mail
 from rest_framework.test import APITestCase
-from pecoret.core.test import PeCoReTTestCaseMixin
+
 from advisories.models.advisory_membership import Roles
+from pecoret.core.test import PeCoReTTestCaseMixin
 
 
 class AdvisoryMembershipCreateView(APITestCase, PeCoReTTestCaseMixin):
@@ -15,20 +16,7 @@ class AdvisoryMembershipCreateView(APITestCase, PeCoReTTestCaseMixin):
             "role": Roles.READ_ONLY.label,
             "active_until": "2099-10-10",
         }
-
-    def test_allowed(self):
-        self.client.force_login(self.advisory_manager1)
-        self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
-        self.assertEqual(len(mail.outbox), 1)
-
-    def test_allowed_new_user(self):
-        self.client.force_login(self.advisory_manager1)
-        self.data["email"] = "mynewrandommail@local.host"
-        self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
-        self.assertEqual(len(mail.outbox), 2)
-
-    def test_forbidden(self):
-        users = [
+        self.forbidden_users = [
             self.pentester2,
             self.pentester1,
             self.read_only1,
@@ -39,11 +27,32 @@ class AdvisoryMembershipCreateView(APITestCase, PeCoReTTestCaseMixin):
             self.vendor2,
             self.read_only_vendor,
         ]
-        for user in users:
+
+    def test_allowed(self):
+        self.client.force_login(self.advisory_manager1)
+        self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
+        self.assertEqual(len(mail.outbox), 1)
+
+    def test_api_token_allowed(self):
+        self.api_token_check(self.advisory_manager1, 'scope_advisories', self.url, self.client.post, 403, 201, 403,
+                             data=self.data)
+
+    def test_allowed_new_user(self):
+        self.client.force_login(self.advisory_manager1)
+        self.data["email"] = "mynewrandommail@local.host"
+        self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
+        self.assertEqual(len(mail.outbox), 2)
+
+    def test_forbidden(self):
+        for user in self.forbidden_users:
             self.client.force_login(user)
             self.basic_status_code_check(
                 self.url, self.client.post, 403, data=self.data
             )
+
+    def test_api_token_forbidden(self):
+        for user in self.forbidden_users:
+            self.api_token_check(user, 'scope_advisories', self.url, self.client.post, 403, 403, 403, data=self.data)
 
     def test_draft_forbidden(self):
         self.url = self.get_url(
@@ -77,20 +86,10 @@ class AdvisoryMembershipListView(APITestCase, PeCoReTTestCaseMixin):
         self.url = self.get_url(
             "advisories:membership-list", advisory=self.advisory1.pk
         )
-
-    def test_advisory_management(self):
-        self.client.force_login(self.advisory_manager1)
-        response = self.basic_status_code_check(self.url, self.client.get, 200)
-        self.assertEqual(response.json()["count"], 3)
-
-    def test_allowed(self):
-        users = [self.pentester1, self.vendor1, self.read_only_vendor]
-        for user in users:
-            self.client.force_login(user)
-            self.basic_status_code_check(self.url, self.client.get, 200)
-
-    def test_forbidden(self):
-        users = [
+        self.users_allowed = [
+            self.pentester1, self.vendor1, self.read_only_vendor
+        ]
+        self.forbidden_users = [
             self.vendor2,
             self.management1,
             self.management2,
@@ -98,9 +97,29 @@ class AdvisoryMembershipListView(APITestCase, PeCoReTTestCaseMixin):
             self.user1,
             self.read_only1,
         ]
-        for user in users:
+
+    def test_advisory_management(self):
+        self.client.force_login(self.advisory_manager1)
+        response = self.basic_status_code_check(self.url, self.client.get, 200)
+        self.assertEqual(response.json()["count"], 3)
+
+    def test_allowed(self):
+        for user in self.users_allowed:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.get, 200)
+
+    def test_api_allowed(self):
+        for user in self.users_allowed:
+            self.api_token_check(user, 'scope_advisories', self.url, self.client.get, 200, 200, 403)
+
+    def test_forbidden(self):
+        for user in self.forbidden_users:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.get, 403)
+
+    def test_api_forbidden(self):
+        for user in self.forbidden_users:
+            self.api_token_check(user, 'scope_advisories', self.url, self.client.get, 403, 403, 403)
 
     def test_draft_allowed(self):
         self.url = self.get_url(
@@ -110,6 +129,12 @@ class AdvisoryMembershipListView(APITestCase, PeCoReTTestCaseMixin):
         for user in users:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.get, 200)
+
+    def test_api_draft_allowed(self):
+        self.url = self.get_url("advisories:membership-list", advisory=self.advisory2.pk)
+        users = [self.pentester2, self.vendor2]
+        for user in users:
+            self.api_token_check(user, 'scope_advisories', self.url, self.client.get, 200, 200, 403)
 
     def test_draft_forbidden(self):
         self.url = self.get_url(
@@ -128,6 +153,23 @@ class AdvisoryMembershipListView(APITestCase, PeCoReTTestCaseMixin):
         for user in users:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.get, 403)
+
+    def test_api_token_draft_forbidden(self):
+        self.url = self.get_url(
+            "advisories:membership-list", advisory=self.advisory2.pk
+        )
+        users = [
+            self.vendor1,
+            self.management2,
+            self.management1,
+            self.pentester1,
+            self.user1,
+            self.read_only1,
+            self.advisory_manager1,
+            self.read_only_vendor,
+        ]
+        for user in users:
+            self.api_token_check(user, 'scope_advisories', self.url, self.client.get, 403, 403, 403)
 
 
 class AdvisoryMembershipUpdateView(APITestCase, PeCoReTTestCaseMixin):

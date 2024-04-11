@@ -11,6 +11,7 @@ from checklists.filters.checklists import AssetChecklistFilter
 
 class ChecklistViewSet(PeCoReTModelViewSet):
     queryset = Checklist.objects.none()
+    api_scope = 'scope_knowledgebase'
     permission_classes = [
         permissions.GroupPermission(
             read_write_groups=[
@@ -34,6 +35,7 @@ class AssetChecklistViewSet(PeCoReTNoUpdateViewSet):
     search_fields = ["name"]
     permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY]
     serializer_class = AssetChecklistSerializer
+    api_scope = 'scope_all_projects'
 
     def get_queryset(self):
         return AssetChecklist.objects.for_project(self.request.project)

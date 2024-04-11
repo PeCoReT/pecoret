@@ -36,7 +36,7 @@ class FindingListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_api_token_forbidden(self):
         for user in self.forbidden_users:
-            self.api_token_check(user, 'scope_asmonitor', self.url, self.client.post, 403, 403, 403)
+            self.api_token_check(user, 'scope_asmonitor', self.url, self.client.get, 403, 403, 403)
 
 
 class FindingCreateView(APITestCase, PeCoReTTestCaseMixin):

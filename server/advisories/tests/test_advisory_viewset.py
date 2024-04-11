@@ -9,28 +9,33 @@ class AdvisoryListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url("advisories:advisory-list")
+        self.allowed_users = [
+            self.pentester1, self.pentester2,
+            self.advisory_manager1, self.read_only1,
+            self.vendor1, self.vendor2,
+            self.read_only_vendor,
+            self.management1, self.management2,
+        ]
 
     def test_status_allowed(self):
-        users = [
-            self.pentester1,
-            self.pentester2,
-            self.advisory_manager1,
-            self.read_only1,
-            self.vendor1,
-            self.vendor2,
-            self.read_only_vendor,
-            self.management1,
-            self.management2,
-        ]
-        for user in users:
+        for user in self.allowed_users:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.get, 200)
+
+    def test_api_token_allowed(self):
+        for user in self.allowed_users:
+            self.api_token_check(user, 'scope_advisories', self.url, self.client.get, 200, 200, 403)
 
     def test_forbidden(self):
         users = [self.user1]
         for user in users:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.get, 403)
+
+    def test_api_token_forbidden(self):
+        users = [self.user1]
+        for user in users:
+            self.api_token_check(user, 'scope_advisories', self.url, self.client.get, 403, 403, 403)
 
     def test_response_length(self):
         self.client.force_login(self.pentester1)
@@ -68,22 +73,13 @@ class AdvisoryCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             "internal_name": "test",
             "labels": []
         }
-
-    def test_forbidden(self):
-        users = [
+        self.users_forbidden = [
             self.user1,
             self.vendor1,
             self.vendor2,
             self.read_only_vendor,
         ]
-        for user in users:
-            self.client.force_login(user)
-            self.basic_status_code_check(
-                self.url, self.client.post, 403, data=self.data
-            )
-
-    def test_allowed(self):
-        users = [
+        self.users_allowed = [
             self.pentester1,
             self.read_only1,
             self.pentester2,
@@ -91,11 +87,28 @@ class AdvisoryCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.management1,
             self.management2,
         ]
-        for user in users:
+
+    def test_forbidden(self):
+        for user in self.users_forbidden:
+            self.client.force_login(user)
+            self.basic_status_code_check(
+                self.url, self.client.post, 403, data=self.data
+            )
+
+    def test_api_token_forbidden(self):
+        for user in self.users_forbidden:
+            self.api_token_check(user, 'scope_advisories', self.url, self.client.post, 403, 403, 403, data=self.data)
+
+    def test_allowed(self):
+        for user in self.users_allowed:
             self.client.force_login(user)
             self.basic_status_code_check(
                 self.url, self.client.post, 201, data=self.data
             )
+
+    def test_api_token_allowed(self):
+        for user in self.users_allowed:
+            self.api_token_check(user, 'scope_advisories', self.url, self.client.post, 403, 201, 403, data=self.data)
 
 
 class AdvisoryUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
