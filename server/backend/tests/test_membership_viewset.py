@@ -8,19 +8,26 @@ class MembershipListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url("backend:membership-list", project=self.project1.pk)
+        self.users_allowed = [
+            self.management1, self.pentester1, self.read_only1
+        ]
+        self.users_forbidden = [
+            self.user1, self.pentester2, self.management2
+        ]
 
     def test_status_code_allowed(self):
-        users = [
-            self.management1, self.pentester1, self.read_only1,
-        ]
-        for user in users:
+        for user in self.users_allowed:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.get, 200)
 
     def test_status_code_forbidden(self):
-        for user in [self.user1, self.pentester2, self.management2]:
+        for user in self.users_forbidden:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.get, 403)
+
+    def test_api_token_forbidden(self):
+        for user in self.users_forbidden:
+            self.api_token_check(user, 'scope_all_projects', self.url, self.client.get, 403, 403, 403)
 
 
 class MembershipCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):

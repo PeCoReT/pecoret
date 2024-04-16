@@ -8,21 +8,28 @@ class CompanyInformationCreateView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.url = self.get_url("backend:companies:information-list", company=self.project1.company.pk)
         self.data = {"text": "test123"}
-
-    def test_allowed(self):
-        users = [
+        self.users_allowed = [
             self.pentester1, self.management1, self.read_only1, self.management2, self.customer1
         ]
-        for user in users:
+        self.users_forbidden = [
+            self.vendor1, self.vendor2, self.user1, self.advisory_manager1, self.pentester2, self.customer2
+        ]
+
+    def test_allowed(self):
+        for user in self.users_allowed:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
 
+    def test_api_token_allowed(self):
+        for user in self.users_allowed:
+            self.api_token_check(user, 'scope_companies', self.url, self.client.post, 403, 201, 403, data=self.data)
+
+    def test_api_token_forbidden(self):
+        for user in self.users_forbidden:
+            self.api_token_check(user, 'scope_companies', self.url, self.client.post, 403, 403, 403, data=self.data)
+
     def test_forbidden(self):
-        users = [
-            self.vendor1, self.vendor2, self.user1, self.advisory_manager1, self.pentester2,
-            self.customer2
-        ]
-        for user in users:
+        for user in self.users_forbidden:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.post, 403, data=self.data)
 
@@ -67,24 +74,31 @@ class CompanyInformationListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url("backend:companies:information-list", company=self.project1.company.pk)
+        self.users_allowed = [
+            self.pentester1, self.read_only1, self.management2, self.management1, self.customer1
+        ]
+        self.users_forbidden = [
+            self.user1, self.advisory_manager1, self.vendor1, self.vendor2, self.pentester2,
+            self.customer2
+        ]
 
     def test_allowed(self):
-        users = [
-            self.pentester1, self.read_only1, self.management2, self.management1,
-            self.customer1
-        ]
-        for user in users:
+        for user in self.users_allowed:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.get, 200)
 
     def test_forbidden(self):
-        users = [
-            self.user1, self.advisory_manager1, self.vendor1, self.vendor2, self.pentester2,
-            self.customer2
-        ]
-        for user in users:
+        for user in self.users_forbidden:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.get, 403)
+
+    def test_api_token_allowed(self):
+        for user in self.users_allowed:
+            self.api_token_check(user, 'scope_companies', self.url, self.client.get, 200, 200, 403)
+
+    def test_api_token_forbidden(self):
+        for user in self.users_forbidden:
+            self.api_token_check(user, 'scope_companies', self.url, self.client.get, 403, 403, 403)
 
 
 class CompanyInformationUpdateView(APITestCase, PeCoReTTestCaseMixin):

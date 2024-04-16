@@ -28,18 +28,30 @@ class FindingListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             user=self.pentester2,
         )
         self.url = self.get_url("backend:finding-list", project=self.project1.pk)
+        self.user_allowed = [
+            self.read_only1, self.pentester1, self.management1
+        ]
+        self.user_forbidden = [
+            self.user1, self.management2, self.pentester2
+        ]
 
     def test_status_allowed(self):
-        users = [self.read_only1, self.pentester1, self.management1]
-        for user in users:
+        for user in self.user_allowed:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.get, 200)
 
     def test_status_forbidden(self):
-        users = [self.user1, self.management2, self.pentester2]
-        for user in users:
+        for user in self.user_forbidden:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.get, 403)
+
+    def test_api_token_allowed(self):
+        for user in self.user_allowed:
+            self.api_token_check(user, 'scope_all_projects', self.url, self.client.get, 200, 200, 403)
+
+    def test_api_token_forbidden(self):
+        for user in self.user_forbidden:
+            self.api_token_check(user, 'scope_all_projects', self.url, self.client.get, 403, 403, 403)
 
     def test_project(self):
         self.client.force_login(self.pentester1)

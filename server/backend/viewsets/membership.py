@@ -12,7 +12,7 @@ class MembershipViewSet(PeCoReTModelViewSet):
     queryset = Membership.objects.none()
     filterset_class = None
     search_fields = []
-    api_scope = None
+    api_scope = None  # disable changing memberships through api tokens
     permission_classes = [permissions.PRESET_OWNER_OR_READ_ONLY]
     serializer_class = MembershipSerializer
 

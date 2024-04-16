@@ -64,6 +64,10 @@ class CompanyPermission(BasePermission, TokenPermissionMixin):
             request.company = company
             return True
         if user.is_customer and user.company.pk == company.pk:
+            # customers should not have api tokens at the moment, but check permissions to prevent future errors
+            if isinstance(request.auth, APIToken):
+                if not self.has_token_permission(request, view, None):
+                    return False
             request.company = company
             return True
         if request.method not in SAFE_METHODS:

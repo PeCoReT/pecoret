@@ -8,7 +8,7 @@ class APITokenViewSet(PeCoReTNoUpdateViewSet):
     queryset = APIToken.objects.none()
     search_fields = ["name"]
     serializer_class = APITokenSerializer
-    api_scope = None
+    api_scope = None  # do not allow api tokens to configure api tokens
     permission_classes = [
         permissions.GroupPermission(
             read_write_groups=[
