@@ -10,6 +10,12 @@ class GenericAssetCreateView(APITestCase, PeCoReTTestCaseMixin):
         self.url = self.get_url("backend:generic-asset-list", project=self.project1.pk)
         self.data = {"name": 'test', "environment": Environment.UNKNOWN.label,
                      "accessible": AssetAccessibility.UNKNOWN.label}
+        self.users_allowed = [
+            self.pentester1, self.management1
+        ]
+        self.users_forbidden = [
+            self.read_only_vendor, self.read_only1, self.pentester2, self.user1, self.management2
+        ]
 
     def test_pentester1(self):
         self.client.force_login(self.pentester1)
@@ -20,12 +26,18 @@ class GenericAssetCreateView(APITestCase, PeCoReTTestCaseMixin):
         self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
 
     def test_forbidden(self):
-        users = [
-            self.read_only1, self.management2, self.pentester2, self.user1
-        ]
-        for user in users:
+        for user in self.users_forbidden:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.post, 403, data=self.data)
+
+    def test_api_token_allowed(self):
+        for user in self.users_allowed:
+            self.data['name'] = user.username
+            self.api_token_check(user, 'scope_all_projects', self.url, self.client.post, 403, 201, 403, data=self.data)
+
+    def test_api_token_forbidden(self):
+        for user in self.users_forbidden:
+            self.api_token_check(user, 'scope_all_projects', self.url, self.client.post, 403, 403, 403, data=self.data)
 
 
 class HostUpdateView(APITestCase, PeCoReTTestCaseMixin):

@@ -1,6 +1,5 @@
 from rest_framework.test import APITestCase
 from pecoret.core.test import PeCoReTTestCaseMixin
-from backend.models.api_token import APIToken
 
 
 class APITokenCreateView(APITestCase, PeCoReTTestCaseMixin):

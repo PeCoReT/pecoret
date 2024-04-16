@@ -28,6 +28,7 @@ class ItemViewSet(PeCoReTModelViewSet):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     search_fields = ['name', 'item_id']
+    api_scope = 'scope_knowledgebase'
     permission_classes = [
         permissions.GroupPermission(
             read_only_groups=[

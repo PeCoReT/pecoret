@@ -144,6 +144,7 @@ class UserViewSet(PeCoReTModelViewSet):
 class GroupViewSet(PeCoReTReadOnlyModelViewSet):
     queryset = Group.objects.all()
     filterset_class = None
+    api_scope = None  # do not allow api access
     search_fields = ["name"]
     permission_classes = [
         permissions.GroupPermission(read_write_groups=[permissions.Groups.SUPERUSER], read_only_groups=[])

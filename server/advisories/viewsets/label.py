@@ -13,6 +13,7 @@ class LabelViewSet(ModelViewSet):
     search_fields = ["name", "description"]
     ordering_fields = []
     serializer_class = LabelSerializer
+    api_scope = 'scope_advisories'
 
     def get_queryset(self):
         return Label.objects.all()

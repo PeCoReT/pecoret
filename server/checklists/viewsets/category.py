@@ -1,6 +1,3 @@
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework import status
 from pecoret.core.viewsets import PeCoReTReadOnlyModelViewSet, PeCoReTModelViewSet
 from pecoret.core import permissions
 from checklists.models import AssetCategory, Category
@@ -16,6 +13,7 @@ class AssetCategoryViewSet(PeCoReTReadOnlyModelViewSet):
     serializer_class = AssetCategorySerializer
     filterset_class = AssetCategoryFilter
     search_fields = ["name", "assetitem__name"]
+    api_scope = 'scope_all_projects'
 
     def get_queryset(self):
         return AssetCategory.objects.for_project(self.request.project)
@@ -33,5 +31,6 @@ class CategoryViewSet(PeCoReTModelViewSet):
             ]
         )
     ]
+    api_scope = 'scope_knowledgebase'
     search_fields = ['name', 'category_id']
     serializer_class = CategorySerializer
