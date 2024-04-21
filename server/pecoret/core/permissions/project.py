@@ -1,5 +1,6 @@
 from rest_framework.permissions import SAFE_METHODS
-from backend.models import Project, APIToken
+from backend.models import APIToken
+from backend.models.project import Project, Visibility
 from backend.models.membership import Membership
 from .base import BasePermission
 from .token.base import TokenPermissionMixin
@@ -43,10 +44,14 @@ class ProjectPermission(BasePermission, TokenPermissionMixin):
 
     def has_object_permission(self, request, view, obj):
         project = self.project_from_request(request)
-        if not project:
+        if not project or not request.user.is_authenticated:
             return False
-        if not request.user.is_authenticated:
-            return False
+        # allow public projects for pentesters
+        if project.visibility == Visibility.PENTESTERS:
+            if request.user.groups.filter(name='Pentester').exists():
+                request.project = project
+                return True
+
         membership = self._check_project_membership(request.user, project)
         if not membership.exists():
             return False

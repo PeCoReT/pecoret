@@ -18,7 +18,8 @@ export default {
                 language: null,
                 description: '',
                 require_cvss_score: null,
-                company: null
+                company: null,
+                visibility: null
             },
             scoreChoices: [
                 { label: 'CVSS 4.0 Base', value: 0 },
@@ -35,6 +36,9 @@ export default {
             service: new ProjectService(),
             companyService: new CompanyService()
         };
+    },
+    mounted() {
+        this.model.visibility = 'Members Only';
     },
     methods: {
         close() {
@@ -70,11 +74,6 @@ export default {
                 this.languageChoices = response.data;
             });
         },
-        getCompanies() {
-            this.companyService.getCompanies().then((response) => {
-                this.companyChoices = response.data.results;
-            });
-        },
         create() {
             let data = {
                 pentest_types: this.model.pentest_types,
@@ -86,7 +85,8 @@ export default {
                 language: this.model.language,
                 require_cvss_base_score: this.model.require_cvss_base_score,
                 description: this.model.description,
-                company: this.model.company
+                company: this.model.company,
+                visibility: this.model.visibility
             };
             this.service.createProject(this.$api, data).then((response) => {
                 this.$toast.add({
@@ -133,9 +133,13 @@ export default {
                 <Dropdown optionLabel="language" optionValue="language" @focus="onFocusLanguages" v-model="model.language" :options="languageChoices"></Dropdown>
             </div>
 
-            <div class="field col-12">
+            <div class="field col-12 md:col-6">
                 <label for="company">Company</label>
                 <Dropdown :options="companyChoices" @filter="onFilterCompany" @focus="onFocusCompany" filter optionLabel="name" optionValue="pk" v-model="model.company"></Dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label for="visibility">Visibility</label>
+                <Dropdown :options="service.getVisibilityChoices()" optionLabel="label" optionValue="value" v-model="model.visibility"></Dropdown>
             </div>
             <div class="field col-12">
                 <label for="require_cvss_score">Require CVSS Score</label>

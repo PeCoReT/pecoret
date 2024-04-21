@@ -8,6 +8,11 @@ class ProjectStatus(models.IntegerChoices):
     CLOSED = 1, "Closed"
 
 
+class Visibility(models.IntegerChoices):
+    MEMBERS_ONLY = 0, 'Members Only'
+    PENTESTERS = 1, 'Pentesters'
+
+
 class TestMethod(models.IntegerChoices):
     WHITE_BOX = 0, "White Box"
     GREY_BOX = 1, "Grey Box"
@@ -27,6 +32,8 @@ class ProjectQuerySet(models.QuerySet):
         return self.filter(pk=project)
 
     def for_user(self, user):
+        if user.groups.filter(name='Pentester').exists():
+            return self.filter(models.Q(membership__user=user) | models.Q(visibility=Visibility.PENTESTERS))
         return self.filter(membership__user=user)
 
     def closed(self):
@@ -34,6 +41,9 @@ class ProjectQuerySet(models.QuerySet):
 
     def open(self):
         return self.filter(status=ProjectStatus.OPEN)
+
+    def for_pentesters(self):
+        return self.filter(visibility=Visibility.PENTESTERS)
 
 
 class Project(TimestampedModel):
@@ -51,6 +61,7 @@ class Project(TimestampedModel):
     year = models.PositiveIntegerField(editable=False, blank=True, null=True)
     require_cvss_score = models.PositiveSmallIntegerField(blank=True, null=True, choices=ScoreChoices.choices)
     language = models.CharField(choices=settings.LANGUAGES, default="en", max_length=4)
+    visibility = models.PositiveSmallIntegerField(choices=Visibility.choices, default=Visibility.MEMBERS_ONLY)
 
     def __str__(self):
         return self.name

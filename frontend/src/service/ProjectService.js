@@ -1,6 +1,21 @@
 import { api } from '@/plugins/axios';
 
+export const visibilityChoices = [
+    {
+        label: 'Membery Only',
+        value: 'Members Only'
+    },
+    {
+        label: 'Pentesters',
+        value: 'Pentesters'
+    }
+];
+
 export default class ProjectService {
+    getVisibilityChoices() {
+        return visibilityChoices;
+    }
+
     getProjects(api, params) {
         let url = '/projects/';
         let config = {};

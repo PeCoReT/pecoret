@@ -2,9 +2,8 @@
 import PentestTypeSelectField from '../elements/forms/PentestTypeSelectField.vue';
 import CompanyService from '@/service/CompanyService';
 import ProjectService from '@/service/ProjectService';
-import { useAuthStore } from "@/store/auth";
+import { useAuthStore } from '@/store/auth';
 
-const projectService = new ProjectService();
 
 export default {
     name: 'ProjectUpdateDialog',
@@ -22,6 +21,7 @@ export default {
             model: this.project,
             projectId: this.$route.params.projectId,
             companyService: new CompanyService(),
+            service: new ProjectService(),
             availableLanguages: [],
             companyChoices: null,
             testMethodChoices: [
@@ -45,11 +45,6 @@ export default {
         },
         open() {
             this.visible = true;
-        },
-        getCompanies() {
-            this.companyService.getCompanies().then((response) => {
-                this.companyChoices = response.data.results;
-            });
         },
         onFocusCompany() {
             if (this.companyChoices) {
@@ -96,9 +91,10 @@ export default {
                 language: this.model.language,
                 require_cvss_score: this.model.require_cvss_score,
                 description: this.model.description,
-                company: this.model.company
+                company: this.model.company,
+                visibility: this.model.visibility
             };
-            projectService
+            this.service
                 .patchProject(this.$api, this.projectId, data)
                 .then(() => {
                     this.authStore.activateProject(this.model);
@@ -157,9 +153,13 @@ export default {
                 <Dropdown optionLabel="language" optionValue="language" v-model="model.language" :options="availableLanguages"></Dropdown>
             </div>
 
-            <div class="field col-12">
+            <div class="field col-12 md:col-6">
                 <label for="company">Company</label>
                 <Dropdown :options="companyChoices" @filter="onFilterCompany" @focus="onFocusCompany" filter optionLabel="name" optionValue="pk" v-model="model.company"></Dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label for="visibility">Visibility</label>
+                <Dropdown :options="service.getVisibilityChoices()" optionLabel="label" optionValue="value" v-model="model.visibility"></Dropdown>
             </div>
             <div class="field col-12">
                 <label for="require_cvss_score">Require CVSS Score</label>
