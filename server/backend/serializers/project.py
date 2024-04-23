@@ -2,7 +2,6 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from django.conf import settings
 from backend.models.project import Project, TestMethod, ProjectStatus, Visibility
-from pecoret.core.permissions.group import Groups
 from pecoret.core.serializers import ValuedChoiceField, PrimaryKeyRelatedField
 from .pentest_type import PentestTypeSerializer
 
@@ -24,9 +23,9 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     def validate_visibility(self, value):
         user = self.context['request'].user
-        if not user.groups.filter(name=Groups.GROUP_MANAGEMENT).exists():
+        if not user.is_management_member:
             raise ValidationError({'visibility': 'You cannot change visibility of the project'})
-        return True
+        return value
 
     class Meta:
         model = Project

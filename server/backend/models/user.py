@@ -1,7 +1,7 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as BaseUserManager
 from django.core.exceptions import ValidationError
+from django.db import models
 
 
 class UserQuerySet(models.QuerySet):
@@ -33,6 +33,14 @@ class User(AbstractUser):
     @property
     def is_customer(self):
         return self.groups.filter(name="Customer").exists()
+
+    @property
+    def is_management_member(self):
+        return self.groups.filter(name='Management').exists()
+
+    @property
+    def is_pentester_or_management(self):
+        return self.groups.filter(models.Q(name='Management') | models.Q(name='Pentester')).exists()
 
     def save(self, *args, **kwargs):
         self.clean()
