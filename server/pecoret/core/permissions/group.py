@@ -1,5 +1,5 @@
 from rest_framework.permissions import SAFE_METHODS
-from backend.models import APIToken
+from backend.models.api_token import APIToken
 from .base import BasePermission
 from .token.base import TokenPermissionMixin
 

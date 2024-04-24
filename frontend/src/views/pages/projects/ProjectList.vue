@@ -228,8 +228,12 @@ export default {
                     </Column>
                     <Column field="date_created" header="Created" sortable></Column>
                     <Column field="test_method" header="Test Method"></Column>
-                    <Column field="start_date" header="Start Date"></Column>
-                    <Column field="end_date" header="End Date"></Column>
+                    <Column field="visibility" header="Visibility"></Column>
+                    <Column field="start_date" header="Period">
+                        <template #body="slotProps">
+                            {{ slotProps.data.start_date }} - {{ slotProps.data.end_date }}
+                        </template>
+                    </Column>
                 </DataTable>
             </div>
         </div>

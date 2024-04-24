@@ -28,12 +28,12 @@ export default {
     },
     mounted() {
         this.getProject();
-        this.getMembership();
     },
     methods: {
         getProject() {
             this.service.getProject(this.projectId).then((response) => {
                 this.project = response.data;
+                this.getMembership();
                 this.breadcrumbs[this.breadcrumbs.length - 1] = {
                     label: response.data.name,
                     disabled: true
@@ -47,6 +47,10 @@ export default {
             return markdown.renderMarkdown(text);
         },
         getMembership() {
+            if (this.project.visibility === 'Pentesters') {
+                this.role = { role: 'Public Pentester' };
+                return;
+            }
             this.service.getProjectMembershipMe(this.projectId).then((response) => {
                 this.role = response.data;
             });

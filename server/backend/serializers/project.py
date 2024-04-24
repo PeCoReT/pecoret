@@ -1,6 +1,7 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from django.conf import settings
-from backend.models.project import Project, TestMethod, ProjectStatus, ScoreChoices
+from backend.models.project import Project, TestMethod, ProjectStatus, Visibility
 from pecoret.core.serializers import ValuedChoiceField, PrimaryKeyRelatedField
 from .pentest_type import PentestTypeSerializer
 
@@ -12,12 +13,19 @@ class ProjectSerializer(serializers.ModelSerializer):
     pentest_types = PrimaryKeyRelatedField(serializer=PentestTypeSerializer, many=True)
     language = ValuedChoiceField(choices=settings.LANGUAGES)
     pinned = serializers.SerializerMethodField()
+    visibility = ValuedChoiceField(choices=Visibility.choices)
 
     def get_company_name(self, obj):
         return obj.company.name
 
     def get_pinned(self, obj):
         return obj.pinnedproject_set.for_user(self.context["request"].user).exists()
+
+    def validate_visibility(self, value):
+        user = self.context['request'].user
+        if not user.is_management_member:
+            raise ValidationError({'visibility': 'You cannot change visibility of the project'})
+        return value
 
     class Meta:
         model = Project
@@ -37,7 +45,6 @@ class ProjectSerializer(serializers.ModelSerializer):
             "year",
             "pentest_types",
             "require_cvss_score",
-            "language",
-
+            "language", "visibility"
         ]
         extra_kwargs = {"description": {"required": False}}
