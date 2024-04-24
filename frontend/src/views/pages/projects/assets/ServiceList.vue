@@ -1,13 +1,12 @@
 <script>
 import AssetService from '@/service/AssetService';
-import BlankSlate from '@/components/BlankSlate.vue';
-import ServiceCreateDialog from '@/components/dialogs/ServiceCreateDialog.vue';
+import ServiceCreateDialog from '@/components/projects/assets/ServiceCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'ServiceList',
-    components: { GenericDataTable, BaseListLayout, BlankSlate, ServiceCreateDialog },
+    components: { GenericDataTable, BaseListLayout, ServiceCreateDialog },
     data() {
         return {
             assetService: new AssetService(),

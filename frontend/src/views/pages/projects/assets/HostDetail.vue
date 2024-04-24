@@ -1,6 +1,6 @@
 <script>
 import AssetService from '@/service/AssetService';
-import HostUpdateDialog from '@/components/dialogs/HostUpdateDialog.vue';
+import HostUpdateDialog from '@/components/projects/assets/HostUpdateDialog.vue';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import markdown from '@/utils/markdown';
 

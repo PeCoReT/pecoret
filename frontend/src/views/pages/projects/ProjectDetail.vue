@@ -152,6 +152,10 @@ export default {
                         <div class="col-6">Language</div>
                         <div class="col-6">{{ project.language }}</div>
                     </div>
+                    <div class="grid">
+                        <div class="col-6">Visibility</div>
+                        <div class="col-6">{{ project.visibility }}</div>
+                    </div>
                 </template>
             </Card>
 

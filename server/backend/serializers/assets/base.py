@@ -1,11 +1,13 @@
 from rest_framework import serializers
+from pecoret.core.serializers import ValuedChoiceField, PrimaryKeyRelatedField
+from backend.serializers.technology import TechnologySerializer
 from backend.models.assets.base import Environment, AssetAccessibility
-from pecoret.core.serializers import ValuedChoiceField
 
 
 class BaseAssetSerializer(serializers.ModelSerializer):
     environment = ValuedChoiceField(choices=Environment.choices, required=False)
     accessible = ValuedChoiceField(choices=AssetAccessibility.choices, required=False)
+    technologies = PrimaryKeyRelatedField(serializer=TechnologySerializer, many=True, required=False)
 
     class Meta:
         fields = [
@@ -16,6 +18,6 @@ class BaseAssetSerializer(serializers.ModelSerializer):
             "description",
             "environment",
             "display_name",
-            "asset_type"
+            "asset_type", "technologies"
         ]
         read_only_fields = ["asset_type"]

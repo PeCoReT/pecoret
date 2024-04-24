@@ -3,6 +3,7 @@ import AssetService from '@/service/AssetService';
 import AssetEnvironmentSelectField from '@/components/elements/forms/AssetEnvironmentSelectField.vue';
 import AssetAccessibleSelectField from '@/components/elements/forms/AssetAccessibleSelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
+import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
 
 export default {
     name: 'ThickClientUpdateDialog',
@@ -63,8 +64,12 @@ export default {
                 description: this.model.description,
                 os: this.model.os,
                 decompile_allowed: this.model.decompile_allowed,
-                programming_language: this.model.programming_language
+                programming_language: this.model.programming_language,
+                technologies: this.model.technologies
             };
+            if (this.model.technologies.length > 0 && this.model.technologies[0].pk) {
+                delete data.technologies;
+            }
             this.service.patchThickClient(this.$api, this.$route.params.projectId, this.asset.pk, data).then(() => {
                 this.$emit('object-updated', this.model);
                 this.visible = false;
@@ -80,7 +85,7 @@ export default {
             }
         }
     },
-    components: { AssetEnvironmentSelectField, AssetAccessibleSelectField, MarkdownEditor }
+    components: { TechnologyMultiSelectField, AssetEnvironmentSelectField, AssetAccessibleSelectField, MarkdownEditor }
 };
 </script>
 
@@ -115,6 +120,10 @@ export default {
             </div>
             <div class="field col-12 md:col-6">
                 <AssetAccessibleSelectField v-model="model.accessible"></AssetAccessibleSelectField>
+            </div>
+            <div class="field col-12">
+                <label for="technologies">Technologies</label>
+                <TechnologyMultiSelectField v-model="model.technologies"></TechnologyMultiSelectField>
             </div>
             <div class="field col-12">
                 <label for="description">Description</label>

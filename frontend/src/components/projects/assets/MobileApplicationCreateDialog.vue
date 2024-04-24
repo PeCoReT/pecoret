@@ -1,8 +1,9 @@
 <script>
 import AssetService from '@/service/AssetService';
-import AssetEnvironmentSelectField from '../elements/forms/AssetEnvironmentSelectField.vue';
-import AssetAccessibleSelectField from '../elements/forms/AssetAccessibleSelectField.vue';
+import AssetEnvironmentSelectField from '@/components/elements/forms/AssetEnvironmentSelectField.vue';
+import AssetAccessibleSelectField from '@/components/elements/forms/AssetAccessibleSelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
+import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
 
 export default {
     name: 'MobileApplicationCreateDialog',
@@ -17,7 +18,8 @@ export default {
                 certificate_pinning: null,
                 environment: 'Unknown',
                 accessible: 'Unknown',
-                description: null
+                description: null,
+                technologies: []
             },
             osChoices: [
                 {
@@ -56,7 +58,7 @@ export default {
             });
         }
     },
-    components: { AssetEnvironmentSelectField, AssetAccessibleSelectField, MarkdownEditor }
+    components: { TechnologyMultiSelectField, AssetEnvironmentSelectField, AssetAccessibleSelectField, MarkdownEditor }
 };
 </script>
 
@@ -89,6 +91,10 @@ export default {
             </div>
             <div class="field col-12 md:col-6">
                 <AssetAccessibleSelectField v-model="model.accessible"></AssetAccessibleSelectField>
+            </div>
+            <div class="field col-12">
+                <label for="technologies">Technologies</label>
+                <TechnologyMultiSelectField v-model="model.technologies"></TechnologyMultiSelectField>
             </div>
             <div class="field col-12">
                 <label for="description">Description</label>
