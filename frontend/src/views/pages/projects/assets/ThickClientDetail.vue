@@ -1,6 +1,6 @@
 <script>
 import AssetService from '@/service/AssetService';
-import ThickClientUpdateDialog from '@/components/dialogs/ThickClientUpdateDialog.vue';
+import ThickClientUpdateDialog from '@/components/projects/assets/ThickClientUpdateDialog.vue';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import markdown from '@/utils/markdown';
 

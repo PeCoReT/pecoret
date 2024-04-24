@@ -1,6 +1,6 @@
 <script>
 import AssetService from '@/service/AssetService';
-import HostCreateDialog from '@/components/dialogs/HostCreateDialog.vue';
+import HostCreateDialog from '@/components/projects/assets/HostCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 

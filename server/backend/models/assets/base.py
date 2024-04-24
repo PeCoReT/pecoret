@@ -34,6 +34,7 @@ class BaseAsset(PeCoReTBaseModel):
     environment = models.PositiveSmallIntegerField(
         choices=Environment.choices, default=Environment.UNKNOWN
     )
+    technologies = models.ManyToManyField('backend.Technology', blank=True)
 
     class Meta:
         abstract = True

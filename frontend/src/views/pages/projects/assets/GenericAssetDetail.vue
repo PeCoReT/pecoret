@@ -1,6 +1,6 @@
 <script>
 import AssetService from '@/service/AssetService';
-import GenericAssetUpdateDialog from '@/components/dialogs/GenericAssetUpdateDialog.vue';
+import GenericAssetUpdateDialog from '@/components/projects/assets/GenericAssetUpdateDialog.vue';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import markdown from '@/utils/markdown';
 

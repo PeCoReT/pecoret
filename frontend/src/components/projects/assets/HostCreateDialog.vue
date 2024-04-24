@@ -3,20 +3,24 @@ import AssetService from '@/service/AssetService';
 import AssetEnvironmentSelectField from '@/components/elements/forms/AssetEnvironmentSelectField.vue';
 import AssetAccessibleSelectField from '@/components/elements/forms/AssetAccessibleSelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
+import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
 
 export default {
-    name: 'HostUpdateDialog',
-    props: {
-        asset: {
-            required: true
-        }
-    },
-    emits: ['object-updated'],
+    name: 'HostCreateDialog',
+    emits: ['object-created'],
     data() {
         return {
             visible: false,
-            model: this.asset,
-            service: new AssetService()
+            projectId: this.$route.params.projectId,
+            model: {
+                ip: null,
+                dns: null,
+                operating_system: null,
+                environment: 'Unknown',
+                accessible: 'Unknown',
+                technologies: []
+            },
+            assetService: new AssetService()
         };
     },
     methods: {
@@ -26,38 +30,27 @@ export default {
         open() {
             this.visible = true;
         },
-        patch() {
-            let data = {
-                dns: this.model.dns,
-                operating_system: this.model.operating_system,
-                ip: this.model.ip,
-                environment: this.model.environment,
-                accessible: this.model.accessible,
-                description: this.model.description
-            };
-            this.service.patchHost(this.$api, this.$route.params.projectId, this.asset.pk, data).then(() => {
-                this.$emit('object-updated', this.model);
+        create() {
+            this.assetService.createHost(this.$api, this.projectId, this.model).then((response) => {
+                this.$toast.add({
+                    severity: 'success',
+                    summary: 'Created!',
+                    life: 3000,
+                    detail: 'Host created!'
+                });
+                this.$emit('object-created', response.data);
                 this.visible = false;
             });
         }
     },
-    watch: {
-        asset: {
-            immediate: true,
-            deep: true,
-            handler(value) {
-                this.model = value;
-            }
-        }
-    },
-    components: { AssetEnvironmentSelectField, AssetAccessibleSelectField, MarkdownEditor }
+    components: { TechnologyMultiSelectField, AssetEnvironmentSelectField, AssetAccessibleSelectField, MarkdownEditor }
 };
 </script>
 
 <template>
-    <Button icon="fa fa-pen-to-square" size="small" @click="open" outlined label="Edit"></Button>
+    <Button icon="fa fa-plus" label="Host" outlined @click="open"></Button>
 
-    <Dialog header="Update Web Application" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
+    <Dialog header="Create Host" v-model:visible="visible" modal :style="{ width: '70vw' }">
         <div class="p-fluid formgrid grid">
             <div class="field col-12">
                 <label for="ip">IP</label>
@@ -79,6 +72,10 @@ export default {
                 <AssetAccessibleSelectField v-model="model.accessible"></AssetAccessibleSelectField>
             </div>
             <div class="field col-12">
+                <label for="technologies">Technologies</label>
+                <TechnologyMultiSelectField v-model="model.technologies"></TechnologyMultiSelectField>
+            </div>
+            <div class="field col-12">
                 <label for="description">Description</label>
                 <MarkdownEditor v-model="model.description"></MarkdownEditor>
             </div>
@@ -86,7 +83,7 @@ export default {
 
         <template #footer>
             <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="patch" icon="pi pi-check" class="p-button-outlined"></Button>
+            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
         </template>
     </Dialog>
 </template>

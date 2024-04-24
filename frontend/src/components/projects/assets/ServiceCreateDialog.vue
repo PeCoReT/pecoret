@@ -1,6 +1,7 @@
 <script>
 import AssetService from '@/service/AssetService';
 
+
 export default {
     name: 'ServiceCreateDialog',
     emits: ['object-created'],
@@ -15,7 +16,7 @@ export default {
                 protocol: null,
                 port: null,
                 product: null,
-                state: 'Open'
+                state: 'Open',
             },
             protocolChoices: [
                 {
@@ -78,7 +79,7 @@ export default {
                 this.hosts = response.data.results;
             });
         },
-        onHostSelectFocus(event) {
+        onHostSelectFocus() {
             if (this.hosts.length > 0) {
                 return;
             }
@@ -87,7 +88,6 @@ export default {
             });
         }
     },
-    components: {}
 };
 </script>
 

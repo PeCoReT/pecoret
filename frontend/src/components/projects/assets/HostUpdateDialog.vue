@@ -3,9 +3,10 @@ import AssetService from '@/service/AssetService';
 import AssetEnvironmentSelectField from '@/components/elements/forms/AssetEnvironmentSelectField.vue';
 import AssetAccessibleSelectField from '@/components/elements/forms/AssetAccessibleSelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
+import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
 
 export default {
-    name: 'WebApplicationUpdateDialog',
+    name: 'HostUpdateDialog',
     props: {
         asset: {
             required: true
@@ -16,8 +17,7 @@ export default {
         return {
             visible: false,
             model: this.asset,
-            service: new AssetService(),
-            loading: false
+            service: new AssetService()
         };
     },
     methods: {
@@ -28,23 +28,22 @@ export default {
             this.visible = true;
         },
         patch() {
-            this.loading = true;
             let data = {
-                name: this.model.name,
-                base_url: this.model.base_url,
+                dns: this.model.dns,
+                operating_system: this.model.operating_system,
+                ip: this.model.ip,
                 environment: this.model.environment,
                 accessible: this.model.accessible,
-                description: this.model.description
+                description: this.model.description,
+                technologies: this.model.technologies
             };
-            this.service
-                .patchWebApplication(this.$api, this.$route.params.projectId, this.asset.pk, data)
-                .then(() => {
-                    this.$emit('object-updated', this.model);
-                    this.visible = false;
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
+            if (this.model.technologies.length > 0 && this.model.technologies[0].pk) {
+                delete data.technologies;
+            }
+            this.service.patchHost(this.$api, this.$route.params.projectId, this.asset.pk, data).then(() => {
+                this.$emit('object-updated', this.model);
+                this.visible = false;
+            });
         }
     },
     watch: {
@@ -56,7 +55,7 @@ export default {
             }
         }
     },
-    components: { AssetEnvironmentSelectField, AssetAccessibleSelectField, MarkdownEditor }
+    components: { TechnologyMultiSelectField, AssetEnvironmentSelectField, AssetAccessibleSelectField, MarkdownEditor }
 };
 </script>
 
@@ -64,20 +63,29 @@ export default {
     <Button icon="fa fa-pen-to-square" size="small" @click="open" outlined label="Edit"></Button>
 
     <Dialog header="Update Web Application" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
-        <div class="formgrid grid p-fluid">
+        <div class="p-fluid formgrid grid">
             <div class="field col-12">
-                <label for="name">Name</label>
-                <InputText id="name" type="text" v-model="model.name"></InputText>
+                <label for="ip">IP</label>
+                <InputText id="ip" type="text" v-model="model.ip"></InputText>
             </div>
-            <div class="field col-12">
-                <label for="base_url">Base URL</label>
-                <InputText id="base_url" type="text" v-model="model.base_url"></InputText>
+            <div class="field col-12 md:col-6">
+                <label for="dns">DNS</label>
+                <InputText id="dns" type="text" v-model="model.dns"></InputText>
             </div>
+            <div class="field col-12 md:col-6">
+                <label for="os">Operating System</label>
+                <InputText id="os" type="text" v-model="model.operating_system"></InputText>
+            </div>
+
             <div class="field col-12 md:col-6">
                 <AssetEnvironmentSelectField v-model="model.environment"></AssetEnvironmentSelectField>
             </div>
             <div class="field col-12 md:col-6">
                 <AssetAccessibleSelectField v-model="model.accessible"></AssetAccessibleSelectField>
+            </div>
+            <div class="field col-12">
+                <label for="technologies">Technologies</label>
+                <TechnologyMultiSelectField v-model="model.technologies"></TechnologyMultiSelectField>
             </div>
             <div class="field col-12">
                 <label for="description">Description</label>
@@ -87,7 +95,7 @@ export default {
 
         <template #footer>
             <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="patch" :loading="loading" icon="pi pi-check" class="p-button-outlined"></Button>
+            <Button label="Save" @click="patch" icon="pi pi-check" class="p-button-outlined"></Button>
         </template>
     </Dialog>
 </template>

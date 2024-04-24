@@ -1,6 +1,6 @@
 <script>
 import AssetService from '@/service/AssetService';
-import WebApplicationCreateDialog from '@/components/dialogs/WebApplicationCreateDialog.vue';
+import WebApplicationCreateDialog from '@/components/projects/assets/WebApplicationCreateDialog.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 
 export default {

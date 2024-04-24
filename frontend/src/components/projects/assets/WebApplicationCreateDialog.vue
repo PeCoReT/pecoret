@@ -1,15 +1,17 @@
 <script>
 import AssetService from '@/service/AssetService';
-import AssetEnvironmentSelectField from '../elements/forms/AssetEnvironmentSelectField.vue';
-import AssetAccessibleSelectField from '../elements/forms/AssetAccessibleSelectField.vue';
+import AssetEnvironmentSelectField from '@/components/elements/forms/AssetEnvironmentSelectField.vue';
+import AssetAccessibleSelectField from '@/components/elements/forms/AssetAccessibleSelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
+import ModalDialog from '@/components/elements/dialogs/ModalDialog.vue';
+import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
 
 export default {
     name: 'WebApplicationCreateDialog',
     emits: ['object-created'],
     data() {
         return {
-            visible: false,
+            showDialog: false,
             loading: false,
             projectId: this.$route.params.projectId,
             model: {
@@ -17,45 +19,49 @@ export default {
                 base_url: null,
                 environment: 'Unknown',
                 accessible: 'Unknown',
-                description: ''
+                description: '',
+                technologies: []
             },
-            assetService: new AssetService()
+            service: new AssetService()
         };
     },
     methods: {
-        close() {
-            this.visible = false;
-        },
         open() {
-            this.visible = true;
+            this.showDialog = true;
         },
-        create() {
+        save() {
             this.loading = true;
-            this.assetService
+            this.service
                 .createWebApplication(this.$api, this.projectId, this.model)
                 .then((response) => {
                     this.$toast.add({
                         severity: 'success',
-                        summary: 'Created!',
+                        summary: 'Web Application created!',
                         life: 3000,
-                        detail: 'Web application created!'
+                        detail: 'Web application created successfully!'
                     });
                     this.$emit('object-created', response.data);
-                    this.visible = false;
+                    this.showDialog = false;
                 })
                 .finally(() => {
                     this.loading = false;
                 });
         }
     },
-    components: { AssetEnvironmentSelectField, AssetAccessibleSelectField, MarkdownEditor }
+    components: {
+        TechnologyMultiSelectField,
+        ModalDialog,
+        AssetEnvironmentSelectField,
+        AssetAccessibleSelectField,
+        MarkdownEditor
+    }
 };
 </script>
 
 <template>
     <Button icon="fa fa-plus" label="Web Application" outlined @click="open"></Button>
 
-    <Dialog header="Create Web Application" v-model:visible="visible" modal :style="{ width: '70vw' }">
+    <ModalDialog v-model:loading="loading" header="Create Web Application" v-model="showDialog" @onSave="save">
         <div class="formgrid grid p-fluid">
             <div class="field col-12">
                 <label for="name">Name</label>
@@ -72,14 +78,13 @@ export default {
                 <AssetAccessibleSelectField v-model="model.accessible"></AssetAccessibleSelectField>
             </div>
             <div class="field col-12">
+                <label for="technologies">Technologies</label>
+                <TechnologyMultiSelectField v-model="model.technologies"></TechnologyMultiSelectField>
+            </div>
+            <div class="field col-12">
                 <label for="description">Description</label>
                 <MarkdownEditor v-model="model.description"></MarkdownEditor>
             </div>
         </div>
-
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" :loading="loading" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+    </ModalDialog>
 </template>

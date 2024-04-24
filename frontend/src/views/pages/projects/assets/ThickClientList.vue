@@ -1,6 +1,6 @@
 <script>
 import AssetService from '@/service/AssetService';
-import ThickClientCreateDialog from '@/components/dialogs/ThickClientCreateDialog.vue';
+import ThickClientCreateDialog from '@/components/projects/assets/ThickClientCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 

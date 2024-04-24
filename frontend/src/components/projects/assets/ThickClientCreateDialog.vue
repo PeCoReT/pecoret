@@ -1,16 +1,19 @@
 <script>
 import AssetService from '@/service/AssetService';
-import AssetEnvironmentSelectField from '../elements/forms/AssetEnvironmentSelectField.vue';
-import AssetAccessibleSelectField from '../elements/forms/AssetAccessibleSelectField.vue';
+import AssetEnvironmentSelectField from '@/components/elements/forms/AssetEnvironmentSelectField.vue';
+import AssetAccessibleSelectField from '@/components/elements/forms/AssetAccessibleSelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
+import ModalDialog from '@/components/elements/dialogs/ModalDialog.vue';
+import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
 
 export default {
     name: 'ThickClientCreateDialog',
     emits: ['object-created'],
     data() {
         return {
-            visible: false,
+            showDialog: false,
             projectId: this.$route.params.projectId,
+            loading: false,
             model: {
                 name: null,
                 os: null,
@@ -19,7 +22,8 @@ export default {
                 decompile_allowed: 'Unknown',
                 environment: 'Unknown',
                 accessible: 'Unknown',
-                description: null
+                description: null,
+                technologies: []
             },
             decompileChoices: [
                 {
@@ -53,33 +57,42 @@ export default {
         };
     },
     methods: {
-        close() {
-            this.visible = false;
-        },
         open() {
-            this.visible = true;
+            this.showDialog = true;
         },
-        create() {
-            this.service.createThickClient(this.$api, this.projectId, this.model).then((response) => {
-                this.$toast.add({
-                    severity: 'success',
-                    summary: 'Created!',
-                    life: 3000,
-                    detail: 'Thick client created!'
+        save() {
+            this.loading = true;
+            this.service
+                .createThickClient(this.$api, this.projectId, this.model)
+                .then((response) => {
+                    this.$toast.add({
+                        severity: 'success',
+                        summary: 'Thick Client created!',
+                        life: 3000,
+                        detail: 'Thick client created successfully!'
+                    });
+                    this.$emit('object-created', response.data);
+                    this.showDialog = false;
+                })
+                .finally(() => {
+                    this.loading = false;
                 });
-                this.$emit('object-created', response.data);
-                this.visible = false;
-            });
         }
     },
-    components: { AssetEnvironmentSelectField, AssetAccessibleSelectField, MarkdownEditor }
+    components: {
+        TechnologyMultiSelectField,
+        ModalDialog,
+        AssetEnvironmentSelectField,
+        AssetAccessibleSelectField,
+        MarkdownEditor
+    }
 };
 </script>
 
 <template>
     <Button icon="fa fa-plus" label="Thick Client" outlined @click="open"></Button>
 
-    <Dialog header="Create Mobile Application" v-model:visible="visible" modal :style="{ width: '70vw' }">
+    <ModalDialog :loading="loading" header="Create Thick Client" v-model="showDialog" @onSave="save">
         <div class="p-fluid formgrid grid">
             <div class="field col-12">
                 <label for="name">Name</label>
@@ -109,14 +122,13 @@ export default {
                 <AssetAccessibleSelectField v-model="model.accessible"></AssetAccessibleSelectField>
             </div>
             <div class="field col-12">
+                <label for="technologies">Technologies</label>
+                <TechnologyMultiSelectField v-model="model.technologies"></TechnologyMultiSelectField>
+            </div>
+            <div class="field col-12">
                 <label for="description">Description</label>
                 <MarkdownEditor v-model="model.description"></MarkdownEditor>
             </div>
         </div>
-
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+    </ModalDialog>
 </template>
