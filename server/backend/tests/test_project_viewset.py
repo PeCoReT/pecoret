@@ -1,6 +1,6 @@
 from rest_framework.test import APITestCase
 from pecoret.core.test import PeCoReTTestCaseMixin
-from backend.models.project import ProjectStatus, TestMethod
+from backend.models.project import ProjectStatus, TestMethod, Visibility
 from backend.models.pentest_type import PentestType
 
 
@@ -118,6 +118,7 @@ class ProjectCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             "pentest_types": self.pentest_types,
             "end_date": "2022-02-02",
             "description": "test",
+            "visibility": Visibility.MEMBERS_ONLY.label
         }
 
     def test_allowed(self):
