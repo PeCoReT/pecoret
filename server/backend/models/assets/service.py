@@ -46,6 +46,10 @@ class Service(TimestampedModel):
         return f"{self.name}/{Protocol(self.protocol).name} {self.host.ip}:{self.port}"
 
     @property
+    def value(self):
+        return self.display_name
+
+    @property
     def get_asset_type_display(self):
         return "Service"
 

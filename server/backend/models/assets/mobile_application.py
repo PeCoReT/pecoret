@@ -34,6 +34,10 @@ class MobileApplication(BaseAsset):
     def get_asset_type_display(self):
         return "Mobile Application"
 
+    @property
+    def value(self):
+        return self.name
+
     def __str__(self):
         return self.name
 

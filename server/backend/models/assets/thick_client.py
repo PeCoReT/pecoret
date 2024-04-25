@@ -40,6 +40,10 @@ class ThickClient(BaseAsset):
         return self.name
 
     @property
+    def value(self):
+        return self.value
+
+    @property
     def get_asset_type_display(self):
         return "Thick Client"
 

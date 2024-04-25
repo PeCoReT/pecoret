@@ -18,6 +18,6 @@ class BaseAssetSerializer(serializers.ModelSerializer):
             "description",
             "environment",
             "display_name",
-            "asset_type", "technologies"
+            "asset_type", "technologies", "value"
         ]
         read_only_fields = ["asset_type"]

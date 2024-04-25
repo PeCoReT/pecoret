@@ -28,3 +28,7 @@ class GenericAsset(BaseAsset):
 
     def __str__(self):
         return self.name
+
+    @property
+    def value(self):
+        return self.name

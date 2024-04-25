@@ -31,5 +31,9 @@ class WebApplication(BaseAsset):
     def get_asset_type_display(self):
         return self._meta.verbose_name
 
+    @property
+    def value(self):
+        return self.base_url
+
     def __str__(self):
         return self.name

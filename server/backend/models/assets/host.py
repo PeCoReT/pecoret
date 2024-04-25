@@ -32,6 +32,10 @@ class Host(BaseAsset):
     def name(self):
         return self.__str__()
 
+    @property
+    def value(self):
+        return self.name
+
     def __str__(self):
         if not self.dns:
             return self.ip

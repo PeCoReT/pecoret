@@ -42,9 +42,6 @@ export default {
                             programId: this.$route.params.programId
                         }
                     }).path
-                },
-                {
-                    label: 'Scans'
                 }
             ]
         };
