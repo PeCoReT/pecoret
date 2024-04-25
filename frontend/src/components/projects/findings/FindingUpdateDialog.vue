@@ -95,6 +95,12 @@ export default {
                 <Dropdown :options="userAccountChoices" @focus="onUserAccountFocus" optionLabel="username" v-model="model.user_account" show-clear></Dropdown>
             </div>
             <div class="field col-12">
+                <div class="flex align-items-center">
+                    <Checkbox v-model="model.exclude_from_report" :binary="true" />
+                    <label class="ml-2"> Exclude from report? </label>
+                </div>
+            </div>
+            <div class="field col-12">
                 <label for="recommendation">Recommendation</label>
                 <MarkdownEditor v-model="model.recommendation"></MarkdownEditor>
             </div>
