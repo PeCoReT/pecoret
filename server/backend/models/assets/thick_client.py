@@ -41,7 +41,7 @@ class ThickClient(BaseAsset):
 
     @property
     def value(self):
-        return self.value
+        return self.name
 
     @property
     def get_asset_type_display(self):
