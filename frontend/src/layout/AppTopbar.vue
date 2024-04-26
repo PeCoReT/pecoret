@@ -119,6 +119,12 @@ export default {
                             })
                         },
                         {
+                            label: 'Targets',
+                            route: this.$router.resolve({
+                                name: 'ASMonitorGlobalTargetList'
+                            })
+                        },
+                        {
                             label: 'Findings',
                             route: this.$router.resolve({
                                 name: 'ASMonitorGlobalFindingList'
@@ -208,7 +214,7 @@ export default {
                 return true;
             }
             return false;
-        },
+        }
     },
     methods: {
         onLogout() {
@@ -216,7 +222,7 @@ export default {
             authService.logout(this.$api).then(() => {
                 this.$router.push({ name: 'Login' });
             });
-        },
+        }
     },
     components: { ProgramTabMenu, ProjectTabMenu }
 };
