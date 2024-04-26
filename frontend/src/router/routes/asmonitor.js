@@ -23,6 +23,11 @@ const asmonitorRoutes = [
                 component: () => import('@/views/pages/asmonitor/TargetList.vue')
             },
             {
+                path: '/attack-surface/programs/:programId/targets/:targetId',
+                name: 'ASMonitorTargetDetail',
+                component: () => import('@/views/pages/asmonitor/TargetDetail.vue')
+            },
+            {
                 path: '/attack-surface/programs/:programId/findings',
                 name: 'ASMonitorFindingList',
                 component: () => import('@/views/pages/asmonitor/FindingList.vue')
