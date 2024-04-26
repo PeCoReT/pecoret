@@ -14,7 +14,7 @@ from pecoret.core.viewsets import GenericViewSet
 class AdvisoryManagementInboxViewSet(mixins.ListModelMixin, GenericViewSet):
     permission_classes = [permissions.PRESET_GROUP_ADVISORY_MANAGEMENT]
     filterset_class = InboxFilter
-    search_fields = ["product", "vendor_name", "internal_name", "vulnerability__vulnerability_id"]
+    search_fields = ["internal_name", "vulnerability__vulnerability_id"]
     ordering_fields = ["advisory_id", "date_planned_disclosure", "date_created", "date_updated"]
     serializer_class = AdvisoryAdvisoryManagementSerializer
 
