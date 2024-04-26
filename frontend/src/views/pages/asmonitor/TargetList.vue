@@ -121,6 +121,15 @@ export default {
                 this.techChoices = response.data.results;
             });
         },
+        onRowClick(row) {
+            this.$router.push({
+                name: 'ASMonitorTargetDetail',
+                params: {
+                    programId: this.programId,
+                    targetId: row.data.pk
+                }
+            });
+        },
         confirmDialogDelete(id) {
             this.$confirm.require({
                 message: 'Do you want to remove this target?',
@@ -168,6 +177,7 @@ export default {
                 filter-display="menu"
                 :show-search="true"
                 @search="onGlobalSearch"
+                @row-click="onRowClick"
             >
                 <Column field="name" header="Name" sortable></Column>
                 <Column field="ip" header="IP"></Column>

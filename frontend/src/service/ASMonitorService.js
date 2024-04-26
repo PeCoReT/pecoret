@@ -122,6 +122,11 @@ export default class ASMonitorService {
         return api.patch(url, data);
     }
 
+    getTarget(api, programId, id) {
+        let url = `/asmonitor/programs/${programId}/targets/${id}/`;
+        return api.get(url);
+    }
+
     getFindings(api, programId, params) {
         let url = `/asmonitor/programs/${programId}/findings/`;
         let config = {};
@@ -172,5 +177,29 @@ export default class ASMonitorService {
         }
         let url = '/asmonitor/targets/';
         return api.get(url, config);
+    }
+
+    getTargetMetas(api, programId, targetId, params) {
+        let config = {};
+        if (params) {
+            config['params'] = params;
+        }
+        let url = `/asmonitor/programs/${programId}/targets/${targetId}/metas/`;
+        return api.get(url, config);
+    }
+
+    patchTargetMeta(api, programId, targetId, id, data) {
+        let url = `/asmonitor/programs/${programId}/targets/${targetId}/metas/${id}/`;
+        return api.patch(url, data);
+    }
+
+    createTargetMeta(api, programId, targetId, data) {
+        let url = `/asmonitor/programs/${programId}/targets/${targetId}/metas/`;
+        return api.post(url, data);
+    }
+
+    deleteTargetMeta(api, programId, targetId, id) {
+        let url = `/asmonitor/programs/${programId}/targets/${targetId}/metas/${id}/`;
+        return api.delete(url);
     }
 }
