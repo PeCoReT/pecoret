@@ -24,7 +24,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for finding in vulnerability.finding_set.all() %}
+        {% for finding in vulnerability.finding_set.for_project(project) %}
           <tr>
             <td class="text-{{ finding.get_severity_display().lower() }}">
               <a href="#finding-{{ finding.pk }}-title">
