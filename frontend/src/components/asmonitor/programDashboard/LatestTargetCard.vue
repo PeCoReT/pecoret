@@ -35,7 +35,7 @@ export default {
             };
             this.service.getTargets(this.$api, this.programId, data).then((response) => {
                 if (response.data.results.length > 0) {
-                    this.text = response.data.results[0].name;
+                    this.text = response.data.results[0].ip;
                 } else {
                     this.text = 'None';
                 }
@@ -46,5 +46,5 @@ export default {
 </script>
 
 <template>
-    <DetailCardWithIcon title="Latest Target" :text="text" icon="fa fa-crosshairs"></DetailCardWithIcon>
+    <DetailCardWithIcon title="Latest Host" :text="text" icon="fa fa-crosshairs"></DetailCardWithIcon>
 </template>

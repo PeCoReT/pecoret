@@ -1,0 +1,155 @@
+attack-surface:
+  programs:
+    - name: "CyberGuard Initiative"
+      hosts:
+        - ip: "192.168.1.10"
+          hostnames:
+            - name: "intranet.example.com"
+            - name: "internal-intranet"
+          urls:
+            - url: "http://intranet.example.com"
+          technologies:
+            - name: "WordPress"
+        - ip: "192.168.1.11"
+          hostnames:
+            - name: "intranet2.example.com"
+            - name: "internal-intranet2"
+          urls:
+            - url: "http://intranet2.example.com"
+          technologies:
+            - name: "WordPress"
+        - ip: "192.168.1.12"
+          hostnames:
+            - name: "intranet3.example.com"
+            - name: "internal-intranet3"
+          urls:
+            - url: "http://intranet3.example.com"
+        - ip: "172.16.1.10"
+          hostnames:
+            - name: "portal.example.com"
+            - name: "internal-portal"
+          urls:
+            - url: "http://portal.example.com"
+          technologies:
+            - name: "Nextcloud"
+            - name: "Authentication"
+        - ip: "192.168.133.55"
+          hostnames:
+            - name: "intranet55.example.com"
+            - name: "internal-intranet55"
+          urls:
+            - url: "http://intranet55.example.com"
+          technologies:
+            - name: "WordPress"
+        - ip: "192.168.178.56"
+          hostnames:
+            - name: "intranet56.example.com"
+            - name: "internal-intranet56"
+          urls:
+            - url: "http://intranet56.example.com"
+          technologies:
+            - name: "WordPress"
+        - ip: "192.168.10.57"
+          hostnames:
+            - name: "intranet57.example.com"
+            - name: "internal-intranet57"
+          urls:
+            - url: "http://intranet57.example.com"
+          technologies:
+            - name: "WordPress"
+        - ip: "192.168.10.13"
+          hostnames:
+            - name: "intranet4.example.com"
+            - name: "internal-intranet4"
+          urls:
+            - url: "http://intranet4.example.com"
+          technologies:
+            - name: "BookStack"
+        - ip: "192.168.10.14"
+          hostnames:
+            - name: "intranet5.example.com"
+            - name: "internal-intranet5"
+          urls:
+            - url: "http://intranet5.example.com"
+          technologies:
+            - name: "osCommerce"
+        - ip: "10.10.10.101"
+          hostnames:
+            - name: "intranet-alpha.example.com"
+            - name: "internal-alpha"
+          urls:
+            - url: "http://intranet-alpha.example.com"
+          technologies:
+            - name: "Wordpress"
+        - ip: "10.10.10.102"
+          hostnames:
+            - name: "intranet-beta.example.com"
+            - name: "internal-beta"
+          urls:
+            - url: "http://intranet-beta.example.com"
+          technologies:
+            - name: "Nextcloud"
+        - ip: "10.10.10.103"
+          hostnames:
+            - name: "intranet-gamma.example.com"
+            - name: "internal-gamma"
+          urls:
+            - url: "http://intranet-gamma.example.com"
+          technologies:
+            - name: "GitLab"
+        - ip: "10.10.10.104"
+          hostnames:
+            - name: "intranet-delta.example.com"
+            - name: "internal-delta"
+          urls:
+            - url: "http://intranet-delta.example.com"
+          technologies:
+            - name: "BookStack"
+        - ip: "10.10.10.105"
+          hostnames:
+            - name: "intranet-epsilon.example.com"
+            - name: "internal-epsilon"
+          urls:
+            - url: "http://intranet-epsilon.example.com"
+          technologies:
+            - name: "osCommerce"
+        - ip: "10.10.1.101"
+          hostnames:
+            - name: "finance-portal.example.com"
+            - name: "internal-finance"
+          urls:
+            - url: "http://finance-portal.example.com"
+          technologies:
+            - name: "Magento"
+        - ip: "10.10.1.102"
+          hostnames:
+            - name: "hr-system.example.com"
+            - name: "internal-hr"
+          urls:
+            - url: "http://hr-system.example.com"
+          technologies:
+            - name: "OpenCart"
+        - ip: "10.10.1.103"
+          hostnames:
+            - name: "crm-app.example.com"
+            - name: "internal-crm"
+          urls:
+            - url: "http://crm-app.example.com"
+          technologies:
+            - name: "SuiteCRM"
+        - ip: "10.10.1.104"
+          hostnames:
+            - name: "wiki-platform.example.com"
+            - name: "internal-wiki"
+          urls:
+            - url: "http://wiki-platform.example.com"
+          technologies:
+            - name: "BookStack"
+        - ip: "10.10.1.105"
+          hostnames:
+            - name: "inventory-system.example.com"
+            - name: "internal-inventory"
+          urls:
+            - url: "http://inventory-system.example.com"
+          technologies:
+            - name: "osCommerce"

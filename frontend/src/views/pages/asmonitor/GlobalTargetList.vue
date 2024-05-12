@@ -13,7 +13,7 @@ export default {
         return {
             breadcrumbs: [
                 {
-                    label: 'Targets',
+                    label: 'Hosts',
                     disabled: true
                 }
             ],
@@ -41,6 +41,9 @@ export default {
                 item.technologies.forEach((item) => {
                     names.push(item.name);
                 });
+            }
+            if (names.length < 1) {
+                return '-';
             }
             return names.join(',');
         },
@@ -83,7 +86,15 @@ export default {
             this.pagination.page = event.page + 1;
             this.getItems();
         },
-        onRowClick() {},
+        onRowClick(row) {
+            this.$router.push({
+                name: 'ASMonitorTargetDetail',
+                params: {
+                    programId: row.data.program.pk,
+                    targetId: row.data.pk
+                }
+            });
+        },
         onSearch(query) {
             let params = {
                 search: query
@@ -124,7 +135,6 @@ export default {
                 @filter="getItems"
                 filter-display="menu"
             >
-                <Column field="name" header="Name" sortable></Column>
                 <Column field="ip" header="IP"></Column>
                 <Column field="last_seen" header="Last Seen" sortable>
                     <template #body="slotProps">
@@ -133,7 +143,8 @@ export default {
                 </Column>
                 <Column field="tags" header="Tags" :showFilterMatchModes="false">
                     <template #body="slotProps">
-                        <TagBadgeButton :label="tag" v-for="tag in slotProps.data.tags" :key="tag.pk"></TagBadgeButton>
+                        <span v-if="slotProps.data.tags.length > 0"> <TagBadgeButton :label="tag" v-for="tag in slotProps.data.tags" :key="tag.pk"></TagBadgeButton> </span>
+                        <span v-else>-</span>
                     </template>
                     <template #filter="{ filterModel }">
                         <MultiSelect v-model="filterModel.value" :options="tagChoices" @filter="tagFilter" placeholder="Select tags" filter @focus="tagFilter" class="p-column-filter" showClear optionLabel="name" optionValue="pk"></MultiSelect>
@@ -158,6 +169,7 @@ export default {
                         {{ getTechnologyDisplay(slotProps.data) }}
                     </template>
                 </Column>
+                <Column field="scope" header="Scope"></Column>
                 <Column field="date_updated" header="Updated" sortable></Column>
                 <Column header="Actions">
                     <template #body="slotProps">

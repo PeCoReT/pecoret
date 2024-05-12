@@ -5,8 +5,8 @@ technologies:
 
 attack-surface:
   tags:
-    - name: php
-      description: Is running some PHP application
+    - name: needs-review
+      description: Imported automatically. Needs review
       color: '#55ab65'
     - name: cve
       description: Affected by at least one CVE
@@ -14,15 +14,15 @@ attack-surface:
 
   programs:
     - name: Breaking Bad Bug Bounty
-      targets:
-        - name: shop.hermanos.es
-          ip: 10.192.10.10
-        - name: blog.hermanos.es
-          ip: 10.192.10.19
+      hosts:
+        - ip: 10.192.10.10
+        - ip: 10.192.10.19
+          hostnames:
+            - name: blog.hermanos.es
           technologies:
             - name: WordPress
           tags:
-            - name: php
+            - name: needs-review
           findings:
             - name: SQL-Injection
               severity: Critical
@@ -30,9 +30,10 @@ attack-surface:
               user: hschrader
 
     - name: "DefendShield Initiative"
-      targets:
-        - name: "https://api.internal.example.com"
-          ip: "172.17.0.10"
+      hosts:
+        - ip: "172.17.0.10"
+          urls:
+            - url: "https://api.internal.example.com"
           technologies:
             - name: "WordPress"
           findings:
@@ -49,7 +50,7 @@ attack-surface:
               user: "dlewis"
               proof_text: "Uploading malicious XML payload to extract sensitive data via contact form"
     - name: "ThreatGuard Program"
-      targets:
+      hosts:
         - name: "https://app2.corp.example.com"
           ip: "192.168.2.10"
           technologies:

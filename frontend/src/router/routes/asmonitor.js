@@ -28,6 +28,21 @@ const asmonitorRoutes = [
                 component: () => import('@/views/pages/asmonitor/TargetDetail.vue')
             },
             {
+                path: '/attack-surface/programs/:programId/targets/:targetId/hostnames',
+                name: 'ASMonitorHostnameList',
+                component: () => import('@/views/pages/asmonitor/HostnameList.vue')
+            },
+            {
+                path: '/attack-surface/programs/:programId/targets/:targetId/ports',
+                name: 'ASMonitorPortList',
+                component: () => import('@/views/pages/asmonitor/PortList.vue')
+            },
+            {
+                path: '/attack-surface/programs/:programId/targets/:targetId/urls',
+                name: 'ASMonitorURLList',
+                component: () => import('@/views/pages/asmonitor/URLList.vue')
+            },
+            {
                 path: '/attack-surface/programs/:programId/findings',
                 name: 'ASMonitorFindingList',
                 component: () => import('@/views/pages/asmonitor/FindingList.vue')
@@ -38,6 +53,11 @@ const asmonitorRoutes = [
                 component: () => import('@/views/pages/asmonitor/FindingDetail.vue')
             },
             {
+                path: '/attack-surface/programs/:programId/scopes',
+                name: 'ASMonitorScopeList',
+                component: () => import('@/views/pages/asmonitor/ScopeList.vue')
+            },
+            {
                 path: '/attack-surface/findings',
                 name: 'ASMonitorGlobalFindingList',
                 component: () => import('@/views/pages/asmonitor/GlobalFindingList.vue')
@@ -46,6 +66,11 @@ const asmonitorRoutes = [
                 path: '/attack-surface/targets',
                 name: 'ASMonitorGlobalTargetList',
                 component: () => import('@/views/pages/asmonitor/GlobalTargetList.vue')
+            },
+            {
+                path: '/attack-surface/urls',
+                name: 'ASMonitorGlobalURLList',
+                component: () => import('@/views/pages/asmonitor/GlobalURLList.vue')
             }
         ]
     }

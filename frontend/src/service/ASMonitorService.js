@@ -36,6 +36,29 @@ const SeverityChoices = [
     }
 ];
 
+const ScopeTypeChoices = [
+    {
+        name: 'IP',
+        value: 'IP'
+    },
+    {
+        name: 'Network',
+        value: 'Network'
+    },
+    {
+        name: 'Domain',
+        value: 'Domain'
+    },
+    {
+        name: 'Wildcard',
+        value: 'Wildcard'
+    },
+    {
+        name: 'Subdomain',
+        value: 'Subdomain'
+    }
+];
+
 export default class ASMonitorService {
     getStatusChoices() {
         return StatusChoices;
@@ -43,6 +66,10 @@ export default class ASMonitorService {
 
     getSeverityChoices() {
         return SeverityChoices;
+    }
+
+    getScopeTypeChoices() {
+        return ScopeTypeChoices;
     }
 
     getPrograms(api, params) {
@@ -94,7 +121,7 @@ export default class ASMonitorService {
     }
 
     getTargets(api, programId, params) {
-        let url = `/asmonitor/programs/${programId}/targets/`;
+        let url = `/asmonitor/programs/${programId}/hosts/`;
         let config = {};
         if (params) {
             config['params'] = params;
@@ -108,22 +135,22 @@ export default class ASMonitorService {
     }
 
     createTarget(api, programId, data) {
-        let url = `/asmonitor/programs/${programId}/targets/`;
+        let url = `/asmonitor/programs/${programId}/hosts/`;
         return api.post(url, data);
     }
 
     deleteTarget(api, programId, id) {
-        let url = `/asmonitor/programs/${programId}/targets/${id}/`;
+        let url = `/asmonitor/programs/${programId}/hosts/${id}/`;
         return api.delete(url);
     }
 
     patchTarget(api, programId, id, data) {
-        let url = `/asmonitor/programs/${programId}/targets/${id}/`;
+        let url = `/asmonitor/programs/${programId}/hosts/${id}/`;
         return api.patch(url, data);
     }
 
     getTarget(api, programId, id) {
-        let url = `/asmonitor/programs/${programId}/targets/${id}/`;
+        let url = `/asmonitor/programs/${programId}/hosts/${id}/`;
         return api.get(url);
     }
 
@@ -175,7 +202,7 @@ export default class ASMonitorService {
         if (params) {
             config['params'] = params;
         }
-        let url = '/asmonitor/targets/';
+        let url = '/asmonitor/hosts/';
         return api.get(url, config);
     }
 
@@ -184,22 +211,87 @@ export default class ASMonitorService {
         if (params) {
             config['params'] = params;
         }
-        let url = `/asmonitor/programs/${programId}/targets/${targetId}/metas/`;
+        let url = `/asmonitor/programs/${programId}/hosts/${targetId}/metas/`;
         return api.get(url, config);
     }
 
     patchTargetMeta(api, programId, targetId, id, data) {
-        let url = `/asmonitor/programs/${programId}/targets/${targetId}/metas/${id}/`;
+        let url = `/asmonitor/programs/${programId}/hosts/${targetId}/metas/${id}/`;
         return api.patch(url, data);
     }
 
     createTargetMeta(api, programId, targetId, data) {
-        let url = `/asmonitor/programs/${programId}/targets/${targetId}/metas/`;
+        let url = `/asmonitor/programs/${programId}/hosts/${targetId}/metas/`;
         return api.post(url, data);
     }
 
     deleteTargetMeta(api, programId, targetId, id) {
-        let url = `/asmonitor/programs/${programId}/targets/${targetId}/metas/${id}/`;
+        let url = `/asmonitor/programs/${programId}/hosts/${targetId}/metas/${id}/`;
         return api.delete(url);
+    }
+
+    getHostnames(api, programId, hostId, params) {
+        let config = {};
+        if (params) {
+            config['params'] = params;
+        }
+        let url = `/asmonitor/programs/${programId}/hosts/${hostId}/hostnames/`;
+        return api.get(url, config);
+    }
+
+    deleteHostname(api, programId, hostId, id) {
+        let url = `/asmonitor/programs/${programId}/hosts/${hostId}/hostnames/${id}/`;
+        return api.delete(url);
+    }
+
+    getPorts(api, programId, hostId, params) {
+        let config = {};
+        if (params) {
+            config['params'] = params;
+        }
+        let url = `/asmonitor/programs/${programId}/hosts/${hostId}/ports/`;
+        return api.get(url, config);
+    }
+
+    deletePort(api, programId, hostId, id) {
+        let url = `/asmonitor/programs/${programId}/hosts/${hostId}/port/${id}/`;
+        return api.delete(url);
+    }
+
+    getGlobalURLs(api, params) {
+        let config = {};
+        if (params) {
+            config['params'] = params;
+        }
+        let url = `/asmonitor/urls/`;
+        return api.get(url, config);
+    }
+
+    getURLs(api, programId, hostId, params) {
+        let config = {};
+        if (params) {
+            config['params'] = params;
+        }
+        let url = `/asmonitor/programs/${programId}/hosts/${hostId}/urls/`;
+        return api.get(url, config);
+    }
+
+    getScopes(api, programId, params) {
+        let config = {};
+        if (params) {
+            config['params'] = params;
+        }
+        let url = `/asmonitor/programs/${programId}/scopes/`;
+        return api.get(url, config);
+    }
+
+    deleteScope(api, programId, id) {
+        let url = `/asmonitor/programs/${programId}/scopes/${id}/`;
+        return api.delete(url);
+    }
+
+    createScope(api, programId, data) {
+        let url = `/asmonitor/programs/${programId}/scopes/`;
+        return api.post(url, data);
     }
 }

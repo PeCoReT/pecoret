@@ -26,7 +26,7 @@ export default {
                     }).path
                 },
                 {
-                    label: 'Targets',
+                    label: 'Hosts',
                     route: this.$router.resolve({
                         name: 'ASMonitorTargetList',
                         params: {
@@ -42,6 +42,15 @@ export default {
                             programId: this.$route.params.programId
                         }
                     }).path
+                },
+                {
+                    label: 'Scope',
+                    route: this.$router.resolve({
+                        name: 'ASMonitorScopeList',
+                        params: {
+                            programId: this.$route.params.programId
+                        }
+                    })
                 }
             ]
         };

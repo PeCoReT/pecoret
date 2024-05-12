@@ -8,9 +8,9 @@ from django.core.management.base import BaseCommand
 
 from asmonitor import models as asmonitor_models
 from backend import models
+from backend.models.finding import Severity
 from backend.models.membership import Roles
 from backend.models.project import TestMethod
-from backend.models.finding import Severity
 from checklists.models import Category, Item, Checklist
 
 
@@ -144,10 +144,14 @@ class Command(BaseCommand):
             program, _created = asmonitor_models.Program.objects.get_or_create(name=data['name'], defaults={
                 'description': data.get('description')
             })
-            for target_data in data.get('targets', []):
-                target, created = asmonitor_models.Target.objects.get_or_create(name=target_data['name'],
-                                                                                ip=target_data['ip'],
-                                                                                program=program)
+            for target_data in data.get('hosts', []):
+                defaults = {
+                    'last_seen': target_data.get('last_seen'), 'description': target_data.get('description')
+                }
+                if target_data.get('scope'):
+                    defaults['scope'] = target_data['scope']
+                target, created = asmonitor_models.Host.objects.get_or_create(
+                    ip=target_data['ip'], program=program, defaults=defaults)
                 for tech_data in target_data.get('technologies', []):
                     tech, _created = models.Technology.objects.get_or_create(name=tech_data['name'], defaults={
                         'description': tech_data.get('description'),
@@ -160,11 +164,15 @@ class Command(BaseCommand):
                         'color': data.get('color')
                     })
                     target.tags.add(tag)
+                for url_data in target_data.get('urls', []):
+                    _, _ = asmonitor_models.URL.objects.get_or_create(url=url_data['url'], host=target)
+                for hostname_data in target_data.get('hostnames', []):
+                    _, _ = asmonitor_models.Hostname.objects.get_or_create(name=hostname_data['name'], host=target)
                 target.save()
                 for finding_data in target_data.get('findings', []):
                     _finding, _created = asmonitor_models.Finding.objects.get_or_create(name=finding_data['name'],
                                                                                         program=program,
-                                                                                        target=target, defaults={
+                                                                                        host=target, defaults={
                             'severity': Severity[finding_data['severity'].upper()].value,
                             'proof_text': finding_data['proof_text'],
                             'user': models.User.objects.get(username=finding_data['user'])

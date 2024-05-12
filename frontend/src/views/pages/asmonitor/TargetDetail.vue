@@ -3,10 +3,11 @@ import ASMonitorService from '@/service/ASMonitorService';
 import BaseLayout from '@/layout/base/BaseLayout.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import TargetMetaCreateDialog from '@/components/asmonitor/dialogs/TargetMetaCreateDialog.vue';
+import TargetDetailTabMenu from '@/components/asmonitor/TargetDetailTabMenu.vue';
 
 export default {
     name: 'TargetDetail',
-    components: { TargetMetaCreateDialog, MarkdownEditor, BaseLayout },
+    components: { TargetDetailTabMenu, TargetMetaCreateDialog, MarkdownEditor, BaseLayout },
     data() {
         return {
             service: new ASMonitorService(),
@@ -19,7 +20,7 @@ export default {
             totalRecords: 0,
             breadcrumbs: [
                 {
-                    label: 'Targets',
+                    label: 'Hosts',
                     to: this.$router.resolve({
                         name: 'ASMonitorTargetList',
                         params: {
@@ -84,6 +85,14 @@ export default {
                 });
             });
         },
+        onListFilter(event) {
+            let params = {
+                search: event.value
+            };
+            this.service.getTargetMetas(this.$api, this.programId, this.targetId, params).then((response) => {
+                this.notes = response.data.results;
+            });
+        },
         deleteMeta() {
             this.$confirm.require({
                 message: 'Do you want to delete this item?',
@@ -118,10 +127,11 @@ export default {
         </template>
         <template #default>
             <div class="col-12">
-                <div class="card">
+                <TargetDetailTabMenu class="surface-card"></TargetDetailTabMenu>
+                <div class="card border-noround-top">
                     <div class="grid">
                         <div class="col-3 h-full">
-                            <Listbox @change="onMetaSelected" v-model="selectedMeta" :options="metas" optionLabel="key" class="w-full">
+                            <Listbox @change="onMetaSelected" v-model="selectedMeta" :options="metas" optionLabel="key" class="w-full" filter @filter="onListFilter">
                                 <template #option="slotProps">
                                     {{ slotProps.option.key }}
                                 </template>

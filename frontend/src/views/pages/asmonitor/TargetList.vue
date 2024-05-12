@@ -20,7 +20,7 @@ export default {
         return {
             breadcrumbs: [
                 {
-                    label: 'Targets',
+                    label: 'Hosts',
                     disabled: true
                 }
             ],
@@ -46,6 +46,9 @@ export default {
                 item.technologies.forEach((item) => {
                     names.push(item.name);
                 });
+            }
+            if (names.length < 1) {
+                return '-';
             }
             return names.join(',');
         },
@@ -132,7 +135,7 @@ export default {
         },
         confirmDialogDelete(id) {
             this.$confirm.require({
-                message: 'Do you want to remove this target?',
+                message: 'Do you want to remove this host?',
                 header: 'Delete confirmation',
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
@@ -141,7 +144,7 @@ export default {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',
-                            detail: 'Target was removed!',
+                            detail: 'Host was removed!',
                             life: 3000
                         });
                         this.getItems();
@@ -166,8 +169,8 @@ export default {
                 :total-records="totalRecords"
                 :loading="loading"
                 :pagination="pagination"
-                blank-slate-text="No targets found!"
-                blank-slate-title="No Targets!"
+                blank-slate-text="No hosts found!"
+                blank-slate-title="No Hosts!"
                 blank-slate-icon="fa fa-crosshairs"
                 :model-value="items"
                 @sort="onSort"
@@ -179,7 +182,6 @@ export default {
                 @search="onGlobalSearch"
                 @row-click="onRowClick"
             >
-                <Column field="name" header="Name" sortable></Column>
                 <Column field="ip" header="IP"></Column>
                 <Column field="last_seen" header="Last Seen" sortable>
                     <template #body="slotProps">
@@ -188,7 +190,8 @@ export default {
                 </Column>
                 <Column field="tags" header="Tags" :showFilterMatchModes="false">
                     <template #body="slotProps">
-                        <TagBadgeButton :label="tag" v-for="tag in slotProps.data.tags" :key="tag.pk"></TagBadgeButton>
+                        <span v-if="slotProps.data.tags.length > 0"> <TagBadgeButton :label="tag" v-for="tag in slotProps.data.tags" :key="tag.pk"></TagBadgeButton> </span>
+                        <span v-else>-</span>
                     </template>
                     <template #filter="{ filterModel }">
                         <MultiSelect v-model="filterModel.value" :options="tagChoices" @filter="tagFilter" placeholder="Select tags" filter @focus="tagFilter" class="p-column-filter" showClear optionLabel="name" optionValue="pk"></MultiSelect>
@@ -214,6 +217,8 @@ export default {
                     </template>
                 </Column>
                 <Column field="date_updated" header="Updated" sortable></Column>
+                <Column field="scope" header="Scope"></Column>
+                <Column field="port_count" header="Ports"></Column>
                 <Column header="Actions">
                     <template #body="slotProps">
                         <TargetUpdateDialog :target="slotProps.data" @object-updated="getItems"></TargetUpdateDialog>

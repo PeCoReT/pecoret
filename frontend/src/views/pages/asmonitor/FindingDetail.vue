@@ -11,7 +11,7 @@ export default {
     components: { FindingUpdateDialog, MarkdownEditor, InfoCardWithForm, DetailCardWithIcon },
     data() {
         return {
-            finding: { target: {}, cwe: {} },
+            finding: { host: {}, cwe: {} },
             service: new ASMonitorService(),
             programId: this.$route.params.programId,
             findingId: this.$route.params.findingId,
@@ -108,7 +108,7 @@ export default {
                         </InfoCardWithForm>
                     </div>
                     <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Target" icon="fa-crosshairs" class="surface-ground" :text="finding.target.name"></DetailCardWithIcon>
+                        <DetailCardWithIcon title="Host" icon="fa-crosshairs" class="surface-ground" :text="finding.host.ip"></DetailCardWithIcon>
                     </div>
                 </div>
                 <div class="grid formgrid p-fluid">

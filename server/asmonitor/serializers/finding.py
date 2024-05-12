@@ -2,13 +2,13 @@ from rest_framework import serializers
 from pecoret.core.serializers import PrimaryKeyRelatedField, ValuedChoiceField
 from asmonitor.models.finding import Finding, Severity, Status
 from backend.serializers.cwe import CWEMinimalSerializer
-from .target import TargetSerializer
+from .host import HostSerializer
 from .program import ProgramSerializer
 from .tag import TagSerializer
 
 
 class FindingSerializer(serializers.ModelSerializer):
-    target = PrimaryKeyRelatedField(serializer=TargetSerializer)
+    host = PrimaryKeyRelatedField(serializer=HostSerializer)
     severity = ValuedChoiceField(choices=Severity.choices)
     status = ValuedChoiceField(choices=Status.choices, required=False)
     cwe = PrimaryKeyRelatedField(serializer=CWEMinimalSerializer, required=False, allow_null=True)
@@ -17,7 +17,7 @@ class FindingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Finding
         fields = [
-            'pk', 'name', 'severity', 'cwe', 'proof_text', 'target', 'status', 'tags'
+            'pk', 'name', 'severity', 'cwe', 'proof_text', 'host', 'status', 'tags'
         ]
 
 

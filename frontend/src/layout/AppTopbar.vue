@@ -119,9 +119,15 @@ export default {
                             })
                         },
                         {
-                            label: 'Targets',
+                            label: 'Hosts',
                             route: this.$router.resolve({
                                 name: 'ASMonitorGlobalTargetList'
+                            })
+                        },
+                        {
+                            label: 'URLs',
+                            route: this.$router.resolve({
+                                name: 'ASMonitorGlobalURLList'
                             })
                         },
                         {

@@ -13,7 +13,6 @@ export default {
         return {
             showDialog: false,
             model: {
-                name: null,
                 ip: null,
                 description: null,
                 technologies: null,
@@ -53,9 +52,9 @@ export default {
             this.service.createTarget(this.$api, this.programId, this.model).then(() => {
                 this.$toast.add({
                     severity: 'success',
-                    summary: 'Target created!',
+                    summary: 'Host created!',
                     life: 3000,
-                    detail: 'Target created successfully!'
+                    detail: 'Host created successfully!'
                 });
                 this.$emit('object-created');
                 this.showDialog = false;
@@ -66,14 +65,10 @@ export default {
 </script>
 
 <template>
-    <Button icon="fa fa-plus" label="Target" outlined @click="open"></Button>
-    <ModalDialog v-model:loading="loading" header="New Target" v-model="showDialog" @onSave="create">
+    <Button icon="fa fa-plus" label="Host" outlined @click="open"></Button>
+    <ModalDialog v-model:loading="loading" header="New Host" v-model="showDialog" @onSave="create">
         <div class="p-fluid grid formgrid">
-            <div class="field col-12 md:col-6">
-                <label for="name">Name</label>
-                <InputText v-model="model.name" id="name"></InputText>
-            </div>
-            <div class="field col-12 md:col-6">
+            <div class="field col-12">
                 <label for="ip">IP</label>
                 <InputText v-model="model.ip" id="ip"></InputText>
             </div>

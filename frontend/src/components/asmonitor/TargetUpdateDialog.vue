@@ -61,7 +61,6 @@ export default {
         patch() {
             this.loading = true;
             let data = {
-                name: this.model.name,
                 description: this.model.description,
                 ip: this.model.ip,
                 tags: this.model.tags,
@@ -75,9 +74,9 @@ export default {
                 .then(() => {
                     this.$toast.add({
                         severity: 'success',
-                        summary: 'Target updated!',
+                        summary: 'Host updated!',
                         life: 3000,
-                        detail: 'Target updated successfully!'
+                        detail: 'Host updated successfully!'
                     });
                     this.$emit('object-updated');
                     this.showDialog = false;
@@ -91,13 +90,9 @@ export default {
 </script>
 <template>
     <Button icon="fa fa-edit" size="small" outlined @click="open"></Button>
-    <ModalDialog v-model:loading="loading" header="Update Target" v-model="showDialog" @onSave="patch">
+    <ModalDialog v-model:loading="loading" header="Update Host" v-model="showDialog" @onSave="patch">
         <div class="p-fluid grid formgrid">
-            <div class="field col-12 md:col-6">
-                <label for="name">Name</label>
-                <InputText v-model="model.name" id="name"></InputText>
-            </div>
-            <div class="field col-12 md:col-6">
+            <div class="field col-12">
                 <label for="ip">IP</label>
                 <InputText v-model="model.ip" id="ip"></InputText>
             </div>
