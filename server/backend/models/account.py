@@ -1,15 +1,16 @@
 from django.db import models
-from .assets.web_application import WebApplication
-from .assets.host import Host
 
 
-class AccountManager(models.Manager):
+class AccountQuerySet(models.QuerySet):
     def for_project(self, project):
         return self.filter(project=project)
 
+    def is_compromised(self):
+        return self.filter(is_compromised=True)
+
 
 class Account(models.Model):
-    objects = AccountManager()
+    objects = AccountQuerySet.as_manager()
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     project = models.ForeignKey(
