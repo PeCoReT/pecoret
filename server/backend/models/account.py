@@ -6,7 +6,7 @@ class AccountQuerySet(models.QuerySet):
         return self.filter(project=project)
 
     def is_compromised(self):
-        return self.filter(is_compromised=True)
+        return self.filter(compromised=True)
 
 
 class Account(models.Model):
