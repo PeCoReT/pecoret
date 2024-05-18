@@ -2,16 +2,16 @@ from pecoret.core.viewsets import PeCoReTModelViewSet, GenericViewSet
 from pecoret.core.mixins import ListModelMixin
 from pecoret.core import permissions
 from asmonitor.permissions import ASMonitorGroupPermission
-from asmonitor.models import Host
+from asmonitor.models import Target
 from asmonitor.filters.host import HostFilter
-from asmonitor.serializers.host import HostSerializer, GlobalHostSerializer
+from asmonitor.serializers.target import TargetSerializer, GlobalTargetSerializer
 
 
-class HostViewSet(PeCoReTModelViewSet):
-    queryset = Host.objects.none()
-    serializer_class = HostSerializer
-    search_fields = ['ip', 'description', 'hostname__name']
-    ordering_fields = ['ip', 'date_updated', 'date_created', 'last_seen', 'hostname__name']
+class TargetViewSet(PeCoReTModelViewSet):
+    queryset = Target.objects.none()
+    serializer_class = TargetSerializer
+    search_fields = ['ip', 'description', 'name']
+    ordering_fields = ['ip', 'date_updated', 'date_created', 'last_seen', 'name']
     filterset_class = HostFilter
     api_scope = 'scope_asmonitor'
     permission_classes = [
@@ -23,16 +23,16 @@ class HostViewSet(PeCoReTModelViewSet):
     ]
 
     def get_queryset(self):
-        return Host.objects.for_program(self.request.program)
+        return Target.objects.for_program(self.request.program)
 
     def perform_create(self, serializer):
         serializer.save(program=self.request.program)
 
 
-class GlobalHostViewSet(ListModelMixin, GenericViewSet):
-    queryset = Host.objects.all()
-    serializer_class = GlobalHostSerializer
-    search_fields = ['ip', 'description', 'hostname__name', 'targetmeta__key']
+class GlobalTargetViewSet(ListModelMixin, GenericViewSet):
+    queryset = Target.objects.all()
+    serializer_class = GlobalTargetSerializer
+    search_fields = ['ip', 'description', 'name', 'targetmeta__key']
     ordering_fields = ['ip', 'date_updated', 'date_created', 'last_seen']
     filterset_class = HostFilter
     api_scope = 'scope_asmonitor'

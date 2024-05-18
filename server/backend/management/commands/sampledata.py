@@ -144,13 +144,16 @@ class Command(BaseCommand):
             program, _created = asmonitor_models.Program.objects.get_or_create(name=data['name'], defaults={
                 'description': data.get('description')
             })
-            for target_data in data.get('hosts', []):
+            for target_data in data.get('targets', []):
                 defaults = {
                     'last_seen': target_data.get('last_seen'), 'description': target_data.get('description')
                 }
                 if target_data.get('scope'):
                     defaults['scope'] = target_data['scope']
-                target, created = asmonitor_models.Host.objects.get_or_create(
+                # if no ip set name to ip
+                if not target_data.get('name'):
+                    target_data['name'] = target_data['ip']
+                target, created = asmonitor_models.Target.objects.get_or_create(
                     ip=target_data['ip'], program=program, defaults=defaults)
                 for tech_data in target_data.get('technologies', []):
                     tech, _created = models.Technology.objects.get_or_create(name=tech_data['name'], defaults={
@@ -165,14 +168,12 @@ class Command(BaseCommand):
                     })
                     target.tags.add(tag)
                 for url_data in target_data.get('urls', []):
-                    _, _ = asmonitor_models.URL.objects.get_or_create(url=url_data['url'], host=target)
-                for hostname_data in target_data.get('hostnames', []):
-                    _, _ = asmonitor_models.Hostname.objects.get_or_create(name=hostname_data['name'], host=target)
+                    _, _ = asmonitor_models.URL.objects.get_or_create(url=url_data['url'], target=target)
                 target.save()
                 for finding_data in target_data.get('findings', []):
                     _finding, _created = asmonitor_models.Finding.objects.get_or_create(name=finding_data['name'],
                                                                                         program=program,
-                                                                                        host=target, defaults={
+                                                                                        target=target, defaults={
                             'severity': Severity[finding_data['severity'].upper()].value,
                             'proof_text': finding_data['proof_text'],
                             'user': models.User.objects.get(username=finding_data['user'])

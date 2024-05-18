@@ -3,13 +3,13 @@ from pecoret.core.models import TimestampedModel
 
 
 class URLQuerySet(models.QuerySet):
-    def for_host(self, host):
-        return self.filter(host=host)
+    def for_target(self, target):
+        return self.filter(target=target)
 
 
 class URL(TimestampedModel):
     objects = URLQuerySet.as_manager()
-    host = models.ForeignKey('asmonitor.Host', on_delete=models.CASCADE)
+    target = models.ForeignKey('asmonitor.Target', on_delete=models.CASCADE)
     url = models.URLField()
     last_seen = models.DateTimeField(blank=True, null=True)
     request = models.TextField(blank=True, null=True)
@@ -19,14 +19,14 @@ class URL(TimestampedModel):
     class Meta:
         ordering = ['url', '-date_updated']
         unique_together = [
-            ('host', 'url')
+            ('target', 'url')
         ]
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         # update parents
-        self.host.save()
+        self.target.save()
 
     @property
     def program(self):
-        return self.host.program
+        return self.target.program

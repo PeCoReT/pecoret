@@ -2,8 +2,7 @@ from .program import Program
 from .tag import Tag
 from .finding import Finding
 from .targetmeta import TargetMeta
-from .host import Host
-from .hostname import Hostname
+from .target import Target
 from .url import URL
 from .port import Port
 from .scope import Scope

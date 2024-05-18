@@ -1,13 +1,13 @@
-from rest_framework.exceptions import NotFound
-from pecoret.core.mixins import ListModelMixin
-from pecoret.core import permissions
-from pecoret.core.viewsets import PeCoReTModelViewSet, GenericViewSet
-from asmonitor.models import URL, Host
+from asmonitor.mixins import TargetRelatedMixin
+from asmonitor.models import URL
 from asmonitor.permissions import ASMonitorGroupPermission
 from asmonitor.serializers.url import URLSerializer, GlobalURLSerializer
+from pecoret.core import permissions
+from pecoret.core.mixins import ListModelMixin
+from pecoret.core.viewsets import PeCoReTModelViewSet, GenericViewSet
 
 
-class URLViewSet(PeCoReTModelViewSet):
+class URLViewSet(TargetRelatedMixin, PeCoReTModelViewSet):
     queryset = URL.objects.none()
     serializer_class = URLSerializer
     search_fields = ['url', 'request', 'response']
@@ -23,14 +23,12 @@ class URLViewSet(PeCoReTModelViewSet):
     ]
 
     def get_queryset(self):
-        try:
-            host = Host.objects.get(pk=self.kwargs.get('host'), program__pk=self.kwargs.get('program'))
-        except Host.DoesNotExist:
-            raise NotFound()
-        return URL.objects.for_host(host)
+        target = self.get_target()
+        return URL.objects.for_target(target)
 
     def perform_create(self, serializer):
-        serializer.save(host_id=self.kwargs['host'])
+        target = self.get_target()
+        serializer.save(target=target)
 
 
 class GlobalURLViewSet(ListModelMixin, GenericViewSet):

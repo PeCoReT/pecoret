@@ -13,4 +13,4 @@ class FindingFilter(filters.FilterSet):
 
     class Meta:
         model = Finding
-        fields = ['host', 'status', 'severity', 'tags']
+        fields = ['target', 'status', 'severity', 'tags']

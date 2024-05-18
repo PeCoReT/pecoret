@@ -24,7 +24,7 @@ class Finding(TimestampedModel):
                             blank=True)
     user = models.ForeignKey("backend.User", on_delete=CASCADE_USER_TO_GHOST, related_name='asmonitor_finding_set')
     proof_text = models.TextField(default="", blank=True)
-    host = models.ForeignKey('asmonitor.Host', on_delete=models.CASCADE)
+    target = models.ForeignKey('asmonitor.Target', on_delete=models.CASCADE)
     status = models.PositiveSmallIntegerField(choices=Status.choices, default=Status.OPEN)
     program = models.ForeignKey('asmonitor.Program', on_delete=models.CASCADE)
     tags = models.ManyToManyField('asmonitor.Tag', blank=True)
@@ -33,7 +33,7 @@ class Finding(TimestampedModel):
         ordering = ['-date_created']
 
     def clean(self):
-        if self.host.program.pk != self.program.pk:
+        if self.target.program.pk != self.program.pk:
             raise ValidationError({"target": "target does not belong to project"})
         return super().clean()
 

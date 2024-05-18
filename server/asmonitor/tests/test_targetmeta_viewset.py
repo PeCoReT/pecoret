@@ -43,8 +43,8 @@ class TargetMetaCreateView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.target = self.create_instance(Target)
         self.data = {
-            'key': 'urls',
-            'value': 'https://example.com\nhttps://example.com/admin'
+            'key': 'test123',
+            'value': 'test4567'
         }
         self.url = self.get_url('asmonitor:targets:meta-list', program=self.target.program.pk, target=self.target.pk)
         self.allowed_users = [

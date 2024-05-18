@@ -8,28 +8,31 @@ class ScopeChoices(models.IntegerChoices):
     OUT_OF_SCOPE = 2, 'Out of Scope'
 
 
-class HostQuerySet(models.QuerySet):
+class TargetQuerySet(models.QuerySet):
     def for_program(self, program):
         return self.filter(program=program)
 
 
-class Host(TimestampedModel):
-    objects = HostQuerySet.as_manager()
-    ip = models.GenericIPAddressField()
-    technologies = models.ManyToManyField('backend.Technology', blank=True, related_name='asmonitor_hosts')
+class Target(TimestampedModel):
+    objects = TargetQuerySet.as_manager()
+    name = models.CharField(max_length=512, db_index=True)
+    ip = models.GenericIPAddressField(null=True, db_index=True)
     description = models.TextField(blank=True, null=True)
-    program = models.ForeignKey('asmonitor.Program', on_delete=models.CASCADE)
+    technologies = models.ManyToManyField('backend.Technology', blank=True)
     last_seen = models.DateTimeField(blank=True, null=True)
+    program = models.ForeignKey('asmonitor.Program', on_delete=models.CASCADE)
     tags = models.ManyToManyField('asmonitor.Tag', blank=True)
     scope = models.PositiveSmallIntegerField(choices=ScopeChoices.choices, default=ScopeChoices.UNDEFINED)
 
     class Meta:
-        ordering = ['-last_seen', 'ip']
+        ordering = ['-last_seen', 'name']
         unique_together = [
-            ('program', 'ip')
+            ('name', 'program', 'ip')
         ]
 
     def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = self.ip
         super().save(*args, **kwargs)
         # update date_updated in program too
         self.program.save()

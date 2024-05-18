@@ -9,13 +9,13 @@ class Protocol(models.IntegerChoices):
 
 
 class PortQuerySet(models.QuerySet):
-    def for_host(self, host):
-        return self.filter(host=host)
+    def for_target(self, target):
+        return self.filter(target=target)
 
 
 class Port(TimestampedModel):
     objects = PortQuerySet.as_manager()
-    host = models.ForeignKey('asmonitor.Host', on_delete=models.CASCADE)
+    target = models.ForeignKey('asmonitor.Target', on_delete=models.CASCADE)
     port = models.PositiveSmallIntegerField(validators=[MaxValueValidator(65535)])
     service = models.CharField(max_length=32, null=True, blank=True)
     protocol = models.PositiveSmallIntegerField(choices=Protocol.choices, default=Protocol.TCP)
@@ -23,6 +23,6 @@ class Port(TimestampedModel):
 
     class Meta:
         unique_together = [
-            ('host', 'port', 'protocol')
+            ('target', 'port', 'protocol')
         ]
         ordering = ['port', 'protocol']

@@ -1,6 +1,6 @@
 from django_filters import widgets
 from django_filters import rest_framework as filters
-from asmonitor.models import Host, Tag
+from asmonitor.models import Target, Tag
 from backend.models.technology import Technology
 
 
@@ -12,5 +12,5 @@ class HostFilter(filters.FilterSet):
     )
 
     class Meta:
-        model = Host
+        model = Target
         fields = ['tags', 'technologies']

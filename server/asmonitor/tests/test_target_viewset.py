@@ -1,6 +1,7 @@
 from rest_framework.test import APITestCase
 
 from asmonitor.models import Target, Program
+from asmonitor.models.target import ScopeChoices
 from pecoret.core.test import PeCoReTTestCaseMixin
 
 
@@ -42,7 +43,8 @@ class TargetCreateView(APITestCase, PeCoReTTestCaseMixin):
         self.program = self.create_instance(Program)
         self.data = {
             'ip': '10.10.10.10',
-            'name': 'Test'
+            'name': 'Test',
+            'scope': ScopeChoices.IN_SCOPE.label
         }
         self.url = self.get_url('asmonitor:programs:target-list', program=self.program.pk)
         self.allowed_users = [
@@ -56,7 +58,7 @@ class TargetCreateView(APITestCase, PeCoReTTestCaseMixin):
     def test_allowed(self):
         for user in self.allowed_users:
             self.client.force_login(user)
-            self.data['name'] = self.data['name'] + user.username
+            self.data['name'] = user.username
             self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
 
     def test_forbidden(self):
@@ -66,7 +68,7 @@ class TargetCreateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_api_token_allowed(self):
         for user in self.allowed_users:
-            self.data['name'] = self.data['name'] + user.username
+            self.data['name'] = user.username
             self.api_token_check(user, 'scope_asmonitor', self.url, self.client.post, 403, 201, 403, data=self.data)
 
     def test_api_token_forbidden(self):
