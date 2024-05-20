@@ -23,7 +23,9 @@ class Finding(TimestampedModel):
     cwe = models.ForeignKey('backend.CWE', on_delete=models.CASCADE, related_name='asmonitor_finding_set', null=True,
                             blank=True)
     user = models.ForeignKey("backend.User", on_delete=CASCADE_USER_TO_GHOST, related_name='asmonitor_finding_set')
+    description = models.TextField(blank=True)
     proof_text = models.TextField(default="", blank=True)
+    recommendation = models.TextField(blank=True)
     target = models.ForeignKey('asmonitor.Target', on_delete=models.CASCADE)
     status = models.PositiveSmallIntegerField(choices=Status.choices, default=Status.OPEN)
     program = models.ForeignKey('asmonitor.Program', on_delete=models.CASCADE)

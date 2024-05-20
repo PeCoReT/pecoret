@@ -13,4 +13,4 @@ class HostFilter(filters.FilterSet):
 
     class Meta:
         model = Target
-        fields = ['tags', 'technologies']
+        fields = ['tags', 'technologies', 'name', 'ip']

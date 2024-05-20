@@ -20,7 +20,7 @@ export default {
         return {
             breadcrumbs: [
                 {
-                    label: 'Hosts',
+                    label: 'Targets',
                     disabled: true
                 }
             ],
@@ -135,7 +135,7 @@ export default {
         },
         confirmDialogDelete(id) {
             this.$confirm.require({
-                message: 'Do you want to remove this host?',
+                message: 'Do you want to remove this target?',
                 header: 'Delete confirmation',
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
@@ -144,7 +144,7 @@ export default {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',
-                            detail: 'Host was removed!',
+                            detail: 'Target was removed!',
                             life: 3000
                         });
                         this.getItems();
@@ -169,19 +169,21 @@ export default {
                 :total-records="totalRecords"
                 :loading="loading"
                 :pagination="pagination"
-                blank-slate-text="No hosts found!"
-                blank-slate-title="No Hosts!"
+                blank-slate-text="No targets found!"
+                blank-slate-title="No Targets!"
                 blank-slate-icon="fa fa-crosshairs"
                 :model-value="items"
                 @sort="onSort"
                 @filter="getItems"
                 v-model:filters="filters"
+                @page="onPage"
                 :removable-sort="true"
                 filter-display="menu"
                 :show-search="true"
                 @search="onGlobalSearch"
                 @row-click="onRowClick"
             >
+                <Column field="name" header="Name"></Column>
                 <Column field="ip" header="IP"></Column>
                 <Column field="last_seen" header="Last Seen" sortable>
                     <template #body="slotProps">

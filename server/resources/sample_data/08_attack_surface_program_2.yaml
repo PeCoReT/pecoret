@@ -20,7 +20,6 @@ attack-surface:
             - url: "http://portal.example.com"
           technologies:
             - name: "Nextcloud"
-            - name: "Authentication"
         - ip: "192.168.133.55"
           urls:
             - url: "http://intranet55.example.com"
@@ -50,7 +49,7 @@ attack-surface:
           urls:
             - url: "http://intranet-alpha.example.com"
           technologies:
-            - name: "Wordpress"
+            - name: "WordPress"
         - ip: "10.10.10.102"
           urls:
             - url: "http://intranet-beta.example.com"

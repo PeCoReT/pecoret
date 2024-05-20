@@ -4,7 +4,7 @@ django-filter==24.2
 Pillow==10.3.0
 django-cors-headers==4.3.1
 django_q2==1.6.2
-weasyprint==61.2
+weasyprint==62.1
 libsass==0.23.0
 markdown==3.6
 pygments==2.17.2

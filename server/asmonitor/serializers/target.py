@@ -17,7 +17,7 @@ class TargetSerializer(serializers.ModelSerializer):
         model = Target
         fields = [
             'pk', 'ip', 'description', 'technologies', 'tags', 'date_updated', 'date_created', 'last_seen',
-            'port_count', 'scope', 'name'
+            'port_count', 'scope', 'name', 'display_name'
         ]
 
 

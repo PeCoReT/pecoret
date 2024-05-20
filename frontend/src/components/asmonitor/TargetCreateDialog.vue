@@ -14,9 +14,11 @@ export default {
             showDialog: false,
             model: {
                 ip: null,
+                name: null,
                 description: null,
                 technologies: null,
-                tags: null
+                tags: null,
+                scope: 'Undefined'
             },
             loading: false,
             programId: this.$route.params.programId,
@@ -52,9 +54,9 @@ export default {
             this.service.createTarget(this.$api, this.programId, this.model).then(() => {
                 this.$toast.add({
                     severity: 'success',
-                    summary: 'Host created!',
+                    summary: 'Target created!',
                     life: 3000,
-                    detail: 'Host created successfully!'
+                    detail: 'Target created successfully!'
                 });
                 this.$emit('object-created');
                 this.showDialog = false;
@@ -65,12 +67,20 @@ export default {
 </script>
 
 <template>
-    <Button icon="fa fa-plus" label="Host" outlined @click="open"></Button>
-    <ModalDialog v-model:loading="loading" header="New Host" v-model="showDialog" @onSave="create">
+    <Button icon="fa fa-plus" label="Target" outlined @click="open"></Button>
+    <ModalDialog v-model:loading="loading" header="New Target" v-model="showDialog" @onSave="create">
         <div class="p-fluid grid formgrid">
-            <div class="field col-12">
+            <div class="field col-12 md:col-6">
+                <label for="name">Name</label>
+                <InputText v-model="model.name" id="name"></InputText>
+            </div>
+            <div class="field col-12 md:col-6">
                 <label for="ip">IP</label>
                 <InputText v-model="model.ip" id="ip"></InputText>
+            </div>
+            <div class="field col-12">
+                <label for="scope">Scope</label>
+                <Dropdown :options="service.getInScopeChoices()" optionLabel="name" optionValue="value" v-model="model.scope"></Dropdown>
             </div>
             <div class="field col-12">
                 <label for="technologies">Technologies</label>

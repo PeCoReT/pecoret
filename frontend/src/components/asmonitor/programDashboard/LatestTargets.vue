@@ -49,7 +49,7 @@ export default {
                     <div class="col-12 border-round border-1 p-0 card m-0" v-for="(item, index) in slotProps.items" :key="index">
                         <div class="flex p-4 gap-4">
                             <div class="flex justify-content-start w-full">
-                                {{ item.ip }}
+                                {{ item.name }} ({{ item.ip }})
                             </div>
                         </div>
                     </div>

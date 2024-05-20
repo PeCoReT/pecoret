@@ -84,7 +84,7 @@ class ProjectUpdateVisibility(APITestCase, PeCoReTTestCaseMixin):
     def test_not_allowed(self):
         for user in self.not_allowed:
             self.client.force_login(user)
-            self.basic_status_code_check(self.url, self.client.patch, 400, data=self.data, debug=True)
+            self.basic_status_code_check(self.url, self.client.patch, 400, data=self.data)
 
     def test_allowed(self):
         for user in self.allowed_users:

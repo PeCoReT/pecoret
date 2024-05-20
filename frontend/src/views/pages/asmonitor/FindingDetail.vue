@@ -11,7 +11,7 @@ export default {
     components: { FindingUpdateDialog, MarkdownEditor, InfoCardWithForm, DetailCardWithIcon },
     data() {
         return {
-            finding: { host: {}, cwe: {} },
+            finding: { target: {}, cwe: {} },
             service: new ASMonitorService(),
             programId: this.$route.params.programId,
             findingId: this.$route.params.findingId,
@@ -108,13 +108,21 @@ export default {
                         </InfoCardWithForm>
                     </div>
                     <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Host" icon="fa-crosshairs" class="surface-ground" :text="finding.host.ip"></DetailCardWithIcon>
+                        <DetailCardWithIcon title="Target" icon="fa-crosshairs" class="surface-ground" :text="finding.target.display_name"></DetailCardWithIcon>
                     </div>
                 </div>
                 <div class="grid formgrid p-fluid">
                     <div class="field col-12">
+                        <label for="description">Description</label>
+                        <MarkdownEditor v-model="finding.description" @blur="patchFindingData({ description: finding.description })"></MarkdownEditor>
+                    </div>
+                    <div class="field col-12">
                         <label for="proof">Proof</label>
                         <MarkdownEditor v-model="finding.proof_text" @blur="patchFindingData({ proof_text: finding.proof_text })"></MarkdownEditor>
+                    </div>
+                    <div class="field col-12">
+                        <label for="recommendation">Recommendation</label>
+                        <MarkdownEditor v-model="finding.recommendation" @blur="patchFindingData({ recommendation: finding.recommendation })"></MarkdownEditor>
                     </div>
                 </div>
             </div>

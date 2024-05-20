@@ -18,8 +18,10 @@ export default {
                 severity: null,
                 cwe: null,
                 proof_text: null,
-                host: null,
-                tags: null
+                target: null,
+                tags: null,
+                recommendation: null,
+                description: null
             },
             targetChoices: null,
             cweChoices: null,
@@ -90,8 +92,8 @@ export default {
                 <SeveritySelectField v-model="model.severity"></SeveritySelectField>
             </div>
             <div class="field col-12">
-                <label for="target">Host</label>
-                <Dropdown id="target" filter optionLabel="ip" optionValue="pk" :options="targetChoices" v-model="model.host" @filter="onFilterTarget" @focus="getTargets"></Dropdown>
+                <label for="target">Target</label>
+                <Dropdown id="target" filter optionLabel="ip" optionValue="pk" :options="targetChoices" v-model="model.target" @filter="onFilterTarget" @focus="getTargets"></Dropdown>
             </div>
             <div class="field col-12">
                 <label for="cwe">CWE-ID</label>
@@ -102,8 +104,16 @@ export default {
                 <TagSelectField v-model="model.tags"></TagSelectField>
             </div>
             <div class="field col-12">
-                <label for="description">Proof</label>
+                <label for="description">Description</label>
+                <MarkdownEditor v-model="model.description"></MarkdownEditor>
+            </div>
+            <div class="field col-12">
+                <label for="proof">Proof</label>
                 <MarkdownEditor v-model="model.proof_text"></MarkdownEditor>
+            </div>
+            <div class="field col-12">
+                <label for="recommendation">Recommendation</label>
+                <MarkdownEditor v-model="model.recommendation"></MarkdownEditor>
             </div>
         </div>
     </ModalDialog>

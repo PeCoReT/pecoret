@@ -26,7 +26,7 @@ export default {
                     }).path
                 },
                 {
-                    label: 'Hosts',
+                    label: 'Targets',
                     route: this.$router.resolve({
                         name: 'ASMonitorTargetList',
                         params: {

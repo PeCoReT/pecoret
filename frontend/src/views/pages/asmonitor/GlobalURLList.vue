@@ -52,7 +52,7 @@ export default {
                 name: 'ASMonitorURLList',
                 params: {
                     programId: row.data.program.pk,
-                    targetId: row.data.host.pk
+                    targetId: row.data.target.pk
                 }
             });
         },

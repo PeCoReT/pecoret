@@ -128,7 +128,7 @@ export default {
                         <Dropdown v-model="filterModel.value" :options="service.getSeverityChoices()" class="p-column-filter" showClear optionLabel="name" optionValue="value"></Dropdown>
                     </template>
                 </Column>
-                <Column field="host.ip" header="Host"></Column>
+                <Column header="Target" field="target.display_name"></Column>
                 <Column field="status" header="Status" :showFilterMatchModes="false">
                     <template #filter="{ filterModel }">
                         <Dropdown v-model="filterModel.value" :options="service.getStatusChoices()" class="p-column-filter" showClear optionLabel="name" optionValue="value"></Dropdown>

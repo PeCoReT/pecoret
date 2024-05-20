@@ -15,16 +15,6 @@ export default {
                     })
                 },
                 {
-                    label: 'Hostnames',
-                    route: this.$router.resolve({
-                        name: 'ASMonitorHostnameList',
-                        params: {
-                            programId: this.$route.params.programId,
-                            targetId: this.$route.params.targetId
-                        }
-                    })
-                },
-                {
                     label: 'Ports',
                     route: this.$router.resolve({
                         name: 'ASMonitorPortList',
@@ -45,9 +35,9 @@ export default {
                     })
                 },
                 {
-                    label: 'Findings',
+                    label: 'Meta',
                     route: this.$router.resolve({
-                        name: 'ASMonitorTargetDetail',
+                        name: 'ASMonitorTargetMetaList',
                         params: {
                             programId: this.$route.params.programId,
                             targetId: this.$route.params.targetId

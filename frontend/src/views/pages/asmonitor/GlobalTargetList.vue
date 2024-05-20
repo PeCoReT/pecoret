@@ -135,6 +135,7 @@ export default {
                 @filter="getItems"
                 filter-display="menu"
             >
+                <Column field="name" header="Name"></Column>
                 <Column field="ip" header="IP"></Column>
                 <Column field="last_seen" header="Last Seen" sortable>
                     <template #body="slotProps">

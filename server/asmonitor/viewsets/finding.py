@@ -1,3 +1,5 @@
+from django.http.response import HttpResponse
+from rest_framework.decorators import action
 from asmonitor.models import Finding
 from asmonitor.permissions import ASMonitorGroupPermission
 from asmonitor.filters.finding import FindingFilter
@@ -28,6 +30,17 @@ class FindingViewSet(PeCoReTModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(program=self.request.program, user=self.request.user)
+
+    """
+    @action(detail=True, method=['get'])
+    def export_pdf(self, request, *args, **kwargs):
+        finding = self.get_object()
+        template = request.GET.get('template', 'default_template')
+        result = export_finding(finding, template)
+        response = HttpResponse(result, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline'
+        return response
+    """
 
 
 class GlobalFindingList(ListModelMixin, GenericViewSet):

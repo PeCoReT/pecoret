@@ -28,14 +28,14 @@ const asmonitorRoutes = [
                 component: () => import('@/views/pages/asmonitor/TargetDetail.vue')
             },
             {
-                path: '/attack-surface/programs/:programId/targets/:targetId/hostnames',
-                name: 'ASMonitorHostnameList',
-                component: () => import('@/views/pages/asmonitor/HostnameList.vue')
-            },
-            {
                 path: '/attack-surface/programs/:programId/targets/:targetId/ports',
                 name: 'ASMonitorPortList',
                 component: () => import('@/views/pages/asmonitor/PortList.vue')
+            },
+            {
+                path: '/attack-surface/programs/:programId/targets/:targetId/meta',
+                name: 'ASMonitorTargetMetaList',
+                component: () => import('@/views/pages/asmonitor/TargetMetaList.vue')
             },
             {
                 path: '/attack-surface/programs/:programId/targets/:targetId/urls',

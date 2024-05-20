@@ -36,6 +36,21 @@ const SeverityChoices = [
     }
 ];
 
+const InScopeChoices = [
+    {
+        name: 'In Scope',
+        value: 'In Scope'
+    },
+    {
+        name: 'Undefined',
+        value: 'Undefined'
+    },
+    {
+        name: 'Out of Scope',
+        value: 'Out of Scope'
+    }
+];
+
 const ScopeTypeChoices = [
     {
         name: 'IP',
@@ -62,6 +77,10 @@ const ScopeTypeChoices = [
 export default class ASMonitorService {
     getStatusChoices() {
         return StatusChoices;
+    }
+
+    getInScopeChoices() {
+        return InScopeChoices;
     }
 
     getSeverityChoices() {

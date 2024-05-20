@@ -29,7 +29,7 @@ export default {
             programId: this.$route.params.programId,
             targetChoices: [],
             filters: {
-                'host.ip': { value: null },
+                'target.name': { value: null },
                 status: { value: null },
                 severity: { value: null }
             }
@@ -39,7 +39,7 @@ export default {
         getItems() {
             this.loading = true;
             let params = {
-                host: this.filters['host.ip'].value,
+                target: this.filters['target.name'].value,
                 status: this.filters.status.value,
                 page: this.pagination.page,
                 limit: this.pagination.limit,
@@ -175,9 +175,9 @@ export default {
                         <Dropdown v-model="filterModel.value" :options="service.getSeverityChoices()" class="p-column-filter" showClear optionLabel="name" optionValue="value"></Dropdown>
                     </template>
                 </Column>
-                <Column field="host.ip" header="Host" :showFilterMatchModes="false">
+                <Column field="target.name" header="Target" :showFilterMatchModes="false">
                     <template #filter="{ filterModel }">
-                        <Dropdown v-model="filterModel.value" :options="targetChoices" @filter="targetFilter" placeholder="Select host" filter @focus="targetFilter" class="p-column-filter" showClear optionLabel="ip" optionValue="pk"></Dropdown>
+                        <Dropdown v-model="filterModel.value" :options="targetChoices" @filter="targetFilter" placeholder="Select target" filter @focus="targetFilter" class="p-column-filter" showClear optionLabel="ip" optionValue="pk"></Dropdown>
                     </template>
                 </Column>
                 <Column field="status" header="Status" :showFilterMatchModes="false">

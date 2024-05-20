@@ -40,3 +40,9 @@ class Target(TimestampedModel):
     @property
     def port_count(self):
         return self.port_set.count()
+
+    @property
+    def display_name(self):
+        if self.ip:
+            return f'{self.name} ({self.ip})'
+        return self.name
