@@ -12,13 +12,14 @@ class URLSerializer(serializers.ModelSerializer):
     class Meta:
         model = URL
         fields = [
-            'pk', 'url', 'date_created', 'date_updated', 'last_seen', 'request', 'response', 'status_code'
+            'pk', 'url', 'date_created', 'date_updated', 'last_seen', 'request', 'response', 'status_code',
+            'is_base'
         ]
 
     def create(self, validated_data):
         instance = super().create(validated_data)
         scheme, port = utils.url.port_and_scheme_from_url(instance.url)
-        _, _ = Port.objects.get_or_create(host=instance.host, port=port, protocol=Protocol.TCP,
+        _, _ = Port.objects.get_or_create(target=instance.target, port=port, protocol=Protocol.TCP,
                                           defaults={'service': scheme})
         return instance
 
@@ -29,4 +30,5 @@ class GlobalURLSerializer(URLSerializer):
 
     class Meta:
         model = URL
-        fields = ['pk', 'url', 'date_created', 'date_updated', 'last_seen', 'program', 'status_code', 'target']
+        fields = ['pk', 'url', 'date_created', 'date_updated', 'last_seen', 'program', 'status_code', 'target',
+                  'is_base']

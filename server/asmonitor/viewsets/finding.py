@@ -1,12 +1,14 @@
-from django.http.response import HttpResponse
+from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.response import Response
+
+from asmonitor.filters.finding import FindingFilter
 from asmonitor.models import Finding
 from asmonitor.permissions import ASMonitorGroupPermission
-from asmonitor.filters.finding import FindingFilter
 from asmonitor.serializers.finding import FindingSerializer, GlobalFindingSerializer
 from pecoret.core import permissions
-from pecoret.core.viewsets import PeCoReTModelViewSet, GenericViewSet
 from pecoret.core.mixins import ListModelMixin
+from pecoret.core.viewsets import PeCoReTModelViewSet, GenericViewSet
 
 
 class FindingViewSet(PeCoReTModelViewSet):
@@ -31,16 +33,23 @@ class FindingViewSet(PeCoReTModelViewSet):
     def perform_create(self, serializer):
         serializer.save(program=self.request.program, user=self.request.user)
 
-    """
-    @action(detail=True, method=['get'])
-    def export_pdf(self, request, *args, **kwargs):
-        finding = self.get_object()
-        template = request.GET.get('template', 'default_template')
-        result = export_finding(finding, template)
-        response = HttpResponse(result, content_type='application/pdf')
-        response['Content-Disposition'] = 'inline'
-        return response
-    """
+    @action(detail=False, methods=["post"])
+    def create_or_update(self, request, *args, **kwargs):
+        serializer = FindingSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        qs = Finding.objects.filter_unique(request.program, request.data['name'], request.data['target'],
+                                           request.data['severity'])
+        if qs.exists():
+            serializer = self.get_serializer(qs.get(), data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
+            return Response(serializer.data, status.HTTP_200_OK)
+        # create
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class GlobalFindingList(ListModelMixin, GenericViewSet):

@@ -22,7 +22,7 @@ export default {
             totalRecords: 0,
             breadcrumbs: [
                 {
-                    label: 'Hosts',
+                    label: 'Targets',
                     to: this.$router.resolve({
                         name: 'ASMonitorTargetList',
                         params: {

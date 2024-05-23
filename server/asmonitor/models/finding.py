@@ -15,6 +15,9 @@ class FindingQuerySet(models.QuerySet):
     def for_program(self, program):
         return self.filter(program=program)
 
+    def filter_unique(self, program, name, target, severity):
+        return self.for_program(program).filter(name=name, target=target, severity=Severity[severity.upper()].value)
+
 
 class Finding(TimestampedModel):
     objects = FindingQuerySet.as_manager()

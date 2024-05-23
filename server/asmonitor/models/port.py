@@ -12,6 +12,9 @@ class PortQuerySet(models.QuerySet):
     def for_target(self, target):
         return self.filter(target=target)
 
+    def filter_unique(self, protocol, port, target):
+        return self.for_target(target).filter(protocol=Protocol[protocol].value, port=port)
+
 
 class Port(TimestampedModel):
     objects = PortQuerySet.as_manager()

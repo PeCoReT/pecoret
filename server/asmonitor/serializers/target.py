@@ -10,7 +10,7 @@ from .program import ProgramSerializer
 class TargetSerializer(serializers.ModelSerializer):
     technologies = PrimaryKeyRelatedField(serializer=TechnologySerializer, many=True, required=False)
     tags = PrimaryKeyRelatedField(serializer=TagSerializer, many=True, required=False)
-    scope = ValuedChoiceField(choices=ScopeChoices.choices)
+    scope = ValuedChoiceField(choices=ScopeChoices.choices, required=False)
     name = serializers.CharField(required=False)
 
     class Meta:

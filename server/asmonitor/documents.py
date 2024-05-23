@@ -19,6 +19,12 @@ class TargetDocument(Document):
         'name': fields.TextField()
     })
     ip = fields.IpField()
+    ports = fields.NestedField(attr='port_set', properties={
+        'protocol': fields.TextField(attr='get_protocol_display'),
+        'port': fields.IntegerField(),
+        'service': fields.TextField(),
+        'banner': fields.TextField()
+    })
 
     class Index:
         name = 'targets'
