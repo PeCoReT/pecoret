@@ -57,7 +57,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         groups = validated_data.pop('groups')
-        password = validated_data.pop('password')
+        password = validated_data.pop('password', None)
         user = User.objects.create_user(**validated_data, is_active=False)
         if password:
             user.set_password(password)
