@@ -15,7 +15,9 @@ export default {
                 last_name: null,
                 email: null,
                 groups: [],
-                company: null
+                company: null,
+                password: null,
+                is_active: false
             },
             service: new AdminService(),
             groupChoices: [],
@@ -49,6 +51,7 @@ export default {
                 last_name: this.model.last_name,
                 email: this.model.email,
                 groups: this.model.groups,
+                password: this.model.password,
                 company: this.model.company
             };
             this.service.createUser(this.$api, data).then((response) => {
@@ -59,6 +62,7 @@ export default {
                     detail: 'User created successfully!'
                 });
                 this.$emit('object-created', response.data);
+                this.model.password = null;
                 this.visible = false;
             });
         },
@@ -104,6 +108,11 @@ export default {
             <div class="field col-12" v-if="isCustomerSelected === true">
                 <label for="company">Company</label>
                 <CompanySelectField v-model="model.company"></CompanySelectField>
+            </div>
+            <div class="field col-12">
+                <label for="password">Password</label>
+                <Password id="password" v-model="model.password" :feedback="false" :toggleMask="true"></Password>
+                <small>You can leave the password empty to send an activation mail to the user! Users where the password was set are inactive by default. Enable them using the update dialog!</small>
             </div>
         </div>
 

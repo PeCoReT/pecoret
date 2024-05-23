@@ -38,7 +38,9 @@ class UserViewSet(PeCoReTModelViewSet):
     def perform_create(self, serializer):
         instance = serializer.save()
         context = {"user": instance}
-        async_task(mail.send_activation_mail, context, instance.email)
+        # if admin user does not have set is admin or a usable password
+        if not instance.is_active and not instance.has_usable_password():
+            async_task(mail.send_activation_mail, context, instance.email)
 
     @action(
         detail=False,
@@ -100,9 +102,7 @@ class UserViewSet(PeCoReTModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=False, methods=["post"], serializer_class=serializers.ChangeEmailSerializer,
-            throttle_classes=[AuthFlowThrottle], permission_classes=[IsAuthenticated],
-
-            )
+            throttle_classes=[AuthFlowThrottle], permission_classes=[IsAuthenticated])
     @method_decorator(csrf_protect)
     def change_email(self, request, *args, **kwargs):
         serializer = serializers.ChangeEmailSerializer(data=request.data, context={"request": request})

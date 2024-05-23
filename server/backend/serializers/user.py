@@ -6,10 +6,10 @@ from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied
 
 from backend.models.user import User
-from backend.utils.change_email_token_generator import change_email_token_generator
 from backend.serializers.company import CompanySerializer
-from pecoret.core.utils import decode_uid
+from backend.utils.change_email_token_generator import change_email_token_generator
 from pecoret.core.serializers import PrimaryKeyRelatedField
+from pecoret.core.utils import decode_uid
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -43,20 +43,36 @@ class MinimalUserSerializer(serializers.ModelSerializer):
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
+    default_error_messages = {
+        "invalid_password": "Invalid password! {msg}"
+    }
+
     class Meta:
         model = User
-        fields = ["pk", "username", "first_name", "last_name", "email", "groups", 'company']
-        read_only_Fields = ["pk", "username", "is_active"]
+        fields = ["pk", "username", "first_name", "last_name", "email", "groups", 'company', 'password']
+        read_only_Fields = ["pk", "username"]
+        extra_kwargs = {
+            'password': {'required': False, 'allow_null': True, 'allow_blank': True}
+        }
 
     def create(self, validated_data):
         groups = validated_data.pop('groups')
+        password = validated_data.pop('password')
         user = User.objects.create_user(**validated_data, is_active=False)
+        if password:
+            user.set_password(password)
         user.save()
         for group in groups:
             user.groups.add(group)
         return user
 
     def validate(self, attrs):
+        if attrs.get('password'):
+            user = self.context['request'].user
+            try:
+                validate_password(attrs["password"], user)
+            except ValidationError as e:
+                self.fail("invalid_password", msg=str(';'.join(list(e.messages))))
         group = Group.objects.get(name='Customer')
         if attrs.get('company') and group not in attrs['groups']:
             raise ValidationError({'company': 'Only customers can have a company set.'})
