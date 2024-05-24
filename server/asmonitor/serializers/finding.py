@@ -18,7 +18,7 @@ class FindingSerializer(serializers.ModelSerializer):
         model = Finding
         fields = [
             'pk', 'name', 'severity', 'cwe', 'proof_text', 'target', 'status', 'tags',
-            'description', 'recommendation'
+            'description', 'recommendation', 'internal_information'
         ]
 
 

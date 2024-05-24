@@ -13,7 +13,7 @@ export default {
         return {
             breadcrumbs: [
                 {
-                    label: 'Hosts',
+                    label: 'Targets',
                     disabled: true
                 }
             ],

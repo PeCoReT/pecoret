@@ -11,6 +11,7 @@ router.register('tags', viewsets.TagViewSet, 'tag')
 router.register('findings', viewsets.GlobalFindingList, 'finding')
 router.register('targets', viewsets.GlobalTargetViewSet, 'target')
 router.register('urls', viewsets.GlobalURLViewSet, 'url')
+router.register('ports', viewsets.GlobalPortViewSet, 'port')
 
 
 # all routes for programs

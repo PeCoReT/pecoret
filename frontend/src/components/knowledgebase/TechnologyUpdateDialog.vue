@@ -2,10 +2,11 @@
 import ModalDialog from '@/components/elements/dialogs/ModalDialog.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import TechnologyService from '@/service/TechnologyService';
+import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
 
 export default {
     name: 'TechnologyUpdateDialog',
-    components: { MarkdownEditor, ModalDialog },
+    components: { TechnologyMultiSelectField, MarkdownEditor, ModalDialog },
     emits: ['object-updated'],
     props: {
         technology: {
@@ -40,8 +41,12 @@ export default {
                 cpe: this.model.cpe,
                 homepage: this.model.homepage,
                 source_code_url: this.model.source_code_url,
-                vendor: this.model.vendor
+                vendor: this.model.vendor,
+                implicit_technologies: this.model.implicit_technologies
             };
+            if (this.model.implicit_technologies.length > 0 && this.model.implicit_technologies[0].pk) {
+                delete data.implicit_technologies;
+            }
             this.service.patchTechnology(this.$api, this.technology.pk, data).then(() => {
                 this.$toast.add({
                     severity: 'success',
@@ -80,6 +85,10 @@ export default {
             <div class="field col-12">
                 <label for="source_code_url">Source Code URL</label>
                 <InputText v-model="model.source_code_url"></InputText>
+            </div>
+            <div class="field col-12">
+                <label>Implicit Technologies</label>
+                <TechnologyMultiSelectField v-model="model.implicit_technologies"></TechnologyMultiSelectField>
             </div>
             <div class="field col-12">
                 <label for="description">Description</label>

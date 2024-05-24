@@ -29,3 +29,7 @@ class Port(TimestampedModel):
             ('target', 'port', 'protocol')
         ]
         ordering = ['port', 'protocol']
+
+    @property
+    def program(self):
+        return self.target.program

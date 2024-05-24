@@ -20,6 +20,8 @@ class URL(TimestampedModel):
     response = models.TextField(blank=True, null=True)
     status_code = models.PositiveSmallIntegerField(blank=True, null=True)
     is_base = models.BooleanField(editable=False, null=True)
+    tags = models.ManyToManyField('asmonitor.Tag', blank=True)
+    technologies = models.ManyToManyField('backend.Technology', blank=True)
 
     class Meta:
         ordering = ['url', '-date_updated']

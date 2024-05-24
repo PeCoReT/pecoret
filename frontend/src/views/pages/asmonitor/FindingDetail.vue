@@ -124,6 +124,10 @@ export default {
                         <label for="recommendation">Recommendation</label>
                         <MarkdownEditor v-model="finding.recommendation" @blur="patchFindingData({ recommendation: finding.recommendation })"></MarkdownEditor>
                     </div>
+                    <div class="field col-12">
+                        <label for="internal_information">Internal Information</label>
+                        <MarkdownEditor v-model="finding.internal_information" @blur="patchFindingData({ internal_information: finding.internal_information })"></MarkdownEditor>
+                    </div>
                 </div>
             </div>
         </div>

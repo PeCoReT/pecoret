@@ -33,6 +33,7 @@ class Finding(TimestampedModel):
     status = models.PositiveSmallIntegerField(choices=Status.choices, default=Status.OPEN)
     program = models.ForeignKey('asmonitor.Program', on_delete=models.CASCADE)
     tags = models.ManyToManyField('asmonitor.Tag', blank=True)
+    internal_information = models.TextField(blank=True, null=True)
 
     class Meta:
         ordering = ['-date_created']

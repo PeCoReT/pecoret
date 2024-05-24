@@ -2,7 +2,7 @@
 import ASMonitorService from '@/service/ASMonitorService';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
-
+import TechnologyService from '@/service/TechnologyService';
 
 export default {
     name: 'GlobalURLList',
@@ -16,16 +16,34 @@ export default {
                 }
             ],
             service: new ASMonitorService(),
+            techService: new TechnologyService(),
+            techChoices: [],
             items: [],
             pagination: { page: 1, limit: 20 },
             loading: false,
-            totalRecords: 0
+            totalRecords: 0,
+            filters: {
+                tags: { value: null },
+                technologies: { value: null }
+            }
         };
     },
     mounted() {
         this.getItems();
     },
     methods: {
+        getTechnologyDisplay(item) {
+            let names = [];
+            if (item.technologies && item.technologies.length > 0) {
+                item.technologies.forEach((item) => {
+                    names.push(item.name);
+                });
+            }
+            if (names.length < 1) {
+                return '-';
+            }
+            return names.join(',');
+        },
         getItems(params) {
             this.loading = true;
             if (!params) {
@@ -33,6 +51,8 @@ export default {
             }
             params['page'] = this.pagination.page;
             params['limit'] = this.pagination.limit;
+            params['tags'] = this.filters.tags.value;
+            params['technologies'] = this.filters.technologies.value;
             this.service
                 .getGlobalURLs(this.$api, params)
                 .then((response) => {
@@ -54,6 +74,14 @@ export default {
                     programId: row.data.program.pk,
                     targetId: row.data.target.pk
                 }
+            });
+        },
+        techFilter(event) {
+            let params = {
+                search: event.value
+            };
+            this.techService.getTechnologies(this.$api, params).then((response) => {
+                this.techChoices = response.data.results;
             });
         },
         onSearch(query) {
@@ -92,11 +120,33 @@ export default {
                 @rowClick="onRowClick"
                 :removable-sort="true"
                 @sort="onSort"
+                v-model:filters="filters"
+                @filter="getItems()"
+                filter-display="menu"
             >
                 <Column field="url" header="URL"></Column>
                 <Column field="last_seen" header="Last Seen" sortable>
                     <template #body="slotProps">
                         {{ slotProps.data.last_seen || 'Never' }}
+                    </template>
+                </Column>
+                <Column field="technologies" header="Technologies" :showFilterMatchModes="false">
+                    <template #filter="{ filterModel }">
+                        <MultiSelect
+                            v-model="filterModel.value"
+                            :options="techChoices"
+                            @filter="techFilter"
+                            placeholder="Select technologies"
+                            filter
+                            @focus="techFilter"
+                            class="p-column-filter"
+                            showClear
+                            optionLabel="name"
+                            optionValue="pk"
+                        ></MultiSelect>
+                    </template>
+                    <template #body="slotProps">
+                        {{ getTechnologyDisplay(slotProps.data) }}
                     </template>
                 </Column>
                 <Column field="program.name" header="Program"></Column>

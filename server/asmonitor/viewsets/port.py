@@ -3,9 +3,10 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from asmonitor.models import Port
 from asmonitor.permissions import ASMonitorGroupPermission
-from asmonitor.serializers.port import PortSerializer
+from asmonitor.serializers.port import PortSerializer, GlobalPortSerializer
 from pecoret.core import permissions
-from pecoret.core.viewsets import PeCoReTModelViewSet
+from pecoret.core.viewsets import PeCoReTModelViewSet, GenericViewSet
+from pecoret.core.mixins import ListModelMixin
 from asmonitor.mixins import TargetRelatedMixin
 
 
@@ -47,3 +48,18 @@ class PortViewSet(TargetRelatedMixin, PeCoReTModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class GlobalPortViewSet(ListModelMixin, GenericViewSet):
+    queryset = Port.objects.all()
+    serializer_class = GlobalPortSerializer
+    search_fields = ['port', 'protocol', 'banner', 'service']
+    api_scope = 'scope_asmonitor'
+    filterset_class = None
+    permission_classes = [
+        ASMonitorGroupPermission(
+            read_write_groups=[
+                permissions.Groups.GROUP_PENTESTER
+            ]
+        )
+    ]
