@@ -6,9 +6,7 @@ from django.contrib.auth.models import Group
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
-from asmonitor import models as asmonitor_models
 from backend import models
-from backend.models.finding import Severity
 from backend.models.membership import Roles
 from backend.models.project import TestMethod
 from checklists.models import Category, Item, Checklist
@@ -34,7 +32,7 @@ class Command(BaseCommand):
             self.create_projects()
             self.create_checklists()
             self.create_technologies()
-            self.create_attack_surface_data()
+            # self.create_attack_surface_data()
 
     def create_users(self):
         self.stdout.write('Creating users...')
@@ -130,6 +128,7 @@ class Command(BaseCommand):
                 'description': item.get('description')
             })
 
+    """
     def create_attack_surface_data(self):
         if not self.data.get('attack-surface'):
             return
@@ -178,3 +177,4 @@ class Command(BaseCommand):
                             'proof_text': finding_data['proof_text'],
                             'user': models.User.objects.get(username=finding_data['user'])
                         })
+            """

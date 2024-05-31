@@ -115,31 +115,31 @@ export default {
                         {
                             label: 'Programs',
                             route: this.$router.resolve({
-                                name: 'ASMonitorProgramList'
+                                name: 'AttackSurfaceProgramList'
                             })
                         },
                         {
                             label: 'Targets',
                             route: this.$router.resolve({
-                                name: 'ASMonitorGlobalTargetList'
+                                name: 'AttackSurfaceTargetList'
                             })
                         },
                         {
                             label: 'URLs',
                             route: this.$router.resolve({
-                                name: 'ASMonitorGlobalURLList'
+                                name: 'AttackSurfaceURLList'
                             })
                         },
                         {
-                            label: 'Findings',
+                            label: 'Scan Findings',
                             route: this.$router.resolve({
-                                name: 'ASMonitorGlobalFindingList'
+                                name: 'AttackSurfaceScanFindingList'
                             })
                         },
                         {
                             label: 'Tags',
                             route: this.$router.resolve({
-                                name: 'ASMonitorTagList'
+                                name: 'AttackSurfaceTagList'
                             })
                         }
                     ]

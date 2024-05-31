@@ -75,6 +75,13 @@ class ReportPlugin(ReportErrorMixin, BaseReportPlugin):
         generator = generators.PDFReportGenerator(self, context, language=finding.project.language)
         return generator.generate('single_finding_export.html')
 
+    def export_asmonitor_finding(self, finding):
+        context = self.get_context(**{
+            'finding': finding
+        })
+        generator = generators.PDFReportGenerator(self, context, language='en')
+        return generator.generate('attack_surface_finding.html')
+
     def export_advisory_pdf(self, advisory):
         context = self.get_context(**{'advisory': advisory, 'severity_colors': self.SEVERITY_COLORS})
         generator = generators.PDFReportGenerator(self, context)

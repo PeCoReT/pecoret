@@ -1,0 +1,86 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>{{ finding.name }}</title>
+    <meta name="description" content="{{ finding.name }}">
+
+    <style>
+        @page {
+            @bottom-left {
+                font-size: 10px;
+                content: "{{ _('Confidential') }}";
+                margin-top: -5px;
+
+            }
+
+            @bottom-center {
+                content: "{{ finding.program.name }}";
+                font-size: 10px;
+                margin-top: -5px;
+            }
+
+            @bottom-right {
+                font-size: 10px;
+                content: counter(page) ' / ' counter(pages);
+                margin-top: -5px;
+            }
+        }
+    </style>
+</head>
+
+
+<body id="advisory-body">
+
+<!-- Header Table -->
+<section id="finding-header">
+    <h3 id="finding-title">
+    <span class="fa-layers text-{{ finding.get_severity_display().lower() }}">
+        <i class="fas fa-bookmark"></i>
+        <span
+                class="fa-layers-text"
+                data-fa-transform="shrink-8 down-3"
+                style="font-weight:900"></span>
+    </span>
+        {{ finding.name }}
+    </h3>
+
+    <table
+            style="width: 100%"
+            id="intro-detail-table">
+        <thead>
+        <tr>
+            <th>Severity</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="text-{{ finding.get_severity_display().lower() }}">
+                <strong>{{ finding.get_severity_display().lower().capitalize() }}</strong>
+            </td>
+            <td>{{ finding.get_status_display() }}</td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<section id="finding-description">
+    <h4>Description</h4>
+    {{ report_helpers.bleach_md(finding.description)|safe }}
+</section>
+<section
+        id="finding-proof"
+        class="proofs">
+    <h4>Proof</h4>
+    {{ report_helpers.bleach_md(finding.proof_text, allow_images=True)|safe }}
+
+</section>
+
+<section id="finding-recommendation">
+    <h4>Recommendation</h4>
+    {{ report_helpers.bleach_md(finding.recommendation)|safe }}
+</section>
+</body>
+
+</html>

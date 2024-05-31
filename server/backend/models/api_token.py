@@ -67,7 +67,7 @@ class APIToken(models.Model):
     scope_all_projects = models.PositiveSmallIntegerField(choices=AccessChoices.choices,
                                                           default=AccessChoices.NO_ACCESS)
     scope_user = models.PositiveSmallIntegerField(choices=AccessChoices.choices, default=AccessChoices.NO_ACCESS)
-    scope_asmonitor = models.PositiveSmallIntegerField(choices=AccessChoices.choices, default=AccessChoices.NO_ACCESS)
+    scope_attack_surface = models.PositiveSmallIntegerField(choices=AccessChoices.choices, default=AccessChoices.NO_ACCESS)
     scope_knowledgebase = models.PositiveSmallIntegerField(choices=AccessChoices.choices,
                                                            default=AccessChoices.NO_ACCESS)
 
