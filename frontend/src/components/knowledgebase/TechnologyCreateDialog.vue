@@ -2,10 +2,11 @@
 import ModalDialog from '@/components/elements/dialogs/ModalDialog.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import TechnologyService from '@/service/TechnologyService';
+import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
 
 export default {
     name: 'TechnologyCreateDialog',
-    components: { MarkdownEditor, ModalDialog },
+    components: { TechnologyMultiSelectField, MarkdownEditor, ModalDialog },
     emits: ['object-created'],
     data() {
         return {
@@ -16,7 +17,8 @@ export default {
                 cpe: null,
                 homepage: null,
                 source_code_url: null,
-                vendor: null
+                vendor: null,
+                implicit_technologies: null
             },
             loading: false,
             service: new TechnologyService()
@@ -27,6 +29,9 @@ export default {
             this.showDialog = true;
         },
         create() {
+            if (this.model.implicit_technologies === null) {
+                this.model.implicit_technologies = [];
+            }
             this.service.createTechnology(this.$api, this.model).then(() => {
                 this.$toast.add({
                     severity: 'success',
@@ -65,6 +70,10 @@ export default {
             <div class="field col-12">
                 <label for="source_code_url">Source Code URL</label>
                 <InputText v-model="model.source_code_url"></InputText>
+            </div>
+            <div class="field col-12">
+                <label>Implicit Technologies</label>
+                <TechnologyMultiSelectField v-model="model.implicit_technologies"></TechnologyMultiSelectField>
             </div>
             <div class="field col-12">
                 <label for="description">Description</label>

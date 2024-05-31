@@ -19,7 +19,9 @@ export default {
                 cwe: null,
                 proof_text: null,
                 target: null,
-                tags: null
+                tags: null,
+                recommendation: null,
+                description: null
             },
             targetChoices: null,
             cweChoices: null,
@@ -60,12 +62,15 @@ export default {
             });
         },
         create() {
+            if (this.model.tags === null) {
+                this.model.tags = [];
+            }
             this.service.createFinding(this.$api, this.programId, this.model).then(() => {
                 this.$toast.add({
                     severity: 'success',
-                    summary: 'Program created!',
+                    summary: 'Finding created!',
                     life: 3000,
-                    detail: 'Program created successfully!'
+                    detail: 'Finding created successfully!'
                 });
                 this.$emit('object-created');
                 this.showDialog = false;
@@ -88,7 +93,7 @@ export default {
             </div>
             <div class="field col-12">
                 <label for="target">Target</label>
-                <Dropdown id="target" filter optionLabel="name" optionValue="pk" :options="targetChoices" v-model="model.target" @filter="onFilterTarget" @focus="getTargets"></Dropdown>
+                <Dropdown id="target" filter optionLabel="ip" optionValue="pk" :options="targetChoices" v-model="model.target" @filter="onFilterTarget" @focus="getTargets"></Dropdown>
             </div>
             <div class="field col-12">
                 <label for="cwe">CWE-ID</label>
@@ -99,8 +104,16 @@ export default {
                 <TagSelectField v-model="model.tags"></TagSelectField>
             </div>
             <div class="field col-12">
-                <label for="description">Proof</label>
+                <label for="description">Description</label>
+                <MarkdownEditor v-model="model.description"></MarkdownEditor>
+            </div>
+            <div class="field col-12">
+                <label for="proof">Proof</label>
                 <MarkdownEditor v-model="model.proof_text"></MarkdownEditor>
+            </div>
+            <div class="field col-12">
+                <label for="recommendation">Recommendation</label>
+                <MarkdownEditor v-model="model.recommendation"></MarkdownEditor>
             </div>
         </div>
     </ModalDialog>

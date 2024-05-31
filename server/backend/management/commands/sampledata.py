@@ -6,11 +6,9 @@ from django.contrib.auth.models import Group
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
-from asmonitor import models as asmonitor_models
 from backend import models
 from backend.models.membership import Roles
 from backend.models.project import TestMethod
-from backend.models.finding import Severity
 from checklists.models import Category, Item, Checklist
 
 
@@ -34,7 +32,7 @@ class Command(BaseCommand):
             self.create_projects()
             self.create_checklists()
             self.create_technologies()
-            self.create_attack_surface_data()
+            # self.create_attack_surface_data()
 
     def create_users(self):
         self.stdout.write('Creating users...')
@@ -130,6 +128,7 @@ class Command(BaseCommand):
                 'description': item.get('description')
             })
 
+    """
     def create_attack_surface_data(self):
         if not self.data.get('attack-surface'):
             return
@@ -145,9 +144,16 @@ class Command(BaseCommand):
                 'description': data.get('description')
             })
             for target_data in data.get('targets', []):
-                target, created = asmonitor_models.Target.objects.get_or_create(name=target_data['name'],
-                                                                                ip=target_data['ip'],
-                                                                                program=program)
+                defaults = {
+                    'last_seen': target_data.get('last_seen'), 'description': target_data.get('description')
+                }
+                if target_data.get('scope'):
+                    defaults['scope'] = target_data['scope']
+                # if no ip set name to ip
+                if not target_data.get('name'):
+                    target_data['name'] = target_data['ip']
+                target, created = asmonitor_models.Target.objects.get_or_create(
+                    ip=target_data['ip'], program=program, defaults=defaults)
                 for tech_data in target_data.get('technologies', []):
                     tech, _created = models.Technology.objects.get_or_create(name=tech_data['name'], defaults={
                         'description': tech_data.get('description'),
@@ -160,6 +166,8 @@ class Command(BaseCommand):
                         'color': data.get('color')
                     })
                     target.tags.add(tag)
+                for url_data in target_data.get('urls', []):
+                    _, _ = asmonitor_models.URL.objects.get_or_create(url=url_data['url'], target=target)
                 target.save()
                 for finding_data in target_data.get('findings', []):
                     _finding, _created = asmonitor_models.Finding.objects.get_or_create(name=finding_data['name'],
@@ -169,3 +177,4 @@ class Command(BaseCommand):
                             'proof_text': finding_data['proof_text'],
                             'user': models.User.objects.get(username=finding_data['user'])
                         })
+            """

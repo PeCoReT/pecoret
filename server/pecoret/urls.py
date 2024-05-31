@@ -7,7 +7,7 @@ urlpatterns = [
     path('api/', include('backend.urls')),
     path('api/', include('checklists.urls')),
     path('api/', include('advisories.urls')),
-    path('api/', include('asmonitor.urls'))
+    path('api/', include('attack_surface.urls'))
 ]
 
 if settings.DEBUG:

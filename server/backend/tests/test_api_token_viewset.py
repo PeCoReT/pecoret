@@ -12,7 +12,7 @@ class APITokenCreateView(APITestCase, PeCoReTTestCaseMixin):
             "scope_user": "No Access",
             "scope_all_projects": "No Access",
             "scope_advisories": "No Access",
-            "scope_asmonitor": "No Access",
+            "scope_attack_surface": "No Access",
             "scope_knowledgebase": "No Access"
         }
 

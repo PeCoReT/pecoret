@@ -15,13 +15,19 @@ class Technology(TimestampedModel):
     objects = TechnologyQuerySet.as_manager()
     name = models.CharField(max_length=256, unique=True)
     description = models.TextField(null=True, blank=True)
-    cpe = models.CharField(max_length=256, null=True, blank=True)
+    cpe = models.CharField(max_length=256, null=True)
     homepage = models.URLField(null=True, blank=True)
     vendor = models.CharField(max_length=256, null=True, blank=True)
     source_code_url = models.URLField(null=True, blank=True)
+    implicit_technologies = models.ManyToManyField('self', blank=True, symmetrical=False)
 
     class Meta:
         ordering = ['name', '-date_updated']
+
+    def __str__(self):
+        if self.cpe:
+            return self.cpe
+        return self.name
 
     @property
     def source_code_available(self):

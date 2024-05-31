@@ -36,17 +36,82 @@ const SeverityChoices = [
     }
 ];
 
+const InScopeChoices = [
+    {
+        name: 'In Scope',
+        value: 'In Scope'
+    },
+    {
+        name: 'Undefined',
+        value: 'Undefined'
+    },
+    {
+        name: 'Out of Scope',
+        value: 'Out of Scope'
+    }
+];
+
+const ScopeTypeChoices = [
+    {
+        name: 'IP',
+        value: 'IP'
+    },
+    {
+        name: 'Network',
+        value: 'Network'
+    },
+    {
+        name: 'Domain',
+        value: 'Domain'
+    },
+    {
+        name: 'Subdomain',
+        value: 'Subdomain'
+    }
+];
+
+const DataTypeChoices = [
+    {
+        name: 'IP',
+        value: 'IP'
+    },
+    {
+        name: 'Network',
+        value: 'Network'
+    },
+    {
+        name: 'Domain',
+        value: 'Domain'
+    },
+    {
+        name: 'Subdomain',
+        value: 'Subdomain'
+    }
+];
+
 export default class ASMonitorService {
     getStatusChoices() {
         return StatusChoices;
+    }
+
+    getInScopeChoices() {
+        return InScopeChoices;
     }
 
     getSeverityChoices() {
         return SeverityChoices;
     }
 
+    getDataTypeChoices() {
+        return DataTypeChoices;
+    }
+
+    getScopeTypeChoices() {
+        return ScopeTypeChoices;
+    }
+
     getPrograms(api, params) {
-        let url = '/asmonitor/programs/';
+        let url = '/attack-surface/programs/';
         let config = {};
         if (params) {
             config['params'] = params;
@@ -55,27 +120,27 @@ export default class ASMonitorService {
     }
 
     createProgram(api, data) {
-        let url = '/asmonitor/programs/';
+        let url = '/attack-surface/programs/';
         return api.post(url, data);
     }
 
     getProgram(api, id) {
-        let url = `/asmonitor/programs/${id}/`;
+        let url = `/attack-surface/programs/${id}/`;
         return api.get(url);
     }
 
     patchProgram(api, id, data) {
-        let url = `/asmonitor/programs/${id}/`;
+        let url = `/attack-surface/programs/${id}/`;
         return api.patch(url, data);
     }
 
     deleteProgram(api, id) {
-        let url = `/asmonitor/programs/${id}/`;
+        let url = `/attack-surface/programs/${id}/`;
         return api.delete(url);
     }
 
     getTags(api, params) {
-        let url = '/asmonitor/tags/';
+        let url = '/attack-surface/tags/';
         let config = {};
         if (params) {
             config['params'] = params;
@@ -84,51 +149,46 @@ export default class ASMonitorService {
     }
 
     deleteTag(api, id) {
-        let url = `/asmonitor/tags/${id}/`;
+        let url = `/attack-surface/tags/${id}/`;
         return api.delete(url);
     }
 
     createTag(api, data) {
-        let url = '/asmonitor/tags/';
+        let url = '/attack-surface/tags/';
         return api.post(url, data);
-    }
-
-    getTargets(api, programId, params) {
-        let url = `/asmonitor/programs/${programId}/targets/`;
-        let config = {};
-        if (params) {
-            config['params'] = params;
-        }
-        return api.get(url, config);
     }
 
     patchTag(api, id, data) {
-        let url = `/asmonitor/tags/${id}/`;
+        let url = `/attack-surface/tags/${id}/`;
         return api.patch(url, data);
     }
 
-    createTarget(api, programId, data) {
-        let url = `/asmonitor/programs/${programId}/targets/`;
+    getTargets(api, programId, params) {
+        let url = `/attack-surface/targets/`;
+        let config = {};
+        if (params) {
+            config['params'] = params;
+        }
+        return api.get(url, config);
+    }
+
+    createTarget(api, data) {
+        let url = `/attack-surface/targets/`;
         return api.post(url, data);
     }
 
-    deleteTarget(api, programId, id) {
-        let url = `/asmonitor/programs/${programId}/targets/${id}/`;
+    deleteTarget(api, id) {
+        let url = `/attack-surface/targets/${id}/`;
         return api.delete(url);
     }
 
-    patchTarget(api, programId, id, data) {
-        let url = `/asmonitor/programs/${programId}/targets/${id}/`;
+    patchTarget(api, id, data) {
+        let url = `/attack-surface/targets/${id}/`;
         return api.patch(url, data);
     }
 
-    getTarget(api, programId, id) {
-        let url = `/asmonitor/programs/${programId}/targets/${id}/`;
-        return api.get(url);
-    }
-
-    getFindings(api, programId, params) {
-        let url = `/asmonitor/programs/${programId}/findings/`;
+    getScanFindings(api, params) {
+        let url = `/attack-surface/scan-findings/`;
         let config = {};
         if (params) {
             config['params'] = params;
@@ -136,70 +196,56 @@ export default class ASMonitorService {
         return api.get(url, config);
     }
 
-    createFinding(api, programId, data) {
-        let url = `/asmonitor/programs/${programId}/findings/`;
+    deleteScanFinding(api, id) {
+        let url = `/attack-surface/scan-findings/${id}/`;
+        return api.delete(url);
+    }
+
+    createScanFinding(api, data) {
+        let url = `/attack-surface/scan-findings/`;
         return api.post(url, data);
     }
 
-    getFinding(api, programId, id) {
-        let url = `/asmonitor/programs/${programId}/findings/${id}/`;
+    patchScanFinding(api, id, data) {
+        let url = `/attack-surface/scan-findings/${id}/`;
+        return api.patch(url, data);
+    }
+
+    getScanFinding(api, id) {
+        let url = `/attack-surface/scan-findings/${id}/`;
         return api.get(url);
     }
 
-    deleteFinding(api, programId, id) {
-        let url = `/asmonitor/programs/${programId}/findings/${id}/`;
+    getPorts(api, params) {
+        let config = {};
+        if (params) {
+            config['params'] = params;
+        }
+        let url = `/attack-surface/ports/`;
+        return api.get(url, config);
+    }
+
+    deletePort(api, programId, hostId, id) {
+        let url = `/asmonitor/programs/${programId}/targets/${hostId}/port/${id}/`;
         return api.delete(url);
     }
 
-    patchFinding(api, programId, id, data) {
-        let url = `/asmonitor/programs/${programId}/findings/${id}/`;
-        return api.patch(url, data);
-    }
-
-    getGlobalFindings(api, params) {
+    getURLs(api, params) {
         let config = {};
         if (params) {
             config['params'] = params;
         }
-        let url = '/asmonitor/findings/';
+        let url = `/attack-surface/urls/`;
         return api.get(url, config);
     }
 
-    getFindingsByDateStats(api, programId) {
-        let url = `/asmonitor/programs/${programId}/stats_findings_by_date/`;
-        return api.get(url);
+    deleteURL(api, id) {
+        let url = `/attack-surface/urls/${id}/`;
+        return api.delete(url);
     }
 
-    getGlobalTargets(api, params) {
-        let config = {};
-        if (params) {
-            config['params'] = params;
-        }
-        let url = '/asmonitor/targets/';
-        return api.get(url, config);
-    }
-
-    getTargetMetas(api, programId, targetId, params) {
-        let config = {};
-        if (params) {
-            config['params'] = params;
-        }
-        let url = `/asmonitor/programs/${programId}/targets/${targetId}/metas/`;
-        return api.get(url, config);
-    }
-
-    patchTargetMeta(api, programId, targetId, id, data) {
-        let url = `/asmonitor/programs/${programId}/targets/${targetId}/metas/${id}/`;
-        return api.patch(url, data);
-    }
-
-    createTargetMeta(api, programId, targetId, data) {
-        let url = `/asmonitor/programs/${programId}/targets/${targetId}/metas/`;
+    createURL(api, data) {
+        let url = `/attack-surface/urls/`;
         return api.post(url, data);
-    }
-
-    deleteTargetMeta(api, programId, targetId, id) {
-        let url = `/asmonitor/programs/${programId}/targets/${targetId}/metas/${id}/`;
-        return api.delete(url);
     }
 }

@@ -53,9 +53,6 @@ class FindingQuerySet(models.QuerySet):
     def exclude_fixed(self):
         return self.exclude(status=FindingStatus.FIXED)
 
-    def for_asmonitor(self):
-        return self.filter(project__visibility=Visibility.PENTESTERS)
-
 
 class FindingManager(models.Manager):
     def create_from_template(self, **data):

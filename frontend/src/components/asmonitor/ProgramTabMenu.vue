@@ -42,6 +42,15 @@ export default {
                             programId: this.$route.params.programId
                         }
                     }).path
+                },
+                {
+                    label: 'Scope',
+                    route: this.$router.resolve({
+                        name: 'ASMonitorScopeList',
+                        params: {
+                            programId: this.$route.params.programId
+                        }
+                    })
                 }
             ]
         };

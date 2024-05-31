@@ -12,4 +12,4 @@ class TechnologyFilter(filters.FilterSet):
 
     class Meta:
         model = Technology
-        fields = ['source_code_available']
+        fields = ['source_code_available', 'cpe', 'name', 'vendor']

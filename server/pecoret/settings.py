@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     "backend.apps.BackendConfig",
     "advisories.apps.AdvisoriesConfig",
     "checklists.apps.ChecklistsConfig",
-    "asmonitor.apps.AsmonitorConfig"
+    'attack_surface.apps.AttackSurfaceConfig'
 ]
 
 MIDDLEWARE = [

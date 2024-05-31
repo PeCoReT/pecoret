@@ -1,0 +1,97 @@
+attack-surface:
+  programs:
+    - name: "CyberGuard Initiative"
+      targets:
+        - ip: "192.168.1.10"
+          urls:
+            - url: "http://intranet.example.com"
+          technologies:
+            - name: "WordPress"
+        - ip: "192.168.1.11"
+          urls:
+            - url: "http://intranet2.example.com"
+          technologies:
+            - name: "WordPress"
+        - ip: "192.168.1.12"
+          urls:
+            - url: "http://intranet3.example.com"
+        - ip: "172.16.1.10"
+          urls:
+            - url: "http://portal.example.com"
+          technologies:
+            - name: "Nextcloud"
+        - ip: "192.168.133.55"
+          urls:
+            - url: "http://intranet55.example.com"
+          technologies:
+            - name: "WordPress"
+        - ip: "192.168.178.56"
+          urls:
+            - url: "http://intranet56.example.com"
+          technologies:
+            - name: "WordPress"
+        - ip: "192.168.10.57"
+          urls:
+            - url: "http://intranet57.example.com"
+          technologies:
+            - name: "WordPress"
+        - ip: "192.168.10.13"
+          urls:
+            - url: "http://intranet4.example.com"
+          technologies:
+            - name: "BookStack"
+        - ip: "192.168.10.14"
+          urls:
+            - url: "http://intranet5.example.com"
+          technologies:
+            - name: "osCommerce"
+        - ip: "10.10.10.101"
+          urls:
+            - url: "http://intranet-alpha.example.com"
+          technologies:
+            - name: "WordPress"
+        - ip: "10.10.10.102"
+          urls:
+            - url: "http://intranet-beta.example.com"
+          technologies:
+            - name: "Nextcloud"
+        - ip: "10.10.10.103"
+          urls:
+            - url: "http://intranet-gamma.example.com"
+          technologies:
+            - name: "GitLab"
+        - ip: "10.10.10.104"
+          urls:
+            - url: "http://intranet-delta.example.com"
+          technologies:
+            - name: "BookStack"
+        - ip: "10.10.10.105"
+          urls:
+            - url: "http://intranet-epsilon.example.com"
+          technologies:
+            - name: "osCommerce"
+        - ip: "10.10.1.101"
+          urls:
+            - url: "http://finance-portal.example.com"
+          technologies:
+            - name: "Magento"
+        - ip: "10.10.1.102"
+          urls:
+            - url: "http://hr-system.example.com"
+          technologies:
+            - name: "OpenCart"
+        - ip: "10.10.1.103"
+          urls:
+            - url: "http://crm-app.example.com"
+          technologies:
+            - name: "SuiteCRM"
+        - ip: "10.10.1.104"
+          urls:
+            - url: "http://wiki-platform.example.com"
+          technologies:
+            - name: "BookStack"
+        - ip: "10.10.1.105"
+          urls:
+            - url: "http://inventory-system.example.com"
+          technologies:
+            - name: "osCommerce"

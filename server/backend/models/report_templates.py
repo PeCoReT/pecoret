@@ -15,6 +15,9 @@ class ReportTemplateQuerySet(models.QuerySet):
     def active(self):
         return self.filter(status=ReportTemplateStatus.ACTIVE)
 
+    def default(self):
+        return self.get(name='default_template')
+
 
 class ReportTemplate(models.Model):
     objects = ReportTemplateQuerySet.as_manager()

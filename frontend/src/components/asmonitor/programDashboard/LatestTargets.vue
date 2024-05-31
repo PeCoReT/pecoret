@@ -42,14 +42,14 @@ export default {
 
 <template>
     <Card class="card p-1">
-        <template #title>Latest Targets</template>
+        <template #title>Latest Hosts</template>
         <template #content>
             <DataView :value="items">
                 <template #list="slotProps">
                     <div class="col-12 border-round border-1 p-0 card m-0" v-for="(item, index) in slotProps.items" :key="index">
                         <div class="flex p-4 gap-4">
                             <div class="flex justify-content-start w-full">
-                                {{ item.name }}
+                                {{ item.name }} ({{ item.ip }})
                             </div>
                         </div>
                     </div>
