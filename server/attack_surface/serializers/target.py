@@ -8,7 +8,7 @@ from .tag import TagSerializer
 
 class TargetSerializer(serializers.ModelSerializer):
     program = PrimaryKeyRelatedField(serializer=ProgramSerializer)
-    scope = ValuedChoiceField(choices=ScopeChoices.choices)
+    scope = ValuedChoiceField(choices=ScopeChoices.choices, required=False)
     data_type = ValuedChoiceField(choices=DataTypes.choices)
     tags = PrimaryKeyRelatedField(serializer=TagSerializer, many=True, required=False)
     technologies = PrimaryKeyRelatedField(serializer=TechnologySerializer, many=True, required=False)

@@ -171,6 +171,8 @@ export default {
                 filter-display="menu"
                 :show-search="true"
                 @search="onGlobalSearch"
+                :show-refresh-button="true"
+                @refresh="getItems"
             >
                 <Column field="data" header="Data"></Column>
                 <Column field="data_type" header="Data Type"></Column>
