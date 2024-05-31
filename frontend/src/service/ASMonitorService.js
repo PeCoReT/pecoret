@@ -163,7 +163,7 @@ export default class ASMonitorService {
         return api.patch(url, data);
     }
 
-    getTargets(api, programId, params) {
+    getTargets(api, params) {
         let url = `/attack-surface/targets/`;
         let config = {};
         if (params) {
