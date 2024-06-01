@@ -4,14 +4,14 @@ import ScanFindingCreateDialog from '@/components/attack_surface/ScanFindingCrea
 import SeverityBadge from '@/components/SeverityBadge.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
-import FindingBulkEditDialog from '@/components/asmonitor/dialogs/FindingBulkEditDialog.vue';
+import ScanFindingBulkEditDialog from "@/components/attack_surface/ScanFindingBulkEditDialog.vue";
 import TagBadgeButton from '@/components/asmonitor/TagBadgeButton.vue';
 
 export default {
     name: 'ScanFindingList',
     components: {
         TagBadgeButton,
-        FindingBulkEditDialog,
+        ScanFindingBulkEditDialog,
         GenericDataTable,
         BaseListLayout,
         ScanFindingCreateDialog,
@@ -140,7 +140,7 @@ export default {
             >
                 <template #bulk-edit>
                     <Button v-if="selectedItems.length > 0" icon="fa fa-trash" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2"></Button>
-                    <FindingBulkEditDialog :findings="selectedItems" @object-updated="getItems" :programId="1"></FindingBulkEditDialog>
+                    <ScanFindingBulkEditDialog :findings="selectedItems" @object-updated="getItems"></ScanFindingBulkEditDialog>
                 </template>
                 <Column selectionMode="multiple" headerStyle=""></Column>
                 <Column field="name" header="Name"></Column>

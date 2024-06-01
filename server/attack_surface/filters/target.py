@@ -5,10 +5,10 @@ from .base import TagTechnologyFilter, ProgramFilterMixin
 
 class TargetFilter(ProgramFilterMixin, TagTechnologyFilter):
     scope = ChoiceFilter(choices=ScopeChoices.choices)
-    data_types = ChoiceFilter(choices=DataTypes.choices)
+    data_type = ChoiceFilter(choices=DataTypes.choices)
 
     class Meta:
         model = Target
         fields = [
-            'tags', 'technologies', 'data', 'data_types', 'scope', 'program'
+            'tags', 'technologies', 'data', 'data_type', 'scope', 'program'
         ]

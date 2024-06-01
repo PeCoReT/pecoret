@@ -32,9 +32,17 @@ export default {
             totalRecords: 0,
             tagChoices: [],
             techChoices: [],
+            dataTypeChoices: [
+                { name: 'Domain', value: 'Domain' },
+                { name: 'Subdomain', value: 'Subdomain' },
+                { name: 'IP', value: 'IP' },
+                { name: 'Network', value: 'Network' }
+            ],
             filters: {
                 tags: { value: null },
-                technologies: { value: null }
+                technologies: { value: null },
+                data_type: { value: null },
+                scope: { value: null }
             }
         };
     },
@@ -76,7 +84,9 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page,
                 tags: this.filters.tags.value,
-                technologies: this.filters.technologies.value
+                technologies: this.filters.technologies.value,
+                data_type: this.filters.data_type.value,
+                scope: this.filters.scope.value
             };
             this.service
                 .getTargets(this.$api, data)
@@ -175,7 +185,11 @@ export default {
                 @refresh="getItems"
             >
                 <Column field="data" header="Data"></Column>
-                <Column field="data_type" header="Data Type"></Column>
+                <Column field="data_type" header="Data Type" :showFilterMatchModes="false">
+                    <template #filter="{ filterModel }">
+                        <Dropdown v-model="filterModel.value" :options="service.getDataTypeChoices()" :showClear="true" optionLabel="name" optionValue="value"></Dropdown>
+                    </template>
+                </Column>
                 <Column field="last_seen" header="Last Seen" sortable>
                     <template #body="slotProps">
                         {{ slotProps.data.last_seen || 'Unknown' }}
@@ -210,7 +224,11 @@ export default {
                     </template>
                 </Column>
                 <Column field="date_updated" header="Updated" sortable></Column>
-                <Column field="scope" header="Scope"></Column>
+                <Column field="scope" header="Scope" :show-filter-match-modes="false">
+                    <template #filter="{ filterModel }">
+                        <Dropdown v-model="filterModel.value" :options="service.getInScopeChoices()" optionValue="value" optionLabel="name"></Dropdown>
+                    </template>
+                </Column>
                 <Column header="Actions">
                     <template #body="slotProps">
                         <TargetUpdateDialog :target="slotProps.data" @object-updated="getItems"></TargetUpdateDialog>

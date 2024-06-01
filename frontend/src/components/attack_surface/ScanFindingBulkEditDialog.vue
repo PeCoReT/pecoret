@@ -3,16 +3,13 @@ import ASMonitorService from '@/service/ASMonitorService';
 import ModalDialog from '@/components/elements/dialogs/ModalDialog.vue';
 
 export default {
-    name: 'FindingBulkEditDialog',
+    name: 'ScanFindingBulkEditDialog',
     components: { ModalDialog },
     emits: ['object-updated'],
     props: {
         findings: {
             required: true
         },
-        programId: {
-            required: true
-        }
     },
     data() {
         return {
@@ -35,7 +32,7 @@ export default {
             }
             this.loading = true;
             for (let i = 0; i < this.findings.length; i++) {
-                await this.service.patchFinding(this.$api, this.programId, this.findings[i].pk, data).then(() => {});
+                await this.service.patchScanFinding(this.$api, this.findings[i].pk, data).then(() => {});
             }
             this.loading = false;
             this.fields.status = null;
