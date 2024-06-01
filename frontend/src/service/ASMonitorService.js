@@ -239,6 +239,16 @@ export default class ASMonitorService {
         return api.get(url, config);
     }
 
+    getURL(api, pk) {
+        let url = `/attack-surface/urls/${pk}/`;
+        return api.get(url);
+    }
+
+    patchURL(api, pk, data) {
+        let url = `/attack-surface/urls/${pk}/`;
+        return api.patch(url, data);
+    }
+
     deleteURL(api, id) {
         let url = `/attack-surface/urls/${id}/`;
         return api.delete(url);

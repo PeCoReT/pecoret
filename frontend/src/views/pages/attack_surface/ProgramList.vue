@@ -108,7 +108,6 @@ export default {
                 blank-slate-title="No Programs!"
                 blank-slate-icon="fa fa-shield"
                 :model-value="this.items"
-                @row-click="onRowClick"
                 @page="onPage"
                 @search="onGlobalSearch"
                 :show-search="true"

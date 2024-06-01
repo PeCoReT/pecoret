@@ -23,8 +23,6 @@ class URLViewSet(PeCoReTModelViewSet):
 
     @action(detail=False, methods=["post"])
     def create_or_update(self, request, *args, **kwargs):
-        serializer = URLSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
         qs = URL.objects.filter_unique(request.data['url'], request.data['program'])
         if qs.exists():
             serializer = self.get_serializer(qs.get(), data=request.data, partial=True)

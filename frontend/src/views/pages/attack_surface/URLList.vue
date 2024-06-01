@@ -87,6 +87,12 @@ export default {
                 this.techChoices = response.data.results;
             });
         },
+        onRowClick(row) {
+            this.$router.push({
+                name: 'AttackSurfaceURLDetail',
+                params: { urlId: row.data.pk }
+            });
+        },
         confirmDialogDelete(id) {
             this.$confirm.require({
                 message: 'Do you want to remove this url?',
@@ -130,6 +136,7 @@ export default {
                 @refresh="getItems"
                 v-model:filters="filters"
                 @filter="getItems"
+                @row-click="onRowClick"
                 filter-display="menu"
             >
                 <Column field="url" header="URL">
