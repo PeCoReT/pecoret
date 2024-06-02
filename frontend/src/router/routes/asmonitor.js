@@ -41,6 +41,11 @@ const asmonitorRoutes = [
                 path: '/attack-surface/scan-findings/:findingId',
                 name: 'AttackSurfaceScanFindingDetail',
                 component: () => import('@/views/pages/attack_surface/FindingDetail.vue')
+            },
+            {
+                path: '/attack-surface/ports',
+                name: 'AttackSurfacePortList',
+                component: () => import('@/views/pages/attack_surface/PortList.vue')
             }
         ]
     }

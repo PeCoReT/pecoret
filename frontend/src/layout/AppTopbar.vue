@@ -125,6 +125,12 @@ export default {
                             })
                         },
                         {
+                            label: 'Ports',
+                            route: this.$router.resolve({
+                                name: 'AttackSurfacePortList'
+                            })
+                        },
+                        {
                             label: 'URLs',
                             route: this.$router.resolve({
                                 name: 'AttackSurfaceURLList'
