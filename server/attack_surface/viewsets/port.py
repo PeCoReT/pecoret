@@ -23,8 +23,6 @@ class PortViewSet(PeCoReTModelViewSet):
 
     @action(detail=False, methods=["post"])
     def create_or_update(self, request, *args, **kwargs):
-        serializer = PortSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
         qs = Port.objects.filter_unique(request.data['protocol'], request.data['port'], request.data['target'])
         if qs.exists():
             serializer = self.get_serializer(qs.get(), data=request.data, partial=True)
