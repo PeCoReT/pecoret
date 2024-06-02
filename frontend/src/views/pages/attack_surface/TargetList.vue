@@ -30,8 +30,11 @@ export default {
             pagination: { page: 1, limit: 20 },
             loading: false,
             totalRecords: 0,
+            selectedItems: [],
+
             tagChoices: [],
             techChoices: [],
+            deleteButtonLoading: false,
             dataTypeChoices: [
                 { name: 'Domain', value: 'Domain' },
                 { name: 'Subdomain', value: 'Subdomain' },
@@ -58,6 +61,30 @@ export default {
                 return '-';
             }
             return names.join(',');
+        },
+        bulkDeleteConfirm() {
+            this.$confirm.require({
+                message: 'Do you want to delete all selected items?',
+                header: 'Delete confirmation',
+                icon: 'fa fa-trash',
+                acceptClass: 'p-button-danger',
+                accept: () => {
+                    this.deleteButtonLoading = true;
+                    this.loading = true;
+                    let itemsDeleted = 0;
+                    this.selectedItems.forEach((item) => {
+                        this.service.deleteTarget(this.$api, item.pk).then(() => {
+                            itemsDeleted++;
+                            if (itemsDeleted === this.selectedItems.length) {
+                                this.loading = false;
+                                this.deleteButtonLoading = false;
+                                this.selectedItems = [];
+                                this.getItems();
+                            }
+                        });
+                    });
+                }
+            });
         },
         onSort(event) {
             this.loading = true;
@@ -183,7 +210,13 @@ export default {
                 @search="onGlobalSearch"
                 :show-refresh-button="true"
                 @refresh="getItems"
+                v-model:selection="selectedItems"
             >
+                <template #bulk-edit>
+                    <Button v-if="selectedItems.length > 0" icon="fa fa-trash" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2"></Button>
+                </template>
+                <Column selectionMode="multiple" headerStyle=""></Column>
+
                 <Column field="data" header="Data"></Column>
                 <Column field="data_type" header="Data Type" :showFilterMatchModes="false">
                     <template #filter="{ filterModel }">
