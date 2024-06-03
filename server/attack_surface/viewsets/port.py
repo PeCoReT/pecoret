@@ -17,7 +17,7 @@ class PortViewSet(PeCoReTModelViewSet):
         )
     ]
     api_scope = 'scope_attack_surface'
-    search_fields = ['url']
+    search_fields = ['service', 'banner']
     ordering_fields = ['date_created', 'date_updated', 'last_seen']
     filterset_class = PortFilter
 
