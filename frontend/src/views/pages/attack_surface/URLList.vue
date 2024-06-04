@@ -21,7 +21,8 @@ export default {
             totalRecords: 0,
             techChoices: [],
             techService: new TechnologyService(),
-
+            selectedItems: [],
+            deleteButtonLoading: false,
             filters: {
                 technologies: { value: null }
             },
@@ -93,21 +94,26 @@ export default {
                 params: { urlId: row.data.pk }
             });
         },
-        confirmDialogDelete(id) {
+        bulkDeleteConfirm() {
             this.$confirm.require({
-                message: 'Do you want to remove this url?',
+                message: 'Do you want to delete all selected items?',
                 header: 'Delete confirmation',
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteURL(this.$api, id).then(() => {
-                        this.$toast.add({
-                            severity: 'info',
-                            summary: 'Deleted',
-                            detail: 'URL was removed!',
-                            life: 3000
+                    this.deleteButtonLoading = true;
+                    this.loading = true;
+                    let itemsDeleted = 0;
+                    this.selectedItems.forEach((item) => {
+                        this.service.deleteURL(this.$api, item.pk).then(() => {
+                            itemsDeleted++;
+                            if (itemsDeleted === this.selectedItems.length) {
+                                this.loading = false;
+                                this.deleteButtonLoading = false;
+                                this.selectedItems = [];
+                                this.getItems();
+                            }
                         });
-                        this.getItems();
                     });
                 }
             });
@@ -138,7 +144,12 @@ export default {
                 @filter="getItems"
                 @row-click="onRowClick"
                 filter-display="menu"
+                v-model:selection="selectedItems"
             >
+                <template #bulk-edit>
+                    <Button v-if="selectedItems.length > 0" icon="fa fa-trash" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2"></Button>
+                </template>
+                <Column selection-mode="multiple" headerStyle=""></Column>
                 <Column field="url" header="URL">
                     <template #body="slotProps">
                         <span v-if="slotProps.data.url.length > 120" v-tooltip="slotProps.data.url">{{ slotProps.data.url.substring(0, 120) }}...</span>

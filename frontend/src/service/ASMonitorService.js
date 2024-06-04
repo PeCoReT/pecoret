@@ -225,8 +225,8 @@ export default class ASMonitorService {
         return api.get(url, config);
     }
 
-    deletePort(api, programId, hostId, id) {
-        let url = `/asmonitor/programs/${programId}/targets/${hostId}/port/${id}/`;
+    deletePort(api, id) {
+        let url = `/attack-surface/ports/${id}/`;
         return api.delete(url);
     }
 

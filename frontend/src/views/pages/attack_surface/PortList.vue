@@ -18,6 +18,8 @@ export default {
             loading: false,
             pagination: { limit: 25, page: 1 },
             totalRecords: 0,
+            deleteButtonLoading: false,
+            selectedItems: [],
             filters: {
                 port: { value: null },
                 'target.program.name': { value: null },
@@ -67,21 +69,26 @@ export default {
                 this.totalRecords = resp.data.count;
             });
         },
-        confirmDialogDelete(id) {
+        bulkDeleteConfirm() {
             this.$confirm.require({
-                message: 'Do you want to remove this port?',
+                message: 'Do you want to delete all selected items?',
                 header: 'Delete confirmation',
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deletePort(this.$api, id).then(() => {
-                        this.$toast.add({
-                            severity: 'info',
-                            summary: 'Deleted',
-                            detail: 'Port was removed!',
-                            life: 3000
+                    this.deleteButtonLoading = true;
+                    this.loading = true;
+                    let itemsDeleted = 0;
+                    this.selectedItems.forEach((item) => {
+                        this.service.deletePort(this.$api, item.pk).then(() => {
+                            itemsDeleted++;
+                            if (itemsDeleted === this.selectedItems.length) {
+                                this.loading = false;
+                                this.deleteButtonLoading = false;
+                                this.selectedItems = [];
+                                this.getItems();
+                            }
                         });
-                        this.getItems();
                     });
                 }
             });
@@ -97,9 +104,9 @@ export default {
                 :total-records="totalRecords"
                 :loading="loading"
                 :pagination="pagination"
-                blank-slate-text="No urls found!"
-                blank-slate-title="No URLs"
-                blank-slate-icon="fa fa-sitemap"
+                blank-slate-text="No ports found!"
+                blank-slate-title="No Ports"
+                blank-slate-icon="fa fa-circle-nodes"
                 :model-value="items"
                 :show-search="true"
                 @search="onSearch"
@@ -108,7 +115,12 @@ export default {
                 v-model:filters="filters"
                 @filter="getItems"
                 filter-display="menu"
+                v-model:selection="selectedItems"
             >
+                <template #bulk-edit>
+                    <Button v-if="selectedItems.length > 0" icon="fa fa-trash" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2"></Button>
+                </template>
+                <Column selection-mode="multiple" headerStyle=""></Column>
                 <Column field="port" header="Port" :show-filter-match-modes="false">
                     <template #filter="{ filterModel }">
                         <InputText v-model="filterModel.value"></InputText>
