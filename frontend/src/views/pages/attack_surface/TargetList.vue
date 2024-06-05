@@ -265,7 +265,6 @@ export default {
                 <Column header="Actions">
                     <template #body="slotProps">
                         <TargetUpdateDialog :target="slotProps.data" @object-updated="getItems"></TargetUpdateDialog>
-                        <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                     </template>
                 </Column>
             </GenericDataTable>

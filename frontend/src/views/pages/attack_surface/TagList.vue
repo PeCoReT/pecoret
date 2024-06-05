@@ -105,7 +105,12 @@ export default {
                 @search="onGlobalSearch"
             >
                 <Column field="name" header="Name"></Column>
-                <Column field="description" header="Description"></Column>
+                <Column field="description" header="Description">
+                    <template #body="slotProps">
+                        <span v-if="slotProps.data.description">{{ slotProps.data.description }}</span>
+                        <span v-else>-</span>
+                    </template>
+                </Column>
                 <Column header="Preview">
                     <template #body="slotProps">
                         <AdvisoryLabelBadge :label="slotProps.data"></AdvisoryLabelBadge>
