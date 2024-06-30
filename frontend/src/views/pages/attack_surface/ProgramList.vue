@@ -3,10 +3,11 @@ import ASMonitorService from '@/service/ASMonitorService';
 import ProgramCreateDialog from '@/components/attack_surface/ProgramCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
+import ProgramUpdateDialog from '@/components/attack_surface/ProgramUpdateDialog.vue';
 
 export default {
     name: 'ProgramList',
-    components: { GenericDataTable, BaseListLayout, ProgramCreateDialog },
+    components: { ProgramUpdateDialog, GenericDataTable, BaseListLayout, ProgramCreateDialog },
     data() {
         return {
             breadcrumbs: [
@@ -41,14 +42,6 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
-        },
-        onRowClick(row) {
-            this.$router.push({
-                name: 'ASMonitorProgramDetail',
-                params: {
-                    programId: row.data.pk
-                }
-            });
         },
         onPage(event) {
             this.pagination.page = event.page + 1;
@@ -117,6 +110,7 @@ export default {
                 <Column field="date_updated" header="Updated"></Column>
                 <Column header="Actions">
                     <template #body="slotProps">
+                        <ProgramUpdateDialog :program="slotProps.data" @object-updated="getItems"></ProgramUpdateDialog>
                         <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                     </template>
                 </Column>

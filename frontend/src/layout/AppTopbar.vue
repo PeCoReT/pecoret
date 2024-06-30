@@ -2,7 +2,6 @@
 import { useAuthStore } from '@/store/auth';
 import ProjectTabMenu from './ProjectTabMenu.vue';
 import AuthService from '../service/AuthService';
-import ProgramTabMenu from '@/components/asmonitor/ProgramTabMenu.vue';
 
 export default {
     name: 'AppTopbar',
@@ -236,7 +235,7 @@ export default {
             });
         }
     },
-    components: { ProgramTabMenu, ProjectTabMenu }
+    components: { ProjectTabMenu }
 };
 </script>
 
@@ -260,5 +259,4 @@ export default {
         </template>
     </Menubar>
     <ProjectTabMenu v-if="this.$route.params.projectId"></ProjectTabMenu>
-    <ProgramTabMenu v-else-if="this.$route.params.programId"></ProgramTabMenu>
 </template>

@@ -8,11 +8,6 @@ const asmonitorRoutes = [
                 component: () => import('@/views/pages/attack_surface/ProgramList.vue')
             },
             {
-                path: '/attack-surface/programs/:programId',
-                name: 'ASMonitorProgramDetail',
-                component: () => import('@/views/pages/asmonitor/ProgramDetail.vue')
-            },
-            {
                 path: '/attack-surface/tags',
                 name: 'AttackSurfaceTagList',
                 component: () => import('@/views/pages/attack_surface/TagList.vue')
