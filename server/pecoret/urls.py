@@ -1,4 +1,3 @@
-from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 
@@ -7,7 +6,7 @@ urlpatterns = [
     path('api/', include('backend.urls')),
     path('api/', include('checklists.urls')),
     path('api/', include('advisories.urls')),
-    path('api/', include('attack_surface.urls'))
+    path('api/', include('attack_surface.urls')),
 ]
 
 if settings.DEBUG:
@@ -18,7 +17,3 @@ if settings.DEBUG:
         path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     ]
 
-if settings.ENABLE_DJANGO_ADMIN_PANEL:
-    urlpatterns += [
-        path('api/admin/', admin.site.urls),
-    ]

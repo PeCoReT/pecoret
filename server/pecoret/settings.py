@@ -3,10 +3,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 try:
     from conf.secret_key import SECRET_KEY
@@ -17,7 +13,6 @@ except ImportError:
         secret = secrets.token_hex(132)
         f.write(f'SECRET_KEY = "{secret}"')
     SECRET_KEY = secret
-
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -175,8 +170,8 @@ CORS_EXPOSE_HEADERS = ["Content-Disposition", "Content-Type"]
 CORS_ALLOW_CREDENTIALS = True
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-# expire session after 15 minutes
-SESSION_COOKIE_AGE = 15 * 60
+# expire session after 16h
+SESSION_COOKIE_AGE = 16 * 60 * 60
 
 Q_CLUSTER = {
     "name": "DjangORM",
@@ -205,8 +200,6 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
 ]
 
-ENABLE_DJANGO_ADMIN_PANEL = False
-
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'Strict'
@@ -215,6 +208,8 @@ SESSION_COOKIE_SAMESITE = 'Strict'
 FALLBACK_REPORT_TEMPLATE = "default_template"
 
 EXTENSIONS_DIRECTORY = BASE_DIR / 'extensions'
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 
 EXTRA_SETTINGS_DEFAULTS = [
@@ -253,6 +248,7 @@ EXTRA_SETTINGS_DEFAULTS = [
     }
 ]
 
+LDAP_SYNC_GROUP_MAPPING = {}
 
 if DEBUG:
     REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"].append(

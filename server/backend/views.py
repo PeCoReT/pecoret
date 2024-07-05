@@ -9,6 +9,7 @@ from rest_framework import status
 from rest_framework import serializers
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
+from pecoret.core.auth.ldap import sync_ldap_groups
 from backend.serializers.user import UserMeSerializer
 from backend.utils import cvss4
 from backend.models.finding import Severity
@@ -16,6 +17,7 @@ from backend.serializers.cvss_calculator import (
     CVSS4CalculatorSerializer, CVSS4CalculatedSerializer,
     CVSS31CalculatorSerializer, CVSS31CalculatedSerializer
 )
+from backend.serializers.render import RenderMarkdownSerializer
 from .throttle import AuthFlowThrottle
 
 
@@ -61,6 +63,8 @@ class LoginView(APIView):
                 username=serializer.validated_data.get("username"),
                 password=serializer.validated_data.get("password"),
             )
+            if hasattr(user, 'ldap_user') and user.ldap_user.group_names:
+                sync_ldap_groups(user)
             if user:
                 login(request, user)
                 return Response(
@@ -157,5 +161,19 @@ class CVSS31CalculatorView(APIView):
             severity = 'Informational'
         data = {'score': score, 'severity': Severity[severity.upper()].label}
         serializer = CVSS31CalculatedSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class RenderMarkdownToHTML(APIView):
+    """
+    renders markdown to html as it would show in the report (without using custom templates)
+    """
+    authentication_classes = [SessionAuthentication]
+
+    @extend_schema(request=RenderMarkdownSerializer, responses=RenderMarkdownSerializer)
+    @method_decorator(csrf_protect)
+    def post(self, request, **kwargs):
+        serializer = RenderMarkdownSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

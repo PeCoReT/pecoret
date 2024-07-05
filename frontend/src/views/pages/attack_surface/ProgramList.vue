@@ -43,6 +43,24 @@ export default {
                     this.loading = false;
                 });
         },
+        onSort(event) {
+            this.loading = true;
+            let params = {
+                ordering: event.sortField
+            };
+            if (event.sortOrder === -1) {
+                params['ordering'] = '-' + event.sortField;
+            }
+            this.service
+                .getPrograms(this.$api, params)
+                .then((response) => {
+                    this.totalRecords = response.data.count;
+                    this.items = response.data.results;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
@@ -104,10 +122,12 @@ export default {
                 @page="onPage"
                 @search="onGlobalSearch"
                 :show-search="true"
+                @sort="onSort"
+                :removable-sort="true"
             >
-                <Column field="name" header="Name"></Column>
-                <Column field="date_created" header="Created"></Column>
-                <Column field="date_updated" header="Updated"></Column>
+                <Column field="name" header="Name" sortable></Column>
+                <Column field="date_created" header="Created" sortable></Column>
+                <Column field="date_updated" header="Updated" sortable></Column>
                 <Column header="Actions">
                     <template #body="slotProps">
                         <ProgramUpdateDialog :program="slotProps.data" @object-updated="getItems"></ProgramUpdateDialog>

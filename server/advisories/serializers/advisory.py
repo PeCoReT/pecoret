@@ -21,6 +21,7 @@ class BaseAdvisorySerializer(serializers.ModelSerializer):
     user = MinimalUserSerializer(read_only=True)
     labels = LabelField(serializer=LabelSerializer, many=True, read_only=True)
     technology = PrimaryKeyRelatedField(serializer=TechnologySerializer)
+    report_template = ActiveReportTemplateSerializerField(required=False, serializer=ReportTemplateMinimalSerializer)
 
     class Meta:
         model = Advisory
@@ -29,7 +30,7 @@ class BaseAdvisorySerializer(serializers.ModelSerializer):
             "description", "internal_name", "technology",
             "recommendation", "date_created", "date_updated",
             "custom_report_title", "hide_advisory_id_in_report",
-            "proof_text", "labels", "researchers"
+            "proof_text", "labels", "researchers", "report_template"
         ]
         read_only_fields = [
             "pk", "user"
@@ -63,7 +64,7 @@ class AdvisorySerializer(BaseAdvisorySerializer):
 class AdvisoryUpdateSerializer(AdvisorySerializer):
     vulnerability = VulnerabilityTemplateSerializer(read_only=True)
     vulnerability_id = VulnerabilityTemplateIdField(source="vulnerability_key")
-    report_template = ActiveReportTemplateSerializerField(required=False, serializer=ReportTemplateMinimalSerializer)
+    report_template = ActiveReportTemplateSerializerField(serializer=ReportTemplateMinimalSerializer)
 
     class Meta(AdvisorySerializer.Meta):
         fields = AdvisorySerializer.Meta.fields + ["vulnerability_id", "report_template"]

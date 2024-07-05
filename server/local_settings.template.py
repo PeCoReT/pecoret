@@ -8,11 +8,6 @@ from pecoret.settings import *
 # Development settings! Do not enable in production!
 # DEBUG = True
 
-
-# enable django admin panel under `/admin`
-# ENABLE_DJANGO_ADMIN_PANEL = False
-
-
 # Email
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 #EMAIL_USE_SSL = True

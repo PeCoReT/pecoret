@@ -4,7 +4,6 @@ Original source which only support vue2
 https://raw.githubusercontent.com/F-loat/vue-simplemde/master/src/index.vue
 */
 import EasyMDE from 'easymde';
-import markdown from '@/utils/markdown';
 
 export default {
     props: {
@@ -67,12 +66,12 @@ export default {
             const configs = Object.assign(
                 {
                     element: this.$el.firstElementChild,
+                    autoDownloadFontAwesome: false,
                     initialValue: this.value,
-                    previewRender: (plaintext) => {
-                        // use markdown-it and sanitize values to prevent XSS
-                        // the default copy&pasted code from the docs rendered
-                        // `<img src=/X onerror=alert(document.domain)>`
-                        return markdown.renderMarkdown(plaintext);
+                    previewRender: (plaintext, preview) => {
+                        this.$api.post("render-markdown/", { markdown: plaintext}).then((resp) => {
+                            preview.innerHTML = resp.data.html;
+                        })
                     },
                     renderingConfig: {
                         codeSyntaxHighlighting: true
