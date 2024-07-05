@@ -3,10 +3,11 @@ import PBreadcrumb from '@/components/Breadcrumb.vue';
 import ProjectNoteService from '@/service/ProjectNoteService';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import { useAuthStore } from '@/store/auth';
+import RenderedNote from '@/components/projects/notes/RenderedNote.vue';
 
 export default {
     name: 'NoteList',
-    components: { MarkdownEditor, PBreadcrumb },
+    components: { RenderedNote, MarkdownEditor, PBreadcrumb },
     data() {
         return {
             breadcrumbs: [{ label: 'Notes', disabled: true }],
@@ -18,7 +19,8 @@ export default {
             previousSelected: null,
             authStore: useAuthStore(),
             pagination: { limit: 25, page: 1 },
-            totalRecords: 0
+            totalRecords: 0,
+            editMode: false
         };
     },
     computed: {
@@ -36,7 +38,7 @@ export default {
     },
     beforeRouteLeave() {
         if (this.selectedNote) {
-            this.service.unlockNote(this.$api, this.projectId, this.selectedNote.pk).then(() => {});
+            this.service.unlockNote(this.$api, this.projectId, this.selectedNote.pk).then(() => {}).catch(() => {})
         }
     },
     methods: {
@@ -58,16 +60,11 @@ export default {
             this.saveLoading = true;
             let title = 'New Note ' + new Date().getTime();
             let data = { title: title, text: '' };
-            if (this.selectedNote !== null && this.selectedNote.object_lock !== null) {
-                this.service.unlockNote(this.$api, this.projectId, this.selectedNote.pk).then(() => {
-                    this.selectedNote = null;
-                });
-            }
             this.service
                 .createNote(this.$api, this.projectId, data)
                 .then((response) => {
-                    this.notes.push(response.data);
                     this.selectedNote = response.data;
+                    this.getNotes();
                 })
                 .finally(() => {
                     this.saveLoading = false;
@@ -123,22 +120,43 @@ export default {
             });
         },
         patchLock() {
-            this.service.lockNote(this.$api, this.projectId, this.selectedNote.pk).then(() => {});
+            this.service.lockNote(this.$api, this.projectId, this.selectedNote.pk).then((resp) => {
+                this.selectedNote = resp.data;
+                for (let i = 0; i < this.notes.length; i++) {
+                    if (this.notes[i].pk === this.selectedNote.pk) {
+                        this.notes[i] = this.selectedNote;
+                    }
+                }
+            });
+        },
+        enterEditMode() {
+            this.editMode = true;
+            this.patchLock();
+        },
+        exitEditMode() {
+            this.editMode = false;
+            this.service.unlockNote(this.$api, this.projectId, this.selectedNote.pk).then((resp) => {
+                for (let i = 0; i < this.notes.length; i++) {
+                    if (this.notes[i].pk === this.selectedNote.pk) {
+                        this.notes[i].object_lock = null;
+                    }
+                }
+                this.selectedNote.object_lock = null;
+            });
         },
         onNoteSelected(event) {
             if (event.value === null) {
                 this.selectedNote = null;
                 return;
             }
+            if (this.editMode === true) {
+                // do not allow action when in edit mode
+                return;
+            }
             this.getNotes();
             for (let i = 0; i < this.notes.length; i++) {
                 if (this.notes[i].pk === event.value.pk) {
                     this.selectedNote = this.notes[i];
-                    if (this.selectedNote.object_lock === null) {
-                        this.service.lockNote(this.$api, this.projectId, this.selectedNote.pk).then((response) => {
-                            this.notes[i] = response.data;
-                        });
-                    }
                 } else {
                     if (this.notes[i].object_lock !== null && this.notes[i].object_lock.user.username === this.authStore.me.username) {
                         this.service.unlockNote(this.$api, this.projectId, this.notes[i].pk).then(() => {
@@ -163,8 +181,10 @@ export default {
         </div>
         <div class="col-6">
             <div class="flex justify-content-end">
-                <Button icon="fa fa-plus" label="Note" outlined @click="createNote"></Button>
-                <Button icon="fa fa-trash" label="Delete" outlined severity="danger" @click="deleteNote" :disabled="!selectedNote"></Button>
+                <Button icon="fa fa-plus" label="Note" outlined @click="createNote" v-if="!this.editMode"></Button>
+                <Button icon="fa fa-edit" label="Edit" outlined @click="enterEditMode" :disabled="!selectedNote" v-if="!this.editMode"></Button>
+                <Button icon="fa fa-edit" label="Exit" outlined @click="exitEditMode" :disabled="!selectedNote" v-else></Button>
+                <Button icon="fa fa-trash" label="Delete" outlined severity="danger" @click="deleteNote" :disabled="!selectedNote" v-if="!this.editMode"></Button>
             </div>
         </div>
     </div>
@@ -179,7 +199,7 @@ export default {
                             <div>
                                 {{ slotProps.option.title }}
                                 <Button class="m-0 p-0" icon="fa fa-lock" text :disabled="true" v-if="slotProps.option.object_lock !== null"></Button>
-                                <small v-if="slotProps.option.object_lock !== null">
+                                <small v-if="slotProps.option.object_lock">
                                     <i>{{ slotProps.option.object_lock.user.username }}</i>
                                 </small>
                             </div>
@@ -189,15 +209,19 @@ export default {
                 <Paginator :rows="pagination.limit" :totalRecords="totalRecords" @page="onPage"></Paginator>
             </div>
             <div class="col-9">
-                <div class="grid formgrid p-fluid">
-                    <div class="col-12 field">
-                        <InputText v-model="selectedNote.title" v-if="selectedNote !== null"></InputText>
-                    </div>
-                    <div class="col-12 field">
-                        <MarkdownEditor v-if="selectedNote !== null" v-model="selectedNote.text" @update:modelValue="patchLock"></MarkdownEditor>
-                    </div>
-                    <div class="col-12 field">
-                        <Button label="Save" @click="patchNote" :loading="saveLoading" v-if="selectedNote !== null"></Button>
+                <RenderedNote :note="selectedNote" v-if="selectedNote !== null && editMode === false"></RenderedNote>
+
+                <div v-if="editMode === true && selectedNote !== null">
+                    <div class="grid formgrid p-fluid">
+                        <div class="col-12 field">
+                            <InputText v-model="selectedNote.title" v-if="selectedNote !== null"></InputText>
+                        </div>
+                        <div class="col-12 field">
+                            <MarkdownEditor v-if="selectedNote !== null" v-model="selectedNote.text"></MarkdownEditor>
+                        </div>
+                        <div class="col-12 field">
+                            <Button label="Save" @click="patchNote" :loading="saveLoading" v-if="selectedNote !== null"></Button>
+                        </div>
                     </div>
                 </div>
             </div>

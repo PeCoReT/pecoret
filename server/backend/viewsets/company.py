@@ -1,5 +1,5 @@
-from backend.serializers.company import CompanySerializer, CustomerCompanySerializer
 from backend.models import Company
+from backend.serializers.company import CompanySerializer, CustomerCompanySerializer
 from pecoret.core import permissions
 from pecoret.core.viewsets import PeCoReTModelViewSet
 
@@ -11,7 +11,7 @@ class CompanyViewSet(PeCoReTModelViewSet):
     serializer_class = CompanySerializer
 
     def get_permissions(self):
-        if self.action in ["list"]:
+        if self.action in ["list", "retrieve"]:
             return [
                 permissions.GroupPermission(
                     read_write_groups=[],
@@ -30,8 +30,25 @@ class CompanyViewSet(PeCoReTModelViewSet):
                     read_only_groups=[]
                 )
             ]
+        elif self.action == 'destroy':
+            return [
+                permissions.GroupPermission(
+                    read_write_groups=[
+                        permissions.Groups.GROUP_MANAGEMENT
+                    ]
+                )
+            ]
+        elif self.action in ['update', 'partial_update']:
+            return [
+                permissions.GroupPermission(
+                    read_write_groups=[
+                        permissions.Groups.GROUP_MANAGEMENT, permissions.Groups.GROUP_PENTESTER,
+                        permissions.Groups.CUSTOMER
+                    ]
+                )
+            ]
         return [
-            permissions.CompanyPermission(
+            permissions.GroupPermission(
                 read_write_groups=[
                     permissions.Groups.GROUP_PENTESTER,
                     permissions.Groups.GROUP_MANAGEMENT

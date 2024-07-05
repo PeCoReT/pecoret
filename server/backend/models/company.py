@@ -13,14 +13,9 @@ class CompanyQuerySet(models.QuerySet):
         return self.filter(project__pk__in=project_ids)
 
     def for_user(self, user):
-        if user.is_superuser:
-            return self.all()
         if user.is_customer:
             return self.filter(pk=user.company.pk)
-        if user.groups.filter(name="Management").exists():
-            return self.all()
-        project_ids = list(Membership.objects.for_user(user).is_active().values_list("project", flat=True))
-        return self.for_project_ids(project_ids)
+        return self.all()
 
 
 class Company(models.Model):

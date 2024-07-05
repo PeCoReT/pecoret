@@ -9,10 +9,11 @@ class CompanyInformationCreateView(APITestCase, PeCoReTTestCaseMixin):
         self.url = self.get_url("backend:companies:information-list", company=self.project1.company.pk)
         self.data = {"text": "test123"}
         self.users_allowed = [
-            self.pentester1, self.management1, self.read_only1, self.management2, self.customer1
+            self.pentester1, self.management1, self.read_only1, self.management2, self.customer1,
+            self.pentester2
         ]
         self.users_forbidden = [
-            self.vendor1, self.vendor2, self.user1, self.advisory_manager1, self.pentester2, self.customer2
+            self.vendor1, self.vendor2, self.user1, self.advisory_manager1, self.customer2
         ]
 
     def test_allowed(self):
@@ -51,6 +52,10 @@ class CompanyInformationDestroyView(APITestCase, PeCoReTTestCaseMixin):
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(self.url, self.client.delete, 204)
 
+    def test_pentester2(self):
+        self.client.force_login(self.pentester2)
+        self.basic_status_code_check(self.url, self.client.delete, 204)
+
     def test_read_only(self):
         self.client.force_login(self.read_only1)
         self.basic_status_code_check(self.url, self.client.delete, 204)
@@ -63,7 +68,7 @@ class CompanyInformationDestroyView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.advisory_manager1, self.user1, self.pentester2, self.vendor1, self.vendor2, self.customer2
+            self.advisory_manager1, self.user1, self.vendor1, self.vendor2, self.customer2
         ]
         for user in users:
             self.client.force_login(user)
@@ -75,11 +80,10 @@ class CompanyInformationListView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.url = self.get_url("backend:companies:information-list", company=self.project1.company.pk)
         self.users_allowed = [
-            self.pentester1, self.read_only1, self.management2, self.management1, self.customer1
+            self.pentester1, self.read_only1, self.management2, self.management1, self.customer1, self.pentester2
         ]
         self.users_forbidden = [
-            self.user1, self.advisory_manager1, self.vendor1, self.vendor2, self.pentester2,
-            self.customer2
+            self.user1, self.advisory_manager1, self.vendor1, self.vendor2, self.customer2
         ]
 
     def test_allowed(self):

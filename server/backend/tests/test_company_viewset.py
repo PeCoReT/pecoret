@@ -47,10 +47,11 @@ class CompanyUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.url = self.get_url("backend:company-detail", pk=self.project1.company.pk)
         self.data = {"street": "randomstreet 1"}
         self.users_allowed = [
-            self.management2, self.management1, self.customer1, self.pentester1, self.read_only1
+            self.management2, self.management1, self.customer1, self.pentester1, self.read_only1,
+            self.pentester2
         ]
         self.users_forbidden = [
-            self.user1, self.pentester2, self.vendor2, self.vendor1, self.advisory_manager1, self.customer2
+            self.user1, self.vendor2, self.vendor1, self.advisory_manager1
         ]
 
     def test_status_allowed(self):
@@ -78,6 +79,14 @@ class CompanyUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         response = self.client.patch(self.url, self.data)
         self.assertEqual(response.json()['report_template']['pk'], self.customer1.company.report_template.pk)
 
+    def test_customer_status_notfound(self):
+        self.client.force_login(self.customer2)
+        self.basic_status_code_check(self.url, self.client.get, 404)
+
+    def test_api_token_notfound(self):
+        self.api_token_check(self.customer2, 'scope_companies', self.url, self.client.patch, 403, 404, 403,
+                             data=self.data)
+
 
 class CompanyCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
@@ -86,21 +95,21 @@ class CompanyCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         template = self.create_instance(ReportTemplate)
         self.data = {"name": "test", "city": "asdf", "zipcode": "1234", "street": "teststreet",
                      "report_template": template.pk, "country": "asd"}
-
-    def test_status_forbidden(self):
-        users = [
+        self.users_allowed = [
+            self.management2, self.management1
+        ]
+        self.users_forbidden = [
             self.user1, self.pentester2, self.pentester1, self.read_only1, self.vendor2, self.vendor1,
             self.customer2, self.customer1, self.advisory_manager1
         ]
-        for user in users:
+
+    def test_status_forbidden(self):
+        for user in self.users_forbidden:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.post, 403, data=self.data)
 
     def test_status_allowed(self):
-        users = [
-            self.management2, self.management1
-        ]
-        for user in users:
+        for user in self.users_allowed:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
 
@@ -122,26 +131,33 @@ class CompanyDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.vendor1, self.vendor2, self.read_only_vendor, self.read_only1,
             self.pentester1, self.pentester2
         ]
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.delete, 403)
 
 
 class CompanyRetrieveViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url("backend:company-detail", pk=self.project1.company.pk)
+        self.users_allowed = [
+            self.management2, self.management1, self.pentester2, self.pentester1, self.read_only1,
+            self.customer1
+        ]
+        self.users_forbidden = [
+            self.user1, self.vendor2, self.vendor1, self.advisory_manager1
+        ]
 
     def test_status_allowed(self):
-        users = [
-            self.management2, self.management1, self.pentester1, self.read_only1, self.customer1
-        ]
-        for user in users:
+        for user in self.users_allowed:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.get, 200)
 
     def test_status_forbidden(self):
-        users = [
-            self.user1, self.advisory_manager1, self.vendor1, self.vendor2, self.pentester2,
-            self.customer2
-        ]
-        for user in users:
+        for user in self.users_forbidden:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.get, 403)
+
+    def test_status_notfound(self):
+        self.client.force_login(self.customer2)
+        self.basic_status_code_check(self.url, self.client.get, 404)

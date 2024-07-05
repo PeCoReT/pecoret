@@ -10,10 +10,10 @@ class CompanyContactListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.company = self.project1.company
         self.url = self.get_url("backend:companies:contact-list", company=self.company.pk)
         self.users_allowed = [
-            self.management1, self.management2, self.pentester1, self.read_only1, self.customer1
+            self.management1, self.management2, self.pentester1, self.read_only1, self.customer1, self.pentester2
         ]
         self.users_forbidden = [
-            self.pentester2, self.user1, self.vendor2, self.vendor1, self.advisory_manager1, self.customer2
+            self.user1, self.vendor2, self.vendor1, self.advisory_manager1, self.customer2
         ]
 
     def test_allowed(self):
@@ -42,11 +42,19 @@ class CompanyContactDeleteViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.url = self.get_url("backend:companies:contact-detail", company=self.company_contact.company.pk,
                                 pk=self.company_contact.pk)
         self.users_forbidden = [
-            self.read_only1, self.pentester2, self.pentester1, self.user1, self.customer2, self.customer1
+            self.user1, self.customer2, self.customer1, self.vendor1, self.advisory_manager1, self.vendor2
         ]
 
     def test_management2(self):
         self.client.force_login(self.management2)
+        self.basic_status_code_check(self.url, self.client.delete, 204)
+
+    def test_pentester1(self):
+        self.client.force_login(self.pentester1)
+        self.basic_status_code_check(self.url, self.client.delete, 204)
+
+    def test_pentester2(self):
+        self.client.force_login(self.pentester2)
         self.basic_status_code_check(self.url, self.client.delete, 204)
 
     def test_api_token_management1(self):
@@ -76,7 +84,7 @@ class CompanyContactUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_allowed(self):
         users = [
-            self.management1, self.management2
+            self.management1, self.management2, self.pentester2, self.pentester1, self.read_only1
         ]
         for user in users:
             self.client.force_login(user)
@@ -91,7 +99,7 @@ class CompanyContactUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.pentester2, self.pentester1, self.read_only1, self.user1, self.customer2, self.customer1
+            self.user1, self.customer2, self.customer1, self.vendor2, self.vendor1, self.advisory_manager1
         ]
         for user in users:
             self.client.force_login(user)
