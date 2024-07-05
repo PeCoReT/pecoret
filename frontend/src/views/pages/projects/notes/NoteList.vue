@@ -20,7 +20,8 @@ export default {
             authStore: useAuthStore(),
             pagination: { limit: 25, page: 1 },
             totalRecords: 0,
-            editMode: false
+            editMode: false,
+            timer: ''
         };
     },
     computed: {
@@ -38,7 +39,11 @@ export default {
     },
     beforeRouteLeave() {
         if (this.selectedNote) {
-            this.service.unlockNote(this.$api, this.projectId, this.selectedNote.pk).then(() => {}).catch(() => {})
+            this.service
+                .unlockNote(this.$api, this.projectId, this.selectedNote.pk)
+                .then(() => {})
+                .catch(() => {});
+            this.stopTimeUpdate();
         }
     },
     methods: {
@@ -129,9 +134,18 @@ export default {
                 }
             });
         },
+        startTimerUpdate() {
+            // reload data every 5s
+            this.timer = setInterval(this.patchLock, 5 * 1000);
+        },
+        stopTimeUpdate() {
+            clearInterval(this.timer);
+            this.timer = '';
+        },
         enterEditMode() {
             this.editMode = true;
             this.patchLock();
+            this.startTimerUpdate()
         },
         exitEditMode() {
             this.editMode = false;
@@ -142,6 +156,7 @@ export default {
                     }
                 }
                 this.selectedNote.object_lock = null;
+                this.stopTimeUpdate()
             });
         },
         onNoteSelected(event) {
@@ -182,7 +197,7 @@ export default {
         <div class="col-6">
             <div class="flex justify-content-end">
                 <Button icon="fa fa-plus" label="Note" outlined @click="createNote" v-if="!this.editMode"></Button>
-                <Button icon="fa fa-edit" label="Edit" outlined @click="enterEditMode" :disabled="!selectedNote" v-if="!this.editMode"></Button>
+                <Button icon="fa fa-edit" label="Edit" outlined @click="enterEditMode" :disabled="!selectedNote || (this.selectedNote && this.selectedNote.object_lock)" v-if="!this.editMode"></Button>
                 <Button icon="fa fa-edit" label="Exit" outlined @click="exitEditMode" :disabled="!selectedNote" v-else></Button>
                 <Button icon="fa fa-trash" label="Delete" outlined severity="danger" @click="deleteNote" :disabled="!selectedNote" v-if="!this.editMode"></Button>
             </div>
@@ -193,7 +208,7 @@ export default {
     <div class="card">
         <div class="grid">
             <div class="col-3 h-full">
-                <Listbox @change="onNoteSelected" v-model="selectedNote" :options="notes" filter @filter="onListFilter" optionLabel="title" class="w-full">
+                <Listbox @change="onNoteSelected" v-model="selectedNote" :options="notes" filter @filter="onListFilter" optionLabel="title" class="w-full" :disabled="this.editMode">
                     <template #option="slotProps">
                         <div class="flex align-items-center">
                             <div>
