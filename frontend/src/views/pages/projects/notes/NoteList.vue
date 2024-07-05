@@ -37,13 +37,13 @@ export default {
     mounted() {
         this.getNotes();
     },
-    beforeRouteLeave() {
+    beforeUnmount() {
         if (this.selectedNote) {
             this.service
                 .unlockNote(this.$api, this.projectId, this.selectedNote.pk)
                 .then(() => {})
                 .catch(() => {});
-            this.stopTimeUpdate();
+            this.stopTimerUpdate();
         }
     },
     methods: {
@@ -126,7 +126,7 @@ export default {
         },
         patchLock() {
             this.service.lockNote(this.$api, this.projectId, this.selectedNote.pk).then((resp) => {
-                this.selectedNote = resp.data;
+                this.selectedNote.object_lock = resp.data.object_lock;
                 for (let i = 0; i < this.notes.length; i++) {
                     if (this.notes[i].pk === this.selectedNote.pk) {
                         this.notes[i] = this.selectedNote;
@@ -138,14 +138,14 @@ export default {
             // reload data every 5s
             this.timer = setInterval(this.patchLock, 5 * 1000);
         },
-        stopTimeUpdate() {
+        stopTimerUpdate() {
             clearInterval(this.timer);
-            this.timer = '';
+            this.timer = null;
         },
         enterEditMode() {
             this.editMode = true;
             this.patchLock();
-            this.startTimerUpdate()
+            this.startTimerUpdate();
         },
         exitEditMode() {
             this.editMode = false;
@@ -156,8 +156,8 @@ export default {
                     }
                 }
                 this.selectedNote.object_lock = null;
-                this.stopTimeUpdate()
             });
+            this.stopTimerUpdate();
         },
         onNoteSelected(event) {
             if (event.value === null) {
@@ -172,10 +172,12 @@ export default {
             for (let i = 0; i < this.notes.length; i++) {
                 if (this.notes[i].pk === event.value.pk) {
                     this.selectedNote = this.notes[i];
+                    break;
                 } else {
                     if (this.notes[i].object_lock !== null && this.notes[i].object_lock.user.username === this.authStore.me.username) {
                         this.service.unlockNote(this.$api, this.projectId, this.notes[i].pk).then(() => {
                             this.notes[i].object_lock = null;
+                            this.stopTimerUpdate();
                         });
                     }
                 }
@@ -197,7 +199,7 @@ export default {
         <div class="col-6">
             <div class="flex justify-content-end">
                 <Button icon="fa fa-plus" label="Note" outlined @click="createNote" v-if="!this.editMode"></Button>
-                <Button icon="fa fa-edit" label="Edit" outlined @click="enterEditMode" :disabled="!selectedNote || (this.selectedNote && this.selectedNote.object_lock)" v-if="!this.editMode"></Button>
+                <Button icon="fa fa-edit" label="Edit" outlined @click="enterEditMode" :disabled="!selectedNote" v-if="!this.editMode"></Button>
                 <Button icon="fa fa-edit" label="Exit" outlined @click="exitEditMode" :disabled="!selectedNote" v-else></Button>
                 <Button icon="fa fa-trash" label="Delete" outlined severity="danger" @click="deleteNote" :disabled="!selectedNote" v-if="!this.editMode"></Button>
             </div>
