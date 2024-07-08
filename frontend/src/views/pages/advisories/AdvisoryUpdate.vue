@@ -46,7 +46,7 @@ export default {
         update() {
             this.loading = true;
             let data = {
-                internal_name: this.model.internal_name,
+                title: this.model.title,
                 technology: this.model.technology,
                 affected_versions: this.model.affected_versions,
                 fixed_version: this.model.fixed_version,
@@ -135,8 +135,8 @@ export default {
                         <Dropdown :options="templateChoices" optionLabel="name" optionValue="vulnerability_id" @focus="onFocusTemplate" filter @filter="onFilterTemplate" v-model="model.template"></Dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label for="name">Internal Name</label>
-                        <InputText id="name" v-model="model.internal_name"></InputText>
+                        <label for="name">Title</label>
+                        <InputText id="name" v-model="model.title"></InputText>
                     </div>
                     <div class="field col-12 md:col-6">
                         <SeveritySelectField v-model="model.severity"></SeveritySelectField>

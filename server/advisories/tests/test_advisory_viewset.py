@@ -70,7 +70,7 @@ class AdvisoryCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             "proofs": "lorem ipsum",
             "recommendation": "lorem ipsum",
             "vulnerability_id": "path-traversal",
-            "internal_name": "test",
+            "title": "test",
             "labels": []
         }
         self.users_forbidden = [

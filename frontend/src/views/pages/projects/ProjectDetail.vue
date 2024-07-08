@@ -16,6 +16,8 @@ export default {
             project: {},
             service: new ProjectService(),
             role: {},
+            updatedSuccessToastTitle: 'Project updated!',
+            updatedSuccessToastText: 'Project was updated successfully!',
             breadcrumbs: [
                 { label: 'Projects', to: this.$router.resolve({ name: 'ProjectList' }) },
                 { label: 'Project Detail', disabled: true }
@@ -68,10 +70,23 @@ export default {
         patchProject(data) {
             this.service.patchProject(this.$api, this.projectId, data).then((response) => {
                 this.project = response.data;
+                this.$toast.add({
+                    severity: 'success',
+                    summary: this.updatedSuccessToastTitle,
+                    life: 3000,
+                    detail: this.updatedSuccessToastText
+                });
             });
         },
         pinProject() {
-            this.service.pinProject(this.$api, this.projectId, this.project.pinned).then(() => {});
+            this.service.pinProject(this.$api, this.projectId, this.project.pinned).then(() => {
+                this.$toast.add({
+                    severity: 'success',
+                    summary: this.updatedSuccessToastTitle,
+                    life: 3000,
+                    detail: this.updatedSuccessToastText
+                });
+            });
         }
     },
     computed: {

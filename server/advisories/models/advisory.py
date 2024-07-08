@@ -104,7 +104,7 @@ class AdvisoryManager(models.Manager):
         data["severity"] = finding.severity
         data["user"] = finding.user
         data["proof_text"] = finding.proof_text
-        data["internal_name"] = finding.name
+        data["title"] = finding.name
         data["recommendation"] = finding.vulnerability.recommendation
         data["vulnerability"] = VulnerabilityTemplate.objects.get(
             vulnerability_id=finding.vulnerability.vulnerability_id
@@ -133,7 +133,7 @@ class Advisory(TimestampedModel):
     user = models.ForeignKey("backend.User", on_delete=models.PROTECT)
     date_planned_disclosure = models.DateField()
     date_disclosure = models.DateField(blank=True, null=True)
-    internal_name = models.CharField(max_length=64, default="")
+    title = models.CharField(max_length=128)
     affected_versions = models.CharField(max_length=128)
     fixed_version = models.CharField(max_length=128, blank=True, null=True)
     vulnerability = models.ForeignKey(
@@ -168,6 +168,12 @@ class Advisory(TimestampedModel):
 
     def __str__(self):
         return self.advisory_id
+
+    @property
+    def internal_name(self):
+        import warnings
+        warnings.warn('`Advisory.internal_name` is deprecated. Use `title` instead', DeprecationWarning)
+        return self.title
 
     def get_researchers(self):
         if self.researchers:

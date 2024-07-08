@@ -36,7 +36,7 @@ export default {
                 }
             ],
             model: {
-                internal_name: null,
+                title: null,
                 template: null,
                 product: null,
                 affected_versions: null,
@@ -56,7 +56,7 @@ export default {
             let proof_text = this.model.proof_text;
             this.loading = true;
             let data = {
-                internal_name: this.model.internal_name,
+                title: this.model.title,
                 vulnerability_id: this.model.template,
                 product: this.model.product,
                 description: this.model.description,
@@ -147,8 +147,8 @@ export default {
 
                 <div class="p-fluid formgrid grid" v-if="activeStep === 0">
                     <div class="field col-12">
-                        <label for="name">Internal Name</label>
-                        <InputText id="name" v-model="model.internal_name"></InputText>
+                        <label for="name">Title</label>
+                        <InputText id="name" v-model="model.title"></InputText>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="template">Vulnerability Template</label>
