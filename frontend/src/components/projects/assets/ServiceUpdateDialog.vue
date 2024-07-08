@@ -15,8 +15,6 @@ export default {
             visible: false,
             model: this.asset,
             service: new AssetService(),
-            host: null,
-            hosts: [],
             protocolChoices: [
                 {
                     label: 'TCP',
@@ -53,7 +51,6 @@ export default {
         patch() {
             let data = {
                 name: this.model.name,
-                host: this.host,
                 protocol: this.model.protocol,
                 port: this.model.port,
                 product: this.model.product,
@@ -64,14 +61,6 @@ export default {
                 this.visible = false;
             });
         },
-        onHostSelectFilter(event) {
-            let params = {
-                search: event.value
-            };
-            this.service.getHosts(this.$api, this.projectId, params).then((response) => {
-                this.hosts = response.data.results;
-            });
-        }
     },
     watch: {
         asset: {
@@ -79,10 +68,6 @@ export default {
             deep: true,
             handler(value) {
                 this.model = value;
-                if (value.host) {
-                    this.hosts.push(value.host);
-                    this.host = value.host.pk;
-                }
             }
         }
     },
@@ -90,14 +75,10 @@ export default {
 </script>
 
 <template>
-    <Button icon="fa fa-pen-to-square" size="small" @click="open" outlined label="Edit"></Button>
+    <Button icon="fa fa-pen-to-square" size="small" @click="open" outlined></Button>
 
     <Dialog header="Update Service" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
         <div class="p-fluid formgrid grid">
-            <div class="field col-12">
-                <label for="host">Host</label>
-                <Dropdown :options="hosts" optionLabel="name" optionValue="pk" id="host" filter v-model="host" @filter="onHostSelectFilter"></Dropdown>
-            </div>
             <div class="field col-12 md:col-6">
                 <label for="name">Name</label>
                 <InputText id="name" type="text" v-model="model.name"></InputText>

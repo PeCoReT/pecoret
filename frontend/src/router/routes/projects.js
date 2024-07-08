@@ -138,16 +138,6 @@ const projectRoutes = [
                         component: () => import('@/views/pages/projects/reports/ReportDocumentList.vue')
                     },
                     {
-                        path: '/projects/:projectId/services',
-                        name: 'ServiceList',
-                        component: () => import('@/views/pages/projects/assets/ServiceList.vue')
-                    },
-                    {
-                        path: '/projects/:projectId/services/:assetId',
-                        name: 'ServiceDetail',
-                        component: () => import('@/views/pages/projects/assets/ServiceDetail.vue')
-                    },
-                    {
                         path: '/projects/:projectId/checklists',
                         name: 'ProjectChecklistList',
                         component: () => import('@/views/pages/projects/checklists/ChecklistList.vue')

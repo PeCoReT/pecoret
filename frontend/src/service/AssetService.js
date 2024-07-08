@@ -58,7 +58,7 @@ export default class AssetService {
     }
 
     getServices(api, projectId, params) {
-        let url = '/projects/' + projectId + '/services/';
+        let url = `/projects/${projectId}/services/`;
         let config = {};
         if (params) {
             config['params'] = params;

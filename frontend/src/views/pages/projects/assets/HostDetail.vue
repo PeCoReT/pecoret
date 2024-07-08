@@ -3,6 +3,7 @@ import AssetService from '@/service/AssetService';
 import HostUpdateDialog from '@/components/projects/assets/HostUpdateDialog.vue';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import markdown from '@/utils/markdown';
+import ServiceList from "@/components/projects/assets/ServiceList.vue";
 
 export default {
     name: 'HostDetail',
@@ -52,7 +53,7 @@ export default {
         },
         confirmDialogDelete() {
             this.$confirm.require({
-                message: 'Do you want to delete this asset and everyhting related to it?',
+                message: 'Do you want to delete this asset and everything related to it?',
                 header: 'Delete confirmation',
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
@@ -62,7 +63,7 @@ export default {
             });
         }
     },
-    components: { DetailCardWithIcon, HostUpdateDialog }
+    components: {ServiceList, DetailCardWithIcon, HostUpdateDialog }
 };
 </script>
 
@@ -109,4 +110,5 @@ export default {
             </div>
         </div>
     </div>
+    <ServiceList :host-id="assetId" :project-id="projectId"></ServiceList>
 </template>

@@ -121,8 +121,16 @@ export default {
                 </template>
 
                 <Column field="ip" header="IP"></Column>
-                <Column field="dns" header="DNS"></Column>
-                <Column field="operating_system" header="Operating System"></Column>
+                <Column field="dns" header="DNS">
+                    <template #body="slotProps">
+                        {{ slotProps.data.dns || '-' }}
+                    </template>
+                </Column>
+                <Column field="operating_system" header="Operating System">
+                    <template #body="slotProps">
+                        {{ slotProps.data.operating_system || '-' }}
+                    </template>
+                </Column>
                 <Column field="environment" header="Environment"></Column>
                 <Column field="accessible" header="Accessible"></Column>
                 <Column header="Actions">

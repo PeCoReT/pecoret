@@ -1,17 +1,25 @@
 <script>
 import AssetService from '@/service/AssetService';
+import ModalDialog from "@/components/elements/dialogs/ModalDialog.vue";
 
 
 export default {
     name: 'ServiceCreateDialog',
+    components: {ModalDialog},
     emits: ['object-created'],
+    props: {
+        projectId: {
+            required: true
+        },
+        hostId: {
+            required: true
+        }
+    },
     data() {
         return {
             visible: false,
-            projectId: this.$route.params.projectId,
             loading: false,
             model: {
-                host: null,
                 name: null,
                 protocol: null,
                 port: null,
@@ -55,6 +63,7 @@ export default {
         },
         create() {
             this.loading = true;
+            this.model.host = this.hostId
             this.service
                 .createService(this.$api, this.projectId, this.model)
                 .then((response) => {
@@ -71,22 +80,6 @@ export default {
                     this.loading = false;
                 });
         },
-        onHostSelectFilter(event) {
-            let params = {
-                search: event.value
-            };
-            this.service.getHosts(this.$api, this.projectId, params).then((response) => {
-                this.hosts = response.data.results;
-            });
-        },
-        onHostSelectFocus() {
-            if (this.hosts.length > 0) {
-                return;
-            }
-            this.service.getHosts(this.$api, this.projectId).then((response) => {
-                this.hosts = response.data.results;
-            });
-        }
     },
 };
 </script>
@@ -96,10 +89,6 @@ export default {
 
     <Dialog header="Create Service" v-model:visible="visible" modal :style="{ width: '70vw' }">
         <div class="p-fluid formgrid grid">
-            <div class="field col-12">
-                <label for="host">Host</label>
-                <Dropdown :options="hosts" optionLabel="name" optionValue="pk" id="host" filter @focus="onHostSelectFocus" v-model="model.host" @filter="onHostSelectFilter"></Dropdown>
-            </div>
             <div class="field col-12 md:col-6">
                 <label for="name">Name</label>
                 <InputText id="name" type="text" v-model="model.name"></InputText>

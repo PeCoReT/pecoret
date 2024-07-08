@@ -65,15 +65,6 @@ export default {
                             }).path
                         },
                         {
-                            label: 'Services',
-                            route: this.$router.resolve({
-                                name: 'ServiceList',
-                                params: {
-                                    projectId: this.$route.params.projectId
-                                }
-                            }).path
-                        },
-                        {
                             label: 'Mobile Applications',
                             route: this.$router.resolve({
                                 name: 'MobileApplicationList',
