@@ -87,6 +87,7 @@ import Tooltip from 'primevue/tooltip';
 import Tree from 'primevue/tree';
 import TreeSelect from 'primevue/treeselect';
 import TreeTable from 'primevue/treetable';
+import TriStateCheckbox from "primevue/tristatecheckbox";
 import pBreadcrumb from '@/components/Breadcrumb.vue';
 import pTabMenu from '@/components/navigation/TabMenu.vue';
 import pMenu from '@/components/navigation/Menu.vue';
@@ -192,6 +193,7 @@ app.component('ToggleButton', ToggleButton);
 app.component('Tree', Tree);
 app.component('TreeSelect', TreeSelect);
 app.component('TreeTable', TreeTable);
+app.component('TriStateCheckbox', TriStateCheckbox);
 
 // custom components
 app.component('pBreadcrumb', pBreadcrumb);
