@@ -197,6 +197,7 @@ export default {
                     v-model:selection="selectedProjects"
                     :show-refresh-button="true"
                     @refresh="getProjects"
+                    @search="onGlobalSearch"
                 >
                     <template #bulk-edit>
                         <Button v-if="selectedProjects.length > 0" icon="fa fa-trash" size="small" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2"></Button>
