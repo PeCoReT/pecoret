@@ -30,9 +30,16 @@ export default {
             this.pagination.page = event.page + 1;
             this.getItems();
         },
-        getItems() {
+        onSearch(search) {
+          this.getItems({search: search})
+        },
+        getItems(params) {
             this.loading = true;
-            let params = {
+            if (!params) {
+                params = {};
+            }
+            params = {
+                ...params,
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
@@ -79,7 +86,18 @@ export default {
             <ContributorCreateDialog @object-created="getItems"></ContributorCreateDialog>
         </template>
         <template #table>
-            <GenericDataTable :total-records="totalRecords" :loading="loading" :pagination="pagination" blank-slate-text="No Contributors!" blank-slate-title="No contributors found!" blank-slate-icon="fa fa-users" :model-value="items" @page="onPage">
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-text="No Contributors!"
+                blank-slate-title="No contributors found!"
+                blank-slate-icon="fa fa-users"
+                :model-value="items"
+                @page="onPage"
+                :show-search="true"
+                @search="onSearch"
+            >
                 <Column field="user.username" header="User"></Column>
                 <Column field="role" header="Role"></Column>
                 <Column field="active_until" header="Membership Expiry">

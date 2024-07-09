@@ -257,9 +257,9 @@ export default {
                         </div>
                     </div>
                 </div>
-                <DataTable paginator lazy :rowHover="items.length > 0" dataKey="pk" :totalRecords="totalRecords" filterDisplay="menu" :rows="pagination.limit" :value="items" :loading="loading" @page="onPage" @sort="onSort" @filter="onFilter">
+                <DataTable paginator lazy :rowHover="items.length > 0" dataKey="pk" :totalRecords="totalRecords" filterDisplay="menu" :rows="pagination.limit" :value="items" :loading="loading" @page="onPage">
                     <template #empty>
-                        <BlankSlate icon="fa fa-file" title="Report documents" text="No report documents found!"></BlankSlate>
+                        <BlankSlate icon="fa fa-file" title="No Report Documents!" text="No report documents found!"></BlankSlate>
                     </template>
                     <Column field="name" header="Header"></Column>
                     <Column field="release_type" header="Release Type"></Column>

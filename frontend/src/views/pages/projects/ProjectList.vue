@@ -1,23 +1,22 @@
 <script>
 import ProjectService from '@/service/ProjectService';
-import { FilterMatchMode } from 'primevue/api';
 import { useAuthStore } from '@/store/auth';
 import ProjectCreateDialog from '@/components/dialogs/ProjectCreateDialog.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
-
-const projectService = new ProjectService();
-const authStore = useAuthStore();
+import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
 export default {
     name: 'ProjectList',
     mounted() {
-        authStore.deactivateProject();
+        this.authStore.deactivateProject();
         this.getProjects();
         this.getPinnedProjects();
     },
     data() {
         return {
             breadcrumbs: [{ label: 'Projects', disabled: true }],
+            service: new ProjectService(),
+            authStore: useAuthStore(),
             projects: [],
             pinnedProjects: [],
             loading: false,
@@ -26,7 +25,7 @@ export default {
             deleteButtonLoading: false,
             pagination: { page: 1, limit: 20 },
             filters: {
-                status: { value: 'Open', matchMode: FilterMatchMode.EQUALS }
+                status: { value: 'Open' }
             },
             statusChoices: [
                 {
@@ -46,7 +45,7 @@ export default {
             let params = {
                 search: query
             };
-            projectService
+            this.service
                 .getProjects(this.$api, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
@@ -67,7 +66,7 @@ export default {
                     this.loading = true;
                     let itemsDeleted = 0;
                     this.selectedProjects.forEach((item) => {
-                        projectService.deleteProject(this.$api, item.pk).then(() => {
+                        this.service.deleteProject(this.$api, item.pk).then(() => {
                             itemsDeleted++;
                             if (itemsDeleted === this.selectedProjects.length) {
                                 this.loading = false;
@@ -84,7 +83,7 @@ export default {
             let params = {
                 pinned: true
             };
-            projectService.getProjects(this.$api, params).then((response) => {
+            this.service.getProjects(this.$api, params).then((response) => {
                 this.pinnedProjects = response.data.results;
             });
         },
@@ -95,7 +94,7 @@ export default {
                 page: this.pagination.page,
                 status: this.filters.status.value
             };
-            projectService
+            this.service
                 .getProjects(this.$api, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
@@ -113,7 +112,7 @@ export default {
             if (event.sortOrder === -1) {
                 params['ordering'] = '-' + event.sortField;
             }
-            projectService
+            this.service
                 .getProjects(this.$api, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
@@ -127,7 +126,7 @@ export default {
             let params = {
                 status: event.filters.status.value
             };
-            projectService.getProjects(this.$api, params).then((response) => {
+            this.service.getProjects(this.$api, params).then((response) => {
                 this.totalRecords = response.data.count;
                 this.projects = response.data.results;
             });
@@ -145,7 +144,7 @@ export default {
             });
         }
     },
-    components: { ProjectCreateDialog, BlankSlate }
+    components: { GenericDataTable, ProjectCreateDialog, BlankSlate }
 };
 </script>
 
@@ -180,45 +179,31 @@ export default {
     <div class="grid">
         <div class="col-12">
             <div class="card">
-                <DataTable
-                    :paginator="true"
-                    dataKey="pk"
-                    :rowHover="this.projects.length > 0"
-                    :rows="pagination.limit"
-                    v-model:selection="selectedProjects"
-                    class="p-datatable-gridlines2"
-                    :value="projects"
-                    filterDisplay="menu"
-                    :lazy="true"
-                    responsiveLayout="scroll"
-                    :totalRecords="totalRecords"
+                <GenericDataTable
+                    :total-records="totalRecords"
                     :loading="loading"
-                    @page="onPage($event)"
-                    removableSort
-                    filter
-                    v-model:filters="filters"
-                    @sort="onSort($event)"
-                    @filter="onFilter($event)"
+                    :pagination="pagination"
+                    blank-slate-text="No projects found!"
+                    blank-slate-title="No Projects!"
+                    blank-slate-icon="fa fa-box"
+                    :model-value="projects"
+                    :removable-sort="true"
+                    @sort="onSort"
+                    @filter="onFilter"
+                    :show-search="true"
+                    filter-display="menu"
                     @row-click="onRowClick"
+                    v-model:filters="filters"
+                    v-model:selection="selectedProjects"
+                    :show-refresh-button="true"
+                    @refresh="getProjects"
                 >
-                    <template #empty>
-                        <BlankSlate title="No projects!" text="No projects found!" icon="fa fa-box"></BlankSlate>
-                    </template>
-
-                    <template #header>
-                        <div class="grid">
-                            <IconField iconPosition="left">
-                                <InputIcon class="fa fa-search"></InputIcon>
-                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </IconField>
-                            <Button v-if="selectedProjects.length > 0" icon="fa fa-trash" size="small" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2"></Button>
-                        </div>
+                    <template #bulk-edit>
+                        <Button v-if="selectedProjects.length > 0" icon="fa fa-trash" size="small" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2"></Button>
                     </template>
                     <Column selectionMode="multiple" headerStyle=""></Column>
                     <Column field="name" header="Name" sortable>
-                        <template #body="slotProps">
-                            [{{ slotProps.data.year }}] {{ slotProps.data.name }}
-                        </template>
+                        <template #body="slotProps"> [{{ slotProps.data.year }}] {{ slotProps.data.name }}</template>
                     </Column>
                     <Column field="company_name" header="Company"></Column>
                     <Column field="status" header="Status" :showFilterMatchModes="false">
@@ -230,11 +215,9 @@ export default {
                     <Column field="test_method" header="Test Method"></Column>
                     <Column field="visibility" header="Visibility"></Column>
                     <Column field="start_date" header="Period">
-                        <template #body="slotProps">
-                            {{ slotProps.data.start_date }} - {{ slotProps.data.end_date }}
-                        </template>
+                        <template #body="slotProps"> {{ slotProps.data.start_date }} - {{ slotProps.data.end_date }} </template>
                     </Column>
-                </DataTable>
+                </GenericDataTable>
             </div>
         </div>
     </div>

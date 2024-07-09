@@ -2,7 +2,6 @@
 import FindingService from '@/service/FindingService';
 import SeverityBadge from '@/components/SeverityBadge.vue';
 import FindingCopyDialog from '@/components/dialogs/FindingCopyDialog.vue';
-import { FilterMatchMode } from 'primevue/api';
 import AssetSelectField from '@/components/elements/forms/AssetSelectField.vue';
 import FindingCreateDialog from '@/components/projects/findings/FindingCreateDialog.vue';
 import FindingBulkEditDialog from '@/components/projects/findings/FindingBulkEditDialog.vue';
@@ -23,8 +22,8 @@ export default {
                 }
             ],
             filters: {
-                needs_review: { value: null, matchMode: FilterMatchMode.EQUALS },
-                component: { value: null, matchMode: FilterMatchMode.EQUALS }
+                needs_review: { value: null },
+                component: { value: null }
             },
             filterAsset: null,
             projectId: this.$route.params.projectId,
@@ -49,6 +48,7 @@ export default {
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.findings = response.data.results;
+                    this.selectedItems = []
                 })
                 .finally(() => {
                     this.loading = false;
@@ -149,7 +149,7 @@ export default {
                 :loading="loading"
                 :pagination="pagination"
                 blank-slate-text="No findings here!"
-                blank-slate-title="No findings!"
+                blank-slate-title="No Findings!"
                 blank-slate-icon="fa fa-bugs"
                 :model-value="findings"
                 v-model:filters="filters"
@@ -160,16 +160,14 @@ export default {
                 @sort="onSort"
                 :filter="true"
                 filter-display="menu"
+                :show-refresh-button="true"
+                @refresh="getFindings"
+                :show-search="true"
+                @search="onGlobalSearch"
             >
-                <template #header>
-                    <div class="grid">
-                        <IconField iconPosition="left">
-                            <InputIcon class="fa fa-search"></InputIcon>
-                            <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                        </IconField>
-                        <Button v-if="selectedItems.length > 0" icon="fa fa-trash" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2 mb-2"></Button>
-                        <FindingBulkEditDialog :findings="selectedItems" @object-updated="getFindings"></FindingBulkEditDialog>
-                    </div>
+                <template #bulk-edit>
+                    <Button v-if="selectedItems.length > 0" icon="fa fa-trash" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2 mb-2"></Button>
+                    <FindingBulkEditDialog :findings="selectedItems" @object-updated="getFindings"></FindingBulkEditDialog>
                 </template>
                 <Column selectionMode="multiple" headerStyle=""></Column>
 
