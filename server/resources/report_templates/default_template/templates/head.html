@@ -1,0 +1,22 @@
+<head>
+    <meta charset="utf-8">
+    <style>
+        @page {
+            @bottom-left {
+                font-size: 10px;
+                content: "{{ _('Client Confidential') }}";
+                margin-top: -5px;
+            }
+
+            @bottom-center {
+                content: "{{ project.name }} ({{ project.company.name }})";
+                font-size: 10px;
+                margin-top: -5px;
+            }
+
+            @bottom-right {
+                content: counter(page) " {{ _('of') }} " counter(pages);
+            }
+        }
+    </style>
+</head>

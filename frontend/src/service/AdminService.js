@@ -28,27 +28,6 @@ export default class AdminService {
         return api.get(url)
     }
 
-
-    deleteReportTemplate(api, templateId){
-        let url = "/report-templates/" + templateId + "/"
-        return api.delete(url)
-    }
-
-    getReportTemplates(api){
-        let url = "/report-templates/"
-        return api.get(url)
-    }
-
-    patchReportTemplate(api, templateId, data){
-        let url = "/report-templates/" + templateId + "/"
-        return api.patch(url, data)
-    }
-
-    createReportTemplate(api, data){
-        let url = "/report-templates/"
-        return api.post(url, data)
-    }
-
     getProjectTypes(api, params){
         let url = "/pentest-types/"
         let config = {}

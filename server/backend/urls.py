@@ -18,7 +18,6 @@ router.register(
 
 router.register("companies", viewsets.CompanyViewSet, "company")
 router.register("cwes", viewsets.CWEViewSet, "cwe")
-router.register("report-templates", viewsets.ReportTemplateViewSet, "report-template")
 router.register('technologies', viewsets.TechnologyViewSet, 'technology')
 router.register("users", viewsets.UserViewSet, "user")
 router.register("groups", viewsets.GroupViewSet, "group")
@@ -92,6 +91,7 @@ urlpatterns = [
     path("cvss-calculator/4.0/", views.CVSS4CalculatorView.as_view(), name='cvss4-calculator'),
     path("cvss-calculator/3.1/", views.CVSS31CalculatorView.as_view(), name='cvss31-calculator'),
     path("render-markdown/", views.RenderMarkdownToHTML.as_view(), name='render-markdown'),
+    path('report-templates/', views.ReportTemplateView.as_view(), name='report-templates'),
     path("projects/<int:project>/", include(project_router.urls)),
     path(
         "projects/<int:project>/findings/<int:finding>/",

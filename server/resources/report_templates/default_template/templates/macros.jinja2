@@ -1,0 +1,12 @@
+{% macro report_errors_for_section(section, report_errors) %}
+    {% if report_errors %}
+        {% for error in report_errors.get(section,[]) %}
+            {% if error.edit_link %}
+                <a class="text-color-error" target="_blank" href="{{ error.edit_link }}"
+                   rel="noopener noreferrer"><strong>Error: </strong>{{ error.message }}</a>
+            {% else %}
+                <p class="text-color-error"><strong>Error: </strong>{{ error.message }}</p>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endmacro %}

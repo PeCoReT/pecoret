@@ -13,11 +13,6 @@ def initialize_default_user(apps, schema_editor):
     User.objects.get_or_create(username="Ghost", is_active=False)
 
 
-def initialize_report_template(apps, schema_editor):
-    ReportTemplate = apps.get_model('backend', "ReportTemplate")
-    ReportTemplate.objects.get_or_create(name="default_template", path="report")
-
-
 class Migration(migrations.Migration):
     dependencies = [
         ("backend", "0001_initial"),
@@ -26,5 +21,4 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunPython(initialize_default_groups),
         migrations.RunPython(initialize_default_user),
-        migrations.RunPython(initialize_report_template)
     ]

@@ -57,9 +57,6 @@ export default {
                 vulnerability_id: this.model.template,
                 report_template: this.model.report_template
             };
-            if (this.model.report_template && this.model.report_template.pk) {
-                data['report_template'] = this.model.report_template.pk;
-            }
             if (this.model.technology && this.model.technology.pk) {
                 data['technology'] = this.model.technology.pk;
             }

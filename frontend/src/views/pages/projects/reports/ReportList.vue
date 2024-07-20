@@ -1,6 +1,6 @@
 <script>
 import ReportService from '@/service/ReportService';
-import ReportCreateDialog from '@/components/dialogs/ReportCreateDialog.vue';
+import ReportCreateDialog from '@/components/projects/reporting/ReportCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
@@ -100,8 +100,7 @@ export default {
                     </div>
                 </template>
                 <Column field="name" header="Name"> </Column>
-                <Column field="variant" header="Variant"></Column>
-                <Column field="template.name" header="Template"></Column>
+                <Column field="template" header="Template"></Column>
                 <Column field="author.username" header="Author"></Column>
             </GenericDataTable>
         </template>

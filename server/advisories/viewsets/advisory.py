@@ -1,4 +1,5 @@
 from django.http.response import HttpResponse
+from django.conf import settings
 from rest_framework.decorators import action
 from advisories.models.advisory import Advisory, Roles
 from advisories.serializers.advisory import (
@@ -138,6 +139,8 @@ class AdvisoryViewSet(PeCoReTModelViewSet):
             HttpResponse: PDF Response
         """
         advisory = self.get_object()
+        if not advisory.report_template:
+            advisory.report_template = list(settings.REPORT_TEMPLATES.keys())[0]
         result = export_advisory(advisory, advisory.report_template)
         response = HttpResponse(result, content_type="application/pdf")
         filename = f"advisory-{advisory.pk}"

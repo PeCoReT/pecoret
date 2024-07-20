@@ -12,3 +12,8 @@ Q_CLUSTER = {
     "sync": True
 }
 
+REPORT_TEMPLATES = {
+    'default_template': {
+        'path': BASE_DIR / 'resources/report_templates/default_template/report_template.py'
+    }
+}

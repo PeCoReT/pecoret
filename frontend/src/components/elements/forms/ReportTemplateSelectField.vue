@@ -28,9 +28,6 @@ export default {
     },
     data() {
         let model = this.modelValue;
-        if (this.modelValue && this.modelValue.pk) {
-            model = this.modelValue.pk;
-        }
         return {
             model: model,
             choices: [],
@@ -44,7 +41,7 @@ export default {
             deep: true,
             handler(value) {
                 if (this.choices.length === 0) {
-                    if (value && value.pk) {
+                    if (value) {
                         this.choices = [value];
                     }
                 }
@@ -55,5 +52,5 @@ export default {
 </script>
 <template>
     <label for="report_template">Report Template</label>
-    <Dropdown id="report_template" v-model="model" :options="choices" @focus="onFocus" optionLabel="name" optionValue="pk" @change="change" :loading="loading"></Dropdown>
+    <Dropdown id="report_template" v-model="model" :options="choices" @focus="onFocus" optionLabel="name" optionValue="name" @change="change" :loading="loading"></Dropdown>
 </template>

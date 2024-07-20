@@ -1,6 +1,6 @@
 from rest_framework.test import APITestCase
 
-from backend.models import Company, ReportTemplate
+from backend.models import Company
 from pecoret.core.test import PeCoReTTestCaseMixin
 
 
@@ -74,10 +74,9 @@ class CompanyUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_customer_forbidden_fields(self):
         self.client.force_login(self.customer1)
-        self.report_template = self.create_instance(ReportTemplate)
-        self.data = {'report_template': self.report_template.pk}
+        self.data = {'report_template': "bla"}
         response = self.client.patch(self.url, self.data)
-        self.assertEqual(response.json()['report_template']['pk'], self.customer1.company.report_template.pk)
+        self.assertEqual(response.json()['report_template'], self.customer1.company.report_template)
 
     def test_customer_status_notfound(self):
         self.client.force_login(self.customer2)
@@ -92,9 +91,8 @@ class CompanyCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url("backend:company-list")
-        template = self.create_instance(ReportTemplate)
         self.data = {"name": "test", "city": "asdf", "zipcode": "1234", "street": "teststreet",
-                     "report_template": template.pk, "country": "asd"}
+                     "report_template": "default_template", "country": "asd"}
         self.users_allowed = [
             self.management2, self.management1
         ]

@@ -142,7 +142,7 @@ REST_FRAMEWORK = {
     "MAX_PAGINATE_BY": 200,
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_THROTTLE_RATES": {"auth_flow_throttle": "7/hour"},
-    "EXCEPTION_HANDLER": "pecoret.core.exceptions.pecoret_execption_handler",
+    "EXCEPTION_HANDLER": "pecoret.core.exceptions.handle",
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
 }
 
@@ -205,10 +205,6 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'Strict'
 SESSION_COOKIE_SAMESITE = 'Strict'
 
-FALLBACK_REPORT_TEMPLATE = "default_template"
-
-EXTENSIONS_DIRECTORY = BASE_DIR / 'extensions'
-
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 
@@ -250,8 +246,12 @@ EXTRA_SETTINGS_DEFAULTS = [
 
 LDAP_SYNC_GROUP_MAPPING = {}
 
-if DEBUG:
-    REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"].append(
-        "rest_framework.renderers.BrowsableAPIRenderer"
-    )
 
+###################
+# Report Templates
+###################
+REPORT_TEMPLATE_PRESETS = {
+    'default_template': {
+        'path': BASE_DIR / 'resources/report_templates/default_template/report_template.py'
+    }
+}

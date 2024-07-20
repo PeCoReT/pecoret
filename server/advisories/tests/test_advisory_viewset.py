@@ -65,6 +65,7 @@ class AdvisoryCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             "technology": self.tech.pk,
             "affected_versions": "1.0",
             "fixed_version": None,
+            "report_template": "default_template",
             "severity": Severity.LOW.label,
             "description": "lorem ipsum",
             "proofs": "lorem ipsum",

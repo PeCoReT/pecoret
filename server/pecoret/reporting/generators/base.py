@@ -18,7 +18,7 @@ class BaseReportGenerator:
         self.report_plugin = report_plugin
         self.preprocess_cb = preprocess_cb
         self.postprocess_cb = postprocess_cb
-        self.jinja_loader = FileSystemLoader(self.report_plugin.template_directory)
+        self.jinja_loader = FileSystemLoader(self.report_plugin.templates_directory)
         self.jinja_env = SandboxedEnvironment(
             loader=self.jinja_loader,
             autoescape=self.jinja_autoescape,

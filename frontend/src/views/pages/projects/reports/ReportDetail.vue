@@ -50,7 +50,6 @@ export default {
         updateReport() {
             this.saveLoading = true;
             let data = {
-                author: this.report.author.pk,
                 title: this.report.title,
                 name: this.report.name,
                 recommendation: this.report.recommendation,
@@ -120,21 +119,6 @@ export default {
         <div class="col-12">
             <ReportTabMenu class="surface-card"></ReportTabMenu>
             <div class="card border-noround-top">
-                <div class="grid">
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Language" icon="fa fa-flag" class="surface-ground" :text="project.language"></DetailCardWithIcon>
-                    </div>
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Author" icon="fa fa-feather" class="surface-ground" :text="report.author.username"></DetailCardWithIcon>
-                    </div>
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Template" icon="fa fa-wand-magic-sparkles" class="surface-ground" :text="report.template.name"></DetailCardWithIcon>
-                    </div>
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Variant" icon="fa fa-file-invoice" class="surface-ground" :text="report.variant"></DetailCardWithIcon>
-                    </div>
-                </div>
-
                 <div class="grid formgrid p-fluid mt-3">
                     <div class="field sm:col-12 md:col-4">
                         <label for="name">Name</label>

@@ -1,23 +1,26 @@
 import cvss
 from django.contrib.auth import authenticate, login, logout
-from django.views.decorators.csrf import csrf_protect
-from django.utils.decorators import method_decorator
+from django.conf import settings
 from django.middleware.csrf import get_token
-from rest_framework.response import Response
-from rest_framework.authentication import SessionAuthentication
-from rest_framework import status
-from rest_framework import serializers
-from rest_framework.views import APIView
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
 from drf_spectacular.utils import extend_schema
-from pecoret.core.auth.ldap import sync_ldap_groups
-from backend.serializers.user import UserMeSerializer
-from backend.utils import cvss4
+from rest_framework import serializers
+from rest_framework import status
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from backend.models.finding import Severity
 from backend.serializers.cvss_calculator import (
     CVSS4CalculatorSerializer, CVSS4CalculatedSerializer,
     CVSS31CalculatorSerializer, CVSS31CalculatedSerializer
 )
 from backend.serializers.render import RenderMarkdownSerializer
+from backend.serializers.user import UserMeSerializer
+from backend.utils import cvss4
+from pecoret.core.auth.ldap import sync_ldap_groups
+from pecoret.reporting.utils import get_report_template_choices
 from .throttle import AuthFlowThrottle
 
 
@@ -177,3 +180,13 @@ class RenderMarkdownToHTML(APIView):
         serializer = RenderMarkdownSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ReportTemplateView(APIView):
+    authentication_classes = [SessionAuthentication]
+
+    def get(self, request, **kwargs):
+        data = []
+        for item in settings.REPORT_TEMPLATES.keys():
+            data.append({'name': item})
+        return Response({'results': data}, status=status.HTTP_200_OK)

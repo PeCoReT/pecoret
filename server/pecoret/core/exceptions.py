@@ -7,7 +7,7 @@ from rest_framework.views import exception_handler
 DRF_NON_FIELD_ERRORS = api_settings.NON_FIELD_ERRORS_KEY
 
 
-def pecoret_execption_handler(exc, context):
+def handle(exc, context):
     """
     translate django validation error which causes HTTP 500 status to DRF validation errors
     and HTTP 400

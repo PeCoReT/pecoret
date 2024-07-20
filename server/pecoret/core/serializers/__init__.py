@@ -7,7 +7,6 @@ from backend.models.finding import ProjectVulnerability
 from backend.models.membership import Roles
 from backend.models.vulnerability import VulnerabilityTemplate
 from backend.models.company import Company
-from backend.models.report_templates import ReportTemplate
 
 
 class ValuedChoiceField(serializers.ChoiceField):
@@ -176,11 +175,3 @@ class CompanyScopedPrimaryKeyRelatedField(PrimaryKeyRelatedField):
                 )
             )
         )
-
-
-class ActiveReportTemplateSerializerField(PrimaryKeyRelatedField):
-    def to_internal_value(self, data):
-        qs = ReportTemplate.objects.active().filter(pk=data)
-        if qs.exists():
-            return qs.get()
-        self.fail('invalid_template')

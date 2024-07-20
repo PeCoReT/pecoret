@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='advisory',
             name='report_template',
-            field=models.ForeignKey(default=advisories.models.advisory.default_report_template, on_delete=pecoret.core.models.CASCADE_REPORT_TEMPLATE_DEFAULT, to='backend.reporttemplate'),
+            field=models.ForeignKey(default=1, on_delete=models.CASCADE, to='backend.reporttemplate'),
         ),
     ]
