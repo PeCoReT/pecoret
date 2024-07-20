@@ -48,9 +48,7 @@ class FindingBarChart(Chart):
 
 class ReportTemplate(mixins.SingleFindingMixin, mixins.AdvisoryMixin, mixins.PentestReportMixin,
                      GenericReportTemplate):
-    css_files = [
-        'css/main.css'
-    ]
+    css_files = []
     _error_classes = {
         'finding': [
             errors.FindingProofCheck

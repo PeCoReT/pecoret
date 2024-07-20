@@ -3,7 +3,7 @@
   border-collapse: collapse;
 
   td, th {
-    border-bottom-color: var(--table-border-color);
+    border-bottom-color: var(--border-color-table);
     border-bottom-width: 1px;
     border-bottom-style: solid;
     border-collapse: collapse;
@@ -12,7 +12,7 @@
   }
 
   th {
-    border-top: var(--table-border-color);
+    border-top: var(--border-color-table);
     border-collapse: collapse;
   }
 }
