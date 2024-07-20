@@ -1,0 +1,27 @@
+<article id="technical-details" class="chapter">
+  <h1 class="chapter-title" id="technical-details-title">{{ _('Technical Details') }}</h1>
+</article>
+
+<section>
+  {% trans %}
+    This section outlines the findings discovered during the assessment.
+  {% endtrans %}
+</section>
+
+{% include './sections/vulnerabilities_overview.html' %}
+
+<section id="findings">
+  <h2>{{ _('Findings') }}</h2>
+  <p>
+    {% trans %}
+      "Findings" are occurrences of various vulnerabilities described in the previous section.
+      If the remediation of a finding requires steps other than those described in the vulnerability, the
+      recommendations for the finding are listed accordingly.
+    {% endtrans %}
+  </p>
+
+  {% for finding in findings %}
+    {% include './sections/single_finding.html' %}
+  {% endfor %}
+</section>
+

@@ -1,14 +1,12 @@
 from rest_framework.test import APITestCase
 
 from advisories.models.advisory import VisibilityChoices
-from backend.models.report_templates import ReportTemplate
 from pecoret.core.test import PeCoReTTestCaseMixin
 
 
 class AdvisoryExportViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.report_template = ReportTemplate.objects.get(name="default_template")
         self.url = self.get_url("advisories:advisory-export-pdf", pk=self.advisory1.pk)
         self.users_allowed = [
             self.pentester1,

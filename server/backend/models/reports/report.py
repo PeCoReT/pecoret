@@ -1,25 +1,5 @@
 from django.db import models
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
-
-
-class ReportVariant(models.IntegerChoices):
-    PENTEST_PDF_REPORT = 0, "Pentest PDF"
-    VULNERABILITY_CSV_REPORT = 1, "Vulnerability CSV"
-    PENTEST_EXCEL = 2, "Pentest Excel"
-
-    @property
-    def to_plugin_method(self):
-        """required to receive the required class of the variant
-
-        Returns:
-            str: class name (e.g. PentestPDFReport)
-        """
-        mappers = {
-            'Pentest PDF': 'export_project_pdf_report',
-            'Vulnerability CSV': 'export_vulnerability_csv',
-            'Pentest Excel': 'export_project_excel'
-        }
-        return mappers[self._label_]
+from pecoret.reporting.utils import get_report_template_choices
 
 
 class ReportQuerySet(models.QuerySet):
@@ -34,11 +14,10 @@ class Report(models.Model):
     name = models.CharField(max_length=128)
     title = models.CharField(max_length=128, default="Pentest Report")
     project = models.ForeignKey('backend.Project', on_delete=models.CASCADE)
-    author = models.ForeignKey('backend.User', on_delete=models.PROTECT)
-    variant = models.PositiveSmallIntegerField(choices=ReportVariant.choices)
+    author = models.ForeignKey('backend.User', on_delete=models.SET_NULL, null=True, blank=True)
     recommendation = models.TextField(null=True, blank=True)
     evaluation = models.TextField(null=True, blank=True)
-    template = models.ForeignKey('backend.ReportTemplate', on_delete=models.PROTECT)
+    template = models.CharField(max_length=128, choices=get_report_template_choices)
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -56,17 +35,6 @@ class Report(models.Model):
         if not self.changehistory_set.count():
             return "0.1"
         return self.changehistory_set.first().version
-
-    def clean(self):
-        try:
-            instance = Report.objects.get(pk=self.pk)
-            if instance.variant != self.variant:
-                raise ValidationError(
-                    {"variant": "Report variant cannot be changed after creation!"}
-                )
-        except ObjectDoesNotExist:
-            pass
-        return super().clean()
 
     class Meta:
         ordering = ["-date_created"]

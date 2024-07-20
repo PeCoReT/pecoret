@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+from django.core.exceptions import ValidationError
 from django_q.models import Task as DjangoQTask
 from pecoret.core.models import TimestampedModel
 
@@ -62,4 +64,7 @@ class ReportRelease(TimestampedModel):
             if qs.exists():
                 # delete existing preview document
                 qs.delete()
+        # check if report template exists
+        if self.report.template not in list(settings.REPORT_TEMPLATES.keys()):
+            raise ValidationError({'report': 'Report template does not exist!'})
         return super().clean()

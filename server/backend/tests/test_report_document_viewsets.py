@@ -1,5 +1,6 @@
+from django.conf import settings
 from rest_framework.test import APITestCase
-from backend.models import Report, ReportRelease, ReportTemplate
+from backend.models import Report, ReportRelease
 from backend.models.reports.report_release import ReleaseType
 from pecoret.core.test import PeCoReTTestCaseMixin
 
@@ -64,9 +65,7 @@ class ReportDocumentUpdateTestCase(APITestCase, PeCoReTTestCaseMixin):
 class ReportDocumentCreateTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.report_template = ReportTemplate.objects.get(
-            name="default_template"
-        )
+        self.report_template = list(settings.REPORT_TEMPLATES.keys())[0]
         self.report1 = self.create_instance(Report, project=self.project1, template=self.report_template)
         self.report2 = self.create_instance(Report, project=self.project2, template=self.report_template)
         self.url = self.get_url(
@@ -78,6 +77,19 @@ class ReportDocumentCreateTestCase(APITestCase, PeCoReTTestCaseMixin):
             "name": "test",
             "release_type": ReleaseType.DRAFT.label,
         }
+
+    def test_non_existent_template(self):
+        with self.settings(REPORT_TEMPLATES={'default_template': {}, 'i-do-not-exist': {}}):
+            self.report1.template = 'i-do-not-exist'
+            self.report1.save()
+        users = [
+            self.pentester1, self.management1
+        ]
+        for user in users:
+            self.client.force_login(user)
+            self.basic_status_code_check(self.url, self.client.post, 400, data=self.data)
+        self.report1.template = 'default_template'
+        self.report1.save()
 
     def test_pentester1_status(self):
         self.client.force_login(self.pentester1)
@@ -144,10 +156,7 @@ class ReportDocumentDownloadTestCase(APITestCase, PeCoReTTestCaseMixin):
 class ReportPreviewDocument(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.report_template = ReportTemplate.objects.get(
-            name="default_template"
-        )
-        self.report1 = self.create_instance(Report, project=self.project1, template=self.report_template)
+        self.report1 = self.create_instance(Report, project=self.project1, template='default_template')
         self.url = self.get_url("backend:report-release-list", project=self.project1.pk, report=self.report1.pk)
         self.data = {"release_type": "Preview", "name": "Preview"}
 

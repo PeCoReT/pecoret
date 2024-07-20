@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from extra_settings.models import Setting
 
 from backend.models import (
-    User, Project, Membership, ReportTemplate, WebApplication,
+    User, Project, Membership, WebApplication,
     Finding
 )
 from advisories.models import advisory
@@ -65,8 +65,10 @@ class PeCoReTTestCaseMixin:
         self.read_only_vendor = self.create_user("readonlyvendor1", "changeme1234", group="Vendor")
         self.vendor2 = self.create_user("testvendor2", "changeme1234", group="Vendor")
         self.advisory1 = self.create_instance(advisory.Advisory, visibility=advisory.VisibilityChoices.TEAM,
+                                              report_template='default_template',
                                               user=self.pentester1)
         self.advisory2 = self.create_instance(advisory.Advisory, visibility=advisory.VisibilityChoices.MEMBERS,
+                                              report_template='default_template',
                                               user=self.pentester2)
         self.assign_advisory_role(self.vendor1, advisory.Roles.VENDOR, self.advisory1)
         self.assign_advisory_role(self.read_only_vendor, advisory.Roles.READ_ONLY, self.advisory1)
@@ -112,7 +114,7 @@ class PeCoReTTestCaseMixin:
         user.save()
 
     def create_project(self):
-        return G(Project, company__report_template=ReportTemplate.objects.get(name="default_template"))
+        return G(Project, company__report_template="default_template")
 
     def assign_project_role(self, user, role, project):
         return G(Membership, user=user, role=role, project=project)

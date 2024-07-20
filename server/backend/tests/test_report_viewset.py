@@ -1,8 +1,7 @@
+from django.conf import settings
 from rest_framework.test import APITestCase
 from pecoret.core.test import PeCoReTTestCaseMixin
-from backend.models.reports.report import ReportVariant, Report
-from backend.models import ReportTemplate
-from backend.models.report_templates import ReportTemplateStatus
+from backend.models.reports.report import Report
 
 
 class ReportListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
@@ -32,26 +31,19 @@ class ReportCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url("backend:report-list", project=self.project1.pk)
-        self.report_template = self.create_instance(
-            ReportTemplate, status=ReportTemplateStatus.ACTIVE
-        )
+        self.report_template = list(settings.REPORT_TEMPLATES.keys())[0]
         self.data = {
             "name": "Test",
             "title": "Test Report",
             "project": self.project1.pk,
-            "author": self.pentester1.pk,
-            "variant": ReportVariant.VULNERABILITY_CSV_REPORT.label,
             "language": "English",
             "recommendation": "",
             "evaluation": "",
-            "template": self.report_template.pk,
+            "template": self.report_template
         }
 
     def test_inactive_report_template(self):
-        new_template = self.create_instance(
-            ReportTemplate, status=ReportTemplateStatus.DRAFT
-        )
-        self.data["template"] = new_template.pk
+        self.data["template"] = "i-do-not-exist-really-just-for-testing"
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(self.url, self.client.post, 400, data=self.data)
 
@@ -66,7 +58,8 @@ class ReportCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def test_forbidden(self):
         users = [
             self.pentester2, self.read_only1, self.user1, self.customer1, self.customer2,
-            self.read_only_vendor, self.advisory_manager1, self.management2
+            self.read_only_vendor, self.advisory_manager1, self.management2,
+            self.vendor2, self.vendor1
         ]
         for user in users:
             self.client.force_login(user)
@@ -86,7 +79,7 @@ class ReportUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.report1 = self.create_instance(
             Report,
             project=self.project1,
-            variant=ReportVariant.PENTEST_PDF_REPORT.value,
+            template=list(settings.REPORT_TEMPLATES.keys())[0]
         )
         self.url = self.get_url(
             "backend:report-detail", project=self.project1.pk, pk=self.report1.pk
@@ -110,13 +103,6 @@ class ReportUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         for user in users:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.patch, 403, data=self.data)
-
-    def test_change_report_variant(self):
-        """ensure that report variant cannot be changed after report was created"""
-        variant = ReportVariant.VULNERABILITY_CSV_REPORT.label
-        self.data["variant"] = variant
-        self.client.force_login(self.pentester1)
-        self.basic_status_code_check(self.url, self.client.patch, 400, data=self.data)
 
 
 class ReportDeleteViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):

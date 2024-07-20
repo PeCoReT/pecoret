@@ -1,6 +1,6 @@
 from pathlib import Path
 from django.db import models
-from .membership import Membership
+from pecoret.reporting.utils import get_report_template_choices
 
 
 def upload_path(instance, filename):
@@ -27,7 +27,7 @@ class Company(models.Model):
     zipcode = models.CharField(max_length=256)
     city = models.CharField(max_length=256)
     country = models.CharField(max_length=256)
-    report_template = models.ForeignKey('backend.ReportTemplate', on_delete=models.PROTECT)
+    report_template = models.CharField(max_length=256, choices=get_report_template_choices)
     logo = models.ImageField(max_length=256, upload_to=upload_path, null=True, blank=True)
 
     class Meta:

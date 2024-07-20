@@ -6,7 +6,6 @@ from .company import CompanyViewSet
 from .reports import (
     ProjectReportViewSet, ReportReleaseViewSet, ChangeHistoryViewSet
 )
-from .report_templates import ReportTemplateViewSet
 from .membership import MembershipViewSet
 from .cwe import CWEViewSet
 from .users import UserViewSet, GroupViewSet

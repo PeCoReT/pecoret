@@ -162,12 +162,6 @@ export default {
                             })
                         },
                         {
-                            label: 'Report Templates',
-                            route: this.$router.resolve({
-                                name: 'ReportTemplateList'
-                            })
-                        },
-                        {
                             label: 'Project Types',
                             route: this.$router.resolve({
                                 name: 'ProjectTypeList'

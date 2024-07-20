@@ -7,11 +7,11 @@ from django.utils import timezone
 from extra_settings.models import Setting
 
 from advisories.models.attachment import ImageAttachment
-from pecoret.core.models import TimestampedModel, CASCADE_REPORT_TEMPLATE_DEFAULT
+from pecoret.core.models import TimestampedModel
+from pecoret.reporting.utils import get_report_template_choices
 from advisories.models.advisory_membership import AdvisoryMembership, Roles
 from advisories.models.advisory_timeline import AdvisoryTimeline
 from backend.models.finding import Severity
-from backend.models.report_templates import ReportTemplate
 from backend.models.vulnerability import VulnerabilityTemplate
 from backend.models.technology import Technology
 
@@ -32,14 +32,6 @@ def create_advisory_id():
         formatter = "%0{len}d".format(len=length)
     new_pk = formatter % int(int(last_id) + 1)
     return f"{year}-{new_pk}"
-
-
-def default_report_template():
-    """
-    get the default report template for advisory model field
-    :return:
-    """
-    return ReportTemplate.objects.get(name="default_template").pk
 
 
 class AdvisoryStatusChoices(models.IntegerChoices):
@@ -148,8 +140,7 @@ class Advisory(TimestampedModel):
     custom_report_title = models.CharField(max_length=255, null=True, blank=True)
     hide_advisory_id_in_report = models.BooleanField(default=False)
     proof_text = models.TextField(blank=True, default="")
-    report_template = models.ForeignKey('backend.ReportTemplate', on_delete=CASCADE_REPORT_TEMPLATE_DEFAULT,
-                                        default=default_report_template)
+    report_template = models.CharField(max_length=128, choices=get_report_template_choices)
     status = models.PositiveSmallIntegerField(
         choices=AdvisoryStatusChoices.choices, default=AdvisoryStatusChoices.NOT_DISCLOSED
     )

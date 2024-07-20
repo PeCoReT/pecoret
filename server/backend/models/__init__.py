@@ -5,7 +5,6 @@ from .cwe import CWE
 from .vulnerability import VulnerabilityTemplate, ProjectVulnerability, VulnerabilityTemplateTranslation
 from .finding import Finding
 from .account import Account
-from .report_templates import ReportTemplate
 from .company import Company
 from .reports.report import Report
 from .reports.report_release import ReportRelease

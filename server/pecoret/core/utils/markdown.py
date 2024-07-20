@@ -1,31 +1,7 @@
-import re
 import markdown
 import nh3
-from markdown.extensions import Extension
-from markdown.postprocessors import Postprocessor
-from markdown.extensions.codehilite import CodeHiliteExtension
 from django.utils.safestring import mark_safe
-
-
-class HighlightCodeBlockProcessor(Postprocessor):
-    line = re.compile(r"(<span.*>.*)§§(.*)§§(.*</span>)*", re.MULTILINE)
-
-    @staticmethod
-    def match_bold(code):
-        if code.group(3) is not None:
-            replaced_code = f"{code.group(1)}<b>{code.group(2)}</b>{code.group(3)}"
-            return replaced_code
-        return f"{code.group(1)}<b>{code.group(2)}</b>"
-
-    def run(self, text):
-        return self.line.sub(self.match_bold, text)
-
-
-class HighlightCodeBlockExtension(Extension):
-    def extendMarkdown(self, md):
-        md.postprocessors.register(
-            HighlightCodeBlockProcessor(md), "custom-highlighter", 30
-        )
+from markdown.extensions.codehilite import CodeHiliteExtension
 
 
 def bleach_md(markdown_content, allow_images=False):
@@ -45,9 +21,10 @@ def bleach_md(markdown_content, allow_images=False):
         "div",
         "span",
         "h1", "h2", "h3", "h4", "h5", "h6"
-        "sup",
+                                      "sup",
         "ol",
         "hr",
+        "table", "tr", "th", "thead", "tbody", "td"
     ]
     allowed_attributes = {
         "code": {"class"},
@@ -55,6 +32,7 @@ def bleach_md(markdown_content, allow_images=False):
         "div": {"class"},
         "span": {"class"},
         "sup": {"id"},
+        "table": {"class"}, "tr": {"class"}, "th": {"class"}, "td": {"class"}
     }
     protocols = set()
     if not markdown_content:
@@ -75,8 +53,7 @@ def bleach_md(markdown_content, allow_images=False):
                     linenos="inline",
                     linespans="line",
                     startinline=True,
-                ),
-                HighlightCodeBlockExtension(),
+                )
             ],
         ),
         tags=set(allowed_tags),

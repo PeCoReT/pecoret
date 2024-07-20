@@ -3,7 +3,6 @@ from django.core import mail
 from backend.models import (
     VulnerabilityTemplate,
     ProjectVulnerability,
-    ReportTemplate,
     Technology
 )
 from backend.models.finding import FindingStatus, Severity
@@ -261,10 +260,11 @@ class FindingAsAdvisoryView(APITestCase, PeCoReTTestCaseMixin):
             )
 
 
-class TestFindingPDFExportView(APITestCase, PeCoReTTestCaseMixin):
+class FindingPDFExportView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.report_template = ReportTemplate.objects.get(name="default_template")
+        self.project1.company.report_template = 'default_template'
+        self.project1.company.save()
         self.template = self.create_instance(VulnerabilityTemplate)
         self.project_vulnerability = self.create_instance(
             ProjectVulnerability,

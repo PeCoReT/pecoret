@@ -116,7 +116,7 @@ export default {
                         <DetailCardWithIcon title="Country" icon="fa-earth" class="surface-ground" :text="company.country"></DetailCardWithIcon>
                     </div>
                     <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Report Template" icon="fa-file" class="surface-ground" :text="company.report_template.name"></DetailCardWithIcon>
+                        <DetailCardWithIcon title="Report Template" icon="fa-file" class="surface-ground" :text="company.report_template"></DetailCardWithIcon>
                     </div>
                 </div>
                 <div class="grid">

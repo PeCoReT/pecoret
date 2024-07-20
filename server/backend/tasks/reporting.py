@@ -1,15 +1,15 @@
-from pecoret.reporting.report_plugin import ReportPluginLoader
+from pecoret.reporting.template_loader import ReportTemplateLoader
 from backend.models.reports.report_release import ReportRelease
-from backend.models.reports.report import ReportVariant
 
 
 def create_report_document_task(report_document_pk):
     report_document = ReportRelease.objects.get(pk=report_document_pk)
-    # get the report variant (e.g. Pentest PDF)
-    report_variant = ReportVariant(report_document.report.variant)
-    plugin_loader = ReportPluginLoader(report_document.report.template)
-    plugin = plugin_loader.load_plugin_from_report_template(report_variant.to_plugin_method)
-    result, content_type, extension = getattr(plugin, report_variant.to_plugin_method)(report_document)
+    template_name = report_document.report.template
+    loader = ReportTemplateLoader(template_name)
+    report_template = loader.load()
+
+    result, content_type, extension = report_template.export_project_pdf_report(report_document)
+
     report_document.compiled_source = result
     report_document.content_type = content_type
     report_document.file_extension = extension
@@ -18,14 +18,14 @@ def create_report_document_task(report_document_pk):
 
 
 def export_single_finding(finding, template):
-    plugin_loader = ReportPluginLoader(template)
-    plugin = plugin_loader.load_plugin_from_report_template('export_single_finding')
-    result, content_type, extension = plugin.export_single_finding(finding)
+    loader = ReportTemplateLoader(template)
+    report_template = loader.load()
+    result, _, _ = report_template.export_single_finding(finding)
     return result
 
 
 def export_advisory(advisory, template):
-    plugin_loader = ReportPluginLoader(template)
-    plugin = plugin_loader.load_plugin_from_report_template('export_advisory_pdf')
-    result, content_type, extension = plugin.export_advisory_pdf(advisory)
+    loader = ReportTemplateLoader(template)
+    report_template = loader.load()
+    result, _, _ = report_template.export_advisory_pdf(advisory)
     return result

@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework.test import APITestCase
 from django_q.tasks import async_task, result
 from backend import models
@@ -12,9 +13,7 @@ class ReportGenerationTask(APITestCase, PeCoReTTestCaseMixin):
 
     def setUp(self) -> None:
         self.init_mixin()
-        self.report_template = models.ReportTemplate.objects.get(
-            name="default_template"
-        )
+        self.report_template = list(settings.REPORT_TEMPLATES.keys())[0]
         self.report = self.create_instance(
             models.Report, project=self.project1, template=self.report_template
         )
@@ -65,6 +64,10 @@ class ReportGenerationTask(APITestCase, PeCoReTTestCaseMixin):
             1,
         )
 
+    def test_non_existent_template(self):
+        # TODO: implement
+        pass
+
 
 class SingleFindingExportTask(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
@@ -78,13 +81,10 @@ class SingleFindingExportTask(APITestCase, PeCoReTTestCaseMixin):
             component_content_type=self.get_content_type_for_model(self.asset1.__class__),
             user=self.pentester1,
         )
-        self.report_template = models.ReportTemplate.objects.get(
-            name="default_template"
-        )
 
     def test_finding_export_task(self):
         task_id = async_task(
-            export_single_finding, self.finding, self.report_template, sync=True
+            export_single_finding, self.finding, "default_template", sync=True
         )
         task_result = result(task_id, 200)
         self.assertIsNotNone(task_result)

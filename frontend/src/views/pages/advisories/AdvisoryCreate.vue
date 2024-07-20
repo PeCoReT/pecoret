@@ -64,7 +64,8 @@ export default {
                 fixed_version: this.model.fixed_version,
                 severity: this.model.severity,
                 technology: this.model.technology,
-                researchers: this.model.researchers
+                researchers: this.model.researchers,
+                report_template: 'default_template'
             };
             // create advisory first, so we can upload attachments afterward
             let response = await this.service.createAdvisory(this.$api, data);

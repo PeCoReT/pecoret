@@ -1,0 +1,15 @@
+.last-page {
+  page-break-before: always;
+  page: cover-page;
+  margin-left: var(--page-margin-left);
+  margin-right: var(--page-margin-right);
+  color: var(--primary-500);
+  margin-top: 90mm;
+
+  .end-of-report {
+    font-size: 50px;
+    text-transform: uppercase;
+    font-weight: normal;
+    text-align: center;
+  }
+}

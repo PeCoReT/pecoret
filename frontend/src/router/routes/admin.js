@@ -8,11 +8,6 @@ const adminRoutes = [
                 component: () => import('@/views/pages/admin/UserList.vue')
             },
             {
-                path: '/admin/report-templates',
-                name: 'ReportTemplateList',
-                component: () => import('@/views/pages/admin/ReportTemplateList.vue')
-            },
-            {
                 path: '/admins/project-types',
                 name: 'ProjectTypeList',
                 component: () => import('@/views/pages/admin/ProjectTypeList.vue')

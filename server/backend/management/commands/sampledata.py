@@ -80,7 +80,7 @@ class Command(BaseCommand):
         for item in self.data.get('companies', []):
             name = item.pop('name')
             contacts = item.pop('contacts', [])
-            item['report_template'] = models.ReportTemplate.objects.get(name='default_template')
+            item['report_template'] = 'default_template'
             company, _created = models.Company.objects.get_or_create(name=name, defaults=item)
             for contact in contacts:
                 models.CompanyContact.objects.get_or_create(company=company, first_name=contact['first_name'],
