@@ -20,14 +20,17 @@ class PDFReportGenerator(ReportGenerator):
     def url_fetcher(self, url, *args, **kwargs):
         if url.startswith("file://"):
             media_name = url.replace("file://", "")
-            media_path = os.path.join(self.report_plugin.templates_directory, media_name)
+            media_path = self.get_filepath(media_name)
             return {"file_obj": open(media_path, "rb")}
         return weasyprint.default_url_fetcher(url, *args, **kwargs)
 
     def get_stylesheets(self):
         css_paths = []
         for css in self.css_files:
-            new_css_path = os.path.join(self.report_plugin.templates_directory, css)
+            if not str(css).startswith('/'):
+                new_css_path = os.path.join(self.report_plugin.templates_directory, css)
+            else:
+                new_css_path = css
             css_paths.append(new_css_path)
         # append sass files
         sass_path = os.path.join(self.report_plugin.templates_directory, "scss/main.scss")
@@ -52,3 +55,7 @@ class PDFReportGenerator(ReportGenerator):
         )
         self._postprocess(weasy_pdf)
         return weasy_pdf, self.content_type, self.file_extension
+
+    def get_filepath(self, filename):
+        return self.report_plugin.get_filepath(filename)
+

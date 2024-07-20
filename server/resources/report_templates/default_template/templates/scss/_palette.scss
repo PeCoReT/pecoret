@@ -36,6 +36,13 @@
 
   /* page layout */
   --page-background: var(--surface-100);
+  --page-margin-top: 25mm;
+  --page-margin-bottom: 25mm;
+  --page-margin-right: 25mm;
+  --page-margin-left: 25mm;
+  --page-height: 297mm;
+  --page-content-height: calc(var(--page-height) - var(--page-margin-bottom) - var(--page-margin-top));
+
 
   /* table of content */
   --color-toc-level-1: var(--black-600);
@@ -54,4 +61,7 @@
 
   /* borders */
   --color-border: var(--black-500);
+
+  /* links */
+  --color-link-text: var(--surface-400);
 }
