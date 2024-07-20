@@ -1,10 +1,11 @@
 import datetime
+import os
 from pathlib import Path
 
 from pecoret.core.utils import image64
 from pecoret.core.utils.markdown import bleach_md
-from pecoret.reporting.template.mixins import ReportErrorMixin
 from pecoret.reporting import generators
+from pecoret.reporting.template.mixins import ReportErrorMixin
 
 
 class BaseReportTemplate:
@@ -51,6 +52,25 @@ class BaseReportTemplate:
 
     def export_advisory_pdf(self, advisory):
         raise NotImplementedError
+
+    def get_filepath(self, filename):
+        """
+        get a file path for a resource related to the preset, or template home
+        """
+        alternative_home = self.kwargs.get('meta', {}).get('home_directory')
+        # prioritize the alternative/overwrite home
+        if alternative_home and os.path.exists(os.path.join(alternative_home, filename)):
+            path = os.path.join(alternative_home, filename)
+        else:
+            path = os.path.join(self.templates_directory, filename)
+        return path
+
+    def get_templates_directories(self):
+        dirs = []
+        if self.kwargs.get('meta', {}).get('home_directory'):
+            dirs.append(Path(self.kwargs['meta']['home_directory']) / 'templates')
+        dirs.append(self.templates_directory)
+        return dirs
 
 
 class GenericReportTemplate(ReportErrorMixin, BaseReportTemplate):
