@@ -4,6 +4,7 @@ import ProjectService from '@/service/ProjectService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import ReportTabMenu from '@/components/projects/reporting/ReportTabMenu.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
+import ReportTemplateSelectField from "@/components/elements/forms/ReportTemplateSelectField.vue";
 
 export default {
     name: 'ReportDetail',
@@ -53,7 +54,8 @@ export default {
                 title: this.report.title,
                 name: this.report.name,
                 recommendation: this.report.recommendation,
-                evaluation: this.report.evaluation
+                evaluation: this.report.evaluation,
+                template: this.report.template
             };
             this.reportService
                 .updateReport(this.$api, this.projectId, this.reportId, data)
@@ -94,7 +96,7 @@ export default {
             });
         }
     },
-    components: { DetailCardWithIcon, ReportTabMenu, MarkdownEditor }
+    components: {ReportTemplateSelectField, DetailCardWithIcon, ReportTabMenu, MarkdownEditor }
 };
 </script>
 <template>
@@ -120,17 +122,20 @@ export default {
             <ReportTabMenu class="surface-card"></ReportTabMenu>
             <div class="card border-noround-top">
                 <div class="grid formgrid p-fluid mt-3">
-                    <div class="field sm:col-12 md:col-4">
+                    <div class="field sm:col-12 md:col-3">
                         <label for="name">Name</label>
                         <InputText id="name" v-model="report.name"></InputText>
                     </div>
-                    <div class="field sm:col-12 md:col-4">
+                    <div class="field sm:col-12 md:col-3">
                         <label for="title">Title</label>
                         <InputText id="title" v-model="report.title"></InputText>
                     </div>
-                    <div class="field sm:col-12 md:col-4">
+                    <div class="field sm:col-12 md:col-3">
                         <label for="author">Author</label>
                         <Dropdown id="author" optionLabel="username" :options="authorChoices" v-model="report.author" @focus="getAuthorChoices"></Dropdown>
+                    </div>
+                    <div class="field sm:col-12 md:col-3">
+                        <ReportTemplateSelectField v-model="report.template"></ReportTemplateSelectField>
                     </div>
                     <div class="field col-12">
                         <label for="evaluation">Evaluation</label>

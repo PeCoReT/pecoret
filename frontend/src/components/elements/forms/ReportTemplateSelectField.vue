@@ -38,12 +38,10 @@ export default {
     watch: {
         modelValue: {
             immediate: true,
-            deep: true,
             handler(value) {
-                if (this.choices.length === 0) {
-                    if (value) {
-                        this.choices = [value];
-                    }
+                if (this.choices.length === 0 && typeof value === 'string') {
+                    this.model = value;
+                    this.choices = [{"name": value}];
                 }
             }
         }
@@ -52,5 +50,5 @@ export default {
 </script>
 <template>
     <label for="report_template">Report Template</label>
-    <Dropdown id="report_template" v-model="model" :options="choices" @focus="onFocus" optionLabel="name" optionValue="name" @change="change" :loading="loading"></Dropdown>
+    <Dropdown id="report_template" v-model="model" :options="choices" @focus="onFocus" @change="change" option-label="name" option-value="name" :loading="loading"></Dropdown>
 </template>
