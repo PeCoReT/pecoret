@@ -64,7 +64,7 @@ class AdvisoryViewSet(PeCoReTModelViewSet):
                     read_only_roles=[Roles.READ_ONLY, Roles.VENDOR],
                 )()
             ]
-        if self.action in "export_pdf":
+        if self.action in ["export_pdf", "preview"]:
             return [
                 permissions.AdvisoryPermission(
                     read_write_roles=[Roles.CREATOR],
