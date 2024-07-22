@@ -90,15 +90,10 @@ export default {
                 :model-value="items"
                 @rowClick="onRowClick"
                 @page="onPage"
+                @search="onGlobalSearch"
+                :show-search="true"
             >
-                <template #header>
-                    <div class="grid">
-                        <IconField iconPosition="left">
-                            <InputIcon class="fa fa-search"></InputIcon>
-                            <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                        </IconField>
-                    </div>
-                </template>
+
                 <Column field="name" header="Name"> </Column>
                 <Column field="template" header="Template"></Column>
                 <Column field="author.username" header="Author"></Column>
