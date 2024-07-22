@@ -51,7 +51,7 @@ class ReportReleaseViewSet(PeCoReTNoUpdateViewSet):
     @action(detail=False, methods=["get"])
     def preview_document(self, *args, **kwargs):
         """
-        get the ReleaseType.PREVIEW document details
+        get the `ReleaseType.PREVIEW` document details
         :param args:
         :param kwargs:
         :return:
