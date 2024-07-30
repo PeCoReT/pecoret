@@ -2,9 +2,11 @@ from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions
 from backend.serializers.assets.generic import GenericAssetSerializer
 from backend.models import GenericAsset
+from pecoret.core.utils.schema import extend_viewset_schema
 
 
-class  GenericAssetViewSet(PeCoReTModelViewSet):
+@extend_viewset_schema(tags=['Projects'], verbose_name='generic asset')
+class GenericAssetViewSet(PeCoReTModelViewSet):
     permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY]
     api_scope = 'scope_all_projects'
     queryset = GenericAsset.objects.none()

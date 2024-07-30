@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django_q.tasks import async_task
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -10,6 +11,14 @@ from pecoret.core import permissions
 from pecoret.core.viewsets import PeCoReTNoUpdateViewSet
 
 
+@extend_schema_view(
+    list=extend_schema(operation_id='Get all report documents/releases', tags=['Reporting']),
+    destroy=extend_schema(operation_id='Delete a report document/release', tags=['Reporting']),
+    retrieve=extend_schema(operation_id='Get a specific report document/release', tags=['Reporting']),
+    create=extend_schema(operation_id='Create a new report document/release', tags=['Reporting']),
+    download=extend_schema(operation_id='Download a report document/release', tags=['Reporting']),
+    preview_document=extend_schema(operation_id='Get the preview report release', tags=['Reporting'])
+)
 class ReportReleaseViewSet(PeCoReTNoUpdateViewSet):
     serializer_class = ReportReleaseSerializer
     queryset = ReportRelease.objects.none()

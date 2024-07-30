@@ -1,6 +1,7 @@
 from django.http.response import HttpResponse
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status
 from backend.models import Finding, FindingTimeline
 from backend.serializers.finding import (
@@ -14,8 +15,16 @@ from backend.tasks.reporting import export_single_finding
 from advisories.models.advisory import Advisory
 from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions
+from pecoret.core.utils.schema import extend_viewset_schema
 
 
+@extend_viewset_schema(tags=['Findings'], verbose_name='finding')
+@extend_schema_view(
+    export_pdf=extend_schema(tags=['Findings'], operation_id='Export PDF'),
+    preview=extend_schema(tags=['Findings'], operation_id='Preview PDF'),
+    as_advisory=extend_schema(tags=['Findings'], operation_id='Advisory from Finding'),
+    copy=extend_schema(tags=['Findings'], operation_id='Copy Finding'),
+)
 class FindingViewSet(PeCoReTModelViewSet):
     queryset = Finding.objects.none()
     filterset_class = FindingFilter

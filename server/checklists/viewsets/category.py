@@ -3,8 +3,12 @@ from pecoret.core import permissions
 from checklists.models import AssetCategory, Category
 from checklists.serializers.category import AssetCategorySerializer, CategorySerializer
 from checklists.filters.category import AssetCategoryFilter
+from pecoret.core.utils.schema import extend_viewset_schema, extend_schema_view, extend_schema
 
 
+@extend_schema_view(
+    list=extend_schema(operation_id='Get all asset categories', tags=['Project Checklists']),
+    retrieve=extend_schema(operation_id='Get specific category', tags=['Project Checklists']))
 class AssetCategoryViewSet(PeCoReTReadOnlyModelViewSet):
     queryset = AssetCategory.objects.none()
     permission_classes = [
@@ -19,6 +23,7 @@ class AssetCategoryViewSet(PeCoReTReadOnlyModelViewSet):
         return AssetCategory.objects.for_project(self.request.project)
 
 
+@extend_viewset_schema(tags=['Checklists'], verbose_name='category', verbose_name_plural='categories')
 class CategoryViewSet(PeCoReTModelViewSet):
     queryset = Category.objects.all()
     permission_classes = [

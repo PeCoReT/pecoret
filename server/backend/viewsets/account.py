@@ -2,8 +2,10 @@ from backend.models import Account
 from backend.serializers.account import AccountSerializer
 from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions
+from pecoret.core.utils.schema import extend_viewset_schema
 
 
+@extend_viewset_schema(tags=['Accounts'], verbose_name='account')
 class AccountViewSet(PeCoReTModelViewSet):
     permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY]
     queryset = Account.objects.none()

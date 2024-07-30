@@ -2,10 +2,15 @@ from django.http import FileResponse
 from rest_framework.decorators import action
 from pecoret.core import permissions
 from pecoret.core.viewsets import PeCoReTModelViewSet
+from pecoret.core.utils.schema import extend_viewset_schema, extend_schema_view, extend_schema
 from backend.models.finding_attachment import FindingImageAttachment
 from backend.serializers.finding_attachment import FindingImageAttachmentSerializer
 
 
+@extend_viewset_schema(tags=['Findings'], verbose_name='finding image attachment')
+@extend_schema_view(
+    preview=extend_schema(tags=['Findings'], operation_id='Preview finding image attachment'),
+)
 class FindingImageAttachmentViewSet(PeCoReTModelViewSet):
     queryset = FindingImageAttachment.objects.none()
     search_fields = ["caption"]

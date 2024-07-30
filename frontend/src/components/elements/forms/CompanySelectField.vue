@@ -3,7 +3,14 @@ import CompanyService from '@/service/CompanyService';
 
 export default {
     name: 'CompanySelectField',
-    props: ['modelValue'],
+    props: {
+        modelValue: {
+            required: true
+        },
+        clear: {
+            default: true
+        }
+    },
     emits: ['update:modelValue'],
     data() {
         return {
@@ -40,5 +47,5 @@ export default {
 </script>
 
 <template>
-    <Dropdown @focus="onFocus" option-label="name" option-value="pk" v-model="model" :options="items" show-clear @update:model-value="this.$emit('update:modelValue', this.model)"></Dropdown>
+    <Dropdown @focus="onFocus" option-label="name" option-value="pk" v-model="model" :options="items" :show-clear="clear" @update:model-value="this.$emit('update:modelValue', this.model)"></Dropdown>
 </template>

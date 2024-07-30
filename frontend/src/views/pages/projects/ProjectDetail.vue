@@ -13,7 +13,7 @@ export default {
     data() {
         return {
             projectId: this.$route.params.projectId,
-            project: {},
+            project: {company: {}},
             service: new ProjectService(),
             role: {},
             updatedSuccessToastTitle: 'Project updated!',
@@ -157,7 +157,7 @@ export default {
                     </div>
                     <div class="grid">
                         <div class="col-6">Company</div>
-                        <div class="col-6">{{ project.company_name }}</div>
+                        <div class="col-6">{{ project.company.name }}</div>
                     </div>
                     <div class="grid">
                         <div class="col-6">Pentest Types</div>

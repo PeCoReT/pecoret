@@ -3,8 +3,16 @@ from checklists.serializers.item import AssetItemSerializer, AssetItemUpdateSeri
 from checklists.filters.item import AssetItemFilter
 from pecoret.core.viewsets import PeCoReTNoDestroyViewSet, PeCoReTModelViewSet
 from pecoret.core import permissions
+from pecoret.core.utils.schema import extend_viewset_schema, extend_schema_view, extend_schema
 
 
+@extend_schema_view(
+    list=extend_schema(operation_id='Get all asset items', tags=['Project Checklists']),
+    retrieve=extend_schema(operation_id='Get specific asset items', tags=['Project Checklists']),
+    update=extend_schema(operation_id='Update specific asset items', tags=['Project Checklists']),
+    partial_update=extend_schema(operation_id='Partially update specific asset items', tags=['Project Checklists']),
+    create=extend_schema(operation_id='Create a new asset items', tags=['Project Checklists']),
+)
 class AssetItemViewSet(PeCoReTNoDestroyViewSet):
     queryset = AssetItem.objects.none()
     permission_classes = [
@@ -24,6 +32,7 @@ class AssetItemViewSet(PeCoReTNoDestroyViewSet):
         return AssetItemSerializer
 
 
+@extend_viewset_schema(tags=['Checklists'], verbose_name='item')
 class ItemViewSet(PeCoReTModelViewSet):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer

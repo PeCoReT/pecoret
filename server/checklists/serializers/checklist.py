@@ -1,3 +1,5 @@
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from pecoret.core.serializers import AssetGenericRelatedField, PrimaryKeyRelatedField
 from checklists.models import Checklist, AssetChecklist
@@ -11,6 +13,7 @@ from backend.serializers.assets.generic import GenericAssetSerializer
 from backend.models import Host, Service, MobileApplication, WebApplication, ThickClient, GenericAsset
 
 
+@extend_schema_field(OpenApiTypes.STR)
 class ChecklistIdField(serializers.Field):
     default_error_messages = {"invalid_id": "Invalid checklist_id"}
 

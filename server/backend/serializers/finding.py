@@ -29,6 +29,7 @@ class FindingSerializer(serializers.ModelSerializer):
     user_account = ProjectFilteredPrimaryKeyRelatedField(
         required=False, allow_empty=True, allow_null=True, serializer=AccountSerializer
     )
+    authentication_required = serializers.BooleanField(read_only=True)
     component = AssetGenericRelatedField({
         WebApplication: WebApplicationSerializer(),
         Host: HostSerializer(),

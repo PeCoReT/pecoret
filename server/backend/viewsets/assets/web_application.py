@@ -1,9 +1,11 @@
+from pecoret.core.utils.schema import extend_viewset_schema
 from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions
 from backend.serializers.assets.web_application import WebApplicationSerializer
 from backend.models import WebApplication
 
 
+@extend_viewset_schema(tags=['Projects'], verbose_name='web application asset')
 class WebApplicationViewSet(PeCoReTModelViewSet):
     permission_classes = [
         permissions.PRESET_PENTESTER_OR_READONLY

@@ -9,7 +9,7 @@ app_name = "backend"
 
 
 router = DefaultRouter()
-router.register("projects", viewsets.ProjectViewSet, "project")
+router.register('projects', viewsets.ProjectViewSet)
 router.register(
     "vulnerability-templates",
     viewsets.VulnerabilityTemplateViewSet,

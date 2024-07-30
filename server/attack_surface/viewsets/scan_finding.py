@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -5,9 +6,14 @@ from rest_framework.response import Response
 from attack_surface.models.scan_finding import ScanFinding
 from attack_surface.serializers.scan_finding import ScanFindingSerializer
 from pecoret.core import permissions
+from pecoret.core.utils.schema import extend_viewset_schema
 from pecoret.core.viewsets import PeCoReTModelViewSet
 
 
+@extend_viewset_schema(tags=['Attack Surface'], verbose_name='scan finding')
+@extend_schema_view(
+    create_or_update=extend_schema(operation_id='Get or create a scan finding', tags=['Attack Surface'])
+)
 class ScanFindingViewSet(PeCoReTModelViewSet):
     queryset = ScanFinding.objects.all()
     serializer_class = ScanFindingSerializer

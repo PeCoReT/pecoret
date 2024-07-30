@@ -90,6 +90,15 @@ class UserCreateViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.assertEqual(user.has_usable_password(), False)
         self.assertEqual(len(mail.outbox), 1)
 
+    def test_superuser_initial_password(self):
+        self.client.force_login(self.superuser)
+        self.data['password'] = 'test1234!asdf'
+        response = self.client.post(self.url, self.data)
+        user = User.objects.get(username="tlast")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(User.objects.filter(username="tlast").count(), 1)
+        self.assertEqual(user.has_usable_password(), True)
+
 
 class AccountActivationView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:

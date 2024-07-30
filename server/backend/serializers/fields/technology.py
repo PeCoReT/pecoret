@@ -1,7 +1,10 @@
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.types import OpenApiTypes
 from backend.models.technology import Technology
 
 
+@extend_schema_field(OpenApiTypes.INT)
 class TechnologyField(serializers.Field):
     default_error_messages = {
         'invalid_pk': 'invalid value'

@@ -1,6 +1,8 @@
 from collections import OrderedDict
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Subquery
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from generic_relations.relations import GenericRelatedField
 from rest_framework import serializers
 from backend.models.finding import ProjectVulnerability
@@ -31,7 +33,7 @@ class ValuedChoiceField(serializers.ChoiceField):
 
 class PrimaryKeyRelatedField(serializers.RelatedField):
     """Source: https://github.com/encode/django-rest-framework/issues/5104#issuecomment-427774013
-    a primarykeyrelatedfield that uses the object instance on read, but PK for write as normal.
+    a PrimaryKeyRelatedField that uses the object instance on read, but PK for write as normal.
     """
 
     def __init__(self, **kwargs):
@@ -134,6 +136,7 @@ class ReportAuthorRelatedField(PrimaryKeyRelatedField):
         )
 
 
+@extend_schema_field(OpenApiTypes.STR)
 class ProjectVulnerabilityIdField(serializers.Field):
     default_error_messages = {
         "invalid_vulnerability_id": "vulnerability_id is not valid."
@@ -150,6 +153,7 @@ class ProjectVulnerabilityIdField(serializers.Field):
         self.fail("invalid_vulnerability_id")
 
 
+@extend_schema_field(OpenApiTypes.STR)
 class VulnerabilityTemplateIdField(serializers.Field):
     default_error_messages = {
         "invalid_vulnerability_id": "vulnerability_id is not valid."

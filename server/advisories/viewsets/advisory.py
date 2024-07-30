@@ -16,13 +16,15 @@ from advisories.serializers.advisory_management import (
 from advisories.filters import AdvisoryFilter
 from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions
+from pecoret.core.utils.schema import extend_viewset_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 
+@extend_viewset_schema(tags=['Advisories'], verbose_name='advisory')
+@extend_schema_view(
+    preview=extend_schema(tags=['Advisories'], operation_id='Preview Advisory PDF'),
+    export_pdf=extend_schema(tags=['Advisories'], operation_id='Export Advisory PDF'))
 class AdvisoryViewSet(PeCoReTModelViewSet):
-    """Handles ``Advisory`` model.
-    Here you can download pdf exports too.
-    """
-
     queryset = Advisory.objects.none()
     filterset_class = AdvisoryFilter
     api_scope = "scope_advisories"

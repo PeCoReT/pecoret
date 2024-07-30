@@ -1,9 +1,17 @@
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from backend.serializers.finding_comment import FindingCommentSerializer
 from backend.models import FindingComment
 from pecoret.core.viewsets import PeCoReTNoDestroyViewSet
 from pecoret.core import permissions
 
 
+@extend_schema_view(
+    list=extend_schema(operation_id='Get all finding comments', tags=['Findings']),
+    retrieve=extend_schema(operation_id='Get specific finding comment', tags=['Findings']),
+    update=extend_schema(operation_id='Update specific finding comment', tags=['Findings']),
+    partial_update=extend_schema(operation_id='Partially update specific finding comment', tags=['Findings']),
+    create=extend_schema(operation_id='Create a new finding comment', tags=['Findings']),
+)
 class FindingCommentViewSet(PeCoReTNoDestroyViewSet):
     permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY, permissions.FindingPermission]
     queryset = FindingComment.objects.none()

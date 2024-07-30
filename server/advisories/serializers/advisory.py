@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from advisories.fields import LabelField
 from advisories.models.advisory import (
     Advisory, Severity, AdvisoryStatusChoices, VisibilityChoices, VulnerabilityStatusChoices
@@ -20,6 +19,7 @@ class BaseAdvisorySerializer(serializers.ModelSerializer):
     user = MinimalUserSerializer(read_only=True)
     labels = LabelField(serializer=LabelSerializer, many=True, read_only=True)
     technology = PrimaryKeyRelatedField(serializer=TechnologySerializer)
+    internal_name = serializers.CharField(read_only=True)
 
     class Meta:
         model = Advisory

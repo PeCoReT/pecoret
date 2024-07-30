@@ -1,9 +1,11 @@
+from pecoret.core.utils.schema import extend_viewset_schema
 from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions
 from backend.models.assets.thick_client import ThickClient
 from backend.serializers.assets.thick_client import ThickClientSerializer
 
 
+@extend_viewset_schema(tags=['Projects'], verbose_name='thick client asset')
 class ThickClientViewSet(PeCoReTModelViewSet):
     permission_classes = [
         permissions.PRESET_PENTESTER_OR_READONLY

@@ -41,11 +41,15 @@ export function loadApi(app) {
                 messageStore.addMessage(error.response.data.detail, 'error');
             }
             if (error.response.status === 400) {
-                app.config.globalProperties.$toast.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    life: 3000,
-                    detail: error.response.data
+                Object.keys(error.response.data).forEach((key) => {
+                    const value = error.response.data[key];
+                    const item = Array.isArray(value) ? value[0]: value;
+                    app.config.globalProperties.$toast.add({
+                        severity: 'error',
+                        summary: `Error: ${key}`,
+                        life: 3000,
+                        detail: item
+                    });
                 });
             }
             return Promise.reject(error);

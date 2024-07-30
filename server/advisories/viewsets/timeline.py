@@ -3,16 +3,11 @@ from advisories.models.advisory_membership import Roles
 from advisories.serializers.timeline import AdvisoryTimelineSerializer
 from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions
+from pecoret.core.utils.schema import extend_viewset_schema
 
 
+@extend_viewset_schema(tags=['Advisories'], verbose_name='timeline')
 class AdvisoryTimelineViewSet(PeCoReTModelViewSet):
-    """ViewSet of the AdvisoryTimeline.
-    CRUD Methods.
-
-    Returns:
-        _type_: _description_
-    """
-
     queryset = AdvisoryTimeline.objects.none()
     api_scope = "scope_advisories"
     permission_classes = [

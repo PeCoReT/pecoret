@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from backend.serializers.technology import TechnologySerializer
 from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions
@@ -5,6 +6,26 @@ from backend.models import Technology
 from backend.filters.technology import TechnologyFilter
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id='Get all technologies', tags=['Technologies']
+    ),
+    create=extend_schema(
+        operation_id='Create a new technology', tags=['Technologies']
+    ),
+    retrieve=extend_schema(
+        operation_id='Get a specific technology', tags=['Technologies']
+    ),
+    destroy=extend_schema(
+        operation_id='Delete a technology', tags=['Technologies']
+    ),
+    partial_update=extend_schema(
+        operation_id='Partially update a technology', tags=['Knowledge Base']
+    ),
+    update=extend_schema(
+        operation_id='Update a technology', tags=['Knowledge Base', 'Technologies']
+    )
+)
 class TechnologyViewSet(PeCoReTModelViewSet):
     queryset = Technology.objects.all()
     search_fields = ['cpe', 'name']

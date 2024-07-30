@@ -3,8 +3,10 @@ from backend.serializers.company_contact import CompanyContactSerializer
 from backend.models.company_contact import CompanyContact
 from backend.filters.company_contact import CompanyContactFilter
 from pecoret.core import permissions
+from pecoret.core.utils.schema import extend_viewset_schema
 
 
+@extend_viewset_schema(tags=['Companies'], verbose_name='company contact')
 class CompanyContactViewSet(PeCoReTModelViewSet):
     permission_classes = [
         permissions.CompanyPermission(

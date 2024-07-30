@@ -13,6 +13,8 @@ class ImplicitTechnologySerializer(serializers.ModelSerializer):
 
 
 class FlatTechnologySerializer(serializers.ModelSerializer):
+    source_code_available = serializers.BooleanField(read_only=True)
+
     class Meta:
         model = Technology
         fields = [

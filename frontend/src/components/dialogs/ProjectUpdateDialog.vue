@@ -3,6 +3,7 @@ import PentestTypeSelectField from '../elements/forms/PentestTypeSelectField.vue
 import CompanyService from '@/service/CompanyService';
 import ProjectService from '@/service/ProjectService';
 import { useAuthStore } from '@/store/auth';
+import CompanySelectField from "@/components/elements/forms/CompanySelectField.vue";
 
 
 export default {
@@ -46,31 +47,10 @@ export default {
         open() {
             this.visible = true;
         },
-        onFocusCompany() {
-            if (this.companyChoices) {
-                return;
-            }
-            this.companyService.getCompanies().then((response) => {
-                this.companyChoices = response.data.results;
-            });
-        },
-        onFilterCompany(event) {
-            let params = {
-                search: event.value
-            };
-            this.companyService.getCompanies(params).then((response) => {
-                this.companyChoices = response.data.results;
-            });
-        },
         getLanguages() {
             let url = '/projects/available-languages/';
             this.$api.get(url).then((response) => {
                 this.availableLanguages = response.data;
-            });
-        },
-        getCompany() {
-            this.companyService.getCompany(this.project.company).then((response) => {
-                this.companyChoices = [response.data];
             });
         },
         patchProject() {
@@ -94,6 +74,9 @@ export default {
                 company: this.model.company,
                 visibility: this.model.visibility
             };
+            if (this.model.company && this.model.company.pk) {
+                data['company'] = this.model.company.pk
+            }
             this.service
                 .patchProject(this.$api, this.projectId, data)
                 .then(() => {
@@ -112,13 +95,13 @@ export default {
             deep: true,
             handler(value) {
                 this.model = value;
-                if (this.model.company && !this.companyChoices) {
-                    this.getCompany();
+                if (this.model.company && this.model.company.pk && !this.companyChoices) {
+                    this.companyChoices = [this.model.company];
                 }
             }
         }
     },
-    components: { PentestTypeSelectField }
+    components: {CompanySelectField, PentestTypeSelectField }
 };
 </script>
 
@@ -155,7 +138,7 @@ export default {
 
             <div class="field col-12 md:col-6">
                 <label for="company">Company</label>
-                <Dropdown :options="companyChoices" @filter="onFilterCompany" @focus="onFocusCompany" filter optionLabel="name" optionValue="pk" v-model="model.company"></Dropdown>
+                <CompanySelectField v-model="model.company" :clear="false"></CompanySelectField>
             </div>
             <div class="field col-12 md:col-6">
                 <label for="visibility">Visibility</label>

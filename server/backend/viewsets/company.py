@@ -2,8 +2,10 @@ from backend.models import Company
 from backend.serializers.company import CompanySerializer, CustomerCompanySerializer
 from pecoret.core import permissions
 from pecoret.core.viewsets import PeCoReTModelViewSet
+from pecoret.core.utils.schema import extend_viewset_schema
 
 
+@extend_viewset_schema(tags=['Companies'], verbose_name='companies')
 class CompanyViewSet(PeCoReTModelViewSet):
     queryset = Company.objects.none()
     search_fields = ["name"]
@@ -58,7 +60,8 @@ class CompanyViewSet(PeCoReTModelViewSet):
         ]
 
     def get_serializer_class(self):
-        if self.request.user.is_customer:
+        # check auth here to make drf_spectacular not through error
+        if self.request.user.is_authenticated and self.request.user.is_customer:
             return CustomerCompanySerializer
         return CompanySerializer
 

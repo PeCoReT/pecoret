@@ -1,3 +1,5 @@
+from drf_spectacular.utils import extend_schema_view, extend_schema
+
 from backend.serializers.cwe import CWESerializer
 from backend.models.cwe import CWE
 from backend.filters.cwe import CWEFilter
@@ -5,6 +7,14 @@ from pecoret.core.viewsets import PeCoReTReadOnlyModelViewSet
 from pecoret.core import permissions
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id='Get all CWEs', tags=['CWEs']
+    ),
+    retrieve=extend_schema(
+        operation_id='Get a specific CWE', tags=['CWEs']
+    )
+)
 class CWEViewSet(PeCoReTReadOnlyModelViewSet):
     serializer_class = CWESerializer
     permission_classes = [

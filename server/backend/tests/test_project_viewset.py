@@ -171,7 +171,7 @@ class PinProjectViewSet(APITestCase, PeCoReTTestCaseMixin):
 class UnpinProjectViewSet(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:project-pin-project", pk=self.project1.pk)
+        self.url = self.get_url("backend:project-delete-pinned-project", pk=self.project1.pk)
 
     def test_forbidden(self):
         users = [
