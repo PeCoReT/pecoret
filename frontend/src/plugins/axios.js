@@ -41,15 +41,31 @@ export function loadApi(app) {
                 messageStore.addMessage(error.response.data.detail, 'error');
             }
             if (error.response.status === 400) {
-                Object.keys(error.response.data).forEach((key) => {
-                    const value = error.response.data[key];
-                    const item = Array.isArray(value) ? value[0]: value;
+                if (typeof error.response.data === 'string') {
                     app.config.globalProperties.$toast.add({
                         severity: 'error',
-                        summary: `Error: ${key}`,
+                        summary: `Error`,
                         life: 3000,
-                        detail: item
+                        detail: error.response.data
                     });
+                } else {
+                    Object.keys(error.response.data).forEach((key) => {
+                        const value = error.response.data[key];
+                        const item = Array.isArray(value) ? value[0] : value;
+                        app.config.globalProperties.$toast.add({
+                            severity: 'error',
+                            summary: `Error: ${key}`,
+                            life: 3000,
+                            detail: item
+                        });
+                    });
+                }
+            } else if (error.response.status === 429) {
+                app.config.globalProperties.$toast.add({
+                    severity: 'error',
+                    summary: `Error: Request blocked`,
+                    life: 3000,
+                    detail: error.response.data.detail
                 });
             }
             return Promise.reject(error);
