@@ -18,7 +18,7 @@ export default {
             this.$api
                 .get(url)
                 .then((response) => {
-                    this.choices = response.data.results;
+                    this.choices = response.data;
                     this.loaded = true;
                 })
                 .finally(() => {
