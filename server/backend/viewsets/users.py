@@ -7,15 +7,27 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from backend.models import User
 from backend.serializers import user as serializers
 from backend.tasks import mail
 from backend.throttle import AuthFlowThrottle
 from pecoret.core import permissions
 from pecoret.core.viewsets import PeCoReTModelViewSet, PeCoReTReadOnlyModelViewSet
+from pecoret.core.utils.schema import extend_viewset_schema
 
 
+@extend_viewset_schema(tags=['Users'], verbose_name='user')
+@extend_schema_view(
+    update_profile=extend_schema(operation_id='Update user profile', tags=['Users']),
+    reset_password=extend_schema(operation_id='Initialize password reset', tags=['Users']),
+    reset_password_confirm=extend_schema(operation_id='Confirm password reset', tags=['Users']),
+    activation=extend_schema(operation_id='Activate user', tags=['Users']),
+    change_email=extend_schema(operation_id='Initialize changing email', tags=['Users']),
+    change_email_confirm=extend_schema(operation_id='Confirm changing email', tags=['Users']),
+    change_password=extend_schema(operation_id='Change user password', tags=['Users'])
+
+)
 class UserViewSet(PeCoReTModelViewSet):
     queryset = User.objects.all()
     filterset_class = None
@@ -141,10 +153,18 @@ class UserViewSet(PeCoReTModelViewSet):
         return Response({'message': 'Password changed!'}, status=status.HTTP_200_OK)
 
 
+@extend_schema_view(
+    list=extend_schema(
+        tags=['Groups'], operation_id='Get all groups'
+    ),
+    retrieve=extend_schema(
+        tags=['Groups'], operation_id='Get a specific group'
+    )
+)
 class GroupViewSet(PeCoReTReadOnlyModelViewSet):
     queryset = Group.objects.all()
     filterset_class = None
-    api_scope = None  # do not allow api access
+    api_scope = None  # do not allow api token access
     search_fields = ["name"]
     permission_classes = [
         permissions.GroupPermission(read_write_groups=[permissions.Groups.SUPERUSER], read_only_groups=[])

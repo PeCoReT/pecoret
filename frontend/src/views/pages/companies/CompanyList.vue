@@ -1,6 +1,6 @@
 <script>
 import CompanyService from '@/service/CompanyService';
-import CompanyCreateDialog from '../../../components/dialogs/CompanyCreateDialog.vue';
+import CompanyCreateDialog from '@/components/companies/dialogs/CompanyCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
@@ -88,6 +88,7 @@ export default {
                 <Column field="street" header="Street"></Column>
                 <Column field="city" header="City"></Column>
                 <Column field="country" header="Country"></Column>
+                <Column field="report_template" header="Report Template"></Column>
             </GenericDataTable>
         </template>
     </BaseListLayout>

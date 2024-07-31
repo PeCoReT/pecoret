@@ -9,6 +9,7 @@ try:
 except ImportError:
     # generate key
     import secrets
+
     with open(BASE_DIR / 'conf/secret_key.py', 'w') as f:
         secret = secrets.token_hex(132)
         f.write(f'SECRET_KEY = "{secret}"')
@@ -17,8 +18,9 @@ except ImportError:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+VERSION = '0.2.0'
 
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -73,7 +75,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "pecoret.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -83,7 +84,6 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -103,7 +103,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -114,7 +113,6 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -146,17 +144,58 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
 }
 
-
 SPECTACULAR_SETTINGS = {
     "TITLE": "PeCoReT API",
     "DESCRIPTION": "PeCoReT API documentation",
-    "VERSION": "0.0.1",
+    "VERSION": VERSION,
     "SERVE_INCLUDE_SCHEMA": False,
     "ENUM_GENERATE_CHOICE_DESCRIPTION": False,
+    "COMPONENT_SPLIT_REQUEST": True,
+    'EXTENSIONS_ROOT': {
+        'x-tagGroups': [
+            {
+                'name': 'General',
+                'tags': ['Authentication', 'API Tokens']
+            },
+            {
+                'name': 'Projects',
+                'tags': ['Projects', 'Reporting', 'Accounts', 'Findings', 'Vulnerabilities', 'Project Checklists']
+            },
+            {
+                'name': 'Advisories',
+                'tags': ['Advisories', 'Advisory Management']
+            },
+            {
+                'name': 'Attack Surface',
+                'tags': ['Attack Surface']
+            },
+            {
+                'name': 'Knowledge Base',
+                'tags': [
+                    'Knowledge Base', 'Vulnerability Templates', 'Report Templates', 'Technologies',
+                    'CWEs', 'Checklists'
+                ]
+            },
+            {
+                'name': 'Administration',
+                'tags': ['Administration', 'Settings', 'Groups', 'Pentest Types']
+            },
+            {
+                'name': 'Miscellaneous',
+                'tags': [
+                    'Miscellaneous', 'checks', 'Helpers', 'CVSS Calculator', 'Companies', 'Users'
+                ]
+            }
+        ]
+    },
     "ENUM_NAME_OVERRIDES": {
         "FindingStatus": "backend.models.finding.FindingStatus.choices",
-        "AssetTaskStatus": "backend.models.checklists.tasks.AssetTaskStatus.choices",
-        "Roles": "backend.models.membership.Roles.choices",
+        "AssetTaskStatus": "checklists.models.item.ItemStatus.choices",
+        "MembershipRoles": "backend.models.membership.Roles.choices",
+        "AdvisoryRoles": 'advisories.models.advisory_membership.Roles',
+        "AdvisoryVisibilityChoices": 'advisories.models.advisory.VisibilityChoices.choices',
+        "ProjectVisibilityChoices": 'backend.models.project.Visibility.choices',
+
     },
 }
 
@@ -185,7 +224,6 @@ Q_CLUSTER = {
     "orm": "default",
 }
 
-
 SITE_URLS = {
     "PASSWORD_RESET": "/reset-password/{uid}/{token}",
     "ACTIVATION": "/account-activation/{uid}/{token}",
@@ -207,13 +245,12 @@ SESSION_COOKIE_SAMESITE = 'Strict'
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-
 EXTRA_SETTINGS_DEFAULTS = [
     {
-      'name': 'GENERAL_SITE_NAME',
-      'type': 'string',
-      'value': 'PeCoReT',
-      'description': 'Name of the site. Mainly used in mails.'
+        'name': 'GENERAL_SITE_NAME',
+        'type': 'string',
+        'value': 'PeCoReT',
+        'description': 'Name of the site. Mainly used in mails.'
     },
     {
         'name': 'GENERAL_SITE_URL',
@@ -245,7 +282,6 @@ EXTRA_SETTINGS_DEFAULTS = [
 ]
 
 LDAP_SYNC_GROUP_MAPPING = {}
-
 
 ###################
 # Report Templates

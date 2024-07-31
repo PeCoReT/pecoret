@@ -1,9 +1,11 @@
+from pecoret.core.utils.schema import extend_viewset_schema
 from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions
 from backend.models.assets.mobile_application import MobileApplication
 from backend.serializers.assets.mobile_application import MobileApplicationSerializer
 
 
+@extend_viewset_schema(tags=['Projects'], verbose_name='mobile application asset')
 class MobileApplicationViewSet(PeCoReTModelViewSet):
     permission_classes = [
         permissions.PRESET_PENTESTER_OR_READONLY

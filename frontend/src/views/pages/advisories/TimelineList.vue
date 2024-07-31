@@ -1,7 +1,7 @@
 <script>
 import AdvisoryService from '@/service/AdvisoryService';
-import AdvisoryTabMenu from '../../../components/pages/AdvisoryTabMenu.vue';
-import AdvisoryTimelineCreateDialog from '../../../components/dialogs/AdvisoryTimelineCreateDialog.vue';
+import AdvisoryTabMenu from '@/components/pages/AdvisoryTabMenu.vue';
+import AdvisoryTimelineCreateDialog from '@/components/advisories/AdvisoryTimelineCreateDialog.vue';
 
 export default {
     name: 'TimelineList',

@@ -206,7 +206,7 @@ export default {
                     <Column field="name" header="Name" sortable>
                         <template #body="slotProps"> [{{ slotProps.data.year }}] {{ slotProps.data.name }}</template>
                     </Column>
-                    <Column field="company_name" header="Company"></Column>
+                    <Column field="company.name" header="Company"></Column>
                     <Column field="status" header="Status" :showFilterMatchModes="false">
                         <template #filter="{ filterModel }">
                             <Dropdown v-model="filterModel.value" :options="statusChoices" placeholder="Select One" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Dropdown>

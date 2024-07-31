@@ -19,7 +19,7 @@ from backend.utils import cvss4
 from .cwe import CWE
 from .finding_timeline import FindingTimeline
 from .vulnerability import Severity, ProjectVulnerability
-from .project import Visibility
+
 
 CVSS_40_REGEX = (r'CVSS:4\.0\/AV:[N|A|L|P]\/AC:[L|H]\/AT:[N|P]\/PR:[N|L|H]\/UI:[N|P|A]\/VC:[H|L|N]\/'
                  r'VI:[H|L|N]\/VA:[H|L|N]\/SC:[H|L|N]\/SI:[H|L|N]\/SA:[H|L|N]')

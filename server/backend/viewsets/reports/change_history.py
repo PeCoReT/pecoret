@@ -2,8 +2,10 @@ from backend.serializers.reports.change_history import ChangeHistorySerializer
 from backend.models.reports.change_history import ChangeHistory
 from pecoret.core import permissions
 from pecoret.core.viewsets import PeCoReTModelViewSet
+from pecoret.core.utils.schema import extend_viewset_schema
 
 
+@extend_viewset_schema(tags=['Reporting'], verbose_name='change history')
 class ChangeHistoryViewSet(PeCoReTModelViewSet):
     serializer_class = ChangeHistorySerializer
     queryset = ChangeHistory.objects.none()

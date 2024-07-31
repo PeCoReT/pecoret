@@ -64,6 +64,7 @@ export default class ProjectService {
         if (data === true) {
             return api.post(url, data);
         }
+        url = `/projects/${projectId}/unpin_project/`;
         return api.delete(url);
     }
 

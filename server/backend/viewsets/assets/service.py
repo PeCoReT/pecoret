@@ -1,3 +1,4 @@
+from pecoret.core.utils.schema import extend_viewset_schema
 from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions
 from backend.models.assets.service import Service
@@ -5,6 +6,7 @@ from backend.serializers.assets.service import ServiceSerializer
 from backend.filters.service import ServiceFilter
 
 
+@extend_viewset_schema(tags=['Projects'], verbose_name='service asset')
 class ServiceViewSet(PeCoReTModelViewSet):
     permission_classes = [
         permissions.PRESET_PENTESTER_OR_READONLY

@@ -1,4 +1,6 @@
 from django_q.tasks import async_task
+from drf_spectacular.utils import extend_schema_view, extend_schema
+
 from backend.tasks import mail
 from advisories.models.advisory_membership import AdvisoryMembership, Roles
 from advisories.serializers.membership import (
@@ -9,6 +11,12 @@ from pecoret.core.viewsets import PeCoReTNoUpdateViewSet
 from pecoret.core import permissions
 
 
+@extend_schema_view(
+    list=extend_schema(operation_id='Get all advisory memberships', tags=['Advisories']),
+    retrieve=extend_schema(operation_id='Get a specific advisory membership', tags=['Advisories']),
+    destroy=extend_schema(operation_id='Delete a advisory membership', tags=['Advisories']),
+    create=extend_schema(operation_id='Create a new advisory membership', tags=['Advisories'])
+)
 class AdvisoryMembershipViewSet(PeCoReTNoUpdateViewSet):
     queryset = AdvisoryMembership.objects.none()
     api_scope = "scope_advisories"

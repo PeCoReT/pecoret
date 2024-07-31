@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
@@ -5,8 +6,13 @@ from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions
 from attack_surface.serializers.url import URLSerializer, URL
 from attack_surface.filters.url import URLFilter
+from pecoret.core.utils.schema import extend_viewset_schema
 
 
+@extend_viewset_schema(tags=['Attack Surface'], verbose_name='url')
+@extend_schema_view(
+    create_or_update=extend_schema(operation_id='Get or create a url', tags=['Attack Surface'])
+)
 class URLViewSet(PeCoReTModelViewSet):
     queryset = URL.objects.all()
     serializer_class = URLSerializer

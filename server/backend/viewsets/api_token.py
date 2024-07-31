@@ -1,9 +1,24 @@
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from backend.serializers.api_token import APITokenSerializer
 from backend.models import APIToken
 from pecoret.core import permissions
 from pecoret.core.viewsets import PeCoReTNoUpdateViewSet
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id='Get all API tokens', tags=['API Tokens']
+    ),
+    retrieve=extend_schema(
+        operation_id='Get a specific API token', tags=['API Tokens']
+    ),
+    destroy=extend_schema(
+        operation_id='Delete a API token', tags=['API Tokens']
+    ),
+    create=extend_schema(
+        operation_id='Create a new API token', tags=['API Tokens']
+    )
+)
 class APITokenViewSet(PeCoReTNoUpdateViewSet):
     queryset = APIToken.objects.none()
     search_fields = ["name"]

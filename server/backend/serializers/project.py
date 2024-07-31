@@ -3,22 +3,20 @@ from rest_framework.exceptions import ValidationError
 from django.conf import settings
 from backend.models.project import Project, TestMethod, ProjectStatus, Visibility
 from pecoret.core.serializers import ValuedChoiceField, PrimaryKeyRelatedField
-from .pentest_type import PentestTypeSerializer
+from backend.serializers.pentest_type import PentestTypeSerializer
+from backend.serializers.company import CompanyMinimalSerializer
 
 
 class ProjectSerializer(serializers.ModelSerializer):
     status = ValuedChoiceField(choices=ProjectStatus.choices)
     test_method = ValuedChoiceField(choices=TestMethod.choices)
-    company_name = serializers.SerializerMethodField("get_company_name")
     pentest_types = PrimaryKeyRelatedField(serializer=PentestTypeSerializer, many=True)
     language = ValuedChoiceField(choices=settings.LANGUAGES)
     pinned = serializers.SerializerMethodField()
     visibility = ValuedChoiceField(choices=Visibility.choices)
+    company = PrimaryKeyRelatedField(serializer=CompanyMinimalSerializer)
 
-    def get_company_name(self, obj):
-        return obj.company.name
-
-    def get_pinned(self, obj):
+    def get_pinned(self, obj) -> bool:
         return obj.pinnedproject_set.for_user(self.context["request"].user).exists()
 
     def validate_visibility(self, value):
@@ -40,7 +38,6 @@ class ProjectSerializer(serializers.ModelSerializer):
             "start_date",
             "end_date",
             "description",
-            "company_name",
             "pinned",
             "year",
             "pentest_types",

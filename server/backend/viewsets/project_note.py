@@ -3,8 +3,14 @@ from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core.mixins.object_lock import ObjectLockMixin
 from backend.models.project_note import ProjectNote
 from backend.serializers.project_note import ProjectNoteSerializer
+from pecoret.core.utils.schema import extend_viewset_schema, extend_schema_view, extend_schema
 
 
+@extend_viewset_schema(tags=['Projects'], verbose_name='project note')
+@extend_schema_view(
+    lock=extend_schema(tags=['Projects'], operation_id='Lock a project note'),
+    unlock=extend_schema(tags=['Projects'], operation_id='Unlock a project note'),
+)
 class ProjectNoteViewSet(ObjectLockMixin, PeCoReTModelViewSet):
     queryset = ProjectNote.objects.none()
     search_fields = ['title', 'text']

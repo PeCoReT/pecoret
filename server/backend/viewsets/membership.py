@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.decorators import action
 from rest_framework.serializers import ValidationError
 from rest_framework.response import Response
@@ -6,8 +7,13 @@ from backend.models.membership import Roles
 from backend.serializers.memberships import MembershipSerializer, MembershipCreateUpdateSerializer
 from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions
+from pecoret.core.utils.schema import extend_viewset_schema
 
 
+@extend_viewset_schema(tags=['Projects'], verbose_name='membership')
+@extend_schema_view(
+    me=extend_schema(operation_id='Get my membership', tags=['Projects'])
+)
 class MembershipViewSet(PeCoReTModelViewSet):
     queryset = Membership.objects.none()
     filterset_class = None

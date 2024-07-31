@@ -2,8 +2,10 @@ from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions
 from backend.models import ProjectScope
 from backend.serializers.project_scope import ProjectScopeSerializer
+from pecoret.core.utils.schema import extend_viewset_schema
 
 
+@extend_viewset_schema(tags=['Projects'], verbose_name='project scope')
 class ProjectScopeViewSet(PeCoReTModelViewSet):
     permission_classes = [permissions.PRESET_PENTESTER_OR_READONLY]
     filterset_class = None

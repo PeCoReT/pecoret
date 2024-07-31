@@ -3,8 +3,10 @@ from pecoret.core import permissions
 from backend.models.company_information import CompanyInformation
 from backend.serializers.company_information import CompanyInformationSerializer
 from backend.filters.company_information import CompanyInformationFilter
+from pecoret.core.utils.schema import extend_viewset_schema
 
 
+@extend_viewset_schema(verbose_name='company information', tags=['Companies'])
 class CompanyInformationViewSet(PeCoReTModelViewSet):
     queryset = CompanyInformation.objects.none()
     filterset_class = CompanyInformationFilter

@@ -1,12 +1,19 @@
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+
+from pecoret.core.utils.schema import extend_viewset_schema
 from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions
 from attack_surface.serializers.target import TargetSerializer, Target
 from attack_surface.filters.target import TargetFilter
 
 
+@extend_viewset_schema(tags=['Attack Surface'], verbose_name='target')
+@extend_schema_view(
+    create_or_update=extend_schema(operation_id='Get or create a target', tags=['Attack Surface'])
+)
 class TargetViewSet(PeCoReTModelViewSet):
     queryset = Target.objects.all()
     serializer_class = TargetSerializer

@@ -5,8 +5,11 @@ from pecoret.core import permissions
 from pecoret.core.viewsets import PeCoReTModelViewSet
 from backend.serializers.project_file import ProjectFileSerializer
 from backend.models.project_file import ProjectFile
+from pecoret.core.utils.schema import extend_viewset_schema, extend_schema_view, extend_schema
 
 
+@extend_viewset_schema(tags=['Projects'], verbose_name='project file')
+@extend_schema_view(download=extend_schema(tags=['Projects'], operation_id='Download project file'))
 class ProjectFileViewSet(PeCoReTModelViewSet):
     queryset = ProjectFile.objects.none()
     search_fields = ["name"]

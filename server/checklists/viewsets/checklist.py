@@ -1,4 +1,4 @@
-from pecoret.core.viewsets import PeCoReTReadOnlyModelViewSet, PeCoReTNoUpdateViewSet, PeCoReTModelViewSet
+from pecoret.core.viewsets import PeCoReTNoUpdateViewSet, PeCoReTModelViewSet
 from pecoret.core import permissions
 from checklists.models import Checklist, AssetChecklist
 from checklists.serializers.checklist import (
@@ -7,8 +7,10 @@ from checklists.serializers.checklist import (
     AssetChecklistCreateSerializer,
 )
 from checklists.filters.checklists import AssetChecklistFilter
+from pecoret.core.utils.schema import extend_viewset_schema, extend_schema_view, extend_schema
 
 
+@extend_viewset_schema(tags=['Checklists'], verbose_name='checklist')
 class ChecklistViewSet(PeCoReTModelViewSet):
     queryset = Checklist.objects.none()
     api_scope = 'scope_knowledgebase'
@@ -29,6 +31,12 @@ class ChecklistViewSet(PeCoReTModelViewSet):
         return Checklist.objects.all()
 
 
+@extend_schema_view(
+    list=extend_schema(operation_id='Get all asset checklists', tags=['Project Checklists']),
+    retrieve=extend_schema(operation_id='Get specific asset checklist', tags=['Project Checklists']),
+    destroy=extend_schema(operation_id='Delete a asset checklist', tags=['Project Checklists']),
+    create=extend_schema(operation_id='Create a new asset checklist', tags=['Project Checklists']),
+)
 class AssetChecklistViewSet(PeCoReTNoUpdateViewSet):
     queryset = AssetChecklist.objects.none()
     filterset_class = AssetChecklistFilter

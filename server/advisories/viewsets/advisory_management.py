@@ -2,7 +2,7 @@ from django.db.models import Count
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from advisories.filters import InboxFilter
 from advisories.serializers.advisory_management import AdvisoryAdvisoryManagementSerializer
 from advisories.models import Advisory
@@ -11,6 +11,14 @@ from pecoret.core import permissions
 from pecoret.core.viewsets import GenericViewSet
 
 
+@extend_schema_view(
+    list=extend_schema(operation_id='List inbox', tags=['Advisory Management']),
+    inbox_statistics=extend_schema(operation_id='Get inbox count statistics', tags=['Advisory Management']),
+    top_vulnerabilities=extend_schema(operation_id='Get top vulnerabilities', tags=['Advisory Management']),
+    top_submitters=extend_schema(operation_id='Get top submitters', tags=['Advisory Management']),
+    top_products=extend_schema(operation_id='Get top products', tags=['Advisory Management']),
+    top_vendors=extend_schema(operation_id='Get top vendors', tags=['Advisory Management']),
+)
 class AdvisoryManagementInboxViewSet(mixins.ListModelMixin, GenericViewSet):
     permission_classes = [permissions.PRESET_GROUP_ADVISORY_MANAGEMENT]
     filterset_class = InboxFilter

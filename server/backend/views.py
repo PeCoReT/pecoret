@@ -1,43 +1,26 @@
 import cvss
-from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
+from django.contrib.auth import authenticate, login, logout
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from drf_spectacular.utils import extend_schema
-from rest_framework import serializers
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from backend.models.finding import Severity
+from backend.serializers.auth import (LoginSerializer, LogoutSerializer, LoginResponseSerializer)
 from backend.serializers.cvss_calculator import (
     CVSS4CalculatorSerializer, CVSS4CalculatedSerializer,
     CVSS31CalculatorSerializer, CVSS31CalculatedSerializer
 )
 from backend.serializers.render import RenderMarkdownSerializer
-from backend.serializers.user import UserMeSerializer
+from backend.serializers.report_template import ReportTemplateSerializer
 from backend.utils import cvss4
 from pecoret.core.auth.ldap import sync_ldap_groups
-from pecoret.reporting.utils import get_report_template_choices
 from .throttle import AuthFlowThrottle
-
-
-# TODO: move to serializers
-class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
-    password = serializers.CharField()
-
-
-class LoginResponseSerializer(serializers.Serializer):
-    user = UserMeSerializer(read_only=True)
-    csrf_token = serializers.CharField()
-
-
-class LogoutSerializer(serializers.Serializer):
-    """empty serializer. required to make spectacular happy
-    """
 
 
 class LoginView(APIView):
@@ -48,17 +31,14 @@ class LoginView(APIView):
     throttle_classes = [AuthFlowThrottle]
     authentication_classes = []
 
-    @extend_schema(request=LoginSerializer, responses=LoginResponseSerializer)
+    @extend_schema(
+        operation_id='Login', summary='Authenticate for SessionAuth',
+        tags=['Authentication'],
+        request=LoginSerializer, responses=LoginResponseSerializer)
     @method_decorator(csrf_protect)
     def post(self, request, **kwargs):
         """handle the login process.
         use a method similar to the original django auth views but using JSON.
-
-        Args:
-            request (_type_): _description_
-
-        Returns:
-            _type_: _description_
         """
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
@@ -82,21 +62,15 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
-    """just as the same implies: this view is used to destroy the session."""
-
     authentication_classes = [SessionAuthentication]
 
-    @extend_schema(request=LogoutSerializer, responses=LogoutSerializer)
+    @extend_schema(
+        operation_id='Logout', tags=['Authentication'],
+        request=LogoutSerializer, responses=LogoutSerializer)
     @method_decorator(csrf_protect)
     def post(self, request, **kwargs):
         """Handle post request and perform logout.
         Use POST to prevent CSRF.
-
-        Args:
-            request (_type_): _description_
-
-        Returns:
-            _type_: _description_
         """
         logout(request)
         return Response({}, status=status.HTTP_204_NO_CONTENT)
@@ -112,7 +86,10 @@ class AuthCheckView(APIView):
 
     authentication_classes = [SessionAuthentication]
 
-    @extend_schema(request={}, responses=LoginResponseSerializer)
+    @extend_schema(
+        operation_id='Check Authentication', tags=['Authentication'],
+        description='Checks if current user is logged in. Retrieve CSRF Token',
+        request={}, responses=LoginResponseSerializer)
     def get(self, request, **kwargs):
         if not request.user.is_authenticated:
             user = None
@@ -135,7 +112,9 @@ class CVSS4CalculatorView(APIView):
 
     authentication_classes = [SessionAuthentication]
 
-    @extend_schema(request=CVSS4CalculatorSerializer, responses=CVSS4CalculatedSerializer)
+    @extend_schema(
+        operation_id='CVSS 4.0 Calculator', tags=['CVSS Calculator'],
+        request=CVSS4CalculatorSerializer, responses=CVSS4CalculatedSerializer)
     @method_decorator(csrf_protect)
     def post(self, request, **kwargs):
         serializer = CVSS4CalculatorSerializer(data=request.data)
@@ -153,7 +132,9 @@ class CVSS31CalculatorView(APIView):
     """
     authentication_classes = [SessionAuthentication]
 
-    @extend_schema(request=CVSS31CalculatorSerializer, responses=CVSS31CalculatedSerializer)
+    @extend_schema(
+        operation_id='CVSS 3.1 Calculator', tags=['CVSS Calculator'],
+        request=CVSS31CalculatorSerializer, responses=CVSS31CalculatedSerializer)
     @method_decorator(csrf_protect)
     def post(self, request, **kwargs):
         serializer = CVSS31CalculatorSerializer(data=request.data)
@@ -174,7 +155,9 @@ class RenderMarkdownToHTML(APIView):
     """
     authentication_classes = [SessionAuthentication]
 
-    @extend_schema(request=RenderMarkdownSerializer, responses=RenderMarkdownSerializer)
+    @extend_schema(
+        operation_id='Render Markdown to HTML', tags=['Helpers'],
+        request=RenderMarkdownSerializer, responses=RenderMarkdownSerializer)
     @method_decorator(csrf_protect)
     def post(self, request, **kwargs):
         serializer = RenderMarkdownSerializer(data=request.data)
@@ -185,8 +168,15 @@ class RenderMarkdownToHTML(APIView):
 class ReportTemplateView(APIView):
     authentication_classes = [SessionAuthentication]
 
+    @extend_schema(
+        operation_id='Get all report templates',
+        description='Retrieve a list of available report templates',
+        tags=['Report Templates'],
+        request=None, responses=ReportTemplateSerializer)
     def get(self, request, **kwargs):
         data = []
         for item in settings.REPORT_TEMPLATES.keys():
             data.append({'name': item})
-        return Response({'results': data}, status=status.HTTP_200_OK)
+        serializer = ReportTemplateSerializer(data, many=True)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

@@ -1,23 +1,19 @@
 from rest_framework import serializers
+
 from backend.models import Company
 
 
-class CompanySerializer(serializers.ModelSerializer):
-
+class CompanyMinimalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
-        fields = [
-            "pk",
-            "date_created",
-            "date_updated",
-            "name",
-            "street",
-            "zipcode",
-            "city",
-            "country",
-            "report_template",
-            "logo"
-        ]
+        fields = ['pk', 'date_created', 'date_updated', 'name']
+
+
+class CompanySerializer(CompanyMinimalSerializer):
+    class Meta:
+        model = Company
+        fields = CompanyMinimalSerializer.Meta.fields + ['street', 'zipcode', 'city', 'country', 'report_template',
+                                                         'logo']
         extra_kwargs = {
             "logo": {
                 "write_only": True

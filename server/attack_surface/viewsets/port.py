@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -5,8 +6,13 @@ from attack_surface.filters.port import PortFilter
 from attack_surface.serializers.port import PortSerializer, Port
 from pecoret.core import permissions
 from pecoret.core.viewsets import PeCoReTModelViewSet
+from pecoret.core.utils.schema import extend_viewset_schema
 
 
+@extend_viewset_schema(tags=['Attack Surface'], verbose_name='port')
+@extend_schema_view(
+    create_or_update=extend_schema(operation_id='Get or create a port', tags=['Attack Surface'])
+)
 class PortViewSet(PeCoReTModelViewSet):
     queryset = Port.objects.all()
     serializer_class = PortSerializer
