@@ -61,6 +61,8 @@ class Migration(migrations.Migration):
         ('advisories', '0007_alter_advisory_report_template'),
     ]
 
+    # schema changes will fail on postgres - atomic = False
+    atomic = False
     operations = [
         migrations.DeleteModel(
             name='AdvisoryMembership',
