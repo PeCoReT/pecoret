@@ -1,8 +1,9 @@
 from rest_framework import serializers
 from advisories.fields import LabelField
 from advisories.models.advisory import (
-    Advisory, Severity, AdvisoryStatusChoices, VisibilityChoices, VulnerabilityStatusChoices
+    Advisory, Severity, AdvisoryStatusChoices, VulnerabilityStatusChoices
 )
+from advisories import fields
 from backend.serializers.user import MinimalUserSerializer
 from backend.serializers.vulnerability import VulnerabilityTemplateSerializer
 from backend.serializers.technology import TechnologySerializer
@@ -19,13 +20,13 @@ class BaseAdvisorySerializer(serializers.ModelSerializer):
     user = MinimalUserSerializer(read_only=True)
     labels = LabelField(serializer=LabelSerializer, many=True, read_only=True)
     technology = PrimaryKeyRelatedField(serializer=TechnologySerializer)
-    internal_name = serializers.CharField(read_only=True)
+    advisory_id = serializers.CharField(read_only=True)
 
     class Meta:
         model = Advisory
         fields = [
             "pk", "user", "affected_versions", "severity",
-            "description", "internal_name", "technology",
+            "description", "advisory_id", "technology",
             "recommendation", "date_created", "date_updated",
             "custom_report_title", "hide_advisory_id_in_report",
             "proof_text", "labels", "researchers", "report_template",
@@ -49,21 +50,21 @@ class AdvisoryCreateSerializer(BaseAdvisorySerializer):
 class AdvisorySerializer(BaseAdvisorySerializer):
     vulnerability = VulnerabilityTemplateSerializer()
     status = ValuedChoiceField(choices=AdvisoryStatusChoices.choices)
-    visibility = ValuedChoiceField(choices=VisibilityChoices.choices)
     vulnerability_status = ValuedChoiceField(choices=VulnerabilityStatusChoices.choices)
 
     class Meta(BaseAdvisorySerializer.Meta):
         fields = BaseAdvisorySerializer.Meta.fields + ["status", "vulnerability", "cve_id",
                                                        "report_template", "fixed_version",
-                                                       "vulnerability_status", "visibility", "date_planned_disclosure"]
+                                                       "vulnerability_status", "date_planned_disclosure"]
 
 
 class AdvisoryUpdateSerializer(AdvisorySerializer):
     vulnerability = VulnerabilityTemplateSerializer(read_only=True)
     vulnerability_id = VulnerabilityTemplateIdField(source="vulnerability_key")
+    labels = fields.LabelField(serializer=LabelSerializer, many=True)
 
     class Meta(AdvisorySerializer.Meta):
-        fields = AdvisorySerializer.Meta.fields + ["vulnerability_id", "report_template"]
+        fields = AdvisorySerializer.Meta.fields + ["vulnerability_id", "report_template", "labels"]
 
 
 class AdvisoryDownloadSerializer(serializers.Serializer):

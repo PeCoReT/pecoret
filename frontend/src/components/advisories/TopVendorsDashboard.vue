@@ -47,7 +47,7 @@ export default {
         getData() {
             this.loading = true;
             this.service
-                .getTopVendors(this.$api)
+                .getTopVendorsStatistics(this.$api)
                 .then((response) => {
                     response.data.forEach((item) => {
                         this.chartData.labels.push(item['technology__vendor']);

@@ -32,8 +32,7 @@ class ProjectFileCreateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.pentester2, self.read_only1, self.vendor1, self.vendor2, self.advisory_manager1,
-            self.management2, self.user1
+            self.pentester2, self.read_only1, self.vendor1, self.vendor2, self.management2, self.user1
         ]
         for user in users:
             self.client.force_login(user)
@@ -57,8 +56,7 @@ class ProjectFileDestroyView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.advisory_manager1, self.user1, self.read_only1, self.vendor2, self.vendor1,
-            self.pentester2, self.management2
+            self.user1, self.read_only1, self.vendor2, self.vendor1, self.pentester2, self.management2
         ]
         for user in users:
             self.client.force_login(user)

@@ -24,8 +24,3 @@ PRESET_GROUP_PENTESTER_MANAGEMENT = GroupPermission(
     read_write_groups=[Groups.GROUP_MANAGEMENT, Groups.GROUP_PENTESTER],
     read_only_groups=[],
 )
-
-PRESET_GROUP_ADVISORY_MANAGEMENT = GroupPermission(
-    read_write_groups=[Groups.ADVISORY_MANAGEMENT],
-    read_only_groups=[]
-)

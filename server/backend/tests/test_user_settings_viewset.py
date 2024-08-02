@@ -16,7 +16,6 @@ class UserSettingsRetrieveViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.pentester2,
             self.management1,
             self.management2,
-            self.advisory_manager1,
             self.user1,
             self.read_only1,
         ]
@@ -40,7 +39,6 @@ class UserSettingsUpdateTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.pentester2,
             self.management1,
             self.management2,
-            self.advisory_manager1,
             self.user1,
             self.read_only1,
         ]

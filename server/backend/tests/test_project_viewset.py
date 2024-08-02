@@ -1,7 +1,8 @@
 from rest_framework.test import APITestCase
-from pecoret.core.test import PeCoReTTestCaseMixin
-from backend.models.project import ProjectStatus, TestMethod, Visibility
+
 from backend.models.pentest_type import PentestType
+from backend.models.project import ProjectStatus, TestMethod, Visibility
+from pecoret.core.test import PeCoReTTestCaseMixin
 
 
 class ProjectListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
@@ -69,8 +70,8 @@ class ProjectDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.customer2, self.customer1, self.vendor1, self.vendor2, self.read_only_vendor,
-            self.advisory_manager1, self.pentester2, self.pentester1, self.user1, self.read_only1
+            self.customer2, self.customer1, self.vendor1, self.vendor2, self.pentester2, self.pentester1, self.user1,
+            self.read_only1
         ]
         for user in users:
             self.client.force_login(user)
@@ -92,8 +93,8 @@ class ProjectDetailViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.customer2, self.customer1, self.vendor1, self.vendor2, self.advisory_manager1,
-            self.pentester2, self.user1, self.read_only_vendor, self.management2
+            self.customer2, self.customer1, self.vendor1, self.vendor2,
+            self.pentester2, self.user1, self.management2
         ]
         for user in users:
             self.client.force_login(user)
@@ -136,7 +137,6 @@ class ProjectCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.pentester2,
             self.read_only1,
             self.user1,
-            self.advisory_manager1,
         ]
         for user in users:
             self.client.force_login(user)
@@ -152,8 +152,7 @@ class PinProjectViewSet(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.read_only1, self.management2, self.pentester2,
-            self.advisory_manager1, self.user1
+            self.read_only1, self.management2, self.pentester2, self.user1
         ]
         for user in users:
             self.client.force_login(user)
@@ -175,8 +174,7 @@ class UnpinProjectViewSet(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.read_only1, self.management2, self.pentester2,
-            self.advisory_manager1, self.user1
+            self.read_only1, self.management2, self.pentester2, self.user1
         ]
         for user in users:
             self.client.force_login(user)

@@ -32,9 +32,7 @@ class FindingTimelineListView(APITestCase, PeCoReTTestCaseMixin):
         self.users_allowed = [
             self.read_only1, self.pentester1, self.management1
         ]
-        self.users_forbidden = [
-            self.management2, self.advisory_manager1, self.pentester2, self.user1
-        ]
+        self.users_forbidden = [self.management2, self.pentester2, self.user1]
 
     def test_allowed(self):
         for user in self.users_allowed:

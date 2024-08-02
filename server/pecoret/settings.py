@@ -163,7 +163,7 @@ SPECTACULAR_SETTINGS = {
             },
             {
                 'name': 'Advisories',
-                'tags': ['Advisories', 'Advisory Management']
+                'tags': ['Advisories', 'Advisory Statistics']
             },
             {
                 'name': 'Attack Surface',

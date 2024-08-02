@@ -2,7 +2,6 @@ from django_q.tasks import async_task, result
 from rest_framework.test import APITestCase
 
 from advisories.models import Advisory
-from advisories.models.advisory import VisibilityChoices
 from backend.tasks.reporting import export_advisory
 from pecoret.core.test import PeCoReTTestCaseMixin
 
@@ -12,7 +11,7 @@ class ExportAdvisoryTask(APITestCase, PeCoReTTestCaseMixin):
 
     def setUp(self) -> None:
         self.init_mixin()
-        self.advisory = self.create_instance(Advisory, visibility=VisibilityChoices.TEAM, user=self.pentester1)
+        self.advisory = self.create_instance(Advisory, user=self.pentester1)
 
     def test_export_advisory(self):
         """test pdf export of advisory

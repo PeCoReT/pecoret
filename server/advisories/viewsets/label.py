@@ -8,8 +8,8 @@ from advisories.serializers.label import LabelSerializer
 @extend_viewset_schema(tags=['Advisories'], verbose_name='label')
 class LabelViewSet(ModelViewSet):
     permission_classes = [permissions.GroupPermission(
-        read_write_groups=[permissions.Groups.ADVISORY_MANAGEMENT],
-        read_only_groups=[permissions.Groups.ADVISORY_MANAGEMENT, permissions.Groups.GROUP_PENTESTER]
+        read_write_groups=[permissions.Groups.GROUP_PENTESTER],
+        read_only_groups=[]
     )]
     filterset_class = None
     search_fields = ["name", "description"]

@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router';
 import AppLayout from '@/layout/AppLayout.vue';
 import adminRoutes from '@/router/routes/admin';
 import projectRoutes from '@/router/routes/projects';
-import advisoryManagementRoutes from '@/router/routes/advisoryManagement';
 import baseRoutes from '@/router/routes/base';
 import checklistRoutes from '@/router/routes/checklists';
 import companyRoutes from '@/router/routes/companies';
@@ -27,7 +26,6 @@ const router = createRouter({
 
                 ...adminRoutes,
                 ...projectRoutes,
-                ...advisoryManagementRoutes,
                 ...advisoryRoutes,
                 ...vulnerabilityTemplateRoutes,
                 ...checklistRoutes,

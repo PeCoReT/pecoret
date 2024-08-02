@@ -6,7 +6,6 @@ from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core.utils.schema import extend_viewset_schema
 from advisories.models.attachment import ImageAttachment
 from advisories.serializers.attachment import ImageAttachmentSerializer
-from advisories.models.advisory_membership import Roles
 
 
 @extend_schema_view(preview=extend_schema(tags=['Advisories'], operation_id='Image Attachments'))
@@ -16,17 +15,17 @@ class ImageAttachmentViewSet(PeCoReTModelViewSet):
     search_fields = ["caption"]
     serializer_class = ImageAttachmentSerializer
     permission_classes = [
-        permissions.AdvisoryPermission(
-            read_write_roles=[Roles.CREATOR, Roles.VENDOR],
-            read_only_roles=[Roles.READ_ONLY],
+        permissions.GroupPermission(
+            read_only_groups=[],
+            read_write_groups=[permissions.Groups.GROUP_PENTESTER],
         )
     ]
 
     def get_queryset(self):
-        return ImageAttachment.objects.for_advisory(self.request.advisory)
+        return ImageAttachment.objects.for_advisory(self.kwargs.get('advisory'))
 
     def perform_create(self, serializer):
-        serializer.save(advisory=self.request.advisory)
+        serializer.save(advisory_id=self.kwargs.get('advisory'))
 
     @action(methods=['get'], detail=True)
     def preview(self, *args, **kwargs):

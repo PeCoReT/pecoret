@@ -13,7 +13,7 @@ class CompanyContactListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.management1, self.management2, self.pentester1, self.read_only1, self.customer1, self.pentester2
         ]
         self.users_forbidden = [
-            self.user1, self.vendor2, self.vendor1, self.advisory_manager1, self.customer2
+            self.user1, self.vendor2, self.vendor1, self.customer2
         ]
 
     def test_allowed(self):
@@ -42,7 +42,7 @@ class CompanyContactDeleteViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.url = self.get_url("backend:companies:contact-detail", company=self.company_contact.company.pk,
                                 pk=self.company_contact.pk)
         self.users_forbidden = [
-            self.user1, self.customer2, self.customer1, self.vendor1, self.advisory_manager1, self.vendor2
+            self.user1, self.customer2, self.customer1, self.vendor1, self.vendor2
         ]
 
     def test_management2(self):
@@ -99,7 +99,7 @@ class CompanyContactUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.user1, self.customer2, self.customer1, self.vendor2, self.vendor1, self.advisory_manager1
+            self.user1, self.customer2, self.customer1, self.vendor2, self.vendor1,
         ]
         for user in users:
             self.client.force_login(user)

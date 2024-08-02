@@ -39,15 +39,6 @@ export default {
                             advisoryId: this.$route.params.advisoryId
                         }
                     })
-                },
-                {
-                    label: 'Memberships',
-                    route: this.$router.resolve({
-                        name: 'AdvisoryMembershipList',
-                        params: {
-                            advisoryId: this.$route.params.advisoryId
-                        }
-                    })
                 }
             ]
         };

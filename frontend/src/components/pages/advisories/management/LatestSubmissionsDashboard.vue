@@ -17,10 +17,10 @@ export default {
         getItems() {
             this.loading = true;
             let params = {
-                ordering: '-date_created'
+                ordering: '-date_created', limit: 5
             };
             this.service
-                .getInbox(this.$api, params)
+                .getAdvisories(this.$api, params)
                 .then((response) => {
                     this.items = response.data.results.slice(0, 5);
                 })

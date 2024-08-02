@@ -5,12 +5,10 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class LabelListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("advisories:label-list")
-        self.users_allowed = [
-            self.advisory_manager1, self.pentester1, self.pentester2, self.read_only1
-        ]
+        self.url = self.get_url("advisories:advisory-label-list")
+        self.users_allowed = [self.pentester1, self.pentester2, self.read_only1]
         self.users_forbidden = [
-            self.management1, self.management2, self.vendor1, self.vendor2, self.user1, self.read_only_vendor
+            self.management1, self.management2, self.user1, self.customer1, self.customer2, self.vendor2, self.vendor1
         ]
 
     def test_allowed(self):
@@ -35,29 +33,25 @@ class LabelListView(APITestCase, PeCoReTTestCaseMixin):
 class LabelCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("advisories:label-list")
+        self.url = self.get_url("advisories:advisory-label-list")
         self.data = {"name": "test", "description": "lorem", "color": "#fff"}
+        self.allowed_users = [self.pentester1, self.pentester2, self.read_only1]
+        self.forbidden_users = [
+            self.vendor1, self.vendor2, self.user1, self.management1, self.management2, self.customer2, self.customer1
+        ]
 
     def test_allowed(self):
-        users = [
-            self.advisory_manager1
-        ]
-        for user in users:
+        for user in self.allowed_users:
+            self.data['name'] = user.username
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
 
     def test_forbidden(self):
-        users = [
-            self.pentester1, self.pentester2,
-            self.management2, self.management1,
-            self.read_only1, self.read_only_vendor,
-            self.vendor2, self.vendor1, self.user1
-        ]
-        for user in users:
+        for user in self.forbidden_users:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.post, 403, data=self.data)
 
     def test_color_validation(self):
         self.data["color"] = '"invalid'
-        self.client.force_login(self.advisory_manager1)
+        self.client.force_login(self.pentester1)
         self.basic_status_code_check(self.url, self.client.post, 400, data=self.data)

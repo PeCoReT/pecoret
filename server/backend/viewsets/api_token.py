@@ -29,7 +29,6 @@ class APITokenViewSet(PeCoReTNoUpdateViewSet):
             read_write_groups=[
                 permissions.Groups.GROUP_MANAGEMENT,
                 permissions.Groups.GROUP_PENTESTER,
-                permissions.Groups.ADVISORY_MANAGEMENT
             ],
             read_only_groups=[]
         )

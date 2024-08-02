@@ -48,7 +48,7 @@ export default {
             this.loading = true;
             const documentStyle = getComputedStyle(document.body);
             this.service
-                .getTopVulnerabilities(this.$api)
+                .getTopVulnerabilitiesStatistics(this.$api)
                 .then((response) => {
                     response.data.forEach((item) => {
                         this.chartData.labels.push(item['vulnerability__name']);

@@ -89,14 +89,6 @@ export default class AdvisoryService {
         return api.get(url, config);
     }
 
-    downloadAdvisoryAsMarkdown(api, advisoryId) {
-        let url = '/advisories/' + advisoryId + '/export_markdown/';
-        let config = {
-            responseType: 'arraybuffer'
-        };
-        return api.get(url, config);
-    }
-
     getTimeline(api, advisoryId) {
         let url = '/advisories/' + advisoryId + '/timelines/';
         let config = {
@@ -132,24 +124,6 @@ export default class AdvisoryService {
         return api.patch(url, data);
     }
 
-    getMemberships(api, advisoryId, params) {
-        let url = '/advisories/' + advisoryId + '/memberships/';
-        let config = {};
-        if (params) {
-            config['params'] = params;
-        }
-        return api.get(url, config);
-    }
-
-    deleteMembership(api, advisoryId, memberId) {
-        let url = '/advisories/' + advisoryId + '/memberships/' + memberId + '/';
-        return api.delete(url);
-    }
-
-    createMembership(api, advisoryId, data) {
-        let url = '/advisories/' + advisoryId + '/memberships/';
-        return api.post(url, data);
-    }
 
     getImageAttachments(api, advisoryId, params) {
         let url = '/advisories/' + advisoryId + '/attachments/';
@@ -160,33 +134,9 @@ export default class AdvisoryService {
         return api.get(url, config);
     }
 
-    createProof(api, advisoryId, data) {
-        let url = '/advisories/' + advisoryId + '/proofs/';
-        let config = {};
-        if (data.image) {
-            config['Content-Type'] = 'multipart/form-data';
-        }
-        return api.post(url, data, config);
-    }
-
-    patchProof(api, advisoryId, proofId, data) {
-        let url = '/advisories/' + advisoryId + '/proofs/' + proofId + '/';
-        return api.patch(url, data);
-    }
-
-    attachmentPatch(api, advisoryId, id, data) {
-        let url = '/advisories/' + advisoryId + '/attachments/' + id + '/';
-        return api.patch(url, data);
-    }
-
     attachmentCreate(api, advisoryId, data) {
         let url = '/advisories/' + advisoryId + '/attachments/';
         return api.post(url, data);
-    }
-
-    getProof(api, advisoryId, proofId) {
-        let url = '/advisories/' + advisoryId + '/proofs/' + proofId + '/';
-        return api.get(url);
     }
 
     deleteAttachment(api, advisoryId, id) {
@@ -195,7 +145,7 @@ export default class AdvisoryService {
     }
 
     getLabels(api, params) {
-        let url = '/advisory-management/labels/';
+        let url = '/advisory-labels/';
         let config = {};
         if (params) {
             config['params'] = params;
@@ -204,42 +154,42 @@ export default class AdvisoryService {
     }
 
     createLabel(api, data) {
-        let url = '/advisory-management/labels/';
+        let url = '/advisory-labels/';
         return api.post(url, data);
     }
 
     deleteLabel(api, id) {
-        let url = '/advisory-management/labels/' + id + '/';
+        let url = `/advisory-labels/${id}/`;
         return api.delete(url);
     }
 
     patchLabel(api, id, data) {
-        let url = '/advisory-management/labels/' + id + '/';
+        let url = `/advisory-labels/${id}/`;
         return api.patch(url, data);
     }
 
-    getInboxStatistics(api) {
-        let url = '/advisory-management/inbox/inbox_statistics/';
+    getBaseInformationStatistics(api) {
+        let url = '/advisories/statistics/base-information/';
         return api.get(url);
     }
 
-    getTopSubmitters(api) {
-        let url = '/advisory-management/inbox/top_submitters/';
+    getTopSubmittersStatistic(api) {
+        let url = '/advisories/statistics/top-submitters/';
         return api.get(url);
     }
 
-    getTopVulnerabilities(api) {
-        let url = '/advisory-management/inbox/top_vulnerabilities/';
+    getTopVulnerabilitiesStatistics(api) {
+        let url = '/advisories/statistics/top-vulnerabilities/';
         return api.get(url);
     }
 
-    getTopProducts(api) {
-        let url = '/advisory-management/inbox/top_products/';
+    getTopProductsStatistics(api) {
+        let url = '/advisories/statistics/top-products/';
         return api.get(url);
     }
 
-    getTopVendors(api) {
-        let url = '/advisory-management/inbox/top_vendors/';
+    getTopVendorsStatistics(api) {
+        let url = '/advisories/statistics/top-vendors/';
         return api.get(url);
     }
 }

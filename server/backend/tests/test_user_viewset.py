@@ -1,11 +1,12 @@
-from django.contrib.auth.models import Group, PermissionsMixin
+from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator
+from django.core import mail
 from django.utils.encoding import force_str, force_bytes
 from django.utils.http import urlsafe_base64_encode
-from django.core import mail
 from rest_framework.test import APITestCase
-from pecoret.core.test import PeCoReTTestCaseMixin
+
 from backend.models import User
+from pecoret.core.test import PeCoReTTestCaseMixin
 
 
 class UserListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
@@ -51,7 +52,7 @@ class UserUpdateViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_group_changed(self):
         self.client.force_login(self.superuser)
-        data = {"groups": [Group.objects.get(name="Advisory Management").pk]}
+        data = {"groups": [Group.objects.get(name="Management").pk]}
         response = self.client.patch(self.url, data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(User.objects.get(username="test_user123").groups.values_list("pk", flat=True)),
@@ -59,8 +60,8 @@ class UserUpdateViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.management1, self.management2, self.advisory_manager1, self.vendor1,
-            self.vendor2, self.user1, self.pentester1,self.pentester2, self.customer2,
+            self.management1, self.management2, self.vendor1,
+            self.vendor2, self.user1, self.pentester1, self.pentester2, self.customer2,
             self.customer1
         ]
         for user in users:
@@ -174,8 +175,7 @@ class UserProfileUpdateViewTest(APITestCase, PeCoReTTestCaseMixin):
 
     def test_allowed(self):
         users = [
-            self.management1, self.management2, self.vendor1, self.vendor2, self.read_only_vendor,
-            self.read_only_vendor, self.pentester1, self.pentester2, self.advisory_manager1,
+            self.management1, self.management2, self.vendor1, self.vendor2, self.pentester1, self.pentester2,
             self.customer1, self.customer2
         ]
         for user in users:
@@ -185,8 +185,8 @@ class UserProfileUpdateViewTest(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden_fields(self):
         users = [
-            self.management1, self.management2, self.vendor1, self.vendor2, self.read_only_vendor,
-            self.read_only1, self.read_only_vendor, self.pentester1, self.pentester2, self.advisory_manager1,
+            self.management1, self.management2, self.vendor1, self.vendor2,
+            self.read_only1, self.pentester1, self.pentester2,
             self.customer2, self.customer1
         ]
         self.data['email'] = 'e@example.test'

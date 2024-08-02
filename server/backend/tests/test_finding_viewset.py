@@ -7,7 +7,7 @@ from backend.models import (
 )
 from backend.models.finding import FindingStatus, Severity
 from backend.models.account import Account
-from advisories.models.advisory import VisibilityChoices, Advisory
+from advisories.models.advisory import Advisory
 from pecoret.core.test import PeCoReTTestCaseMixin
 
 
@@ -236,14 +236,10 @@ class FindingAsAdvisoryView(APITestCase, PeCoReTTestCaseMixin):
     def test_pentester1(self):
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
-        # there is already one created during `setUp`
-        self.assertEqual(Advisory.objects.filter(visibility=VisibilityChoices.MEMBERS).count(), 2)
 
     def test_management1(self):
         self.client.force_login(self.management1)
         self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
-        # there is already one created during `setUp`
-        self.assertEqual(Advisory.objects.filter(visibility=VisibilityChoices.MEMBERS).count(), 2)
 
     def test_forbidden(self):
         users = [
@@ -251,7 +247,6 @@ class FindingAsAdvisoryView(APITestCase, PeCoReTTestCaseMixin):
             self.management2,
             self.user1,
             self.read_only1,
-            self.advisory_manager1,
         ]
         for user in users:
             self.client.force_login(user)
@@ -289,7 +284,7 @@ class FindingPDFExportView(APITestCase, PeCoReTTestCaseMixin):
             self.assertIn("Content-Disposition", response.headers)
 
     def test_forbidden(self):
-        users = [self.pentester2, self.advisory_manager1, self.management2, self.user1]
+        users = [self.pentester2, self.management2, self.user1]
         for user in users:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.get, 403)

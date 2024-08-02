@@ -1,6 +1,7 @@
 from rest_framework.test import APITestCase
-from pecoret.core.test import PeCoReTTestCaseMixin
+
 from backend.models import Report, ChangeHistory
+from pecoret.core.test import PeCoReTTestCaseMixin
 
 
 class ReportHistoryListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
@@ -85,6 +86,7 @@ class ReportHistoryCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.basic_status_code_check(
             url, self.client.post, 403, data=self.data
         )
+
 
 class ReportHistoryUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:

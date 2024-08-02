@@ -1,6 +1,5 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from advisories.models.advisory_comment import AdvisoryComment
-from advisories.models.advisory_membership import Roles
 from advisories.serializers.comment import AdvisoryCommentSerializer
 from pecoret.core.viewsets import PeCoReTNoDestroyViewSet
 from pecoret.core import permissions
@@ -17,21 +16,21 @@ class AdvisoryCommentViewSet(PeCoReTNoDestroyViewSet):
     queryset = AdvisoryComment.objects.none()
     api_scope = "scope_advisories"
     permission_classes = [
-        permissions.AdvisoryPermission(
-            read_write_roles=[Roles.CREATOR, Roles.VENDOR],
-            read_only_roles=[Roles.READ_ONLY],
+        permissions.GroupPermission(
+            read_only_groups=[],
+            read_write_groups=[permissions.Groups.GROUP_PENTESTER],
         )
     ]
     serializer_class = AdvisoryCommentSerializer
 
     def get_queryset(self):
-        qs = AdvisoryComment.objects.for_advisory(self.request.advisory)
+        qs = AdvisoryComment.objects.for_advisory(self.kwargs.get('advisory'))
         if self.action in ["list", "retrieve"]:
             return qs
         return qs.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(advisory=self.request.advisory, user=self.request.user)
+        serializer.save(advisory_id=self.kwargs.get('advisory'), user=self.request.user)
 
     def perform_update(self, serializer):
         serializer.save(user_edit=self.request.user)

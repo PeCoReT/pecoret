@@ -16,7 +16,7 @@ export default {
             service: new AdvisoryService(),
             advisoryId: this.$route.params.advisoryId,
             authStore: useAuthStore(),
-            advisory: { vulnerability: {}, technology: {} },
+            advisory: { vulnerability: {}, technology: {}, user: {} },
             exportTemplate: null,
             downloadPending: false,
             dataLoaded: false,
@@ -25,7 +25,7 @@ export default {
             breadcrumbs: [
                 {
                     label: 'Advisories',
-                    to: this.getBreadcrumbRoot()
+                    to: this.$router.resolve({ name: 'AdvisoryList' })
                 },
                 {
                     label: 'Advisory Detail',
@@ -45,16 +45,6 @@ export default {
         };
     },
     methods: {
-        getBreadcrumbRoot() {
-            if (this.$router.options.history.state.back === '/advisories/inbox') {
-                return this.$router.resolve({
-                    name: 'AdvisoryInbox'
-                });
-            }
-            return this.$router.resolve({
-                name: 'AdvisoryList'
-            });
-        },
         togglePreview() {
             this.showPreview = !this.showPreview;
             if (this.showPreview === true) {
@@ -195,7 +185,7 @@ export default {
         <div class="col-6">
             <div class="flex justify-content-start">
                 <p class="text-xl">
-                    {{ advisory.vulnerability.name }} - {{ advisory.internal_name }} ({{ advisory.pk }}) <span v-if="advisory.cve_id">/ {{ advisory.cve_id }}</span>
+                    {{ advisory.vulnerability.name }} - {{ advisory.title }} ({{ advisory.advisory_id }}) <span v-if="advisory.cve_id">/ {{ advisory.cve_id }}</span>
                 </p>
             </div>
         </div>
@@ -225,9 +215,7 @@ export default {
                         <DetailCardWithIcon title="Fixed Versions" icon="fa fa-screwdriver-wrench" class="surface-ground" :text="advisory.fixed_version || '-'"></DetailCardWithIcon>
                     </div>
                     <div class="col-12 md:col-3">
-                        <InfoCardWithForm class="surface-ground w-full" title="Visibility" icon="fa fa-file-pen">
-                            <Dropdown v-model="advisory.visibility" :options="visibilityChoices" optionLabel="label" optionValue="value" @change="patchAdvisory({ visibility: advisory.visibility })"></Dropdown>
-                        </InfoCardWithForm>
+                        <DetailCardWithIcon title="User" icon="fa fa-user" class="surface-ground" :text="advisory.user.username"></DetailCardWithIcon>
                     </div>
                 </div>
                 <div class="grid">

@@ -13,10 +13,11 @@ export default {
             if (!this.label.color_rgb) {
                 return;
             }
-            let hsl = rgbToHsl(this.label.color_rgb[0], this.label.color_rgb[1], this.label.color_rgb[2]);
-            let r = '--label-r: ' + this.label.color_rgb[0] + ';';
-            let g = '--label-g: ' + this.label.color_rgb[1] + ';';
-            let b = '--label-b: ' + this.label.color_rgb[2] + ';';
+            let rgb = this.label.color_rgb.replace("(", "").replace(")", "").split(",");
+            let hsl = rgbToHsl(rgb[0], rgb[1], rgb[2]);
+            let r = '--label-r: ' + rgb[0] + ';';
+            let g = '--label-g: ' + rgb[1] + ';';
+            let b = '--label-b: ' + rgb[2] + ';';
             let h = '--label-h: ' + hsl[0] + ';';
             let s = '--label-s: ' + hsl[1] + ';';
             let l = '--label-l: ' + hsl[2] + ';';

@@ -22,9 +22,7 @@ class MobileApplicationCreateView(APITestCase, PeCoReTTestCaseMixin):
         self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
 
     def test_forbidden(self):
-        users = [
-            self.read_only1, self.management2, self.pentester2, self.user1, self.advisory_manager1
-        ]
+        users = [self.read_only1, self.management2, self.pentester2, self.user1]
         for user in users:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.post, 403, data=self.data)
@@ -66,7 +64,7 @@ class MobileApplicationListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.pentester2, self.advisory_manager1, self.user1, self.management2
+            self.pentester2, self.user1, self.management2
         ]
         for user in users:
             self.client.force_login(user)

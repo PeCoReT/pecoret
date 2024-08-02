@@ -13,8 +13,7 @@ class GenericAssetCreateView(APITestCase, PeCoReTTestCaseMixin):
         self.users_allowed = [
             self.pentester1, self.management1
         ]
-        self.users_forbidden = [
-            self.read_only_vendor, self.read_only1, self.pentester2, self.user1, self.management2
+        self.users_forbidden = [self.read_only1, self.pentester2, self.user1, self.management2
         ]
 
     def test_pentester1(self):

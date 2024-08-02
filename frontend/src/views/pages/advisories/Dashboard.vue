@@ -9,7 +9,7 @@ import LatestSubmissionsDashboard from '@/components/pages/advisories/management
 import BaseLayout from '@/layout/base/BaseLayout.vue';
 
 export default {
-    name: 'AdvisoryManagementDashboard',
+    name: 'AdvisoryDashboard',
     components: {
         BaseLayout,
         LatestSubmissionsDashboard,
@@ -36,7 +36,7 @@ export default {
     },
     methods: {
         getStatistics() {
-            this.service.getInboxStatistics(this.$api).then((response) => {
+            this.service.getBaseInformationStatistics(this.$api).then((response) => {
                 this.statistics = response.data;
             });
         }
@@ -75,12 +75,6 @@ export default {
             </div>
         </div>
         <div class="col-12 md:col-6 lg:col-6 xl:col-4">
-            <Card class="card mb-3">
-                <template #title>Quick Links</template>
-                <template #content>
-                    <Button @click="this.$router.push(this.$router.resolve({ name: 'AdvisoryInbox' }))" outlined>Inbox </Button>
-                </template>
-            </Card>
             <DetailCardWithIcon title="Next Disclosure" :text="statistics.inbox_next_disclosure_date" style-class="" icon="fa fa-clock"></DetailCardWithIcon>
 
             <div class="mt-3">
