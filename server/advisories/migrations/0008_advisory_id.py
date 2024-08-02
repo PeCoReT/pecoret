@@ -41,6 +41,11 @@ def move_attachments(apps, schema_editor):
                 shutil.move(f'uploads/advisories/{advisory.advisory_id}/', f'uploads/advisories/{advisory.pk}/')
             except Exception as e:
                 print(f'Error moving directory: {e}')
+    ImageAttachment = apps.get_model('advisories', 'ImageAttachment')
+    for a in ImageAttachment.objects.all():
+        if a.advisory.advisory_id in a.image.path:
+            a.image = a.image.path.replace(f'advisories/{a.advisory.advisory_id}', f'advisories/{a.advisory.pk}')
+            a.save()
 
 
 def migrate_label_many_relation(apps, schema_editor):

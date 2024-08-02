@@ -188,7 +188,7 @@ class Advisory(TimestampedModel):
         This allows our injected data to be bleached before further used
         :return:
         """
-        image_re = r'(?P<alt>!\[(?P<caption>[^\]]*)\])\((?P<filename>.*/advisories/\d+-\d+/attachments/(?P<attachment>\d+)/preview/+)(?=\"|\))\)'
+        image_re = r'(?P<alt>!\[(?P<caption>[^\]]*)\])\((?P<filename>.*/advisories/\d+/attachments/(?P<attachment>\d+)/preview/+)(?=\"|\))\)'
 
         def attachment_replace(match):
             attachment_pk = match.group("attachment")
