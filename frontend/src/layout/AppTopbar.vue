@@ -83,24 +83,28 @@ export default {
                 });
             }
             if (this.showAdvisoriesButton === true) {
-                let advisories = { label: 'Advisories', items: [] };
-                advisories.items.push({
-                    label: 'My Advisories',
-                    route: this.$router.resolve({
-                        name: 'AdvisoryList'
-                    })
-                });
+                let advisories = {
+                    label: 'Advisories',
+                    items: [
+                        {
+                            label: 'Dashboard',
+                            route: this.$router.resolve({ name: 'AdvisoryDashboard' })
+                        },
+                        {
+                            label: 'Advisory List',
+                            route: this.$router.resolve({ name: 'AdvisoryList' })
+                        },
+                        {
+                            label: 'Labels',
+                            route: this.$router.resolve({ name: 'AdvisoryLabelList' })
+                        }
+                    ]
+                };
                 if (this.authStore.groups.isAdvisoryManagement === true) {
                     advisories.items.push({
                         label: 'Dashboard',
                         route: this.$router.resolve({
                             name: 'AdvisoryManagementDashboard'
-                        })
-                    });
-                    advisories.items.push({
-                        label: 'Labels',
-                        route: this.$router.resolve({
-                            name: 'AdvisoryManagementLabelList'
                         })
                     });
                 }

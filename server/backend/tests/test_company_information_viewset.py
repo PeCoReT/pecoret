@@ -13,7 +13,7 @@ class CompanyInformationCreateView(APITestCase, PeCoReTTestCaseMixin):
             self.pentester2
         ]
         self.users_forbidden = [
-            self.vendor1, self.vendor2, self.user1, self.advisory_manager1, self.customer2
+            self.vendor1, self.vendor2, self.user1, self.customer2
         ]
 
     def test_allowed(self):
@@ -67,8 +67,7 @@ class CompanyInformationDestroyView(APITestCase, PeCoReTTestCaseMixin):
         self.basic_status_code_check(self.url, self.client.delete, 404)
 
     def test_forbidden(self):
-        users = [
-            self.advisory_manager1, self.user1, self.vendor1, self.vendor2, self.customer2
+        users = [self.user1, self.vendor1, self.vendor2, self.customer2
         ]
         for user in users:
             self.client.force_login(user)
@@ -83,7 +82,7 @@ class CompanyInformationListView(APITestCase, PeCoReTTestCaseMixin):
             self.pentester1, self.read_only1, self.management2, self.management1, self.customer1, self.pentester2
         ]
         self.users_forbidden = [
-            self.user1, self.advisory_manager1, self.vendor1, self.vendor2, self.customer2
+            self.user1, self.vendor1, self.vendor2, self.customer2
         ]
 
     def test_allowed(self):

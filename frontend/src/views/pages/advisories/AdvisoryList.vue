@@ -63,13 +63,21 @@ export default {
                 }
             });
         },
-        getItems() {
+        onSort(event) {
+            let params = { ordering: event.sortField };
+            if (event.sortOrder === -1) {
+                params['ordering'] = '-' + event.sortField;
+            }
+            this.getItems(params);
+        },
+        getItems(params) {
             this.loading = true;
-            let params = {
-                limit: this.pagination.limit,
-                page: this.pagination.page,
-                status: this.filters.status.value
-            };
+            if (!params) {
+                params = {};
+            }
+            params['limit'] = this.pagination.limit;
+            params['page'] = this.pagination.page;
+            params['status'] = this.filters.status.value;
             this.service
                 .getAdvisories(this.$api, params)
                 .then((response) => {
@@ -106,9 +114,13 @@ export default {
                 :filter="true"
                 @search="onGlobalSearch"
                 :show-search="true"
+                :show-refresh-button="true"
+                @sort="onSort"
+                :removable-sort="true"
+                @refresh="getItems"
             >
-                <Column field="pk" header="ID"></Column>
-                <Column field="internal_name" header="Internal Name"></Column>
+                <Column field="advisory_id" header="ID" sortable></Column>
+                <Column field="title" header="Title"></Column>
                 <Column field="vulnerability.name" header="Vulnerability"></Column>
                 <Column field="severity" header="Severity">
                     <template #body="slotProps">
@@ -124,10 +136,12 @@ export default {
                     </template>
                 </Column>
                 <Column field="vulnerability_status" header="Vulnerability Status"></Column>
-                <Column field="date_planned_disclosure" header="Planned Disclosure"></Column>
+                <Column field="user.username" header="User"></Column>
+                <Column field="date_planned_disclosure" header="Planned Disclosure" sortable></Column>
                 <Column header="Labels" field="labels" :showFilterMatchModes="false">
                     <template #body="slotProps">
-                        <AdvisoryLabelBadge v-for="label in slotProps.data.labels" :label="label" :key="label.pk"></AdvisoryLabelBadge>
+                        <span v-if="slotProps.data.labels && slotProps.data.labels.length < 1">-</span>
+                        <AdvisoryLabelBadge v-for="label in slotProps.data.labels" :label="label" :key="label.pk" v-else></AdvisoryLabelBadge>
                     </template>
                 </Column>
             </GenericDataTable>

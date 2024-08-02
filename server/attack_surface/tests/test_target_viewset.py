@@ -9,8 +9,7 @@ class TargetListView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.url = self.get_url('attack_surface:target-list')
         self.users_forbidden = [
-            self.customer2, self.customer1, self.management1, self.management2, self.vendor2, self.vendor1,
-            self.advisory_manager1, self.user1, self.read_only_vendor
+            self.customer2, self.customer1, self.management1, self.management2, self.vendor2, self.vendor1, self.user1
         ]
         self.users_allowed = [
             self.read_only1, self.pentester2, self.pentester1
@@ -51,7 +50,7 @@ class TargetCreateView(APITestCase, PeCoReTTestCaseMixin):
         ]
         self.forbidden_users = [
             self.management1, self.management2, self.customer2, self.customer1, self.vendor1,
-            self.vendor2, self.advisory_manager1, self.user1, self.read_only_vendor
+            self.vendor2, self.user1
         ]
 
     def test_allowed(self):

@@ -19,8 +19,7 @@ class SettingsPatchView(APITestCase, PeCoReTTestCaseMixin):
     def test_forbidden(self):
         users = [
             self.pentester1, self.pentester2, self.user1, self.read_only1,
-            self.vendor1, self.vendor2, self.read_only_vendor, self.management2, self.management1,
-            self.advisory_manager1
+            self.vendor1, self.vendor2, self.management2, self.management1
         ]
         for user in users:
             self.client.force_login(user)
@@ -39,8 +38,7 @@ class SettingsListView(APITestCase, PeCoReTTestCaseMixin):
     def test_forbidden(self):
         users = [
             self.pentester1, self.pentester2, self.user1, self.read_only1,
-            self.vendor1, self.vendor2, self.read_only_vendor, self.management2, self.management1,
-            self.advisory_manager1
+            self.vendor1, self.vendor2, self.management2, self.management1
         ]
         for user in users:
             self.client.force_login(user)

@@ -179,4 +179,4 @@ class ReportTemplateView(APIView):
             data.append({'name': item})
         serializer = ReportTemplateSerializer(data=data, many=True)
         serializer.is_valid(raise_exception=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"results": serializer.data}, status=status.HTTP_200_OK)

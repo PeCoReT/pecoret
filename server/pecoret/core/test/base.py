@@ -4,12 +4,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse_lazy
 from extra_settings.models import Setting
 
+from advisories.models import advisory
 from backend.models import (
     User, Project, Membership, WebApplication,
     Finding
 )
-from advisories.models import advisory
-from advisories.models.advisory_membership import AdvisoryMembership
 from backend.models.api_token import APIToken, AccessChoices
 from backend.models.membership import Roles
 from checklists.models import (
@@ -50,8 +49,6 @@ class PeCoReTTestCaseMixin:
         # superuser
         self.superuser = self.create_user("superuser", "changeme", is_superuser=True, is_staff=True)
 
-        self.advisory_manager1 = self.create_user("advisory1", "changeme", group="Advisory Management")
-
         # assets
         self.asset1 = self.create_instance(WebApplication, project=self.project1)
         self.asset2 = self.create_instance(WebApplication, project=self.project2)
@@ -62,16 +59,11 @@ class PeCoReTTestCaseMixin:
 
     def init_advisory_users(self):
         self.vendor1 = self.create_user("testvendor1", "changeme1234", group="Vendor")
-        self.read_only_vendor = self.create_user("readonlyvendor1", "changeme1234", group="Vendor")
         self.vendor2 = self.create_user("testvendor2", "changeme1234", group="Vendor")
-        self.advisory1 = self.create_instance(advisory.Advisory, visibility=advisory.VisibilityChoices.TEAM,
-                                              report_template='default_template',
+        self.advisory1 = self.create_instance(advisory.Advisory, report_template='default_template',
                                               user=self.pentester1)
-        self.advisory2 = self.create_instance(advisory.Advisory, visibility=advisory.VisibilityChoices.MEMBERS,
-                                              report_template='default_template',
+        self.advisory2 = self.create_instance(advisory.Advisory, report_template='default_template',
                                               user=self.pentester2)
-        self.assign_advisory_role(self.vendor1, advisory.Roles.VENDOR, self.advisory1)
-        self.assign_advisory_role(self.read_only_vendor, advisory.Roles.READ_ONLY, self.advisory1)
 
     def create_api_token(self, user, date_expire=None, **kwargs):
         return APIToken.objects.create_token(user=user, **kwargs)
@@ -97,9 +89,6 @@ class PeCoReTTestCaseMixin:
         _, token_w = self.create_api_token(user, **{scope: self.api_access_choices.READ_WRITE})
         _, token_n = self.create_api_token(user, **{scope: self.api_access_choices.NO_ACCESS})
         return token_w, token_r, token_n
-
-    def assign_advisory_role(self, user, role, advisory):
-        return G(AdvisoryMembership, user=user, role=role, advisory=advisory)
 
     def create_user(self, username, password, is_staff=False, group=None, **kwargs):
         email = "%s@example.com" % username

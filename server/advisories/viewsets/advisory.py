@@ -1,136 +1,57 @@
-from django.http.response import HttpResponse
 from django.conf import settings
+from django.db.models import Count
+from django.http.response import HttpResponse
 from rest_framework.decorators import action
-from advisories.models.advisory import Advisory, Roles
+from rest_framework.response import Response
+
+from advisories.filters import AdvisoryFilter
+from advisories.models.advisory import Advisory
 from advisories.serializers.advisory import (
     AdvisorySerializer,
     AdvisoryCreateSerializer,
     AdvisoryUpdateSerializer,
     AdvisoryDownloadSerializer
 )
-from advisories.serializers.timeline import AdvisoryTimelineSerializer
 from backend.tasks.reporting import export_advisory
-from advisories.serializers.advisory_management import (
-    AdvisoryAdvisoryManagementSerializer, AdvisoryManagementUpdateSerializer
-)
-from advisories.filters import AdvisoryFilter
-from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions
-from pecoret.core.utils.schema import extend_viewset_schema
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from pecoret.core.utils.schema import extend_viewset_schema, extend_schema, extend_schema_view
+from pecoret.core.viewsets import PeCoReTModelViewSet
 
 
 @extend_viewset_schema(tags=['Advisories'], verbose_name='advisory')
 @extend_schema_view(
     preview=extend_schema(tags=['Advisories'], operation_id='Preview Advisory PDF'),
-    export_pdf=extend_schema(tags=['Advisories'], operation_id='Export Advisory PDF'))
+    export_pdf=extend_schema(tags=['Advisories'], operation_id='Export Advisory PDF'),
+    top_submitters=extend_schema(operation_id='Get top submitters', tags=['Advisory Statistics']),
+    top_vulnerabilities=extend_schema(operation_id='Get top vulnerabilities statistics', tags=['Advisory Statistics']),
+    top_vendors=extend_schema(operation_id='Get top vendors statistics', tags=['Advisory Statistics']),
+    top_products=extend_schema(operation_id='Get top products statistics', tags=['Advisory Statistics']),
+    statistics_base_information=extend_schema(operation_id='Get base statistic information',
+                                              tags=['Advisory Statistics']),
+)
 class AdvisoryViewSet(PeCoReTModelViewSet):
     queryset = Advisory.objects.none()
     filterset_class = AdvisoryFilter
     api_scope = "scope_advisories"
-    search_fields = [
-        "vulnerability__vulnerability_id",
-        "product",
-        "vendor_name",
-        "internal_name",
-    ]
-    ordering_fields = [
-        "advisory_id",
-        "date_planned_disclosure",
-        "date_created",
-        "date_updated",
-    ]
+    search_fields = ["vulnerability__vulnerability_id", "product", "vendor_name", "internal_name"]
+    ordering_fields = ["advisory_id", "date_planned_disclosure", "date_created", "date_updated"]
     serializer_class = AdvisorySerializer
-
-    def get_permissions(self):
-        """calculate required permissions based on the current action.
-
-        Returns:
-            _type_: _description_
-        """
-        if self.action == "list":
-            return [
-                permissions.GroupPermission(
-                    read_write_groups=[
-                        permissions.Groups.GROUP_PENTESTER,
-                        permissions.Groups.GROUP_MANAGEMENT,
-                        permissions.Groups.ADVISORY_MANAGEMENT,
-                    ],
-                    read_only_groups=[permissions.Groups.VENDOR],
-                )()
-            ]
-        if self.action == "retrieve":
-            return [
-                permissions.AdvisoryPermission(
-                    read_write_roles=[Roles.CREATOR],
-                    read_only_roles=[Roles.READ_ONLY, Roles.VENDOR],
-                )()
-            ]
-        if self.action in ["export_pdf", "preview"]:
-            return [
-                permissions.AdvisoryPermission(
-                    read_write_roles=[Roles.CREATOR],
-                    read_only_roles=[Roles.READ_ONLY, Roles.VENDOR],
-                )()
-            ]
-        if self.action == "create":
-            return [
-                permissions.GroupPermission(
-                    read_write_groups=[
-                        permissions.Groups.GROUP_PENTESTER,
-                        permissions.Groups.GROUP_MANAGEMENT,
-                        permissions.Groups.ADVISORY_MANAGEMENT,
-                    ]
-                )()
-            ]
-        return [
-            permissions.AdvisoryPermission(
-                read_write_roles=[Roles.CREATOR],
-                read_only_roles=[Roles.READ_ONLY, Roles.VENDOR],
-            )()
-        ]
+    permission_classes = [
+        permissions.GroupPermission(
+            read_write_groups=[permissions.Groups.GROUP_PENTESTER], read_only_groups=[]
+        )]
 
     def get_queryset(self):
-        """The queryset depends on the current action and user group.
-        The list action will only return ``Advisories`` for the current user.
-
-        Returns:
-            _type_: _description_
-        """
-        if self.action == "list":
-            return Advisory.objects.for_user(self.request.user)
-        if self.request.user.groups.filter(name="Advisory Management").exists():
-            # allow advisory management users to update/delete/retrieve advisories (if visibility is set to team)
-            # otherwise, return only the user's advisories in retrieve views
-            # advisory management users can get a list of submitted advisories from the "inbox" view.
-            return Advisory.objects.for_advisory_management(with_user=self.request.user)
         return Advisory.objects.for_user(self.request.user)
 
     def perform_create(self, serializer):
-        """save the serializer and populate the user field with the current user.
-
-        Args:
-            serializer (_type_): _description_
-        """
         serializer.save(user=self.request.user)
 
     def get_serializer_class(self):
-        """checks the current action and returns the correct serializer.
-
-        Returns:
-            ModelSerializer: A ModelSerializer class depending on the current action.
-        """
         if self.action == "create":
             return AdvisoryCreateSerializer
         if self.action in ["list", "retrieve"]:
-            if self.request.user.groups.filter(name="Advisory Management").exists():
-                return AdvisoryAdvisoryManagementSerializer
             return AdvisorySerializer
-        if self.action == "timeline":
-            return AdvisoryTimelineSerializer
-        if self.action in ["partial_update", "update"]:
-            if self.request.user.groups.filter(name="Advisory Management").exists():
-                return AdvisoryManagementUpdateSerializer
         return AdvisoryUpdateSerializer
 
     @action(detail=True, methods=["get"], serializer_class=AdvisoryDownloadSerializer)
@@ -156,3 +77,40 @@ class AdvisoryViewSet(PeCoReTModelViewSet):
         response = HttpResponse(result, content_type="application/pdf")
         response["Content-Disposition"] = "inline"
         return response
+
+    @action(detail=False, methods=["get"], url_path="statistics/top-submitters")
+    def top_submitters(self, request, *args, **kwargs):
+        """list top advisory submitters"""
+        qs = self.get_queryset().count_by_user()
+        return Response(list(qs)[:10])
+
+    @action(detail=False, methods=["get"], url_path="statistics/top-vulnerabilities")
+    def top_vulnerabilities(self, request, *args, **kwargs):
+        qs = self.get_queryset().values("vulnerability__name").annotate(count=Count('pk')).order_by("-count")
+        return Response(list(qs)[:10])
+
+    @action(detail=False, methods=["get"], url_path="statistics/top-vendors")
+    def top_vendors(self, request, *args, **kwargs):
+        qs = self.get_queryset().filter(technology__vendor__isnull=False).values("technology__vendor").annotate(
+            count=Count('pk')).order_by("-count")
+        return Response(list(qs)[:10])
+
+    @action(detail=False, methods=["get"], url_path="statistics/top-products")
+    def top_products(self, request, *args, **kwargs):
+        qs = self.get_queryset().values("technology__name", "technology__vendor").annotate(count=Count('pk')).order_by(
+            "-count")
+        return Response(list(qs)[:10])
+
+    @action(detail=False, methods=["get"], url_path="statistics/base-information")
+    def statistics_base_information(self, request, *args, **kwargs):
+        qs = self.get_queryset()
+        data = {
+            "inbox_count": qs.count(),
+            "inbox_unfixed_count": qs.unfixed().count(),
+            "inbox_fixed_count": qs.fixed().count(),
+            "inbox_wontfix_count": qs.wont_fix().count(),
+            "inbox_next_disclosure_date": None
+        }
+        if qs.count() > 0:
+            data["inbox_next_disclosure_date"] = qs.order_by("-date_planned_disclosure").first().date_planned_disclosure
+        return Response(data)

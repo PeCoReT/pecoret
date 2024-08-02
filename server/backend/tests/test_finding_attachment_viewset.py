@@ -34,7 +34,6 @@ class ImageAttachmentListView(APITestCase, PeCoReTTestCaseMixin):
         ]
         self.users_forbidden = [
             self.user1, self.pentester2, self.customer1, self.customer2, self.vendor1, self.vendor2,
-            self.advisory_manager1
         ]
 
     def test_allowed_status(self):
@@ -101,8 +100,8 @@ class AttachmentCreateView(APITestCase, PeCoReTTestCaseMixin):
             self.pentester1, self.management1
         ]
         self.users_forbidden = [
-            self.pentester2, self.read_only1, self.user1, self.advisory_manager1, self.management2,
-            self.customer1, self.customer2, self.read_only_vendor, self.vendor2, self.vendor1
+            self.pentester2, self.read_only1, self.user1, self.management2,
+            self.customer1, self.customer2, self.vendor2, self.vendor1
         ]
 
     def test_allowed(self):

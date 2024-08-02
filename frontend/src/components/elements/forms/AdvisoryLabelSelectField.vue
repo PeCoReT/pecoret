@@ -1,4 +1,6 @@
 <script>
+import AdvisoryService from "@/service/AdvisoryService";
+
 export default {
     name: 'AdvisoryLabelSelectField',
     props: ['modelValue'],
@@ -11,8 +13,7 @@ export default {
             this.$emit('update:modelValue', this.items);
         },
         loadData() {
-            let url = '/advisory-management/labels/';
-            this.$api.get(url).then((response) => {
+            this.service.getLabels(this.$api).then((response) => {
                 this.choices = response.data.results;
                 this.items = [];
                 this.modelValue.forEach((item) => {
@@ -25,7 +26,8 @@ export default {
     data() {
         return {
             items: this.modelValue,
-            choices: []
+            choices: [],
+            service: new AdvisoryService()
         };
     }
 };
@@ -35,5 +37,3 @@ export default {
     <label for="labels">Labels</label>
     <MultiSelect @change="change" id="labels" v-model="items" :options="choices" optionLabel="name" optionValue="pk"> </MultiSelect>
 </template>
-
-<style scoped></style>

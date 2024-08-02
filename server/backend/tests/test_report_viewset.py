@@ -1,7 +1,8 @@
 from django.conf import settings
 from rest_framework.test import APITestCase
-from pecoret.core.test import PeCoReTTestCaseMixin
+
 from backend.models.reports.report import Report
+from pecoret.core.test import PeCoReTTestCaseMixin
 
 
 class ReportListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
@@ -20,7 +21,7 @@ class ReportListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
     def test_forbidden(self):
         users = [
             self.pentester2, self.user1, self.management2, self.customer1, self.customer2,
-            self.advisory_manager1, self.vendor2, self.vendor1, self.read_only_vendor
+            self.vendor2, self.vendor1,
         ]
         for user in users:
             self.client.force_login(user)
@@ -57,8 +58,7 @@ class ReportCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.pentester2, self.read_only1, self.user1, self.customer1, self.customer2,
-            self.read_only_vendor, self.advisory_manager1, self.management2,
+            self.pentester2, self.read_only1, self.user1, self.customer1, self.customer2, self.management2,
             self.vendor2, self.vendor1
         ]
         for user in users:
@@ -96,8 +96,8 @@ class ReportUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.pentester2, self.management2, self.advisory_manager1, self.read_only1,
-            self.read_only_vendor, self.customer1, self.customer2, self.vendor1,
+            self.pentester2, self.management2, self.read_only1,
+            self.customer1, self.customer2, self.vendor1,
             self.vendor2, self.user1
         ]
         for user in users:
@@ -119,8 +119,8 @@ class ReportDeleteViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.pentester2, self.user1, self.read_only1, self.read_only_vendor,
-            self.customer1, self.management2, self.customer2, self.advisory_manager1
+            self.pentester2, self.user1, self.read_only1,
+            self.customer1, self.management2, self.customer2
         ]
         for user in users:
             self.client.force_login(user)

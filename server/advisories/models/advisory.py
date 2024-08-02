@@ -9,7 +9,6 @@ from extra_settings.models import Setting
 from advisories.models.attachment import ImageAttachment
 from pecoret.core.models import TimestampedModel
 from pecoret.reporting.utils import get_report_template_choices
-from advisories.models.advisory_membership import AdvisoryMembership, Roles
 from advisories.models.advisory_timeline import AdvisoryTimeline
 from backend.models.finding import Severity
 from backend.models.vulnerability import VulnerabilityTemplate
@@ -24,7 +23,7 @@ def create_advisory_id():
     # first advisory this year
     if not qs.exists():
         return f"{year}-0001"
-    last_id = qs.last().pk.split("-")[-1]
+    last_id = qs.last().advisory_id.split("-")[-1]
     length = len(str(last_id))
     if length < 4:
         formatter = "%04d"
@@ -45,21 +44,12 @@ class VulnerabilityStatusChoices(models.IntegerChoices):
     WONT_FIX = 3, "Won't Fix"
 
 
-class VisibilityChoices(models.IntegerChoices):
-    MEMBERS = 1, 'Members'
-    TEAM = 2, 'Team'
-
-
 class AdvisoryQuerySet(models.QuerySet):
     def for_user(self, user):
-        return self.filter(advisorymembership__user=user)
-
-    def for_advisory_management(self, with_user=None):
-        if not with_user:
-            return self.filter(visibility=VisibilityChoices.TEAM)
-        return self.filter(
-            models.Q(advisorymembership__user=with_user) | models.Q(visibility=VisibilityChoices.TEAM)
-        ).distinct()
+        if user.is_vendor:
+            # TODO: only return vendor advisories
+            return self.none()
+        return self.all()
 
     def disclosed(self):
         return self.filter(status=AdvisoryStatusChoices.DISCLOSED)
@@ -119,8 +109,9 @@ class AdvisoryManager(models.Manager):
 
 class Advisory(TimestampedModel):
     objects = AdvisoryManager.from_queryset(AdvisoryQuerySet)()
+    id = models.BigAutoField(primary_key=True)
     advisory_id = models.CharField(
-        max_length=28, primary_key=True, default=create_advisory_id
+        max_length=64, default=create_advisory_id
     )
     user = models.ForeignKey("backend.User", on_delete=models.PROTECT)
     date_planned_disclosure = models.DateField()
@@ -147,24 +138,14 @@ class Advisory(TimestampedModel):
     vulnerability_status = models.PositiveSmallIntegerField(
         choices=VulnerabilityStatusChoices.choices, default=VulnerabilityStatusChoices.UNFIXED
     )
-    visibility = models.PositiveSmallIntegerField(
-        choices=VisibilityChoices.choices, default=VisibilityChoices.MEMBERS
-    )
     # overwrites the default "user" display name in the research section of the PDF
     researchers = models.CharField(max_length=512, null=True, blank=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.old_visibility = self.visibility
 
     def __str__(self):
         return self.advisory_id
-
-    @property
-    def internal_name(self):
-        import warnings
-        warnings.warn('`Advisory.internal_name` is deprecated. Use `title` instead', DeprecationWarning)
-        return self.title
 
     def get_researchers(self):
         if self.researchers:
@@ -207,7 +188,7 @@ class Advisory(TimestampedModel):
         This allows our injected data to be bleached before further used
         :return:
         """
-        image_re = r'(?P<alt>!\[(?P<caption>[^\]]*)\])\((?P<filename>.*/advisories/\d+-\d+/attachments/(?P<attachment>\d+)/preview/+)(?=\"|\))\)'
+        image_re = r'(?P<alt>!\[(?P<caption>[^\]]*)\])\((?P<filename>.*/advisories/\d+/attachments/(?P<attachment>\d+)/preview/+)(?=\"|\))\)'
 
         def attachment_replace(match):
             attachment_pk = match.group("attachment")
@@ -233,8 +214,4 @@ def on_advisory_create(sender, instance, created, **kwargs):
     if created:
         AdvisoryTimeline.objects.create(
             date=timezone.now(), text="Advisory created", advisory=instance
-        )
-        # creators should not have expiry date
-        AdvisoryMembership.objects.create(
-            user=instance.user, role=Roles.CREATOR, advisory=instance
         )

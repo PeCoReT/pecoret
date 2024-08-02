@@ -23,7 +23,7 @@ class ProjectContactListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.pentester2, self.management2, self.user1, self.advisory_manager1
+            self.pentester2, self.management2, self.user1
         ]
         for user in users:
             self.client.force_login(user)
@@ -48,7 +48,7 @@ class ProjectContactCreateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.pentester2, self.management2, self.read_only1, self.user1, self.advisory_manager1
+            self.pentester2, self.management2, self.read_only1, self.user1
         ]
         for user in users:
             self.client.force_login(user)
@@ -76,7 +76,7 @@ class ProjectContactDestroyView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.read_only1, self.user1, self.advisory_manager1, self.management2, self.pentester2
+            self.read_only1, self.user1, self.management2, self.pentester2
         ]
         for user in users:
             self.client.force_login(user)
@@ -103,7 +103,7 @@ class ProjectContactUpdateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.management2, self.pentester2, self.read_only1, self.user1, self.advisory_manager1
+            self.management2, self.pentester2, self.read_only1, self.user1
         ]
         for user in users:
             self.client.force_login(user)

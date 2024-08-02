@@ -11,9 +11,7 @@ class CWEListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.users_allowed = [
             self.pentester1, self.pentester2, self.management1, self.management2, self.read_only1
         ]
-        self.users_forbidden = [
-            self.user1, self.customer2, self.customer1, self.advisory_manager1
-        ]
+        self.users_forbidden = [self.user1, self.customer2, self.customer1]
 
     def test_allowed_status(self):
         for user in self.users_allowed:

@@ -55,20 +55,19 @@ export default {
                 cve_id: this.model.cve_id,
                 researchers: this.model.researchers,
                 vulnerability_id: this.model.template,
-                report_template: this.model.report_template
+                report_template: this.model.report_template,
+                labels: []
             };
             if (this.model.technology && this.model.technology.pk) {
                 data['technology'] = this.model.technology.pk;
             }
-            if (this.authStore.groups.isAdvisoryManagement === true) {
-                data['labels'] = [];
-                this.model.labels.forEach((item) => {
-                    if (item.pk) {
-                        item = item.pk;
-                    }
-                    data['labels'].push(item);
-                });
-            }
+
+            this.model.labels.forEach((item) => {
+                if (item.pk) {
+                    item = item.pk;
+                }
+                data['labels'].push(item);
+            });
             this.service
                 .patchAdvisory(this.$api, this.advisoryId, data)
                 .then((response) => {
@@ -135,13 +134,7 @@ export default {
                         <label for="name">Title</label>
                         <InputText id="name" v-model="model.title"></InputText>
                     </div>
-                    <div class="field col-12 md:col-6">
-                        <SeveritySelectField v-model="model.severity"></SeveritySelectField>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label for="cve-id">CVE-ID</label>
-                        <InputText id="cve-id" v-model="model.cve_id"></InputText>
-                    </div>
+
                     <div class="field col-12">
                         <label for="product">Product</label>
                         <TechnologySelectField v-model="model.technology"></TechnologySelectField>
@@ -154,7 +147,7 @@ export default {
                         <label for="fixed_versions">Fixed Version</label>
                         <InputText id="fixed_versions" v-model="model.fixed_version"></InputText>
                     </div>
-                    <div class="field col-12" v-if="authStore.groups.isAdvisoryManagement === true">
+                    <div class="field col-12">
                         <AdvisoryLabelSelectField v-model="model.labels"></AdvisoryLabelSelectField>
                     </div>
                     <div class="field col-12 md:col-6">
@@ -164,10 +157,14 @@ export default {
                         <label for="custom_title">Custom Report Title</label>
                         <InputText id="custom_title" v-model="model.custom_report_title"></InputText>
                     </div>
-                    <div class="field col-12">
+                    <div class="field col-12 md:col-6">
                         <label for="researchers">Researchers</label>
                         <InputText id="researchers" v-model="model.researchers"></InputText>
                         <small id="researchers-help">Overwrites the researchers section in the report (default: your display name).</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="cve-id">CVE-ID</label>
+                        <InputText id="cve-id" v-model="model.cve_id"></InputText>
                     </div>
                     <div class="field col-12">
                         <InputSwitch v-model="model.hide_advisory_id_in_report" id="hide_id"></InputSwitch>

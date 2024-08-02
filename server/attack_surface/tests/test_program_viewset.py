@@ -18,8 +18,7 @@ class TestProgramListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.management2, self.management1, self.advisory_manager1, self.read_only_vendor,
-            self.vendor2, self.vendor1, self.customer1, self.customer2, self.user1
+            self.management2, self.management1, self.vendor2, self.vendor1, self.customer1, self.customer2, self.user1
         ]
         for user in users:
             self.client.force_login(user)
@@ -34,8 +33,7 @@ class TestProgramListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_api_token_forbidden(self):
         users = [
-            self.management2, self.management1, self.advisory_manager1, self.read_only_vendor,
-            self.vendor1, self.vendor2, self.customer1, self.customer2, self.user1
+            self.management2, self.management1, self.vendor1, self.vendor2, self.customer1, self.customer2, self.user1
         ]
         for user in users:
             self.api_token_check(user, 'scope_attack_surface', self.url, self.client.get, 403, 403, 403)
@@ -51,10 +49,8 @@ class ProgramCreateView(APITestCase, PeCoReTTestCaseMixin):
         self.allowed_users = [
             self.pentester2, self.pentester1, self.read_only1
         ]
-        self.forbidden_users = [
-            self.management2, self.management1, self.read_only_vendor, self.vendor2, self.vendor1,
-            self.advisory_manager1, self.customer1, self.customer2, self.user1
-        ]
+        self.forbidden_users = [self.management2, self.management1, self.vendor2, self.vendor1,
+                                self.customer1, self.customer2, self.user1]
 
     def test_allowed(self):
         for user in self.allowed_users:

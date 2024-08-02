@@ -8,11 +8,6 @@ const advisoryRoutes = [
                 component: () => import('@/views/pages/advisories/AdvisoryList.vue')
             },
             {
-                name: 'AdvisoryInbox',
-                path: '/advisories/inbox',
-                component: () => import('@/views/pages/advisories/AdvisoryInbox.vue')
-            },
-            {
                 name: 'AdvisoryCreate',
                 path: '/advisories/create',
                 component: () => import('@/views/pages/advisories/AdvisoryCreate.vue')
@@ -38,14 +33,19 @@ const advisoryRoutes = [
                 component: () => import('@/views/pages/advisories/CommentList.vue')
             },
             {
-                name: 'AdvisoryMembershipList',
-                path: '/advisories/:advisoryId/memberships',
-                component: () => import('@/views/pages/advisories/MembershipList.vue')
+                name: 'AdvisoryDashboard',
+                path: '/advisories/dashboard',
+                component: () => import('@/views/pages/advisories/Dashboard.vue')
             },
             {
                 name: 'AdvisoryProofList',
                 path: '/advisories/:advisoryId/proofs',
                 component: () => import('@/views/pages/advisories/ProofList.vue')
+            },
+            {
+                name: 'AdvisoryLabelList',
+                path: '/advisories/labels',
+                component: () => import('@/views/pages/advisories/LabelList.vue')
             }
         ]
     }
