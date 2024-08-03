@@ -23,7 +23,8 @@ export default {
             totalRecords: 0,
             pagination: { page: 1, limit: 20 },
             filters: {
-                status: { value: 'Not Disclosed' }
+                status: { value: 'Not Disclosed' },
+                vulnerability_status: { value: null }
             }
         };
     },
@@ -33,6 +34,9 @@ export default {
     computed: {
         statusChoices() {
             return this.service.getStatusChoices();
+        },
+        vulnerabilityStatusChoices() {
+            return this.service.getVulnerabilityStatusChoices();
         },
         showCreateButton() {
             return this.authStore.groups.isVendor !== true;
@@ -78,6 +82,7 @@ export default {
             params['limit'] = this.pagination.limit;
             params['page'] = this.pagination.page;
             params['status'] = this.filters.status.value;
+            params['vulnerability_status'] = this.filters.vulnerability_status.value;
             this.service
                 .getAdvisories(this.$api, params)
                 .then((response) => {
@@ -135,7 +140,11 @@ export default {
                         <Dropdown v-model="filterModel.value" :options="statusChoices" placeholder="Select One" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Dropdown>
                     </template>
                 </Column>
-                <Column field="vulnerability_status" header="Vulnerability Status"></Column>
+                <Column field="vulnerability_status" header="Vulnerability Status" :showFilterMatchModes="false">
+                    <template #filter="{ filterModel }">
+                        <Dropdown v-model="filterModel.value" :options="vulnerabilityStatusChoices" class="p-column-filter" :showClear="true" optionLabel="label" optionValue="value"></Dropdown>
+                    </template>
+                </Column>
                 <Column field="user.username" header="User"></Column>
                 <Column field="date_planned_disclosure" header="Planned Disclosure" sortable></Column>
                 <Column header="Labels" field="labels" :showFilterMatchModes="false">

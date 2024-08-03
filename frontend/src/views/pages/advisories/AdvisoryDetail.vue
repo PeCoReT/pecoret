@@ -1,5 +1,5 @@
 <script>
-import AdvisoryService, { AdvisoryStatusChoices, VisibilityChoices, VulnerabilityStatusChoices } from '@/service/AdvisoryService';
+import AdvisoryService, { AdvisoryStatusChoices, VulnerabilityStatusChoices } from '@/service/AdvisoryService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import AdvisoryTabMenu from '@/components/pages/AdvisoryTabMenu.vue';
 import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
@@ -34,7 +34,6 @@ export default {
             ],
             vulnerabilityStatusChoices: VulnerabilityStatusChoices,
             statusChoices: AdvisoryStatusChoices,
-            visibilityChoices: VisibilityChoices,
             severityChoices: [
                 { label: 'Critical', value: 'Critical' },
                 { label: 'High', value: 'High' },
