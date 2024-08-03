@@ -24,20 +24,14 @@ export const VulnerabilityStatusChoices = [
     }
 ];
 
-export const VisibilityChoices = [
-    {
-        label: 'Members',
-        value: 'Members'
-    },
-    {
-        label: 'Team',
-        value: 'Team'
-    }
-];
 
 export default class AdvisoryService {
     getStatusChoices() {
         return AdvisoryStatusChoices;
+    }
+
+    getVulnerabilityStatusChoices(){
+        return VulnerabilityStatusChoices;
     }
 
     getAdvisories(api, params) {
