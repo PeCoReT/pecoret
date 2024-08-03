@@ -56,7 +56,7 @@ class LoginView(APIView):
                     ).data
                 )
             return Response(
-                "Invalid username and/or password!", status=status.HTTP_400_BAD_REQUEST
+                {"detail": "Invalid username and/or password!"}, status=status.HTTP_400_BAD_REQUEST
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
