@@ -1,6 +1,6 @@
 <script>
 import AdvisoryService from '@/service/AdvisoryService';
-import AdvisoryTabMenu from '../../../components/pages/AdvisoryTabMenu.vue';
+import AdvisoryTabMenu from '@/components/advisories/AdvisoryTabMenu.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 import AdvisoryCommentCreateDialog from '@/components/advisories/AdvisoryCommentCreateDialog.vue';
 import CommentCard from '@/components/elements/CommentCard.vue';
@@ -41,13 +41,13 @@ export default {
     },
     methods: {
         getItems() {
-            this.service.getComments(this.$api, this.advisoryId).then((response) => {
+            this.service.getComments(this.advisoryId).then((response) => {
                 this.items = response.data.results;
             });
         },
         patchComment(pk, comment) {
             let data = { comment: comment };
-            this.service.patchComment(this.$api, this.advisoryId, pk, data).then(() => {
+            this.service.patchComment(this.advisoryId, pk, data).then(() => {
                 this.getItems();
             });
         },

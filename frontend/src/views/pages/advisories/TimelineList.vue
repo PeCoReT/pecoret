@@ -1,6 +1,6 @@
 <script>
 import AdvisoryService from '@/service/AdvisoryService';
-import AdvisoryTabMenu from '@/components/pages/AdvisoryTabMenu.vue';
+import AdvisoryTabMenu from '@/components/advisories/AdvisoryTabMenu.vue';
 import AdvisoryTimelineCreateDialog from '@/components/advisories/AdvisoryTimelineCreateDialog.vue';
 
 export default {
@@ -38,7 +38,7 @@ export default {
     },
     methods: {
         getItems() {
-            this.service.getTimeline(this.$api, this.advisoryId).then((response) => {
+            this.service.getTimeline(this.advisoryId).then((response) => {
                 this.items = response.data.results;
             });
         },

@@ -1,5 +1,5 @@
 <script setup>
-import AppTopbar from './AppTopbar.vue';
+import AppTopbar from '@/components/navigation/bars/AppTopbar.vue';
 
 </script>
 

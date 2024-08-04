@@ -20,7 +20,7 @@ export default {
                 ordering: '-date_created', limit: 5
             };
             this.service
-                .getAdvisories(this.$api, params)
+                .getAdvisories(params)
                 .then((response) => {
                     this.items = response.data.results.slice(0, 5);
                 })

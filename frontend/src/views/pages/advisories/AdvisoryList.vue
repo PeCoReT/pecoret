@@ -2,9 +2,11 @@
 import AdvisoryService from '@/service/AdvisoryService';
 import SeverityBadge from '@/components/SeverityBadge.vue';
 import { useAuthStore } from '@/store/auth';
-import AdvisoryLabelBadge from '@/components/AdvisoryLabelBadge.vue';
+import AdvisoryLabelBadge from '@/components/advisories/AdvisoryLabelBadge.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
+import {useListViewComposable} from '@/composables/listViewComposable';
+
 
 export default {
     name: 'AdvisoryList',
@@ -28,6 +30,10 @@ export default {
             }
         };
     },
+    setup() {
+        const { sort, buildParams } = useListViewComposable()
+        return {sort, buildParams };
+    },
     mounted() {
         this.getItems();
     },
@@ -43,21 +49,12 @@ export default {
         }
     },
     methods: {
-        onFilter() {
-            this.getItems();
-        },
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
         },
         onGlobalSearch(query) {
-            let params = {
-                search: query
-            };
-            this.service.getAdvisories(this.$api, params).then((response) => {
-                this.items = response.data.results;
-                this.totalRecords = response.data.count;
-            });
+            this.getItems({search: query});
         },
         onRowClick(row) {
             this.$router.push({
@@ -67,24 +64,10 @@ export default {
                 }
             });
         },
-        onSort(event) {
-            let params = { ordering: event.sortField };
-            if (event.sortOrder === -1) {
-                params['ordering'] = '-' + event.sortField;
-            }
-            this.getItems(params);
-        },
         getItems(params) {
             this.loading = true;
-            if (!params) {
-                params = {};
-            }
-            params['limit'] = this.pagination.limit;
-            params['page'] = this.pagination.page;
-            params['status'] = this.filters.status.value;
-            params['vulnerability_status'] = this.filters.vulnerability_status.value;
-            this.service
-                .getAdvisories(this.$api, params)
+            let data = this.buildParams(this.pagination, this.filters, params);
+            this.service.getAdvisories(data)
                 .then((response) => {
                     this.items = response.data.results;
                     this.totalRecords = response.data.count;
@@ -114,13 +97,13 @@ export default {
                 v-model:filters="filters"
                 @page="onPage"
                 @rowClick="onRowClick"
-                @filter="onFilter"
+                @filter="getItems"
                 filter-display="menu"
                 :filter="true"
                 @search="onGlobalSearch"
                 :show-search="true"
                 :show-refresh-button="true"
-                @sort="onSort"
+                @sort="sort($event, this.getItems)"
                 :removable-sort="true"
                 @refresh="getItems"
             >

@@ -33,7 +33,7 @@ class AdvisoryViewSet(PeCoReTModelViewSet):
     queryset = Advisory.objects.none()
     filterset_class = AdvisoryFilter
     api_scope = "scope_advisories"
-    search_fields = ["vulnerability__vulnerability_id", "product", "vendor_name", "internal_name"]
+    search_fields = ["vulnerability__vulnerability_id", "technology__cpe", "technology__vendor", "title"]
     ordering_fields = ["advisory_id", "date_planned_disclosure", "date_created", "date_updated"]
     serializer_class = AdvisorySerializer
     permission_classes = [

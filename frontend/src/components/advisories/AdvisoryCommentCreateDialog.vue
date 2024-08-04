@@ -30,7 +30,7 @@ export default {
             let data = {
                 comment: this.model.comment
             };
-            this.service.createComment(this.$api, this.advisoryId, data).then(() => {
+            this.service.createComment(this.advisoryId, data).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Comment created!',

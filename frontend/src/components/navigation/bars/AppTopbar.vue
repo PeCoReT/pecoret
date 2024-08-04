@@ -1,7 +1,7 @@
 <script>
 import { useAuthStore } from '@/store/auth';
-import ProjectTabMenu from './ProjectTabMenu.vue';
-import AuthService from '../service/AuthService';
+import ProjectTabMenu from '@/components/navigation/ProjectTabMenu.vue';
+import AuthService from '@/service/AuthService';
 
 export default {
     name: 'AppTopbar',

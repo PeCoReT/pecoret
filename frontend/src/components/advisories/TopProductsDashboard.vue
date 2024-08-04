@@ -47,7 +47,7 @@ export default {
             this.loading = true;
             const documentStyle = getComputedStyle(document.body);
             this.service
-                .getTopProductsStatistics(this.$api)
+                .getTopProductsStatistics()
                 .then((response) => {
                     response.data.forEach((item) => {
                         let name = item['technology__name'];

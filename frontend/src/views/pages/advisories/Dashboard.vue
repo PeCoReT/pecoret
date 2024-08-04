@@ -5,7 +5,7 @@ import TopSubmitterDashboard from '@/components/advisories/TopSubmitterDashboard
 import TopVulnerabilitiesDashboard from '@/components/advisories/TopVulnerabilitiesDashboard.vue';
 import TopProductsDashboard from '@/components/advisories/TopProductsDashboard.vue';
 import TopVendorsDashboard from '@/components/advisories/TopVendorsDashboard.vue';
-import LatestSubmissionsDashboard from '@/components/pages/advisories/management/LatestSubmissionsDashboard.vue';
+import LatestSubmissionsDashboard from '@/components/advisories/LatestSubmissionsDashboard.vue';
 import BaseLayout from '@/layout/base/BaseLayout.vue';
 
 export default {

@@ -31,7 +31,7 @@ export default {
                 data['date'] = this.model.date.toISOString().split('T')[0];
             }
             this.service
-                .createTimeline(this.$api, this.advisoryId, data)
+                .createTimeline(this.advisoryId, data)
                 .then((response) => {
                     this.$toast.add({
                         severity: 'success',

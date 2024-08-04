@@ -68,7 +68,7 @@ export default {
                 report_template: 'default_template'
             };
             // create advisory first, so we can upload attachments afterward
-            let response = await this.service.createAdvisory(this.$api, data);
+            let response = await this.service.createAdvisory(data);
             let response2 = null;
             for (let i = 0; i < this.model.attachments.length; i++) {
                 let attachment = this.model.attachments[i];
