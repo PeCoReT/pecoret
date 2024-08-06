@@ -36,7 +36,8 @@ export default {
             required: false
         },
         filterDisplay: {
-            required: false
+            required: false,
+            default: 'menu'
         },
         selection: {
             required: false,

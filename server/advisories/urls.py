@@ -18,6 +18,7 @@ advisory_router = DefaultRouter()
 advisory_router.register("timelines", viewsets.AdvisoryTimelineViewSet, "timeline")
 advisory_router.register("comments", viewsets.AdvisoryCommentViewSet, "comment")
 advisory_router.register("attachments", viewsets.ImageAttachmentViewSet, "attachment")
+advisory_router.register("share-tokens", viewsets.ShareTokenViewSet, "share-token")
 
 
 urlpatterns = [

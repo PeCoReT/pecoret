@@ -44,6 +44,14 @@ export function loadApi(app) {
                 const messageStore = useMessageStore();
                 messageStore.addMessage(error.response.data.detail, 'error');
             }
+            if (error.response.status === 404) {
+                app.config.globalProperties.$toast.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    life: 3000,
+                    detail: 'Received not found error from server!'
+                })
+            }
             if (error.response.status === 400) {
                 if (typeof error.response.data === 'string') {
                     app.config.globalProperties.$toast.add({

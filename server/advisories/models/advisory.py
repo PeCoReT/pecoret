@@ -51,6 +51,9 @@ class AdvisoryQuerySet(models.QuerySet):
             return self.none()
         return self.all()
 
+    def for_share_token(self, token):
+        return self.filter(sharetoken__token=token)
+
     def disclosed(self):
         return self.filter(status=AdvisoryStatusChoices.DISCLOSED)
 

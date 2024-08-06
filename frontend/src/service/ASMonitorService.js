@@ -4,12 +4,8 @@ const StatusChoices = [
         value: 'Open'
     },
     {
-        name: 'Fixed',
-        value: 'Fixed'
-    },
-    {
-        name: 'Wont Fix',
-        value: 'Wont Fix'
+        name: 'Closed',
+        value: 'Closed'
     }
 ];
 
@@ -51,24 +47,6 @@ const InScopeChoices = [
     }
 ];
 
-const ScopeTypeChoices = [
-    {
-        name: 'IP',
-        value: 'IP'
-    },
-    {
-        name: 'Network',
-        value: 'Network'
-    },
-    {
-        name: 'Domain',
-        value: 'Domain'
-    },
-    {
-        name: 'Subdomain',
-        value: 'Subdomain'
-    }
-];
 
 const DataTypeChoices = [
     {
@@ -104,10 +82,6 @@ export default class ASMonitorService {
 
     getDataTypeChoices() {
         return DataTypeChoices;
-    }
-
-    getScopeTypeChoices() {
-        return ScopeTypeChoices;
     }
 
     getPrograms(api, params) {

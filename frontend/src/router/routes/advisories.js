@@ -46,6 +46,16 @@ const advisoryRoutes = [
                 name: 'AdvisoryLabelList',
                 path: '/advisories/labels',
                 component: () => import('@/views/pages/advisories/LabelList.vue')
+            },
+            {
+                name: 'AdvisoryShareTokenList',
+                path: '/advisories/:advisoryId/share-tokens',
+                component: () => import('@/views/pages/advisories/ShareTokenList.vue')
+            },
+            {
+                name: 'AdvisoryShareTokenDownload',
+                path: '/advisories/:advisoryId/download/:token',
+                component: () => import('@/views/pages/advisories/ShareTokenAdvisoryDownload.vue')
             }
         ]
     }

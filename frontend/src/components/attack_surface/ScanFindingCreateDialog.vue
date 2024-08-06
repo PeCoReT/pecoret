@@ -88,10 +88,6 @@ export default {
                 <label for="comment">Full Output</label>
                 <MarkdownEditor v-model="model.full_output"></MarkdownEditor>
             </div>
-            <div class="field col-12">
-                <label for="comment">Comment</label>
-                <MarkdownEditor v-model="model.comment"></MarkdownEditor>
-            </div>
         </div>
     </ModalDialog>
 </template>

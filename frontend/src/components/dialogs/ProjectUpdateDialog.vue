@@ -1,5 +1,5 @@
 <script>
-import PentestTypeSelectField from '../elements/forms/PentestTypeSelectField.vue';
+import PentestTypeSelectField from '@/components/forms/fields/PentestTypeSelectField.vue';
 import CompanyService from '@/service/CompanyService';
 import ProjectService from '@/service/ProjectService';
 import { useAuthStore } from '@/store/auth';

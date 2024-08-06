@@ -44,7 +44,7 @@ export default defineComponent({
             let params = {
                 search: query
             };
-            this.service.getLabels(this.$api, params).then((response) => {
+            this.service.getLabels(params).then((response) => {
                 this.items = response.data.results;
                 this.totalRecords = response.data.count;
             });
@@ -56,7 +56,7 @@ export default defineComponent({
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteLabel(this.$api, id).then(() => {
+                    this.service.deleteLabel(id).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',
@@ -75,7 +75,7 @@ export default defineComponent({
                 page: this.pagination.page
             };
             this.service
-                .getLabels(this.$api, params)
+                .getLabels(params)
                 .then((response) => {
                     this.items = response.data.results;
                     this.totalRecords = response.data.count;

@@ -26,6 +26,12 @@ export default {
             this.service
                 .activateAccount(this.$api, data)
                 .then(() => {
+                    this.$toast.add({
+                        severity: 'success',
+                        life: 3000,
+                        detail: 'Account activated successfully!',
+                        summary: 'Account Activated!'
+                    });
                     this.$router.push({ name: 'Login' });
                 })
                 .finally(() => {

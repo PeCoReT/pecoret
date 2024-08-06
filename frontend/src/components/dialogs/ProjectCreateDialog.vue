@@ -1,7 +1,7 @@
 <script>
 import ProjectService from '@/service/ProjectService';
 import CompanyService from '@/service/CompanyService';
-import PentestTypeSelectField from '../elements/forms/PentestTypeSelectField.vue';
+import PentestTypeSelectField from '@/components/forms/fields/PentestTypeSelectField.vue';
 
 export default {
     name: 'ProjectCreateDialog',

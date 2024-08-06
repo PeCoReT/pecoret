@@ -4,6 +4,7 @@ import ProgramCreateDialog from '@/components/attack_surface/ProgramCreateDialog
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 import ProgramUpdateDialog from '@/components/attack_surface/ProgramUpdateDialog.vue';
+import { useListViewComposable } from '@/composables/listViewComposable';
 
 export default {
     name: 'ProgramList',
@@ -20,39 +21,20 @@ export default {
             loading: false,
             totalRecords: 0,
             pagination: { page: 1, limit: 20 },
-            service: new ASMonitorService()
+            filters: {},
+            service: new ASMonitorService(),
+            listComposable: useListViewComposable()
         };
     },
     mounted() {
         this.getItems();
     },
     methods: {
-        getItems() {
+        getItems(params) {
             this.loading = true;
-            let params = {
-                limit: this.pagination.limit,
-                page: this.pagination.page
-            };
+            let data = this.listComposable.buildParams(this.pagination, this.filters, params);
             this.service
-                .getPrograms(this.$api, params)
-                .then((response) => {
-                    this.totalRecords = response.data.count;
-                    this.items = response.data.results;
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-        },
-        onSort(event) {
-            this.loading = true;
-            let params = {
-                ordering: event.sortField
-            };
-            if (event.sortOrder === -1) {
-                params['ordering'] = '-' + event.sortField;
-            }
-            this.service
-                .getPrograms(this.$api, params)
+                .getPrograms(this.$api, data)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -66,19 +48,7 @@ export default {
             this.getItems();
         },
         onGlobalSearch(query) {
-            this.loading = true;
-            let params = {
-                search: query
-            };
-            this.service
-                .getPrograms(this.$api, params)
-                .then((response) => {
-                    this.totalRecords = response.data.count;
-                    this.items = response.data.results;
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
+            this.getItems({search: query})
         },
         confirmDialogDelete(id) {
             this.$confirm.require({
@@ -122,7 +92,11 @@ export default {
                 @page="onPage"
                 @search="onGlobalSearch"
                 :show-search="true"
-                @sort="onSort"
+                @sort="
+                    (event) => {
+                        listComposable.sort(event, this.getItems);
+                    }
+                "
                 :removable-sort="true"
             >
                 <Column field="name" header="Name" sortable></Column>

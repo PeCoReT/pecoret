@@ -1,5 +1,4 @@
-import {api} from '@/plugins/axios';
-
+import { api } from '@/plugins/axios';
 
 export const AdvisoryStatusChoices = [
     {
@@ -27,13 +26,12 @@ export const VulnerabilityStatusChoices = [
     }
 ];
 
-
 export default class AdvisoryService {
     getStatusChoices() {
         return AdvisoryStatusChoices;
     }
 
-    getVulnerabilityStatusChoices(){
+    getVulnerabilityStatusChoices() {
         return VulnerabilityStatusChoices;
     }
 
@@ -112,7 +110,6 @@ export default class AdvisoryService {
         return api.patch(url, data);
     }
 
-
     getImageAttachments(advisoryId, params) {
         let url = `/advisories/${advisoryId}/attachments/`;
         let config = {};
@@ -179,5 +176,32 @@ export default class AdvisoryService {
     getTopVendorsStatistics() {
         let url = '/advisories/statistics/top-vendors/';
         return api.get(url);
+    }
+
+    getShareTokens(id, params) {
+        let url = `/advisories/${id}/share-tokens/`;
+        let config = {};
+        if (params) {
+            config['params'] = params;
+        }
+        return api.get(url, config);
+    }
+
+    createShareToken(id, data) {
+        let url = `/advisories/${id}/share-tokens/`;
+        return api.post(url, data);
+    }
+
+    deleteShareToken(advisoryId, pk) {
+        let url = `advisories/${advisoryId}/share-tokens/${pk}/`;
+        return api.delete(url);
+    }
+
+    downloadAdvisoryWithShareToken(advisoryId, token) {
+        let url = `/advisories/${advisoryId}/download/${token}/`;
+        let config = {
+            responseType: 'arraybuffer'
+        };
+        return api.get(url, config);
     }
 }

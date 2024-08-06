@@ -231,6 +231,7 @@ SITE_URLS = {
     "FINDING_DETAIL": "/projects/{projectId}/findings/{findingId}",
     "CHANGE_EMAIL": "/user/change-email/{uid}/{token}",
     'FINDING_SCORES': '/projects/{projectId}/findings/{findingId}/scores',
+    "ADVISORY_SHARE_TOKEN_DOWNLOAD": '/advisories/{advisoryId}/download/{token}'
 }
 
 PASSWORD_HASHERS = [
