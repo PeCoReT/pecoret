@@ -22,7 +22,7 @@ export default {
         getAttachments() {
             this.attachmentsLoading = true;
             this.service
-                .getImageAttachments(this.$api, this.advisoryId)
+                .getImageAttachments(this.advisoryId)
                 .then((response) => {
                     this.attachments = response.data.results;
                 })
@@ -35,7 +35,7 @@ export default {
             let data = new FormData();
             data.append('image', event.files[event.files.length - 1]);
             this.service
-                .attachmentCreate(this.$api, this.advisoryId, data)
+                .attachmentCreate(this.advisoryId, data)
                 .then((response) => {
                     this.attachments.push(response.data);
                 })
@@ -44,7 +44,7 @@ export default {
                 });
         },
         deleteAttachment(file) {
-            this.service.deleteAttachment(this.$api, this.advisoryId, file.pk).then(() => {
+            this.service.deleteAttachment(this.advisoryId, file.pk).then(() => {
                 this.getAttachments();
             });
         },

@@ -2,7 +2,7 @@
 import ASMonitorService from '@/service/ASMonitorService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
-import { findingStatusChoices, severityChoices } from '@/utils/constants';
+import { severityChoices } from '@/utils/constants';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
@@ -30,6 +30,11 @@ export default {
     mounted() {
         this.getFinding();
     },
+    computed: {
+        statusChoices() {
+            return this.service.getStatusChoices();
+        }
+    },
     methods: {
         confirmDialogDelete() {
             this.$confirm.require({
@@ -45,9 +50,6 @@ export default {
                     });
                 }
             });
-        },
-        findingStatusChoices() {
-            return findingStatusChoices;
         },
         severityChoices() {
             return severityChoices;
@@ -90,7 +92,7 @@ export default {
                     </div>
                     <div class="col-12 md:col-3">
                         <InfoCardWithForm class="surface-ground w-full" title="Status" icon="fa-bookmark">
-                            <Dropdown v-model="finding.status" :options="findingStatusChoices()" optionValue="value" @change="patchFindingData({ status: finding.status })" optionLabel="title" class="w-full"></Dropdown>
+                            <Dropdown v-model="finding.status" :options="statusChoices" optionValue="value" @change="patchFindingData({ status: finding.status })" optionLabel="name" class="w-full"></Dropdown>
                         </InfoCardWithForm>
                     </div>
                     <div class="col-12 md:col-3">

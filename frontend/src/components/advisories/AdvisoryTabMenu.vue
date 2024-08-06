@@ -39,6 +39,15 @@ export default {
                             advisoryId: this.$route.params.advisoryId
                         }
                     })
+                },
+                {
+                    label: 'Share Tokens',
+                    route: this.$router.resolve({
+                        name: 'AdvisoryShareTokenList',
+                        params: {
+                            advisoryId: this.$route.params.advisoryId
+                        }
+                    })
                 }
             ]
         };

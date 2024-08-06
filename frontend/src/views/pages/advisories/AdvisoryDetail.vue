@@ -1,7 +1,7 @@
 <script>
 import AdvisoryService, { AdvisoryStatusChoices, VulnerabilityStatusChoices } from '@/service/AdvisoryService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
-import AdvisoryTabMenu from '@/components/pages/AdvisoryTabMenu.vue';
+import AdvisoryTabMenu from '@/components/advisories/AdvisoryTabMenu.vue';
 import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import { useAuthStore } from '@/store/auth';
@@ -61,7 +61,7 @@ export default {
             });
         },
         getAdvisory() {
-            this.service.getAdvisory(this.$api, this.advisoryId).then((response) => {
+            this.service.getAdvisory(this.advisoryId).then((response) => {
                 this.advisory = response.data;
                 if (this.advisory.recommendation === null) {
                     this.advisory.recommendation = '';
@@ -73,7 +73,7 @@ export default {
             });
         },
         patchAdvisory(data) {
-            this.service.patchAdvisory(this.$api, this.advisoryId, data).then((response) => {
+            this.service.patchAdvisory(this.advisoryId, data).then((response) => {
                 this.advisory = response.data;
                 if (this.showPreview === true) {
                     this.getPreviewData();
@@ -121,7 +121,7 @@ export default {
                 params['template'] = this.exportTemplate;
             }
             this.service
-                .downloadAdvisoryAsPDF(this.$api, this.advisoryId, params)
+                .downloadAdvisoryAsPDF(this.advisoryId, params)
                 .then((response) => {
                     this.forceFileDownload(response);
                     this.exportTemplate = null;
@@ -137,7 +137,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteAdvisory(this.$api, this.advisoryId).then(() => {
+                    this.service.deleteAdvisory(this.advisoryId).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Confirmed',

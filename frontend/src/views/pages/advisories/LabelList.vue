@@ -1,9 +1,9 @@
 <script>
 import { defineComponent } from 'vue';
 import AdvisoryService from '@/service/AdvisoryService';
-import AdvisoryManagementLabelCreateDialog from '@/components/dialogs/AdvisoryManagementLabelCreateDialog.vue';
-import AdvisoryLabelBadge from '@/components/AdvisoryLabelBadge.vue';
-import AdvisoryManagementLabelUpdateDialog from '@/components/dialogs/advisory-management/AdvisoryManagementLabelUpdateDialog.vue';
+import LabelCreateDialog from '@/components/advisories/LabelCreateDialog.vue';
+import AdvisoryLabelBadge from '@/components/advisories/AdvisoryLabelBadge.vue';
+import LabelUpdateDialog from '@/components/advisories/LabelUpdateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
 
@@ -12,8 +12,8 @@ export default defineComponent({
     components: {
         GenericDataTable,
         BaseListLayout,
-        AdvisoryManagementLabelUpdateDialog,
-        AdvisoryManagementLabelCreateDialog,
+        LabelUpdateDialog,
+        LabelCreateDialog,
         AdvisoryLabelBadge
     },
     data() {
@@ -44,7 +44,7 @@ export default defineComponent({
             let params = {
                 search: query
             };
-            this.service.getLabels(this.$api, params).then((response) => {
+            this.service.getLabels(params).then((response) => {
                 this.items = response.data.results;
                 this.totalRecords = response.data.count;
             });
@@ -56,7 +56,7 @@ export default defineComponent({
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteLabel(this.$api, id).then(() => {
+                    this.service.deleteLabel(id).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',
@@ -75,7 +75,7 @@ export default defineComponent({
                 page: this.pagination.page
             };
             this.service
-                .getLabels(this.$api, params)
+                .getLabels(params)
                 .then((response) => {
                     this.items = response.data.results;
                     this.totalRecords = response.data.count;
@@ -91,7 +91,7 @@ export default defineComponent({
 <template>
     <BaseListLayout :breadcrumbs="breadcrumbs">
         <template #create-button>
-            <AdvisoryManagementLabelCreateDialog @object-created="getItems"></AdvisoryManagementLabelCreateDialog>
+            <LabelCreateDialog @object-created="getItems"></LabelCreateDialog>
         </template>
         <template #table>
             <GenericDataTable
@@ -117,7 +117,7 @@ export default defineComponent({
                 </Column>
                 <Column header="Actions">
                     <template #body="slotProps">
-                        <AdvisoryManagementLabelUpdateDialog :label="slotProps.data" @object-updated="getItems"></AdvisoryManagementLabelUpdateDialog>
+                        <LabelUpdateDialog :label="slotProps.data" @object-updated="getItems"></LabelUpdateDialog>
                         <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                     </template>
                 </Column>

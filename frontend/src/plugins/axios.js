@@ -4,9 +4,10 @@ import { useAuthStore } from '@/store/auth';
 import { useMessageStore } from '@/store/messages';
 import { apiURL } from '@/app.config';
 
-const api = axios.create({ baseURL: apiURL, withCredentials: true });
+let api;
 
 export function loadApi(app) {
+    api = axios.create({ baseURL: apiURL, withCredentials: true });
     api.interceptors.request.use(function (request) {
         const authStore = useAuthStore();
         request.headers['X-CSRFToken'] = authStore.csrfToken;
@@ -18,6 +19,9 @@ export function loadApi(app) {
             return response;
         },
         function (error) {
+            if (!error.response) {
+                return Promise.reject(error);
+            }
             if (error.response.status === 401) {
                 app.config.globalProperties.$toast.add({
                     severity: 'error',
@@ -39,6 +43,14 @@ export function loadApi(app) {
                 });
                 const messageStore = useMessageStore();
                 messageStore.addMessage(error.response.data.detail, 'error');
+            }
+            if (error.response.status === 404) {
+                app.config.globalProperties.$toast.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    life: 3000,
+                    detail: 'Received not found error from server!'
+                })
             }
             if (error.response.status === 400) {
                 if (typeof error.response.data === 'string') {

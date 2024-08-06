@@ -13,7 +13,7 @@ export default {
             this.$emit('update:modelValue', this.items);
         },
         loadData() {
-            this.service.getLabels(this.$api).then((response) => {
+            this.service.getLabels().then((response) => {
                 this.choices = response.data.results;
                 this.items = [];
                 this.modelValue.forEach((item) => {

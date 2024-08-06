@@ -4,6 +4,7 @@ import TechnologyCreateDialog from '@/components/knowledgebase/TechnologyCreateD
 import TechnologyUpdateDialog from '@/components/knowledgebase/TechnologyUpdateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
+import { useListViewComposable } from '@/composables/listViewComposable';
 
 export default {
     name: 'TechnologyList',
@@ -11,6 +12,7 @@ export default {
     data() {
         return {
             service: new TechnologyService(),
+            listComposable: useListViewComposable(),
             loading: false,
             breadcrumbs: [
                 {
@@ -35,18 +37,12 @@ export default {
             this.pagination.page = event.page + 1;
             this.getItems();
         },
-        onFilter() {
-            this.getItems();
-        },
-        getItems() {
+        getItems(params) {
             this.loading = true;
-            let params = {
-                limit: this.pagination.limit,
-                page: this.pagination.page,
-                source_code_available: this.filters.source_code_available.value
-            };
+
+            let data = this.listComposable.buildParams(this.pagination, this.filters, params);
             this.service
-                .getTechnologies(this.$api, params)
+                .getTechnologies(this.$api, data)
                 .then((response) => {
                     this.items = response.data.results;
                     this.totalRecords = response.data.count;
@@ -54,15 +50,6 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
-        },
-        onGlobalSearch(query) {
-            let params = {
-                search: query
-            };
-            this.service.getTechnologies(this.$api, params).then((response) => {
-                this.items = response.data.results;
-                this.totalRecords = response.data.count;
-            });
         },
         confirmDialogDelete(id) {
             this.$confirm.require({
@@ -106,9 +93,8 @@ export default {
                 :model-value="items"
                 @page="onPage"
                 :show-search="true"
-                @search="onGlobalSearch"
-                @filter="onFilter"
-                filter-display="menu"
+                @search="(query) => { this.getItems({search: query})}"
+                @filter="getItems"
                 v-model:filters="filters"
             >
                 <Column field="name" header="Name"></Column>
@@ -116,8 +102,7 @@ export default {
                 <Column field="homepage" header="Homepage"></Column>
                 <Column field="source_code_available" :showFilterMatchModes="false" header="Source Code Available">
                     <template #body="slotProps">
-                        <i class="fa fa-check text-success" v-if="slotProps.data.source_code_available"></i>
-                        <i class="fa fa-xmark text-danger" v-else></i>
+                        {{ slotProps.data.source_code_available }}
                     </template>
                     <template #filter="{ filterModel }">
                         <Dropdown v-model="filterModel.value" :show-clear="true" :options="sourceFilterChoices" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Dropdown>
@@ -134,13 +119,3 @@ export default {
         </template>
     </BaseListLayout>
 </template>
-
-<style scoped>
-.text-success {
-    color: var(--green-400);
-}
-
-.text-danger {
-    color: var(--red-400);
-}
-</style>

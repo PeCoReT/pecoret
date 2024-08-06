@@ -1,7 +1,9 @@
+from django.utils import timezone
 from rest_framework.test import APITestCase
 
 from advisories.models.advisory import Severity, Advisory
 from advisories.models.label import Label
+from advisories.models.share_token import ShareToken
 from backend.models import VulnerabilityTemplate, Technology
 from pecoret.core.test import PeCoReTTestCaseMixin
 
@@ -142,3 +144,25 @@ class AdvisoryDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         for user in self.user_forbidden:
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.delete, 403)
+
+
+class AdvisoryShareTokenDownload(APITestCase, PeCoReTTestCaseMixin):
+    def setUp(self):
+        self.init_mixin()
+        self.token = ShareToken.objects.create(date_expire=timezone.now() + timezone.timedelta(days=2),
+                                               advisory=self.advisory1)
+        self.url = self.get_url('advisories:advisory-download-with-token', pk=self.advisory1.pk,
+                                share_token=self.token.token)
+
+    def test_allowed(self):
+        self.basic_status_code_check(self.url, self.client.get, 200)
+
+    def test_expired(self):
+        self.token.date_expire = timezone.now() - timezone.timedelta(days=2)
+        self.token.save()
+        self.basic_status_code_check(self.url, self.client.get, 404)
+
+    def test_broken_access(self):
+        self.url = self.get_url('advisories:advisory-download-with-token', pk=self.advisory2.pk,
+                                share_token=self.token.token)
+        self.basic_status_code_check(self.url, self.client.get, 404)

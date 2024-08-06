@@ -1,11 +1,13 @@
 from django.conf import settings
 from django.db.models import Count
 from django.http.response import HttpResponse
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from advisories.filters import AdvisoryFilter
 from advisories.models.advisory import Advisory
+from advisories.models.share_token import ShareToken
 from advisories.serializers.advisory import (
     AdvisorySerializer,
     AdvisoryCreateSerializer,
@@ -28,12 +30,13 @@ from pecoret.core.viewsets import PeCoReTModelViewSet
     top_products=extend_schema(operation_id='Get top products statistics', tags=['Advisory Statistics']),
     statistics_base_information=extend_schema(operation_id='Get base statistic information',
                                               tags=['Advisory Statistics']),
+    download_with_token=extend_schema(operation_id='Download advisory with share token', tags=['Advisories'])
 )
 class AdvisoryViewSet(PeCoReTModelViewSet):
     queryset = Advisory.objects.none()
     filterset_class = AdvisoryFilter
     api_scope = "scope_advisories"
-    search_fields = ["vulnerability__vulnerability_id", "product", "vendor_name", "internal_name"]
+    search_fields = ["vulnerability__vulnerability_id", "technology__cpe", "technology__vendor", "title"]
     ordering_fields = ["advisory_id", "date_planned_disclosure", "date_created", "date_updated"]
     serializer_class = AdvisorySerializer
     permission_classes = [
@@ -114,3 +117,25 @@ class AdvisoryViewSet(PeCoReTModelViewSet):
         if qs.count() > 0:
             data["inbox_next_disclosure_date"] = qs.order_by("-date_planned_disclosure").first().date_planned_disclosure
         return Response(data)
+
+    @action(detail=True, methods=["get"], url_path=r"download/(?P<share_token>[-\w.~]+)", authentication_classes=[],
+            permission_classes=[])
+    def download_with_token(self, request, *args, **kwargs):
+        try:
+            token = ShareToken.objects.get(token=self.kwargs.get('share_token'))
+        except ShareToken.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        if token.is_expired():
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        try:
+            advisory = Advisory.objects.filter(pk=self.kwargs.get('pk')).for_share_token(
+                self.kwargs.get('share_token')).get()
+        except Advisory.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        if not advisory.report_template:
+            advisory.report_template = list(settings.REPORT_TEMPLATES.keys())[0]
+        result = export_advisory(advisory, advisory.report_template)
+        response = HttpResponse(result, content_type="application/pdf")
+        filename = f"advisory-{advisory.pk}"
+        response["Content-Disposition"] = f"attachment; filename={filename}.pdf"
+        return response

@@ -1,7 +1,7 @@
 <script>
 import ASMonitorService from '@/service/ASMonitorService';
 import TagCreateDialog from '@/components/attack_surface/TagCreateDialog.vue';
-import AdvisoryLabelBadge from '@/components/AdvisoryLabelBadge.vue';
+import AdvisoryLabelBadge from '@/components/advisories/AdvisoryLabelBadge.vue';
 import TagUpdateDialog from '@/components/attack_surface/TagUpdateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';

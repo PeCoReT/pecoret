@@ -3,7 +3,7 @@ import AdvisoryService from '@/service/AdvisoryService';
 import VulnerabilityTemplateService from '@/service/VulnerabilityTemplateService';
 import SeveritySelectField from '@/components/elements/forms/SeveritySelectField.vue';
 import { useAuthStore } from '@/store/auth';
-import AdvisoryLabelSelectField from '@/components/elements/forms/AdvisoryLabelSelectField.vue';
+import AdvisoryLabelSelectField from '@/components/advisories/AdvisoryLabelSelectField.vue';
 import ReportTemplateSelectField from '@/components/elements/forms/ReportTemplateSelectField.vue';
 import TechnologySelectField from '@/components/elements/forms/TechnologySelectField.vue';
 
@@ -69,7 +69,7 @@ export default {
                 data['labels'].push(item);
             });
             this.service
-                .patchAdvisory(this.$api, this.advisoryId, data)
+                .patchAdvisory(this.advisoryId, data)
                 .then((response) => {
                     this.$toast.add({
                         severity: 'success',
@@ -102,7 +102,7 @@ export default {
             });
         },
         getAdvisory() {
-            this.service.getAdvisory(this.$api, this.advisoryId).then((response) => {
+            this.service.getAdvisory(this.advisoryId).then((response) => {
                 this.model = response.data;
                 this.model.template = response.data.vulnerability.vulnerability_id;
                 this.templateChoices.push(response.data.vulnerability);

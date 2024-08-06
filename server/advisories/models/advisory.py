@@ -51,6 +51,9 @@ class AdvisoryQuerySet(models.QuerySet):
             return self.none()
         return self.all()
 
+    def for_share_token(self, token):
+        return self.filter(sharetoken__token=token)
+
     def disclosed(self):
         return self.filter(status=AdvisoryStatusChoices.DISCLOSED)
 
@@ -188,7 +191,8 @@ class Advisory(TimestampedModel):
         This allows our injected data to be bleached before further used
         :return:
         """
-        image_re = r'(?P<alt>!\[(?P<caption>[^\]]*)\])\((?P<filename>.*/advisories/\d+/attachments/(?P<attachment>\d+)/preview/+)(?=\"|\))\)'
+        image_re = (r'(?P<alt>!\[(?P<caption>[^\]]*)\])\((?P<filename>.*/advisories/\d+/attachments'
+                    r'/(?P<attachment>\d+)/preview/+)(?=\"|\))\)')
 
         def attachment_replace(match):
             attachment_pk = match.group("attachment")
@@ -198,7 +202,9 @@ class Advisory(TimestampedModel):
                 return match.group()
             attachment = qs.get()
             caption = match.group('caption')
-            template = f"<div class='image-proof'><div class='image-container'><img src='{attachment.image_base64}'></div><div class='caption'><span class='figure-prefix'>Figure</span><span>{caption}</span></div></div>"
+            template = (f"<div class='image-proof'><div class='image-container'>"
+                        f"<img src='{attachment.image_base64}'></div><div class='caption'>"
+                        f"<span class='figure-prefix'>Figure</span><span>{caption}</span></div></div>")
             return template
 
         proof_text = re.sub(image_re, attachment_replace, self.proof_text)

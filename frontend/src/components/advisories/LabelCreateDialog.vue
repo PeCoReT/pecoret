@@ -1,22 +1,17 @@
 <script>
-import AdvisoryService from "@/service/AdvisoryService";
+import AdvisoryService from '@/service/AdvisoryService'
 
 
 export default {
-  name: "AdvisoryManagementLabelUpdateDialog",
-  emits: ["object-updated"],
-  props: {
-    label: {
-      required: true
-    }
-  },
+  name: "LabelCreateDialog",
+  emits: ["object-created"],
   data() {
     return {
       visible: false,
       model: {
-        name: this.label.name,
-        description: this.label.description,
-        color: this.label.color
+        name: null,
+        description: null,
+        color: null
       },
       service: new AdvisoryService()
     };
@@ -28,36 +23,29 @@ export default {
     open() {
       this.visible = true;
     },
-    patch() {
-      if (this.model.color.startsWith("#") === false) {
-        this.model.color = "#" + this.model.color;
-      }
+    create() {
       let data = {
         name: this.model.name,
         description: this.model.description,
-        color: this.model.color
-      };
-
-      this.service.patchLabel(this.$api, this.label.pk, data).then((response) => {
-        this.$emit("object-updated", response.data);
+        color: '#' + this.model.color
+      }
+      this.service.createLabel(data).then((response) => {
+        this.$toast.add({
+          severity: "success",
+          summary: "Label created!",
+          life: 3000,
+          detail: "New label was created successfully!"
+        });
+        this.$emit("object-created", response.data);
         this.visible = false;
       });
     }
   },
-  watch: {
-    label: {
-      immediate: true,
-      deep: true,
-      handler(value) {
-        this.model = value;
-      }
-    }
-  }
-};
+}
 </script>
 
 <template>
-  <Button icon="fa fa-pen-to-square" size="small" outlined @click="open"></Button>
+  <Button icon="fa fa-plus" label="Label" outlined @click="open"></Button>
 
   <Dialog header="Create Label" v-model:visible="visible" modal :style="{ width: '70vw' }">
     <div class="p-fluid formgrid grid">
@@ -78,7 +66,7 @@ export default {
 
     <template #footer>
       <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-      <Button label="Save" @click="patch" icon="pi pi-check" class="p-button-outlined"></Button>
+      <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
     </template>
   </Dialog>
 </template>

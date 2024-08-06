@@ -1,7 +1,7 @@
 <script>
 import AdvisoryService from '@/service/AdvisoryService';
-import AdvisoryTabMenu from '@/components/pages/AdvisoryTabMenu.vue';
-import AdvisoryAttachmentFileDrop from '@/components/pages/advisories/AdvisoryAttachmentFileDrop.vue';
+import AdvisoryTabMenu from '@/components/advisories/AdvisoryTabMenu.vue';
+import AdvisoryAttachmentFileDrop from '@/components/advisories/AdvisoryAttachmentFileDrop.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
@@ -37,7 +37,7 @@ export default {
     },
     methods: {
         getAdvisory() {
-            this.service.getAdvisory(this.$api, this.advisoryId).then((response) => {
+            this.service.getAdvisory(this.advisoryId).then((response) => {
                 this.model = response.data;
             });
         },
@@ -45,7 +45,7 @@ export default {
             let data = {
                 proof_text: this.model.proof_text
             };
-            this.service.patchAdvisory(this.$api, this.advisoryId, data).then(() => {
+            this.service.patchAdvisory(this.advisoryId, data).then(() => {
                 this.$toast.add({ severity: 'info', summary: 'Updated', detail: 'Proof was updated!', life: 3000 });
             });
         }

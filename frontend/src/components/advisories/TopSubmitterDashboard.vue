@@ -50,7 +50,7 @@ export default {
             this.loading = true;
             const documentStyle = getComputedStyle(document.body);
             this.service
-                .getTopSubmittersStatistic(this.$api)
+                .getTopSubmittersStatistic()
                 .then((response) => {
                     response.data.forEach((item) => {
                         this.chartData.labels.push(item['user__username']);
