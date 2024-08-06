@@ -1,11 +1,9 @@
 <script>
 import ProjectScopeService from "@/service/ProjectScopeService";
-import PentestTypeSelectField from "@/components/elements/forms/PentestTypeSelectField.vue";
 
 
 export default {
     name: "ProjectScopeCreateDialog",
-    components: { PentestTypeSelectField },
     emits: ["object-created"],
     data() {
         return {
