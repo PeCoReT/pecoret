@@ -4,6 +4,7 @@ import { useAuthStore } from '@/store/auth';
 import ProjectCreateDialog from '@/components/dialogs/ProjectCreateDialog.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
+import {useListViewComposable} from "@/composables/listViewComposable";
 
 export default {
     name: 'ProjectList',
@@ -17,6 +18,7 @@ export default {
             breadcrumbs: [{ label: 'Projects', disabled: true }],
             service: new ProjectService(),
             authStore: useAuthStore(),
+            listComposable: useListViewComposable(),
             projects: [],
             pinnedProjects: [],
             loading: false,
@@ -87,15 +89,11 @@ export default {
                 this.pinnedProjects = response.data.results;
             });
         },
-        getProjects() {
+        getProjects(params) {
             this.loading = true;
-            let params = {
-                limit: this.pagination.limit,
-                page: this.pagination.page,
-                status: this.filters.status.value
-            };
+            let data = this.listComposable.buildParams(this.pagination, this.filters, params);
             this.service
-                .getProjects(this.$api, params)
+                .getProjects(this.$api, data)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.projects = response.data.results;
@@ -103,33 +101,6 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
-        },
-        onSort(event) {
-            this.loading = true;
-            let params = {
-                ordering: event.sortField
-            };
-            if (event.sortOrder === -1) {
-                params['ordering'] = '-' + event.sortField;
-            }
-            this.service
-                .getProjects(this.$api, params)
-                .then((response) => {
-                    this.totalRecords = response.data.count;
-                    this.projects = response.data.results;
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-        },
-        onFilter(event) {
-            let params = {
-                status: event.filters.status.value
-            };
-            this.service.getProjects(this.$api, params).then((response) => {
-                this.totalRecords = response.data.count;
-                this.projects = response.data.results;
-            });
         },
         onPage(event) {
             this.pagination.page = event.page + 1;
@@ -165,13 +136,13 @@ export default {
     </div>
 
     <div class="grid" v-if="pinnedProjects.length > 0">
-        <div class="sm:col-6 md:col-4" v-for="project in pinnedProjects" v-bind:key="project.pk">
+        <div class="sm:col-6 md:col-2" v-for="project in pinnedProjects" v-bind:key="project.pk">
             <div class="card">
                 <router-link class="text-color underline" :to="{ name: 'ProjectDetail', params: { projectId: project.pk } }">
                     {{ project.name }}
                 </router-link>
                 <br />
-                <small>{{ project.status }}</small>
+                <small>{{ project.status }} / {{ project.company.name }}</small>
             </div>
         </div>
     </div>
@@ -188,8 +159,8 @@ export default {
                     blank-slate-icon="fa fa-box"
                     :model-value="projects"
                     :removable-sort="true"
-                    @sort="onSort"
-                    @filter="onFilter"
+                    @sort="(event) => { this.listComposable.sort(event, this.getProjects)}"
+                    @filter="getProjects"
                     :show-search="true"
                     filter-display="menu"
                     @row-click="onRowClick"

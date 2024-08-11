@@ -17,7 +17,7 @@ class Technology(TimestampedModel):
     description = models.TextField(null=True, blank=True)
     cpe = models.CharField(max_length=256, null=True)
     homepage = models.URLField(null=True, blank=True)
-    vendor = models.CharField(max_length=256, null=True, blank=True)
+    vendor = models.CharField(max_length=256, null=True)
     source_code_url = models.URLField(null=True, blank=True)
     implicit_technologies = models.ManyToManyField('self', blank=True, symmetrical=False)
 

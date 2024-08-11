@@ -30,3 +30,7 @@ class TechnologySerializer(FlatTechnologySerializer):
     class Meta:
         model = Technology
         fields = FlatTechnologySerializer.Meta.fields + ['implicit_technologies']
+        extra_kwargs = {
+            'cpe': {'allow_null': False, 'allow_blank': False},
+            'vendor': {'allow_null': False, 'allow_blank': False},
+        }
