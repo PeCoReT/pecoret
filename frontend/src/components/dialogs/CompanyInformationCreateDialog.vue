@@ -14,7 +14,8 @@ export default {
         return {
             visible: false,
             companyService: new CompanyService(),
-            text: ''
+            text: '',
+            loading: false
         };
     },
     methods: {
@@ -42,17 +43,11 @@ export default {
 <template>
     <Button icon="fa fa-plus" label="Company Information" @click="open" outlined></Button>
 
-    <Dialog header="Create Company Information" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
-        <div class="grid formgrid p-fluid">
-            <div class="field col-12">
-                <label for="text">Text</label>
+    <ModalDialog header="Create Company Information" v-model="visible" :loading="loading" @onSave="create">
+        <Form>
+            <Field label="Text">
                 <MarkdownEditor v-model="text"></MarkdownEditor>
-            </div>
-        </div>
-
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+            </Field>
+        </Form>
+    </ModalDialog>
 </template>

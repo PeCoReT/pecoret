@@ -1,7 +1,7 @@
 <script>
 import AssetService from '@/service/AssetService';
-import AssetEnvironmentSelectField from '@/components/elements/forms/AssetEnvironmentSelectField.vue';
-import AssetAccessibleSelectField from '@/components/elements/forms/AssetAccessibleSelectField.vue';
+import AssetEnvironmentSelectField from '@/components/forms/fields/AssetEnvironmentSelectField.vue';
+import AssetAccessibleSelectField from '@/components/forms/fields/AssetAccessibleSelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
 
@@ -11,6 +11,7 @@ export default {
     data() {
         return {
             visible: false,
+            loading: false,
             projectId: this.$route.params.projectId,
             model: {
                 name: null,
@@ -39,9 +40,6 @@ export default {
         };
     },
     methods: {
-        close() {
-            this.visible = false;
-        },
         open() {
             this.visible = true;
         },
@@ -65,46 +63,39 @@ export default {
 <template>
     <Button icon="fa fa-plus" label="Mobile Application" outlined @click="open"></Button>
 
-    <Dialog header="Create Mobile Application" v-model:visible="visible" modal :style="{ width: '70vw' }">
-        <div class="p-fluid formgrid grid">
-            <div class="field col-12">
-                <label for="name">Name</label>
+    <ModalDialog header="Create Mobile Application" v-model="visible" v-model:loading="loading" @onSave="create">
+        <Form>
+            <Field label="Name">
                 <InputText id="name" type="text" v-model="model.name"></InputText>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="os">Operating System</label>
-                <Dropdown :options="osChoices" option-label="label" option-value="value" v-model="model.os"></Dropdown>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="version">Version</label>
-                <InputText id="version" type="text" v-model="model.version"></InputText>
-            </div>
-            <div class="field col-12">
-                <div class="flex align-items-center">
+            </Field>
+            <InlineFieldGroup>
+                <InlineField label="Operating System">
+                    <Select :options="osChoices" option-label="label" option-value="value" v-model="model.os"></Select>
+                </InlineField>
+                <InlineField label="Version">
+                    <InputText id="version" type="text" v-model="model.version"></InputText>
+                </InlineField>
+            </InlineFieldGroup>
+            <Field>
+                <div class="flex items-center">
                     <Checkbox v-model="model.certificate_pinning" inputId="cert_pinning" :binary="true" />
-                    <label for="cert_pinning" class="ml-2"> Certificate Pinning?</label>
+                    <label class="ml-2">Certificate Pinning?</label>
                 </div>
-            </div>
-
-            <div class="field col-12 md:col-6">
-                <AssetEnvironmentSelectField v-model="model.environment"></AssetEnvironmentSelectField>
-            </div>
-            <div class="field col-12 md:col-6">
-                <AssetAccessibleSelectField v-model="model.accessible"></AssetAccessibleSelectField>
-            </div>
-            <div class="field col-12">
-                <label for="technologies">Technologies</label>
+            </Field>
+            <InlineFieldGroup>
+                <InlineField label="Environment">
+                    <AssetEnvironmentSelectField v-model="model.environment"></AssetEnvironmentSelectField>
+                </InlineField>
+                <InlineField label="Accessible">
+                    <AssetAccessibleSelectField v-model="model.accessible"></AssetAccessibleSelectField>
+                </InlineField>
+            </InlineFieldGroup>
+            <Field label="Technologies">
                 <TechnologyMultiSelectField v-model="model.technologies"></TechnologyMultiSelectField>
-            </div>
-            <div class="field col-12">
-                <label for="description">Description</label>
+            </Field>
+            <Field label="Description">
                 <MarkdownEditor v-model="model.description"></MarkdownEditor>
-            </div>
-        </div>
-
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+            </Field>
+        </Form>
+    </ModalDialog>
 </template>

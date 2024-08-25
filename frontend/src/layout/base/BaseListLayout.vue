@@ -15,27 +15,27 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
             <pBreadcrumb v-model="breadcrumbModel"></pBreadcrumb>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-6">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-6">
             <slot name="head-left"></slot>
         </div>
-        <div class="col-6">
+        <div class="col-span-6">
             <slot name="head-right">
-                <div class="flex justify-content-end">
+                <div class="flex justify-end">
                     <slot name="create-button"></slot>
                 </div>
             </slot>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-12">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
             <slot>
                 <div class="card">
                     <slot name="table"></slot>

@@ -3,7 +3,7 @@ import ProjectService from '@/service/ProjectService';
 import { useAuthStore } from '@/store/auth';
 import ProjectCreateDialog from '@/components/dialogs/ProjectCreateDialog.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
-import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
 import {useListViewComposable} from "@/composables/listViewComposable";
 
 export default {
@@ -120,23 +120,21 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid grid-cols-1 mt-3">
             <pBreadcrumb v-model="breadcrumbs" />
-        </div>
     </div>
 
-    <div class="grid">
+    <div class="grid mt-3">
         <div class="col-6"></div>
         <div class="col-6">
-            <div class="flex justify-content-end">
+            <div class="flex justify-end">
                 <ProjectCreateDialog @object-created="getProjects"></ProjectCreateDialog>
             </div>
         </div>
     </div>
 
-    <div class="grid" v-if="pinnedProjects.length > 0">
-        <div class="sm:col-6 md:col-2" v-for="project in pinnedProjects" v-bind:key="project.pk">
+    <div class="mb-3 mt-3 grid sm:grid-cols-2 md:grid-cols-6 gap-4" v-if="pinnedProjects.length > 0">
+        <div class="" v-for="project in pinnedProjects" v-bind:key="project.pk">
             <div class="card">
                 <router-link class="text-color underline" :to="{ name: 'ProjectDetail', params: { projectId: project.pk } }">
                     {{ project.name }}
@@ -174,7 +172,7 @@ export default {
                         <Button v-if="selectedProjects.length > 0" icon="fa fa-trash" size="small" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2"></Button>
                     </template>
                     <Column selectionMode="multiple" headerStyle=""></Column>
-                    <Column field="name" header="Name" sortable>
+                    <Column field="name" header="Name" :sortable="true">
                         <template #body="slotProps"> [{{ slotProps.data.year }}] {{ slotProps.data.name }}</template>
                     </Column>
                     <Column field="company.name" header="Company"></Column>
@@ -183,7 +181,7 @@ export default {
                             <Dropdown v-model="filterModel.value" :options="statusChoices" placeholder="Select One" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Dropdown>
                         </template>
                     </Column>
-                    <Column field="date_created" header="Created" sortable></Column>
+                    <Column field="date_created" header="Created" :sortable="true"></Column>
                     <Column field="test_method" header="Test Method"></Column>
                     <Column field="visibility" header="Visibility"></Column>
                     <Column field="start_date" header="Period">

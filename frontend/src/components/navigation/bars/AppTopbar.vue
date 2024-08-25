@@ -3,11 +3,11 @@ import { useAuthStore } from '@/store/auth';
 import ProjectTabMenu from '@/components/navigation/ProjectTabMenu.vue';
 import AuthService from '@/service/AuthService';
 
+
 export default {
     name: 'AppTopbar',
     data() {
         return {
-            topbarMenuActive: null,
             authStore: useAuthStore(),
             userMenuItems: [
                 {
@@ -100,14 +100,6 @@ export default {
                         }
                     ]
                 };
-                if (this.authStore.groups.isAdvisoryManagement === true) {
-                    advisories.items.push({
-                        label: 'Dashboard',
-                        route: this.$router.resolve({
-                            name: 'AdvisoryManagementDashboard'
-                        })
-                    });
-                }
                 items.push(advisories);
             }
 
@@ -238,14 +230,15 @@ export default {
 </script>
 
 <template>
-    <Menubar :model="items" class="surface-card layout-topbar" ref="menu" :pt="{ menu: { class: 'top-menu' } }">
+    <Menubar :model="items" class="layout-topbar" :pt="{ rootList: {class: 'w-11/12 flex justify-end'}, submenu: {class: 'submenu'}}">
         <template #start>
-            <router-link to="/" class="layout-topbar-logo">
-                <img src="/images/logo-no-slogan.svg" alt="logo" />
+            <router-link to="/" class="">
+                <img src="/images/logo-no-slogan.svg" alt="logo" class="max-w-[10rem] md:max-h-[3rem]" />
             </router-link>
+            <span class="w-1/12 bg-primary-100"></span>
         </template>
         <template #item="{ label, item, props, root, hasSubmenu }">
-            <router-link class="flex" v-bind="props.action" :to="item.route" v-if="item.route">
+            <router-link class="flex items-center" v-bind="props.action" :to="item.route" v-if="item.route">
                 <span v-bind="props.icon" />
                 <span v-bind="props.label">{{ label }}</span>
             </router-link>
@@ -258,3 +251,12 @@ export default {
     </Menubar>
     <ProjectTabMenu v-if="this.$route.params.projectId"></ProjectTabMenu>
 </template>
+
+<style scoped>
+.submenu {
+    left: auto;
+    text-align: right;
+    position: absolute;
+    display: block;
+}
+</style>

@@ -72,32 +72,32 @@ export default {
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-6"></div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
+    <div class="grid grid-cols-2 mt-3">
+        <div class="col-span-1"></div>
+        <div class="col-span-1">
+            <div class="flex justify-end">
                 <GenericAssetUpdateDialog @object-updated="getItem" :asset="this.model"></GenericAssetUpdateDialog>
                 <Button label="Delete" severity="danger" outlined icon="fa fa-trash" @click="confirmDialogDelete"></Button>
             </div>
         </div>
     </div>
-    <div class="grid">
+    <div class="grid mt-3">
         <div class="col-12">
             <div class="card">
-                <div class="grid">
-                    <div class="col-12 md:col-4">
-                        <DetailCardWithIcon title="Name" icon="fa fa-earth-europe" class="surface-ground" :text="model.name"></DetailCardWithIcon>
+                <div class="grid grid-cols-12 gap-3">
+                    <div class="col-span-12 md:col-span-4">
+                        <DetailCardWithIcon title="Name" icon="fa fa-earth-europe" class="bg-surface-950" :text="model.name"></DetailCardWithIcon>
                     </div>
-                    <div class="col-12 md:col-4">
-                        <DetailCardWithIcon title="Environment" icon="fa fa-thumbtack" class="surface-ground" :text="model.environment"></DetailCardWithIcon>
+                    <div class="col-span-12 md:col-span-4">
+                        <DetailCardWithIcon title="Environment" icon="fa fa-thumbtack" class="bg-surface-950" :text="model.environment"></DetailCardWithIcon>
                     </div>
-                    <div class="col-12 md:col-4">
-                        <DetailCardWithIcon title="Accessibility" icon="fa fa-plug" class="surface-ground" :text="model.accessible"></DetailCardWithIcon>
+                    <div class="col-span-12 md:col-span-4">
+                        <DetailCardWithIcon title="Accessibility" icon="fa fa-plug" class="bg-surface-950" :text="model.accessible"></DetailCardWithIcon>
                     </div>
                 </div>
-                <div class="grid">
-                    <div class="col-12">
-                        <div class="card surface-ground">
+                <div class="grid mt-3">
+                    <div class="col-span-12">
+                        <div class="card bg-surface-950">
                             <label>Description:</label>
                             <div v-html="renderMarkdown(model.description)" class="mt-3"></div>
                         </div>

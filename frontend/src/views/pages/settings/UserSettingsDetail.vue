@@ -1,5 +1,5 @@
 <script>
-import SettingsTabMenu from '@/components/pages/SettingsTabMenu.vue';
+import SettingsTabMenu from '@/components/navigation/SettingsTabMenu.vue';
 
 export default {
     name: 'UserSettingsDetail',
@@ -41,15 +41,15 @@ export default {
 };
 </script>
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-12">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-12">
-            <SettingsTabMenu class="surface-card"></SettingsTabMenu>
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
+            <SettingsTabMenu></SettingsTabMenu>
             <Card>
                 <template #title>General</template>
                 <template #content>

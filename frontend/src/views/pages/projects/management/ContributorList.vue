@@ -1,8 +1,8 @@
 <script>
 import ContributorService from '@/service/ContributorService';
-import ContributorCreateDialog from '../../../../components/dialogs/ContributorCreateDialog.vue';
+import ContributorCreateDialog from '@/components/dialogs/ContributorCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
-import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
 
 export default {
     name: 'ContributorList',

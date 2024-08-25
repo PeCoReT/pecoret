@@ -7,4 +7,4 @@ class RenderMarkdownSerializer(serializers.Serializer):
     html = serializers.SerializerMethodField(read_only=True)
 
     def get_html(self, obj) -> str:
-        return md_to_clean_html(obj['markdown'])
+        return md_to_clean_html(obj['markdown'], allow_images=True)

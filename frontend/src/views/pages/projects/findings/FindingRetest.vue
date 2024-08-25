@@ -1,6 +1,6 @@
 <script>
 import FindingService, { statusChoices } from '@/service/FindingService';
-import FindingTabMenu from '@/components/pages/FindingTabMenu.vue';
+import FindingTabMenu from '@/components/navigation/FindingTabMenu.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
@@ -85,37 +85,32 @@ export default {
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-6">
-            <div class="justify-content-start flex">
+    <div class="grid grid-cols-2 mt-3">
+        <div class="col-span-1">
+            <div class="justify-start flex">
                 <strong class="text-lg" v-if="finding.vulnerability">{{ finding.vulnerability.name }} / {{ finding.name }}</strong>
             </div>
         </div>
-        <div class="col-6">
-            <div class="flex justify-content-end"></div>
+        <div class="col-span-1">
+            <div class="flex justify-end"></div>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-12">
+    <div class="grid grid-cols-1 mt-3">
+        <div class="col-span-1">
             <FindingTabMenu class="surface-card"></FindingTabMenu>
             <div class="card border-noround-top">
-                <div class="grid formgrid p-fluid">
-                    <div class="col-12 field md:col-6">
-                        <label for="status">Status</label>
-                        <Dropdown v-model="model.status" :options="statusChoices" optionValue="value" optionLabel="title" class="w-full"></Dropdown>
-                    </div>
-                    <div class="col-12 field md:col-6">
-                        <label for="date_retested">Date Retested</label>
-                        <Calendar v-model="model.date_retested" id="date_retested"></Calendar>
-                    </div>
-                    <div class="col-12 field">
-                        <label for="retest">Retest Summary</label>
+                <Form>
+                    <Field label="Status">
+                        <Select v-model="model.status" :options="statusChoices" optionValue="value" optionLabel="title" class="w-full"></Select>
+                    </Field>
+                    <Field label="Date Retested">
+                        <DatePicker v-model="model.date_retested" id="date_retested"></DatePicker>
+                    </Field>
+                    <Field label="Retest Summary">
                         <MarkdownEditor v-model="model.retest_results" id="retest"></MarkdownEditor>
-                    </div>
-                    <div class="col-12">
-                        <Button label="Save" :loading="loading" @click="patchFinding"></Button>
-                    </div>
-                </div>
+                    </Field>
+                    <Button class="w-full" label="Save" :loading="loading" @click="patchFinding"></Button>
+                </Form>
             </div>
         </div>
     </div>

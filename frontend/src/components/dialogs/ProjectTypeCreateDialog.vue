@@ -58,21 +58,14 @@ export default {
 <template>
     <Button icon="fa fa-plus" label="Project Type" outlined @click="open"></Button>
 
-    <Dialog header="Create Project Type" v-model:visible="visible" modal :style="{ width: '70vw' }">
-        <div class="formgrid grid p-fluid">
-            <div class="field col-12">
-                <label for="name">Name</label>
+    <ModalDialog header="Create Project Type" v-model="visible" :loading="loading" @onSave="create">
+        <Form>
+            <Field label="Name">
                 <InputText id="name" v-model="model.name"></InputText>
-            </div>
-            <div class="field col-12">
-                <label for="description">Description</label>
+            </Field>
+            <Field label="Description">
                 <MarkdownEditor v-model="model.description"></MarkdownEditor>
-            </div>
-        </div>
-
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" :loading="loading" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+            </Field>
+        </Form>
+    </ModalDialog>
 </template>

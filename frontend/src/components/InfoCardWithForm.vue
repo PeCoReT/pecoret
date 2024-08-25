@@ -13,15 +13,16 @@ export default {
 </script>
 
 <template>
-    <div class="card mb-0 h-full">
-        <div class="flex justify-content-between mb-3">
-            <div>
-                <span class="block text-500 font-medium mb-3">{{ title }}</span>
-                <slot />
-            </div>
-            <div class="flex align-items-center justify-content-center text-500" style="width: 2.5rem; height: 2.5rem">
-                <i class="fa text-secondary-800 text-xl" :class="icon"></i>
-            </div>
+<div class="card mb-0 h-full">
+    <div class="flex justify-between mb-3">
+        <div>
+            <span class="block text-gray-500 font-medium mb-3">{{ title }}</span>
+            <slot />
+        </div>
+        <div class="flex items-center justify-center text-gray-500" style="width: 2.5rem; height: 2.5rem;">
+            <i class="fa text-secondary-800 text-xl" :class="icon"></i>
         </div>
     </div>
+</div>
+
 </template>

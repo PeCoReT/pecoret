@@ -1,10 +1,10 @@
 <script>
 import AdvisoryService from '@/service/AdvisoryService';
-import SeverityBadge from '@/components/SeverityBadge.vue';
+import SeverityBadge from '@/components/badges/SeverityBadge.vue';
 import { useAuthStore } from '@/store/auth';
-import AdvisoryLabelBadge from '@/components/advisories/AdvisoryLabelBadge.vue';
+import AdvisoryLabelBadge from '@/components/badges/AdvisoryLabelBadge.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
-import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
 import {useListViewComposable} from '@/composables/listViewComposable';
 
 

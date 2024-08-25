@@ -68,40 +68,40 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid grid-cols-1 mt-3">
+        <div class="col-span-1">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-6"></div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
+    <div class="grid mt-3 grid-cols-2">
+        <div class="col-span-1"></div>
+        <div class="col--span-1">
+            <div class="flex justify-end">
                 <HostUpdateDialog @object-updated="getItem" :asset="this.model"></HostUpdateDialog>
                 <Button label="Delete" severity="danger" outlined icon="fa fa-trash" @click="confirmDialogDelete"></Button>
             </div>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-12">
+    <div class="grid mt-3 grid-cols-1">
+        <div class="col-span-1">
             <div class="card">
-                <div class="grid">
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="DNS" icon="fa fa-earth-europe" class="surface-ground" :text="model.dns || '-'"></DetailCardWithIcon>
+                <div class="grid grid-cols-12 gap-3">
+                    <div class="col-span-12 md:col-span-3">
+                        <DetailCardWithIcon title="DNS" icon="fa fa-earth-europe" class="bg-surface-950" :text="model.dns || '-'"></DetailCardWithIcon>
                     </div>
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Environment" icon="fa fa-thumbtack" class="surface-ground" :text="model.environment"></DetailCardWithIcon>
+                    <div class="col-span-12 md:col-span-3">
+                        <DetailCardWithIcon title="Environment" icon="fa fa-thumbtack" class="bg-surface-950" :text="model.environment"></DetailCardWithIcon>
                     </div>
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Accessibility" icon="fa fa-plug" class="surface-ground" :text="model.accessible"></DetailCardWithIcon>
+                    <div class="col-span-12 md:col-span-3">
+                        <DetailCardWithIcon title="Accessibility" icon="fa fa-plug" class="bg-surface-950" :text="model.accessible"></DetailCardWithIcon>
                     </div>
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Operating System" icon="fa fa-laptop-code" class="surface-ground" :text="model.operating_system || '-'"></DetailCardWithIcon>
+                    <div class="col-span-12 md:col-span-3">
+                        <DetailCardWithIcon title="Operating System" icon="fa fa-laptop-code" class="bg-surface-950" :text="model.operating_system || '-'"></DetailCardWithIcon>
                     </div>
                 </div>
-                <div class="grid">
-                    <div class="col-12">
-                        <div class="card surface-ground">
+                <div class="grid grid-cols-1 mt-3">
+                    <div class="col-span-1">
+                        <div class="card bg-surface-950">
                             <label>Description:</label>
                             <div v-html="renderMarkdown(model.description)" class="mt-3"></div>
                         </div>

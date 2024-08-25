@@ -3,6 +3,7 @@ import ReportService from '@/service/ReportService';
 import ReportTabMenu from '@/components/projects/reporting/ReportTabMenu.vue';
 import ReportDocumentCreateDialog from '@/components/dialogs/ReportDocumentCreateDialog.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
 
 export default {
     name: 'ReportDocumentList',
@@ -206,38 +207,36 @@ export default {
             });
         }
     },
-    components: { ReportTabMenu, ReportDocumentCreateDialog, BlankSlate }
+    components: { GenericDataTable, ReportTabMenu, ReportDocumentCreateDialog, BlankSlate }
 };
 </script>
 
 <template>
     <div class="grid mt-3">
-        <div class="col-12">
+        <div class="col-span-12">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-6"></div>
+        <div class="col-span-6">
+            <div class="flex justify-end">
                 <ReportDocumentCreateDialog @object-created="getItems"></ReportDocumentCreateDialog>
             </div>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-12">
-            <ReportTabMenu class="surface-card"></ReportTabMenu>
+    <div class="grid mt-3">
+        <div class="col-span-12">
+            <ReportTabMenu></ReportTabMenu>
             <div class="card border-noround-top">
-                <div class="grid">
-                    <div class="col-6">
-                        <span v-if="this.previewDocument && this.previewDocument.pk">{{ this.getDocumentStatus(this.previewDocument )}}</span>
+                <div class="grid grid-cols-12">
+                    <div class="col-span-6">
+                        <span v-if="this.previewDocument && this.previewDocument.pk">{{ this.getDocumentStatus(this.previewDocument) }}</span>
                     </div>
-                    <div class="col-6">
-                        <div class="flex justify-content-end">
+                    <div class="col-span-6">
+                        <div class="flex justify-end">
                             <Button label="Download" icon="fa fa-download" class="mr-2" :disabled="!previewDocument.pk" outlined @click="downloadDocument(previewDocument.pk, true)" :loading="previewDownloadLoading"></Button>
                             <Button
                                 label="Preview Document"
@@ -250,17 +249,23 @@ export default {
                         </div>
                     </div>
                 </div>
-                <div class="grid" v-if="this.previewDocument !== null">
-                    <div class="col-6 col-offset-6">
-                        <div class="flex justify-content-end">
+                <div class="grid mt-3" v-if="this.previewDocument !== null">
+                    <div class="col-span-6 col-offset-6">
+                        <div class="flex justify-end">
                             <small v-if="this.previewDocument && this.previewDocument.pk">Created at {{ this.previewDocument.date_created }}</small>
                         </div>
                     </div>
                 </div>
-                <DataTable paginator lazy :rowHover="items.length > 0" dataKey="pk" :totalRecords="totalRecords" filterDisplay="menu" :rows="pagination.limit" :value="items" :loading="loading" @page="onPage">
-                    <template #empty>
-                        <BlankSlate icon="fa fa-file" title="No Report Documents!" text="No report documents found!"></BlankSlate>
-                    </template>
+                <GenericDataTable
+                    :total-records="totalRecords"
+                    :loading="loading"
+                    :pagination="pagination"
+                    blank-slate-text="No report documents found!"
+                    blank-slate-title="No Report Documents!"
+                    blank-slate-icon="fa fa-file"
+                    :model-value="items"
+                    @page="onPage"
+                >
                     <Column field="name" header="Header"></Column>
                     <Column field="release_type" header="Release Type"></Column>
                     <Column header="Status">
@@ -274,7 +279,7 @@ export default {
                             <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                         </template>
                     </Column>
-                </DataTable>
+                </GenericDataTable>
             </div>
         </div>
     </div>

@@ -2,7 +2,7 @@
 import AssetService from '@/service/AssetService';
 import GenericAssetCreateDialog from '@/components/projects/assets/GenericAssetCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
-import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
 
 export default {
     name: 'HostList',
@@ -110,16 +110,9 @@ export default {
                 :model-value="items"
                 @page="onPage"
                 @rowClick="onRowClick"
+                :show-search="true"
+                @search="onGlobalSearch"
             >
-                <template #header>
-                    <div class="grid">
-                        <IconField iconPosition="left">
-                            <InputIcon class="fa fa-search"></InputIcon>
-                            <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                        </IconField>
-                    </div>
-                </template>
-
                 <Column field="name" header="Name"></Column>
                 <Column field="environment" header="Environment"></Column>
                 <Column field="accessible" header="Accessible"></Column>

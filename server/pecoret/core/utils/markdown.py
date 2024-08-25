@@ -63,5 +63,5 @@ def bleach_md(markdown_content, allow_images=False):
     return cleaned
 
 
-def md_to_clean_html(content):
-    return mark_safe(bleach_md(content))
+def md_to_clean_html(content, allow_images=False):
+    return mark_safe(bleach_md(content, allow_images=allow_images))

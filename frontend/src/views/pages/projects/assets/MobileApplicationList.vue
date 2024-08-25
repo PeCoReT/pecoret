@@ -2,7 +2,7 @@
 import AssetService from '@/service/AssetService';
 import MobileApplicationCreateDialog from '@/components/projects/assets/MobileApplicationCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
-import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
 
 export default {
     name: 'MobileApplicationList',

@@ -1,12 +1,12 @@
 <script>
 import FindingService from '@/service/FindingService';
-import SeverityBadge from '@/components/SeverityBadge.vue';
+import SeverityBadge from '@/components/badges/SeverityBadge.vue';
 import FindingCopyDialog from '@/components/dialogs/FindingCopyDialog.vue';
-import AssetSelectField from '@/components/elements/forms/AssetSelectField.vue';
-import FindingCreateDialog from '@/components/projects/findings/FindingCreateDialog.vue';
+import AssetSelectField from '@/components/forms/fields/AssetSelectField.vue';
+import FindingCreateDialog from '@/components/dialogs/FindingCreateDialog.vue';
 import FindingBulkEditDialog from '@/components/projects/findings/FindingBulkEditDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
-import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
 
 export default {
     name: 'FindingList',
@@ -188,7 +188,7 @@ export default {
                 <Column field="finding_date" header="Date"></Column>
                 <Column field="needs_review" header="Needs Review" :showFilterMatchModes="false">
                     <template #filter="{ filterModel }">
-                        <TriStateCheckbox v-model="filterModel.value"></TriStateCheckbox>
+                        <Checkbox v-model="filterModel.value" indeterminate binary></Checkbox>
                     </template>
                 </Column>
                 <Column header="Actions">

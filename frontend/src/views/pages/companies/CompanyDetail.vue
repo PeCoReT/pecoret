@@ -3,7 +3,7 @@ import CompanyService from '@/service/CompanyService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import CompanyInformationCreateDialog from '@/components/dialogs/CompanyInformationCreateDialog.vue';
 import CompanyUpdateDialog from '@/components/dialogs/CompanyUpdateDialog.vue';
-import CompanyTabMenu from '../../../components/pages/CompanyTabMenu.vue';
+import CompanyTabMenu from '@/components/navigation/CompanyTabMenu.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 import markdown from '@/utils/markdown';
 import CompanyInformationUpdateDialog from '@/components/dialogs/CompanyInformationUpdateDialog.vue';
@@ -81,67 +81,67 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-6">
+            <div class="flex justify-start">
                 <strong class="text-lg">{{ company.name }}</strong>
             </div>
         </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
+        <div class="col-span-6">
+            <div class="flex justify-end">
                 <CompanyUpdateDialog :company="company" @object-updated="getCompany"></CompanyUpdateDialog>
                 <Button @click="confirmDialogDeleteCompany" outlined severity="danger" icon="fa fa-trash" label="Delete"></Button>
             </div>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-12">
-            <CompanyTabMenu class="surface-card"></CompanyTabMenu>
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-12">
+            <CompanyTabMenu></CompanyTabMenu>
             <div class="card border-noround-top">
-                <div class="grid">
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Street" icon="fa-road" class="surface-ground" :text="company.street"></DetailCardWithIcon>
+                <div class="grid grid-cols-12 gap-3">
+                    <div class="col-span-2 md:col-span-3">
+                        <DetailCardWithIcon title="Street" icon="fa-road" class="bg-surface-950" :text="company.street"></DetailCardWithIcon>
                     </div>
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="City" icon="fa-city" class="surface-ground" :text="company.city"></DetailCardWithIcon>
+                    <div class="col-span-2 md:col-span-3">
+                        <DetailCardWithIcon title="City" icon="fa-city" class="bg-surface-950" :text="company.city"></DetailCardWithIcon>
                     </div>
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Country" icon="fa-earth" class="surface-ground" :text="company.country"></DetailCardWithIcon>
+                    <div class="col-span-2 md:col-span-3">
+                        <DetailCardWithIcon title="Country" icon="fa-earth" class="bg-surface-950" :text="company.country"></DetailCardWithIcon>
                     </div>
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Report Template" icon="fa-file" class="surface-ground" :text="company.report_template"></DetailCardWithIcon>
+                    <div class="col-span-2 md:col-span-3">
+                        <DetailCardWithIcon title="Report Template" icon="fa-file" class="bg-surface-950" :text="company.report_template"></DetailCardWithIcon>
                     </div>
                 </div>
-                <div class="grid">
-                    <div class="col-12">
-                        <div class="grid">
-                            <div class="col-6">
+                <div class="grid grid-cols-12 mt-3">
+                    <div class="col-span-12">
+                        <div class="grid grid-cols-12">
+                            <div class="col-span-6">
                                 <p class="text-xl">Company Information</p>
                             </div>
-                            <div class="col-6 flex justify-content-end">
+                            <div class="col-span-6 flex justify-end">
                                 <CompanyInformationCreateDialog @object-created="getCompanyInformation" :company-id="company.pk"></CompanyInformationCreateDialog>
                             </div>
                         </div>
 
-                        <Card v-for="info in companyInformation" :key="info.pk" class="surface-ground mt-3">
+                        <Card v-for="info in companyInformation" :key="info.pk" class="!bg-surface-950 mt-3">
                             <template #content>
                                 <div v-html="renderMarkdown(info.text)"></div>
                             </template>
                             <template #footer>
                                 <hr />
-                                <div class="grid">
-                                    <div class="col-12 md:col-6">
+                                <div class="grid grid-cols-12 mt-1">
+                                    <div class="col-span-12 md:col-span-6">
                                         {{ info.user.username }} on {{ info.date_created }}<span v-if="info.user_edit">; edited by {{ info.user_edit.username }} on {{ info.date_updated }}</span>
                                     </div>
-                                    <div class="col-12 md:col-6">
-                                        <div class="flex justify-content-end">
+                                    <div class="col-span-12 md:col-span-6">
+                                        <div class="flex justify-end">
                                             <CompanyInformationUpdateDialog :information="info" @object-updated="getCompanyInformation"></CompanyInformationUpdateDialog>
                                             <Button size="small" icon="fa fa-trash" severity="danger" outlined @click="confirmDialogDelete(info.pk)"></Button>
                                         </div>

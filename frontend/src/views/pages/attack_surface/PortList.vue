@@ -1,8 +1,8 @@
 <script>
 import ASMonitorService from '@/service/ASMonitorService';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
-import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
-import ProgramSelectField from '@/components/attack_surface/fields/ProgramSelectField.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
+import ProgramSelectField from '@/components/forms/fields/ProgramSelectField.vue';
 
 export default {
     name: 'PortList',

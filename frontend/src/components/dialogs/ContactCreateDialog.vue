@@ -9,6 +9,7 @@ export default {
             visible: false,
             companyService: new CompanyService(),
             companyId: this.$route.params.companyId,
+            loading: false,
             model: {
                 first_name: null,
                 last_name: null,
@@ -46,45 +47,36 @@ export default {
                 this.visible = false;
             });
         }
-    },
-    components: {}
+    }
 };
 </script>
 
 <template>
     <Button icon="fa fa-plus" label="Contact" @click="open" outlined></Button>
 
-    <Dialog header="Create Contact" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
-        <div class="p-fluid formgrid grid">
-            <div class="field col-12 md:col-6">
-                <label for="first_name">First Name</label>
-                <InputText id="first_name" v-model="model.first_name"></InputText>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="last_name">Last Name</label>
-                <InputText id="last_name" v-model="model.last_name"></InputText>
-            </div>
-            <div class="field col-12">
-                <label for="email">E-Mail</label>
-                <InputText id="email" v-model="model.email" type="email"></InputText>
-            </div>
-            <div class="field col-12">
-                <label for="phone">Phone</label>
-                <InputText id="phone" v-model="model.phone"></InputText>
-            </div>
-            <div class="field col-12">
-                <label for="role">Role</label>
-                <InputText id="role" v-model="model.role"></InputText>
-            </div>
-            <div class="field col-12">
-                <label for="pgp_public_key">PGP Public Key</label>
-                <Textarea id="pgp_public_key" v-model="model.pgp_public_key"></Textarea>
-            </div>
-        </div>
+    <ModalDialog header="Create Contact" v-model="visible" :loading="loading" @onSave="create">
+        <Form>
+            <InlineFieldGroup>
+                <InlineField label="First Name">
+                    <InputText id="first_name" v-model="model.first_name"></InputText>
+                </InlineField>
+                <InlineField label="Last Name">
+                    <InputText id="last_name" v-model="model.last_name"></InputText>
+                </InlineField>
+            </InlineFieldGroup>
 
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+            <Field label="E-Mail">
+                <InputText id="email" v-model="model.email" type="email"></InputText>
+            </Field>
+            <Field label="Phone">
+                <InputText id="phone" v-model="model.phone"></InputText>
+            </Field>
+            <Field label="Role">
+                <InputText id="role" v-model="model.role"></InputText>
+            </Field>
+            <Field label="PGP Public Key">
+                <Textarea id="pgp_public_key" v-model="model.pgp_public_key"></Textarea>
+            </Field>
+        </Form>
+    </ModalDialog>
 </template>

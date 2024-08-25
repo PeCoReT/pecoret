@@ -1,6 +1,9 @@
 <script>
+import Breadcrumb from 'primevue/breadcrumb';
+
 export default {
     name: 'pBreadcrumb',
+    components: { Breadcrumb },
     props: {
         modelValue: {
             required: true
@@ -10,7 +13,7 @@ export default {
 </script>
 
 <template>
-    <Breadcrumb :model="modelValue">
+    <Breadcrumb :model="modelValue" class="rounded">
         <template #item="{ label, item, props }">
             <router-link v-if="item.to" :to="item.to" v-bind="props.action">
                 <span v-bind="props.icon" />

@@ -79,6 +79,13 @@ export function loadApi(app) {
                     life: 3000,
                     detail: error.response.data.detail
                 });
+            } else if (error.response.status === 500) {
+                app.config.globalProperties.$toast.add({
+                    severity: 'error',
+                    summary: 'Error: Unknown server error',
+                    life: 3000,
+                    detail: 'Server returned an unknown error'
+                })
             }
             return Promise.reject(error);
         }

@@ -2,13 +2,14 @@
 import ProjectService from '@/service/ProjectService';
 import CompanyService from '@/service/CompanyService';
 import PentestTypeSelectField from '@/components/forms/fields/PentestTypeSelectField.vue';
+import ModalDialog from '@/components/common/ModalDialog.vue';
 
 export default {
     name: 'ProjectCreateDialog',
     emits: ['object-created'],
     data() {
         return {
-            visible: false,
+            showDialog: false,
             model: {
                 pentest_types: null,
                 name: null,
@@ -21,6 +22,7 @@ export default {
                 company: null,
                 visibility: null
             },
+            loading: false,
             scoreChoices: [
                 { label: 'CVSS 4.0 Base', value: 0 },
                 { label: 'CVSS 3.1 Base', value: 1 }
@@ -41,11 +43,8 @@ export default {
         this.model.visibility = 'Members Only';
     },
     methods: {
-        close() {
-            this.visible = false;
-        },
         open() {
-            this.visible = true;
+            this.showDialog = true;
         },
         onFocusCompany() {
             if (this.companyChoices) {
@@ -75,6 +74,7 @@ export default {
             });
         },
         create() {
+            this.loading = true;
             let data = {
                 pentest_types: this.model.pentest_types,
                 name: this.model.name,
@@ -88,72 +88,68 @@ export default {
                 company: this.model.company,
                 visibility: this.model.visibility
             };
-            this.service.createProject(this.$api, data).then((response) => {
-                this.$toast.add({
-                    severity: 'success',
-                    summary: 'Created',
-                    life: 3000,
-                    detail: 'Project created successfully!'
+            this.service
+                .createProject(this.$api, data)
+                .then((response) => {
+                    this.$toast.add({
+                        severity: 'success',
+                        summary: 'Created',
+                        life: 3000,
+                        detail: 'Project created successfully!'
+                    });
+                    this.$emit('object-created', response.data);
+                    this.showDialog = false;
+                })
+                .finally(() => {
+                    this.loading = false;
                 });
-                this.$emit('object-created', response.data);
-                this.visible = false;
-            });
         }
     },
-    components: { PentestTypeSelectField }
+    components: { ModalDialog, PentestTypeSelectField }
 };
 </script>
 
 <template>
     <Button icon="fa fa-plus" label="Project" @click="open()" outlined></Button>
 
-    <Dialog header="Create Project" v-model:visible="visible" :breakpoints="{ '960px': '75vw' }" :style="{ width: '70vw' }" :modal="true">
-        <div class="p-fluid formgrid grid">
-            <div class="field col-12">
-                <label for="name">Name</label>
+    <ModalDialog :loading="loading" header="New Project" v-model="showDialog" @onSave="create">
+        <Form>
+            <Field label="name">
                 <InputText id="name" type="text" v-model="model.name" label="Name"></InputText>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="start_date">Start Date</label>
-                <Calendar v-model="model.start_date"></Calendar>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="end_date">End Date</label>
-                <Calendar v-model="model.end_date"></Calendar>
-            </div>
-            <div class="field col-12">
-                <label for="test_method">Test Method</label>
-                <Dropdown v-model="model.test_method" :options="testMethodChoices" optionLabel="title" optionValue="value"></Dropdown>
-            </div>
-            <div class="field col-12 md:col-6">
-                <PentestTypeSelectField v-model="model.pentest_types"></PentestTypeSelectField>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="language">Language</label>
-                <Dropdown optionLabel="language" optionValue="language" @focus="onFocusLanguages" v-model="model.language" :options="languageChoices"></Dropdown>
-            </div>
-
-            <div class="field col-12 md:col-6">
-                <label for="company">Company</label>
-                <Dropdown :options="companyChoices" @filter="onFilterCompany" @focus="onFocusCompany" filter optionLabel="name" optionValue="pk" v-model="model.company"></Dropdown>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="visibility">Visibility</label>
-                <Dropdown :options="service.getVisibilityChoices()" optionLabel="label" optionValue="value" v-model="model.visibility"></Dropdown>
-            </div>
-            <div class="field col-12">
-                <label for="require_cvss_score">Require CVSS Score</label>
-                <Dropdown :options="scoreChoices" :show-clear="true" optionLabel="label" optionValue="value" v-model="model.require_cvss_score"></Dropdown>
-            </div>
-            <div class="field col-12">
-                <label for="description">Description</label>
+            </Field>
+            <InlineFieldGroup>
+                <InlineField label="Start Date">
+                    <DatePicker v-model="model.start_date"></DatePicker>
+                </InlineField>
+                <InlineField label="End Date">
+                    <DatePicker v-model="model.end_date"></DatePicker>
+                </InlineField>
+            </InlineFieldGroup>
+            <Field label="Test Method">
+                <Select v-model="model.test_method" :options="testMethodChoices" optionLabel="title" optionValue="value"></Select>
+            </Field>
+            <InlineFieldGroup>
+                <InlineField label="Project Type">
+                    <PentestTypeSelectField v-model="model.pentest_types"></PentestTypeSelectField>
+                </InlineField>
+                <InlineField label="Language">
+                    <Select optionLabel="language" optionValue="language" @focus="onFocusLanguages" v-model="model.language" :options="languageChoices"></Select>
+                </InlineField>
+            </InlineFieldGroup>
+            <InlineFieldGroup>
+                <InlineField label="Company">
+                    <Select :options="companyChoices" @filter="onFilterCompany" @focus="onFocusCompany" filter optionLabel="name" optionValue="pk" v-model="model.company"></Select>
+                </InlineField>
+                <InlineField label="Visibility">
+                    <Select :options="service.getVisibilityChoices()" optionLabel="label" optionValue="value" v-model="model.visibility"></Select>
+                </InlineField>
+            </InlineFieldGroup>
+            <Field label="Require CVSS Score">
+                <Select :options="scoreChoices" :show-clear="true" optionLabel="label" optionValue="value" v-model="model.require_cvss_score"></Select>
+            </Field>
+            <Field label="Description">
                 <Textarea v-model="model.description" autoResize rows="5" cols="30"></Textarea>
-            </div>
-        </div>
-
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+            </Field>
+        </Form>
+    </ModalDialog>
 </template>

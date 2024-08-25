@@ -14,7 +14,8 @@ export default {
         return {
             visible: false,
             model: this.command,
-            service: new ChecklistService()
+            service: new ChecklistService(),
+            loading: false
         };
     },
     methods: {
@@ -45,32 +46,26 @@ export default {
             }
         }
     },
-    components: { MarkdownEditor }
+    components: {MarkdownEditor}
 };
 </script>
 
 <template>
     <Button icon="fa fa-pen-to-square" size="small" @click="open" outlined></Button>
 
-    <Dialog header="Update Item" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
-        <div class="p-fluid formgrid grid">
-            <div class="field col-12">
-                <label for="id">Item ID</label>
+    <ModalDialog header="Update Item" v-model="visible" @onSave="patch" :loading="loading">
+        <Form>
+            <Field label="Item ID">
                 <InputText id="id" type="text" v-model="model.item_id"></InputText>
-            </div>
-            <div class="field col-12">
-                <label for="name">Name</label>
-                <InputText id="name" type="text" v-model="model.name"></InputText>
-            </div>
-            <div class="field col-12">
-                <label for="output">Description</label>
-                <MarkdownEditor v-model="model.description"></MarkdownEditor>
-            </div>
-        </div>
 
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="patch" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+            </Field>
+            <Field label="Name">
+                <InputText id="name" type="text" v-model="model.name"></InputText>
+            </Field>
+            <Field label="Description">
+                                <MarkdownEditor v-model="model.description"></MarkdownEditor>
+
+            </Field>
+        </Form>
+    </ModalDialog>
 </template>

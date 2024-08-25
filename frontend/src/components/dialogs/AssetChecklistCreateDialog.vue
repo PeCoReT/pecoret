@@ -1,88 +1,71 @@
 <script>
-import ChecklistService from '@/service/ChecklistService'
-import AssetSelectField from '@/components/elements/forms/AssetSelectField.vue'
-
+import ChecklistService from '@/service/ChecklistService';
+import AssetSelectField from '@/components/forms/fields/AssetSelectField.vue';
+import ModalDialog from '@/components/common/ModalDialog.vue';
 
 export default {
     name: 'AssetChecklistCreateDialog',
-    emits: ["object-created"],
+    emits: ['object-created'],
     data() {
         return {
-            visible: false,
+            showDialog: false,
             model: {
                 asset: null,
                 checklist: null
             },
+            loading: false,
             projectId: this.$route.params.projectId,
             checklistChoices: [],
-            service: new ChecklistService(),
-        }
+            service: new ChecklistService()
+        };
     },
     methods: {
-        close() {
-            this.visible = false
-        },
         open() {
-            this.visible = true
+            this.showDialog = true;
         },
         create() {
             let data = {
-              component: this.model.asset,
-              checklist_id: this.model.checklist
-            }
+                component: this.model.asset,
+                checklist_id: this.model.checklist
+            };
             this.service.createAssetChecklist(this.$api, this.projectId, data).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Created',
                     life: 3000,
                     detail: 'Checklist created successfully!'
-                })
-                this.$emit('object-created', response.data)
-                this.visible = false
-            })
+                });
+                this.$emit('object-created', response.data);
+                this.showDialog = false;
+            });
         },
-        onFocusChecklist(){
+        onFocusChecklist() {
             this.service.getChecklists(this.$api).then((response) => {
-                this.checklistChoices = response.data.results
-            })
+                this.checklistChoices = response.data.results;
+            });
         },
-        onFilterChecklist(event){
+        onFilterChecklist(event) {
             let params = {
                 search: event.value
-            }
+            };
             this.service.getChecklists(this.$api, params).then((response) => {
-                this.checklistChoices = response.data.results
-            })
+                this.checklistChoices = response.data.results;
+            });
         }
     },
-    components: { AssetSelectField }
-}
-
+    components: { ModalDialog, AssetSelectField }
+};
 </script>
 
 <template>
     <Button icon="fa fa-plus" label="Checklist" @click="open()" outlined></Button>
 
-    <Dialog header="Create Checklist" v-model:visible="visible" :breakpoints="{ '960px': '75vw' }" :style="{ width: '70vw' }"
-        :modal="true">
-
-        <div class="p-fluid formgrid grid">
+    <ModalDialog v-model:loading="loading" header="New Checklist" v-model="showDialog" @onSave="create">
+        <Form>
             <AssetSelectField v-model="model.asset"></AssetSelectField>
-            <div class="field col-12">
-                <label for="test_method">Checklist</label>
-                <Dropdown v-model="model.checklist"
-                    :options="checklistChoices" filter
-                    @focus="onFocusChecklist"
-                    @filter="onFilterChecklist"
-                    optionLabel="name" optionValue="checklist_id"></Dropdown>
-            </div>
-            
-        </div>
-
-
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+            <Field label="Checklist">
+                <Select v-model="model.checklist" :options="checklistChoices" filter @focus="onFocusChecklist" @filter="onFilterChecklist" optionLabel="name" optionValue="checklist_id"></Select>
+            </Field>
+        </Form>
+    </ModalDialog>
 </template>

@@ -15,25 +15,25 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
             <slot name="breadcrumb">
                 <pBreadcrumb v-model="breadcrumbModel"></pBreadcrumb>
             </slot>
         </div>
     </div>
     <slot name="pre-content">
-        <div class="grid">
-            <div class="col-6">
+        <div class="grid grid-cols-12">
+            <div class="col-span-6">
                 <slot name="pre-content-left"></slot>
             </div>
-            <div class="col-6">
+            <div class="col-span-6">
                 <slot name="pre-content-right"></slot>
             </div>
         </div>
     </slot>
 
-    <div class="grid">
+    <div class="grid grid-cols-12 gap-3">
         <slot></slot>
     </div>
 </template>

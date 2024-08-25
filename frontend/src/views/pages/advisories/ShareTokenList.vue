@@ -2,9 +2,9 @@
 import AdvisoryService from '@/service/AdvisoryService';
 import { useListViewComposable } from '@/composables/listViewComposable';
 import PBreadcrumb from '@/components/Breadcrumb.vue';
-import AdvisoryTabMenu from '@/components/advisories/AdvisoryTabMenu.vue';
-import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
-import ShareTokenCreateDialog from '@/components/advisories/ShareTokenCreateDialog.vue';
+import AdvisoryTabMenu from '@/components/navigation/AdvisoryTabMenu.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
+import ShareTokenCreateDialog from '@/components/dialogs/advisories/ShareTokenCreateDialog.vue';
 
 export default {
     name: 'ShareTokenList',
@@ -94,23 +94,23 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-12">
             <p-breadcrumb :model-value="breadcrumbs"></p-breadcrumb>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-6"></div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-6"></div>
+        <div class="col-span-6">
+            <div class="flex justify-end">
                 <ShareTokenCreateDialog @object-created="getItems"></ShareTokenCreateDialog>
             </div>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-12">
-            <AdvisoryTabMenu class="surface-card"></AdvisoryTabMenu>
-            <div class="card border-noround-top">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-12">
+            <AdvisoryTabMenu></AdvisoryTabMenu>
+            <div class="card">
                 <GenericDataTable
                     :total-records="totalRecords"
                     :loading="loading"

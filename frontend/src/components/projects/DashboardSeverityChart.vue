@@ -45,9 +45,9 @@ export default defineComponent({
     <Card class="card">
         <template #title>Severities</template>
         <template #content>
-            <div class="flex justify-content-center">
+            <div class="flex justify-center">
                 <Skeleton v-if="loading"></Skeleton>
-                <Chart type="doughnut" :data="chartData" :options="options" class="w-full max-w-25rem"></Chart>
+                <Chart type="doughnut" :data="chartData" :options="options" class="w-full max-w-[25rem]"></Chart>
             </div>
         </template>
     </Card>

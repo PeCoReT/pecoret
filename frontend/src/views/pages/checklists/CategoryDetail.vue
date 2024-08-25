@@ -82,18 +82,18 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-6">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-6">
             <div class="flex justify-content-start"></div>
         </div>
-        <div class="col-6 h-full">
-            <div class="flex justify-content-end">
+        <div class="col-span-6 h-full">
+            <div class="flex justify-end">
                 <ChecklistItemCreate @object-created="getCategory"></ChecklistItemCreate>
 
                 <Button label="Delete" severity="danger" outlined icon="fa fa-trash" @click="confirmDialogDelete"></Button>
@@ -101,36 +101,36 @@ export default {
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-12">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-12">
             <div class="card">
-                <div class="grid formgrid p-fluid">
-                    <div class="field md:col-6 col-12">
-                        <label for="category_id">Category ID</label>
-                        <InputText v-model="model.category_id"></InputText>
-                    </div>
-                    <div class="field md:col-6 col-12">
-                        <label for="name">Name</label>
-                        <InputText v-model="model.name"></InputText>
-                    </div>
-                </div>
+                <Form>
+                    <InlineFieldGroup>
+                        <InlineField label="Category ID">
+                            <InputText v-model="model.category_id"></InputText>
+                        </InlineField>
+                        <InlineField label="Name">
+                            <InputText v-model="model.name"></InputText>
+                        </InlineField>
+                    </InlineFieldGroup>
+                </Form>
 
-                <div class="grid">
-                    <div class="col-12">
+                <div class="grid mt-3 grid-cols-12">
+                    <div class="col-span-12">
                         <Skeleton v-if="loading === true"></Skeleton>
                         <Accordion v-else>
                             <AccordionTab v-for="(item, index) in model.items" :key="index">
                                 <template #header>
-                                    <div class="col-10 m-1 p-1">
+                                    <div class="col-span-10 m-1 p-1">
                                         <span class="white-space-nowrap">{{ item.name }}</span>
                                     </div>
                                 </template>
-                                <div class="grid">
-                                    <div class="col-10 m-3 p-1">
+                                <div class="grid grid-cols-12">
+                                    <div class="col-span-10 p-2">
                                         <span v-html="renderMarkdown(item.description)"></span>
                                     </div>
-                                    <div class="col m-3 p-1">
-                                        <div class="flex justify-content-end">
+                                    <div class="col-span-2 p-2">
+                                        <div class="flex justify-end">
                                             <ChecklistItemUpdate :item="item"></ChecklistItemUpdate>
                                             <Button icon="fa fa-trash" outlined severity="danger" @click="confirmDialogDeleteItem(item.pk)"></Button>
                                         </div>

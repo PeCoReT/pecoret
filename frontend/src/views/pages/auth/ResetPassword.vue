@@ -4,13 +4,12 @@ import { useAuthStore } from '@/store/auth';
 import AuthLayout from '@/layout/AuthLayout.vue';
 
 export default {
-    name: 'ResetPassword',
+    name: 'Login',
     components: { AuthLayout },
+
     data() {
         return {
-            model: {
-                email: null
-            },
+            email: null,
             loading: false,
             service: new AuthService(),
             authStore: useAuthStore()
@@ -42,16 +41,15 @@ export default {
 </script>
 
 <template>
-    <AuthLayout title="Reset Password">
-        <div class="grid formgrid p-fluid">
-            <div class="col-12 field">
-                <label for="username" class="text-900 text-xl font-medium mb-2">E-Mail</label>
-                <InputText id="email" type="text" placeholder="email" class="mb-3" style="padding: 1rem" v-model="model.email" />
+    <AuthLayout>
+        <InputText id="username" type="text" placeholder="Email address" class="w-full mb-6" v-model="email" />
+
+        <div class="flex items-center justify-between mt-2 mb-6 gap-8">
+            <div class="flex items-center">
+                <label for="rememberme1"></label>
             </div>
+            <a @click="this.$router.push({ name: 'Login' })" class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</a>
         </div>
-        <div class="flex align-items-center justify-content-between mb-5 gap-5">
-            <a class="font-medium no-underline ml-2 text-right cursor-pointer" @click="this.$router.push({ name: 'Login' })" style="color: var(--primary-color)">Back to Login?</a>
-        </div>
-        <Button :loading="loading" label="Reset Password" class="w-full p-3 text-xl" @click="resetPassword"></Button>
+        <Button :loading="loading" label="Sign In" class="w-full" @click="resetPassword"></Button>
     </AuthLayout>
 </template>

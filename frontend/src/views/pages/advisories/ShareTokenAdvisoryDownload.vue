@@ -28,9 +28,9 @@ export default {
 </script>
 
 <template>
-    <AuthLayout title="Download Advisory">
+    <AuthLayout title="" welcomeText="Download your Advisory!">
         <div class="grid p-fluid mt-3">
-            <Button size="large" label="Download" :loading="loading" @click="download"></Button>
+            <Button icon="fa fa-download" size="large" label="Download" :loading="loading" @click="download"></Button>
         </div>
     </AuthLayout>
 </template>

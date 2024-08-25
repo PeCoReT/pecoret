@@ -1,6 +1,6 @@
 <script>
 import FindingService from '@/service/FindingService';
-import FindingTabMenu from '@/components/pages/FindingTabMenu.vue';
+import FindingTabMenu from '@/components/navigation/FindingTabMenu.vue';
 import CVSS4CalculatorForm from '@/components/forms/CVSS4CalculatorForm.vue';
 import { useAuthStore } from '@/store/auth';
 import BlankSlate from '@/components/BlankSlate.vue';
@@ -61,23 +61,23 @@ export default {
 };
 </script>
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid grid-cols-1 mt-3">
+        <div class="col-span-1">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
-    <div class="grid">
+    <div class="grid mt-3">
         <div class="col-12">
             <FindingTabMenu class="surface-card"></FindingTabMenu>
 
             <div class="card border-noround-top" v-if="authStore.activeProject.require_cvss_score === 0">
-                <div class="grid">
-                    <div class="col-6">
+                <div class="grid grid-cols-2">
+                    <div class="col-span-1">
                         <p class="text-xl">CVSS 4.0 Base-Score</p>
                     </div>
-                    <div class="col-6">
-                        <div class="justify-content-end flex">
+                    <div class="col-span-1">
+                        <div class="justify-end flex">
                             <span :class="'color-severity severity-' + this.cvss4.severity.toLowerCase()">{{ this.cvss4.vector }} / {{ this.cvss4.score }} ({{ this.cvss4.severity }})</span>
                         </div>
                     </div>
@@ -87,12 +87,12 @@ export default {
             </div>
 
             <div class="card border-noround-top" v-else-if="authStore.activeProject.require_cvss_score === 1">
-                <div class="grid">
-                    <div class="col-6">
+                <div class="grid grid-cols-2">
+                    <div class="col-span-1">
                         <p class="text-xl">CVSS 3.1 Base-Score</p>
                     </div>
-                    <div class="col-6">
-                        <div class="justify-content-end flex">
+                    <div class="col-span-1">
+                        <div class="justify-end flex">
                             <span :class="'color-severity severity-' + this.cvss31.severity.toLowerCase()">{{ this.cvss31.vector }} / {{ this.cvss31.score }} ({{ this.cvss31.severity }})</span>
                         </div>
                     </div>

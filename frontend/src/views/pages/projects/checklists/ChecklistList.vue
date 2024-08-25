@@ -1,7 +1,7 @@
 <script>
 import ChecklistService from '@/service/ChecklistService';
 import markdown from '@/utils/markdown';
-import AssetSelectField from '@/components/elements/forms/AssetSelectField.vue';
+import AssetSelectField from '@/components/forms/fields/AssetSelectField.vue';
 import AssetChecklistCreateDialog from '@/components/dialogs/AssetChecklistCreateDialog.vue';
 
 export default {
@@ -116,62 +116,64 @@ export default {
 </script>
 <template>
     <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs" />
-        </div>
+        <pBreadcrumb v-model="breadcrumbs" />
     </div>
-    <div class="grid">
-        <div class="col-6"></div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
+    <div class="grid mt-3 grid-cols-2">
+        <div class="col-span-1"></div>
+        <div class="col-span-1">
+            <div class="flex justify-end">
                 <AssetChecklistCreateDialog @object-created="getChecklists"></AssetChecklistCreateDialog>
             </div>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-12">
+    <div class="grid mt-3 grid-cols-1">
+        <div class="col-span-1">
             <div class="card">
-                <div class="p-fluid formgrid grid">
-                    <AssetSelectField v-model="asset" :displayInline="true" @update:model-value="onAssetChange"></AssetSelectField>
-                    <div class="field col-10">
-                        <Dropdown :options="checklistChoices" placeholder="Checklist" v-model="checklist" @change="onChecklistChange" :disabled="checklistChoices.length < 1" optionLabel="name" optionValue="pk"></Dropdown>
-                    </div>
-                    <div class="field col-2">
-                        <Button label="Checklist" size="small" severity="danger" :disabled="this.checklist === null" icon="fa fa-trash" outlined @click="onDeleteDialogChecklist"></Button>
-                    </div>
-                </div>
-                <div class="grid">
-                    <div class="col-12 md:col">
-                        <div class="flex justify-content-between flex-column sm:flex-row">
+                <Form>
+                    <InlineFieldGroup>
+                        <AssetSelectField v-model="asset" :displayInline="true" @update:model-value="onAssetChange"></AssetSelectField>
+                        <InlineField label="Checklist">
+                            <Select :options="checklistChoices" placeholder="Checklist" v-model="checklist" @change="onChecklistChange" :disabled="checklistChoices.length < 1" optionLabel="name" optionValue="pk"></Select>
+                        </InlineField>
+                    </InlineFieldGroup>
+                </Form>
+                <div class="grid mt-3 grid-cols-1 md:grid-cols-2">
+                    <div class="col-span-1">
+                        <div class="flex justify-between flex-column sm:flex-row">
                             <IconField iconPosition="left">
                                 <InputIcon class="fa fa-search"></InputIcon>
                                 <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
                             </IconField>
                         </div>
                     </div>
+                    <div class="col-span-1">
+                        <div class="flex justify-end">
+                            <Button label="Checklist" severity="danger" :disabled="this.checklist === null" icon="fa fa-trash" outlined @click="onDeleteDialogChecklist"></Button>
+                        </div>
+                    </div>
                 </div>
-                <div class="grid">
-                    <Accordion class="mt-3 w-full col">
-                        <AccordionTab v-for="category in categories" :key="category.pk">
-                            <template #header> {{ category.name }} ({{ category.closed_items }}/{{ category.items.length }}) </template>
-                            <div class="grid">
-                                <div class="col-12">
-                                    <div class="flex flex-column xl:flex-row xl:align-items-start p-2 gap-2" v-for="item in category.items">
-                                        <div class="flex align-items-center">
-                                            <Checkbox @change="onCheckboxChange($event, item, category)" :binary="true" v-model="item.checked"></Checkbox>
-                                            <label class="ml-3">
-                                                <Button @click="this.expandedItem = item" text class="text-color">
-                                                    {{ item.name }}
-                                                </Button>
-                                            </label>
+                <div class="grid grid-cols-2 mt-3">
+                    <Accordion class="mt-3 w-full col-span-1">
+                        <AccordionPanel v-for="category in categories" :key="category.pk">
+                            <AccordionHeader>{{ category.name }} ({{ category.closed_items }}/{{ category.items.length }}) </AccordionHeader>
+                            <AccordionContent>
+                                <div class="grid grid-cols-1">
+                                    <div class="col-span-1">
+                                        <div class="flex items-center" v-for="item in category.items">
+                                                <Checkbox @change="onCheckboxChange($event, item, category)" :binary="true" v-model="item.checked"></Checkbox>
+                                                <label class="ml-3">
+                                                    <Button @click="this.expandedItem = item" :text="true" class="text-color">
+                                                        {{ item.name }}
+                                                    </Button>
+                                                </label>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </AccordionTab>
+                            </AccordionContent>
+                        </AccordionPanel>
                     </Accordion>
-                    <div class="col md:col-7 mt-3 h-full" v-if="expandedItem">
+                    <div class="col-span-1 h-full" v-if="expandedItem">
                         <div class="card surface-ground">
                             <div v-html="renderMarkdown(expandedItem.description)" class="checklist-description"></div>
                         </div>

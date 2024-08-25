@@ -58,23 +58,14 @@ export default {
 <template>
     <Button icon="fa fa-pen-to-square" size="small" @click="open" outlined></Button>
 
-    <Dialog header="Update Project Type" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
-        <div class="formgrid grid p-fluid">
-            <div class="field col-12">
-                <label for="name">Name</label>
+    <ModalDialog header="Update Project Type" v-model="visible" @onSave="patch" :loading="loading">
+        <Form>
+            <Field label="Name">
                 <InputText id="name" v-model="model.name"></InputText>
-            </div>
-            <div class="field col-12">
-                <label for="description">Description</label>
+            </Field>
+            <Field label="Description">
                 <MarkdownEditor v-model="model.description"></MarkdownEditor>
-            </div>
-        </div>
-
-        <div class="flex flex-column gap-2"></div>
-
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="patch" :loading="loading" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+            </Field>
+        </Form>
+    </ModalDialog>
 </template>

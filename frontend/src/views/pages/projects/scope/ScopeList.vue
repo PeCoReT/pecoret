@@ -2,7 +2,7 @@
 import ProjectScopeService from '@/service/ProjectScopeService';
 import ProjectScopeCreateDialog from '@/components/dialogs/ProjectScopeCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
-import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
 
 export default {
     name: 'ScopeList',

@@ -1,10 +1,10 @@
 <script>
 import ASMonitorService from '@/service/ASMonitorService';
-import TargetCreateDialog from '@/components/attack_surface/TargetCreateDialog.vue';
-import TargetUpdateDialog from '@/components/attack_surface/TargetUpdateDialog.vue';
-import TagBadgeButton from '@/components/asmonitor/TagBadgeButton.vue';
+import TargetCreateDialog from '@/components/dialogs/attack_surface/TargetCreateDialog.vue';
+import TargetUpdateDialog from '@/components/dialogs/attack_surface/TargetUpdateDialog.vue';
+import TagBadgeButton from '@/components/badges/TagBadgeButton.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
-import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
 import TechnologyService from '@/service/TechnologyService';
 
 export default {

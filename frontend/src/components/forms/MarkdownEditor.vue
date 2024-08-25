@@ -155,7 +155,7 @@ export default {
 </script>
 <template>
     <div class="border-0 border-round">
-        <textarea class="p-3 p-inputtext p-component" :value="modelValue" @blur="handleBlur($event.target.value)" @input="handleInput($event.target.value)" />
+        <textarea :value="modelValue" @blur="handleBlur($event.target.value)" @input="handleInput($event.target.value)" />
     </div>
 </template>
 <style>
@@ -164,7 +164,7 @@ export default {
 .CodeMirror {
     background: var(--surface-ground) !important;
     color: inherit !important;
-    border: 1px solid var(--surface-100) !important;
+    border: 1px solid var(--p-inputtext-border-color) !important;
 }
 
 .editor-preview {
@@ -173,13 +173,13 @@ export default {
 }
 
 .editor-toolbar button:hover {
-    background-color: var(--surface-c) !important;
+    background-color: var(--surface-card) !important;
 }
 
 .editor-toolbar {
-    border-top: 1px solid var(--surface-100);
-    border-left: 1px solid var(--surface-100);
-    border-right: 1px solid var(--surface-100);
+    border-top: 1px solid var(--p-inputtext-border-color);
+    border-left: 1px solid var(--p-inputtext-border-color);
+    border-right: 1px solid var(--p-inputtext-border-color);
 }
 
 .CodeMirror-cursor {
@@ -188,7 +188,7 @@ export default {
 
 .editor-toolbar button.active,
 .editor-toolbar button:hover {
-    background-color: var(--surface-c);
+    background-color: var(--surface-card);
     color: var(--text-color);
 }
 
@@ -201,7 +201,7 @@ export default {
 }
 
 .editor-preview pre {
-    background: var(--surface-50);
+    background: var(--p-surface-800);
     padding: 1em;
     border-radius: 5px;
 }

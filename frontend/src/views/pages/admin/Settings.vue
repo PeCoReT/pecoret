@@ -56,27 +56,26 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-12">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-12">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
             <div class="card">
-                <div class="grid">
-                    <div class="col">
+                <div class="grid grid-cols-12 gap-3">
+                    <div class="col-span-2">
                         <Menu :model="menuItems" class="surface-ground w-20rem"></Menu>
                     </div>
-                    <div class="col">
-                        <div class="formgrid p-fluid grid">
-                            <div class="col-12 field" v-for="item in items" :key="item.pk">
-                                <label :for="item.name">{{ item.name }}</label>
+                    <div class="col-span-10">
+                        <Form>
+                            <Field v-for="item in items" :key="item.pk" :label="item.name">
                                 <InputNumber v-if="item.value_type === 'int'" v-model="item.value" :id="item.name" @change="saveSettings(item)"></InputNumber>
                                 <InputText :id="item.name" v-model="item.value" v-else @change="saveSettings(item)"></InputText>
                                 <small :id="item.name" v-if="item.description !== null && item.description !== ''">{{ item.description }}</small>
-                            </div>
-                        </div>
+                            </Field>
+                        </Form>
                     </div>
                 </div>
             </div>

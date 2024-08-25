@@ -4,6 +4,7 @@ from django.core.files.images import ImageFile
 from django.db import models
 from django.dispatch import receiver
 from django.utils import timezone
+from django.conf import settings
 from extra_settings.models import Setting
 
 from advisories.models.attachment import ImageAttachment
@@ -90,6 +91,7 @@ class AdvisoryManager(models.Manager):
         data["user"] = finding.user
         data["proof_text"] = finding.proof_text
         data["title"] = finding.name
+        data['report_template'] = list(settings.REPORT_TEMPLATES.keys())[0]
         data["recommendation"] = finding.vulnerability.recommendation
         data["vulnerability"] = VulnerabilityTemplate.objects.get(
             vulnerability_id=finding.vulnerability.vulnerability_id

@@ -1,7 +1,7 @@
 <script>
 import AdvisoryService from '@/service/AdvisoryService';
-import AdvisoryTabMenu from '@/components/advisories/AdvisoryTabMenu.vue';
-import AdvisoryAttachmentFileDrop from '@/components/advisories/AdvisoryAttachmentFileDrop.vue';
+import AdvisoryTabMenu from '@/components/navigation/AdvisoryTabMenu.vue';
+import AdvisoryAttachmentFileDrop from '@/components/forms/fields/advisories/AdvisoryAttachmentFileDrop.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
@@ -58,35 +58,33 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-6">
+            <div class="flex justify-start"></div>
         </div>
-        <div class="col-6">
-            <div class="flex justify-content-end"></div>
+        <div class="col-span-6">
+            <div class="flex justify-end"></div>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-12">
-            <AdvisoryTabMenu class="surface-card"></AdvisoryTabMenu>
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-12">
+            <AdvisoryTabMenu></AdvisoryTabMenu>
             <div class="card border-noround-top">
-                <div class="grid formgrid p-fluid">
-                    <div class="col-12 field">
+                <Form>
+                    <Field label="Text">
                         <MarkdownEditor v-model="model.proof_text"></MarkdownEditor>
-                    </div>
-                    <div class="col-12 field">
+                    </Field>
+                    <Field label="Attachments">
                         <AdvisoryAttachmentFileDrop></AdvisoryAttachmentFileDrop>
-                    </div>
-                    <div class="col-12 field">
-                        <Button label="Save" @click="patchAdvisory"></Button>
-                    </div>
-                </div>
+                    </Field>
+                    <Button label="Save" @click="patchAdvisory" class="w-full"></Button>
+                </Form>
             </div>
         </div>
     </div>

@@ -4,7 +4,7 @@ import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMult
 
 export default {
     name: 'ScanFindingDetail',
-    components: { TechnologyMultiSelectField, },
+    components: { TechnologyMultiSelectField },
     data() {
         return {
             item: {},
@@ -59,33 +59,32 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-12">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-6"></div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-6"></div>
+        <div class="col-span-6">
+            <div class="flex justify-end">
                 <Button label="Delete" severity="danger" outlined icon="fa fa-trash" @click="confirmDialogDelete"></Button>
             </div>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-12">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-12">
             <div class="card">
-                <div class="grid formgrid p-fluid">
-                    <div class="field col-12">
-                        <label for="description">URL</label>
+                <Form>
+                    <Field label="URL">
                         <InputText v-model="item.url" @update:model-value="patchData({ url: item.url })"></InputText>
-                    </div>
-                    <div class="field col-12">
-                        <label for="technologies">Technologies</label>
+                    </Field>
+                    <Field label="Technologies">
                         <TechnologyMultiSelectField v-model="item.technologies" @update:model-value="patchData({ technologies: item.technologies })"></TechnologyMultiSelectField>
-                    </div>
-                </div>
+                    </Field>
+                </Form>
             </div>
         </div>
     </div>
 </template>
+

@@ -12,12 +12,12 @@ const userRoutes = [
     {
         path: '/user/api-tokens',
         name: 'APITokenList',
-        component: () => import('@/views/pages/APITokenList.vue')
+        component: () => import('@/views/pages/user/APITokenList.vue')
     },
     {
         path: '/user/change-email/:uid/:token',
         name: 'UserChangeEmailConfirm',
-        component: () => import('@/views/pages/UserChangeEmailConfirm.vue')
+        component: () => import('@/views/pages/user/UserChangeEmailConfirm.vue')
     }
 ];
 

@@ -1,6 +1,6 @@
 <script>
 import AssetService from '@/service/AssetService';
-import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
 import ServiceCreateDialog from '@/components/projects/assets/ServiceCreateDialog.vue';
 import ServiceUpdateDialog from '@/components/projects/assets/ServiceUpdateDialog.vue';
 
@@ -96,8 +96,8 @@ export default {
 </script>
 
 <template>
-    <div class="grid">
-        <div class="col-12">
+    <div class="grid mt-3 grid-cols-1">
+        <div class="col-span-1">
             <div class="card">
                 <h4>Services</h4>
                 <GenericDataTable
@@ -110,17 +110,19 @@ export default {
                     v-model:selection="selectedItems"
                     :model-value="items"
                     @page="onPage"
+                    :show-search="true"
+                    @search="onGlobalSearch"
                 >
                     <template #header>
-                        <div class="grid">
-                            <div class="col-6 justify-content-start flex">
+                        <div class="grid grid-cols-2">
+                            <div class="col-span-1 justify-start flex">
                                 <IconField iconPosition="left">
                                     <InputIcon class="fa fa-search"></InputIcon>
                                     <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
                                 </IconField>
-                                <Button v-if="selectedItems.length > 0" icon="fa fa-trash" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2 mb-2" :loading="deleteButtonLoading"></Button>
+                                <Button v-if="selectedItems.length > 0" icon="fa fa-trash" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2" :loading="deleteButtonLoading"></Button>
                             </div>
-                            <div class="flex justify-content-end col-6">
+                            <div class="flex justify-end col-span-1">
                                 <ServiceCreateDialog :host-id="this.hostId" :project-id="this.projectId" @object-created="getItems"></ServiceCreateDialog>
                             </div>
                         </div>

@@ -1,9 +1,10 @@
 <script>
 import AdvisoryService from '@/service/AdvisoryService';
-import AdvisoryTabMenu from '@/components/advisories/AdvisoryTabMenu.vue';
+import AdvisoryTabMenu from '@/components/navigation/AdvisoryTabMenu.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
-import AdvisoryCommentCreateDialog from '@/components/advisories/AdvisoryCommentCreateDialog.vue';
-import CommentCard from '@/components/elements/CommentCard.vue';
+import AdvisoryCommentCreateDialog from '@/components/dialogs/advisories/AdvisoryCommentCreateDialog.vue';
+import CommentCard from '@/components/cards/CommentCard.vue';
+
 
 export default {
     name: 'CommentList',
@@ -68,21 +69,21 @@ export default {
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-6">
-            <div class="justify-content-start flex"></div>
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-6">
+            <div class="justify-start flex"></div>
         </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
+        <div class="col-span-6">
+            <div class="flex justify-end">
                 <AdvisoryCommentCreateDialog :advisory-id="this.advisoryId" @object-created="getItems"></AdvisoryCommentCreateDialog>
             </div>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-12">
-            <AdvisoryTabMenu class="surface-card"></AdvisoryTabMenu>
-            <div class="card border-noround-top" v-if="items.length > 0">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
+            <AdvisoryTabMenu></AdvisoryTabMenu>
+            <div class="card" v-if="items.length > 0">
                 <CommentCard
                     :comment="comment.comment"
                     :date="comment.date_created"
@@ -98,7 +99,7 @@ export default {
                 ></CommentCard>
             </div>
 
-            <div class="card border-noround-top" v-else>
+            <div class="card" v-else>
                 <BlankSlate title="No comments" text="No comments found!" icon="fa fa-comments"></BlankSlate>
             </div>
         </div>

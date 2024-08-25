@@ -1,9 +1,9 @@
 <script>
 import AdvisoryService from '@/service/AdvisoryService';
 import VulnerabilityTemplateService from '@/service/VulnerabilityTemplateService';
-import SeveritySelectField from '@/components/elements/forms/SeveritySelectField.vue';
+import SeveritySelectField from '@/components/forms/fields/SeveritySelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
-import TechnologySelectField from '@/components/elements/forms/TechnologySelectField.vue';
+import TechnologySelectField from '@/components/forms/fields/TechnologySelectField.vue';
 
 export default {
     name: 'AdvisoryCreate',

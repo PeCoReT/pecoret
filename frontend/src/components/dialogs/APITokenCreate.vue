@@ -18,6 +18,7 @@ export default {
                 scope_advisories: 'No Access',
                 scope_knowledgebase: 'No Access'
             },
+            loading: false,
             service: new UserService(),
             accessChoices: [
                 {
@@ -61,45 +62,32 @@ export default {
 <template>
     <Button icon="fa fa-plus" label="API-Token" outlined @click="open"></Button>
 
-    <Dialog header="Create API-Token" v-model:visible="visible" modal :style="{ width: '70vw' }">
-        <div class="p-fluid formgrid grid">
-            <div class="field col-12">
-                <label for="name">Name</label>
+    <ModalDialog header="Create API-Token" v-model="visible" :loading="loading" @onSave="create">
+        <Form>
+            <Field label="Name">
                 <InputText id="name" type="text" v-model="model.name"></InputText>
-            </div>
-            <div class="field col-12">
-                <label for="date_expire">Date Expire?</label>
-                <Calendar v-model="model.date_expire" id="date_expire"></Calendar>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="scope_all_projects">Scope All Projects?</label>
-                <Dropdown v-model="this.model.scope_all_projects" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Dropdown>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="scope_all_projects">Scope Companies?</label>
-                <Dropdown v-model="this.model.scope_companies" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Dropdown>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="scope_all_projects">Scope User?</label>
-                <Dropdown v-model="this.model.scope_user" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Dropdown>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="scope_all_projects">Scope Advisories?</label>
-                <Dropdown v-model="this.model.scope_advisories" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Dropdown>
-            </div>
-            <div class="field col-12">
-                <label for="scope_asmonitor">Scope Attack Surface?</label>
-                <Dropdown v-model="this.model.scope_attack_surface" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Dropdown>
-            </div>
-            <div class="field col-12">
-                <label for="scope_kb">Scope Knowledge Base?</label>
-                <Dropdown v-model="this.model.scope_knowledgebase" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Dropdown>
-            </div>
-        </div>
-
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+            </Field>
+            <Field label="Date Expire?">
+                <DatePicker v-model="model.date_expire" id="date_expire"></DatePicker>
+            </Field>
+            <Field label="Scope All Projects?">
+                <Select v-model="this.model.scope_all_projects" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Select>
+            </Field>
+            <Field label="Scope Companies?">
+                <Select v-model="this.model.scope_companies" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Select>
+            </Field>
+            <Field label="Scope User?">
+                <Select v-model="this.model.scope_user" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Select>
+            </Field>
+            <Field label="Scope Advisories?">
+                <Select v-model="this.model.scope_advisories" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Select>
+            </Field>
+            <Field label="Scope Attack Surface?">
+                <Select v-model="this.model.scope_attack_surface" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Select>
+            </Field>
+            <Field label="Scope Knowledge Base?">
+                <Select v-model="this.model.scope_knowledgebase" :options="accessChoices" optionLabel="label" optionValue="value" class="w-full"></Select>
+            </Field>
+        </Form>
+    </ModalDialog>
 </template>

@@ -4,7 +4,8 @@ import ProjectService from '@/service/ProjectService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import ReportTabMenu from '@/components/projects/reporting/ReportTabMenu.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
-import ReportTemplateSelectField from "@/components/elements/forms/ReportTemplateSelectField.vue";
+import ReportTemplateSelectField from '@/components/forms/fields/ReportTemplateSelectField.vue';
+import InlineFieldGroup from '@/components/common/forms/InlineFieldGroup.vue';
 
 export default {
     name: 'ReportDetail',
@@ -96,7 +97,7 @@ export default {
             });
         }
     },
-    components: {ReportTemplateSelectField, DetailCardWithIcon, ReportTabMenu, MarkdownEditor }
+    components: { InlineFieldGroup, ReportTemplateSelectField, DetailCardWithIcon, ReportTabMenu, MarkdownEditor }
 };
 </script>
 <template>
@@ -106,51 +107,43 @@ export default {
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
+    <div class="grid mt-3">
+        <div class="col-span-6"></div>
+        <div class="col-span-6">
+            <div class="flex justify-end">
                 <Button label="Delete" severity="danger" outlined icon="fa fa-trash" @click="confirmDialogDelete"></Button>
             </div>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-12">
-            <ReportTabMenu class="surface-card"></ReportTabMenu>
+    <div class="grid mt-3">
+        <div class="col-span-12">
+            <ReportTabMenu></ReportTabMenu>
             <div class="card border-noround-top">
-                <div class="grid formgrid p-fluid mt-3">
-                    <div class="field sm:col-12 md:col-3">
-                        <label for="name">Name</label>
-                        <InputText id="name" v-model="report.name"></InputText>
-                    </div>
-                    <div class="field sm:col-12 md:col-3">
-                        <label for="title">Title</label>
-                        <InputText id="title" v-model="report.title"></InputText>
-                    </div>
-                    <div class="field sm:col-12 md:col-3">
-                        <label for="author">Author</label>
-                        <Dropdown id="author" optionLabel="username" :options="authorChoices" v-model="report.author" @focus="getAuthorChoices"></Dropdown>
-                    </div>
-                    <div class="field sm:col-12 md:col-3">
-                        <ReportTemplateSelectField v-model="report.template"></ReportTemplateSelectField>
-                    </div>
-                    <div class="field col-12">
-                        <label for="evaluation">Evaluation</label>
+                <Form class="mt-3">
+                    <InlineFieldGroup>
+                        <InlineField label="Name">
+                            <InputText id="name" v-model="report.name"></InputText>
+                        </InlineField>
+                        <InlineField label="Title">
+                            <InputText id="title" v-model="report.title"></InputText>
+                        </InlineField>
+                        <InlineField label="Author">
+                            <Select id="author" optionLabel="username" :options="authorChoices" v-model="report.author" @focus="getAuthorChoices"></Select>
+                        </InlineField>
+                        <InlineField label="Report Template">
+                            <ReportTemplateSelectField v-model="report.template"></ReportTemplateSelectField>
+                        </InlineField>
+                    </InlineFieldGroup>
+                    <Field label="Evaluation">
                         <MarkdownEditor v-model="report.evaluation"></MarkdownEditor>
-                    </div>
-                    <div class="field col-12">
-                        <label for="recommendation">Recommendation</label>
+                    </Field>
+                    <Field label="Recommendation">
                         <MarkdownEditor v-model="report.recommendation"></MarkdownEditor>
-                    </div>
-                    <div class="col-12">
-                        <div class="flex justify-content-end mt-3">
-                            <Button label="Save" @click="updateReport" :loading="saveLoading === true"></Button>
-                        </div>
-                    </div>
-                </div>
+                    </Field>
+
+                    <Button label="Save" @click="updateReport" :loading="saveLoading === true" class="mt-3 w-full"></Button>
+                </Form>
             </div>
         </div>
     </div>

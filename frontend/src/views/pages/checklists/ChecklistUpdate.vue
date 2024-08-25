@@ -80,52 +80,54 @@ export default {
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-12">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-12">
             <div class="card">
-                <div class="grid formgrid p-fluid">
-                    <div class="field col-12">
-                        <label for="id">Checklist ID</label>
+                <Form>
+                    <Field label="Checklist ID">
                         <InputText id="id" v-model="model.checklist_id"></InputText>
-                    </div>
-                    <div class="field col-12">
-                        <label for="name">Name</label>
+                    </Field>
+                    <Field label="Name">
                         <InputText id="name" v-model="model.name"></InputText>
-                    </div>
-
-                    <div class="col-12 field">
-                        <label for="categories">Categories</label>
+                    </Field>
+                    <Field label="Categories">
                         <PickList id="categories" v-model="categoryChoices" :show-source-controls="false" :show-target-controls="false" listStyle="height:342px" dataKey="pk" breakpoint="1400px">
                             <template #sourceheader>
-                                Available
-                                <span class="p-input-icon-left mt-3">
-                                    <i class="pi pi-search" />
-                                    <InputText :disabled="categoryChoices.length < 2 || categoryChoices[0].length === 0" v-model="searchAvailable" placeholder="Search" @update:model-value="searchCategories" />
-                                </span>
+                                <div class="flex flex-row align-center">
+                                    <p class="flex text-xl">Available</p>
+                                    <div class="justify-end flex flex-grow">
+                                        <IconField iconPosition="left">
+                                            <InputIcon class="fa fa-search"></InputIcon>
+                                            <InputText :disabled="categoryChoices.length < 2 || categoryChoices[0].length === 0" v-model="searchAvailable" placeholder="Search" @update:model-value="searchCategories" />
+                                        </IconField>
+                                    </div>
+                                </div>
                             </template>
                             <template #targetheader>
-                                Selected
-                                <span class="p-input-icon-left mt-3">
-                                    <i class="pi pi-search" />
-                                    <InputText :disabled="true" v-model="searchAvailable" placeholder="Search" @change="searchCategories"></InputText>
-                                </span>
+                                <div class="flex flex-row align-center">
+                                    <p class="flex text-xl">Selected</p>
+                                    <div class="justify-end flex flex-grow">
+                                        <IconField iconPosition="left">
+                                            <InputIcon class="fa fa-search"></InputIcon>
+                                            <InputText :disabled="true" v-model="searchAvailable" placeholder="Search" @change="searchCategories"></InputText>
+                                        </IconField>
+                                    </div>
+                                </div>
                             </template>
                             <template #item="slotProps">
-                                <div class="flex flex-wrap p-2 align-items-center gap-3">
-                                    <div class="flex-1 flex flex-column gap-2">
+                                <div class="flex flex-wrap align-center gap-2">
+                                    <div class="flex-1 flex flex-col gap-1">
                                         <span class="font-bold">{{ slotProps.item.name }}</span>
-                                        <div class="flex align-items-center gap-2">
+                                        <div class="flex align-center gap-1">
                                             <span>{{ slotProps.item.category_id }}</span>
                                         </div>
                                     </div>
                                 </div>
                             </template>
                         </PickList>
-                    </div>
-                    <div class="col-12 mt-3">
-                        <Button label="Save" @click="save"></Button>
-                    </div>
-                </div>
+                    </Field>
+                    <Button label="Save" @click="save" class="w-full"></Button>
+                </Form>
             </div>
         </div>
     </div>

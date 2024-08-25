@@ -1,5 +1,5 @@
 <script>
-import SettingsTabMenu from '@/components/pages/SettingsTabMenu.vue';
+import SettingsTabMenu from '@/components/navigation/SettingsTabMenu.vue';
 
 export default {
     name: 'UserProfileSettings',
@@ -85,31 +85,29 @@ export default {
 };
 </script>
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-12">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-12">
-            <SettingsTabMenu class="surface-card"></SettingsTabMenu>
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
+            <SettingsTabMenu></SettingsTabMenu>
             <Card>
                 <template #title>General</template>
                 <template #content>
-                    <div class="grid formgrid p-fluid">
-                        <div class="field col-12">
-                            <label for="first_name">First Name</label>
+                    <Form>
+                        <Field label="First Name">
                             <InputText v-model="model.first_name"></InputText>
-                        </div>
-                        <div class="field col-12">
-                            <label for="first_name">Last Name</label>
+                        </Field>
+                        <Field label="Last Name">
                             <InputText v-model="model.last_name"></InputText>
-                        </div>
-                    </div>
+                        </Field>
+                    </Form>
                 </template>
                 <template #footer>
-                    <div class="flex justify-content-end mt-3">
+                    <div class="flex justify-end mt-3">
                         <Button @click="patch" label="Save"></Button>
                     </div>
                 </template>
@@ -117,53 +115,48 @@ export default {
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-12">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-12">
             <Card>
                 <template #title>Change Email</template>
                 <template #content>
-                    <div class="grid formgrid p-fluid">
-                        <div class="field col-12">
-                            <label for="password">Password</label>
-                            <Password v-model="new_email.password" :feedback="false"></Password>
-                        </div>
-                        <div class="field col-12">
-                            <label for="new_email">New Email</label>
+                    <Form>
+                        <Field label="Password">
+                            <Password v-model="new_email.password" :feedback="false" :pt="{ pcInput: { root: 'grow' } }"></Password>
+                        </Field>
+                        <Field label="New Email">
                             <InputText v-model="new_email.mail" id="new_user-help"></InputText>
                             <small id="new_user-help">Current: {{ this.model.email }}.</small>
-                        </div>
-                    </div>
+                        </Field>
+                    </Form>
                 </template>
                 <template #footer>
-                    <div class="flex justify-content-end mt-3">
+                    <div class="flex justify-end mt-3">
                         <Button @click="changeEmail" label="Save"></Button>
                     </div>
                 </template>
             </Card>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-12">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-12">
             <Card>
                 <template #title>Change Password</template>
                 <template #content>
-                    <div class="grid formgrid p-fluid">
-                        <div class="field col-12">
-                            <label for="old_password">Current Password</label>
-                            <Password v-model="change_password.old_password" :feedback="false"></Password>
-                        </div>
-                        <div class="field col-12">
-                            <label for="new_password">New Password</label>
-                            <Password v-model="change_password.new_password" :feedback="false"></Password>
-                        </div>
-                        <div class="field col-12">
-                            <label for="new_password">New Password (confirm)</label>
-                            <Password v-model="change_password.new_password_confirm" :feedback="false"></Password>
-                        </div>
-                    </div>
+                    <Form>
+                        <Field label="Current Password">
+                            <Password v-model="change_password.old_password" :feedback="false" :pt="{ pcInput: { root: 'grow' } }"></Password>
+                        </Field>
+                        <Field label="New Password">
+                            <Password v-model="change_password.new_password" :feedback="false" :pt="{ pcInput: { root: 'grow' } }"></Password>
+                        </Field>
+                        <Field label="New Password (confirm)">
+                            <Password v-model="change_password.new_password_confirm" :feedback="false" :pt="{ pcInput: { root: 'grow' } }"></Password>
+                        </Field>
+                    </Form>
                 </template>
                 <template #footer>
-                    <div class="flex justify-content-end mt-3">
+                    <div class="flex justify-end mt-3">
                         <Button @click="changePassword" label="Save" :disabled="change_password.new_password === null || change_password.new_password !== change_password.new_password_confirm"></Button>
                     </div>
                 </template>

@@ -1,10 +1,11 @@
 <script>
 import AssetService from '@/service/AssetService';
-import AssetEnvironmentSelectField from '@/components/elements/forms/AssetEnvironmentSelectField.vue';
-import AssetAccessibleSelectField from '@/components/elements/forms/AssetAccessibleSelectField.vue';
+import AssetEnvironmentSelectField from '@/components/forms/fields/AssetEnvironmentSelectField.vue';
+import AssetAccessibleSelectField from '@/components/forms/fields/AssetAccessibleSelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
-import ModalDialog from '@/components/elements/dialogs/ModalDialog.vue';
+import ModalDialog from '@/components/common/ModalDialog.vue';
 import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
+import InlineFieldGroup from '@/components/common/forms/InlineFieldGroup.vue';
 
 export default {
     name: 'ThickClientCreateDialog',
@@ -80,6 +81,7 @@ export default {
         }
     },
     components: {
+        InlineFieldGroup,
         TechnologyMultiSelectField,
         ModalDialog,
         AssetEnvironmentSelectField,
@@ -93,42 +95,38 @@ export default {
     <Button icon="fa fa-plus" label="Thick Client" outlined @click="open"></Button>
 
     <ModalDialog :loading="loading" header="Create Thick Client" v-model="showDialog" @onSave="save">
-        <div class="p-fluid formgrid grid">
-            <div class="field col-12">
-                <label for="name">Name</label>
+        <Form>
+            <Field label="Name">
                 <InputText id="name" type="text" v-model="model.name"></InputText>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="os">Operating System</label>
-                <Dropdown :options="osChoices" option-label="label" option-value="value" v-model="model.os"></Dropdown>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="version">Version</label>
-                <InputText id="version" type="text" v-model="model.version"></InputText>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="programming_language">Programming Language</label>
-                <InputText id="programming_language" type="text" v-model="model.programming_language"></InputText>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="decompile">Allowed to decompile?</label>
-                <Dropdown :options="decompileChoices" option-label="label" option-value="value" v-model="model.allowed_decompile"></Dropdown>
-            </div>
-
-            <div class="field col-12 md:col-6">
+            </Field>
+            <InlineFieldGroup>
+                <InlineField label="Operating System">
+                    <Select :options="osChoices" option-label="label" option-value="value" v-model="model.os"></Select>
+                </InlineField>
+                <InlineField label="Version">
+                    <InputText id="version" type="text" v-model="model.version"></InputText>
+                </InlineField>
+            </InlineFieldGroup>
+            <InlineFieldGroup>
+                <InlineField label="Programming Language">
+                    <InputText id="programming_language" type="text" v-model="model.programming_language"></InputText>
+                </InlineField>
+                <InlineField label="Allowed to decompile?">
+                    <Select :options="decompileChoices" option-label="label" option-value="value" v-model="model.allowed_decompile"></Select>
+                </InlineField>
+            </InlineFieldGroup>
+            <Field label="Environment">
                 <AssetEnvironmentSelectField v-model="model.environment"></AssetEnvironmentSelectField>
-            </div>
-            <div class="field col-12 md:col-6">
+            </Field>
+            <Field label="Accessible">
                 <AssetAccessibleSelectField v-model="model.accessible"></AssetAccessibleSelectField>
-            </div>
-            <div class="field col-12">
-                <label for="technologies">Technologies</label>
+            </Field>
+            <Field label="Technologies">
                 <TechnologyMultiSelectField v-model="model.technologies"></TechnologyMultiSelectField>
-            </div>
-            <div class="field col-12">
-                <label for="description">Description</label>
+            </Field>
+            <Field label="Description">
                 <MarkdownEditor v-model="model.description"></MarkdownEditor>
-            </div>
-        </div>
+            </Field>
+        </Form>
     </ModalDialog>
 </template>

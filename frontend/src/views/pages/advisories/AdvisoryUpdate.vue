@@ -1,11 +1,11 @@
 <script>
 import AdvisoryService from '@/service/AdvisoryService';
 import VulnerabilityTemplateService from '@/service/VulnerabilityTemplateService';
-import SeveritySelectField from '@/components/elements/forms/SeveritySelectField.vue';
+import SeveritySelectField from '@/components/forms/fields/SeveritySelectField.vue';
 import { useAuthStore } from '@/store/auth';
-import AdvisoryLabelSelectField from '@/components/advisories/AdvisoryLabelSelectField.vue';
-import ReportTemplateSelectField from '@/components/elements/forms/ReportTemplateSelectField.vue';
-import TechnologySelectField from '@/components/elements/forms/TechnologySelectField.vue';
+import AdvisoryLabelSelectField from '@/components/forms/fields/advisories/AdvisoryLabelSelectField.vue';
+import ReportTemplateSelectField from '@/components/forms/fields/ReportTemplateSelectField.vue';
+import TechnologySelectField from '@/components/forms/fields/TechnologySelectField.vue';
 
 export default {
     name: 'AdvisoryUpdate',
@@ -117,65 +117,62 @@ export default {
 };
 </script>
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-12">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
             <div class="card">
-                <div class="p-fluid formgrid grid" v-if="loaded">
-                    <div class="field col-12 md:col-6">
-                        <label for="template">Vulnerability Template</label>
-                        <Dropdown :options="templateChoices" optionLabel="name" optionValue="vulnerability_id" @focus="onFocusTemplate" filter @filter="onFilterTemplate" v-model="model.template"></Dropdown>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label for="name">Title</label>
-                        <InputText id="name" v-model="model.title"></InputText>
-                    </div>
-
-                    <div class="field col-12">
-                        <label for="product">Product</label>
+                <Form v-if="loaded">
+                    <InlineFieldGroup>
+                        <InlineField label="Vulnerability Template">
+                            <Select :options="templateChoices" optionLabel="name" optionValue="vulnerability_id" @focus="onFocusTemplate" filter @filter="onFilterTemplate" v-model="model.template"></Select>
+                        </InlineField>
+                        <InlineField label="Title">
+                            <InputText id="name" v-model="model.title"></InputText>
+                        </InlineField>
+                    </InlineFieldGroup>
+                    <Field label="Product">
                         <TechnologySelectField v-model="model.technology"></TechnologySelectField>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label for="affected_versions">Affected Versions</label>
-                        <InputText id="affected_versions" v-model="model.affected_versions"></InputText>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label for="fixed_versions">Fixed Version</label>
-                        <InputText id="fixed_versions" v-model="model.fixed_version"></InputText>
-                    </div>
-                    <div class="field col-12">
+                    </Field>
+                    <InlineFieldGroup>
+                        <InlineField label="Affected Versions">
+                            <InputText id="affected_versions" v-model="model.affected_versions"></InputText>
+                        </InlineField>
+                        <InlineField label="Fixed Version">
+                            <InputText id="fixed_versions" v-model="model.fixed_version"></InputText>
+                        </InlineField>
+                    </InlineFieldGroup>
+                    <Field label="Labels">
                         <AdvisoryLabelSelectField v-model="model.labels"></AdvisoryLabelSelectField>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <ReportTemplateSelectField v-model="model.report_template"></ReportTemplateSelectField>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label for="custom_title">Custom Report Title</label>
-                        <InputText id="custom_title" v-model="model.custom_report_title"></InputText>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label for="researchers">Researchers</label>
-                        <InputText id="researchers" v-model="model.researchers"></InputText>
-                        <small id="researchers-help">Overwrites the researchers section in the report (default: your display name).</small>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label for="cve-id">CVE-ID</label>
-                        <InputText id="cve-id" v-model="model.cve_id"></InputText>
-                    </div>
-                    <div class="field col-12">
-                        <InputSwitch v-model="model.hide_advisory_id_in_report" id="hide_id"></InputSwitch>
-                        <label for="hide_id" class="ml-3">Hide advisory id in report?</label>
-                    </div>
-                    <div class="mt-3 col-12">
-                        <div class="justify-content-end flex">
-                            <Button label="Save" :loading="loading" @click="update"></Button>
+                    </Field>
+                    <InlineFieldGroup>
+                        <InlineField label="Report Template">
+                            <ReportTemplateSelectField v-model="model.report_template"></ReportTemplateSelectField>
+                        </InlineField>
+                        <InlineField label="Custom Report Title">
+                            <InputText id="custom_title" v-model="model.custom_report_title"></InputText>
+                        </InlineField>
+                    </InlineFieldGroup>
+                    <InlineFieldGroup>
+                        <InlineField label="Researchers">
+                            <InputText id="researchers" v-model="model.researchers"></InputText>
+                            <small id="researchers-help">Overwrites the researchers section in the report (default: your display name).</small>
+                        </InlineField>
+                        <InlineField label="CVE-ID">
+                            <InputText id="cve-id" v-model="model.cve_id"></InputText>
+                        </InlineField>
+                    </InlineFieldGroup>
+                    <Field>
+                        <div class="flex flex-row">
+                            <ToggleSwitch v-model="model.hide_advisory_id_in_report"></ToggleSwitch>
+                            <label class="ml-3">Hide advisory id in report?</label>
                         </div>
-                    </div>
-                </div>
+                    </Field>
+                    <Button label="Save" :loading="loading" @click="update" class="w-full"></Button>
+                </Form>
 
                 <div v-else class="grid w-full">
                     <Skeleton class="mb-2"></Skeleton>

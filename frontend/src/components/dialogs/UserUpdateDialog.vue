@@ -1,6 +1,6 @@
 <script>
 import AdminService from '@/service/AdminService';
-import CompanySelectField from '@/components/elements/forms/CompanySelectField.vue';
+import CompanySelectField from '@/components/forms/fields/CompanySelectField.vue';
 
 export default {
     name: 'UserUpdateDialog',
@@ -17,7 +17,8 @@ export default {
             model: this.user,
             service: new AdminService(),
             groupChoices: [],
-            customerGroupId: null
+            customerGroupId: null,
+            loading: false
         };
     },
     computed: {
@@ -84,41 +85,31 @@ export default {
 <template>
     <Button icon="fa fa-pen-to-square" size="small" @click="open" outlined></Button>
 
-    <Dialog header="Update User" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
-        <div class="grid formgrid p-fluid">
-            <div class="field col-12">
-                <label for="username">Username</label>
+    <ModalDialog header="Update User" v-model="visible" :loading="loading" @onSave="patch">
+        <Form>
+            <Field label="Username">
                 <InputText id="username" v-model="model.username"></InputText>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="first_name">First Name</label>
-                <InputText id="first_name" v-model="model.first_name"></InputText>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="last_name">Last Name</label>
-                <InputText id="last_name" v-model="model.last_name"></InputText>
-            </div>
-            <div class="field col-12">
-                <label for="email">E-Mail</label>
+            </Field>
+            <InlineFieldGroup>
+                <InlineField label="First Name">
+                    <InputText id="first_name" v-model="model.first_name"></InputText>
+                </InlineField>
+                <InlineField label="Last Name">
+                    <InputText id="last_name" v-model="model.last_name"></InputText>
+                </InlineField>
+            </InlineFieldGroup>
+            <Field label="E-Mail">
                 <InputText id="email" v-model="model.email"></InputText>
-            </div>
-            <div class="field col-12">
-                <label for="groups">Groups</label>
+            </Field>
+            <Field label="Groups">
                 <MultiSelect id="groups" v-model="model.groups" :options="groupChoices" @focus="getGroups" optionValue="pk" optionLabel="name"></MultiSelect>
-            </div>
-            <div class="field col-12" v-if="isCustomerSelected === true">
-                <label for="company">Company</label>
+            </Field>
+            <Field label="Company" v-if="isCustomerSelected === true">
                 <CompanySelectField v-model="model.company"></CompanySelectField>
-            </div>
-            <div class="field col-12">
-                <label for="">Is Active?</label>
-                <InputSwitch v-model="model.is_active"></InputSwitch>
-            </div>
-        </div>
-
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="patch" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+            </Field>
+            <Field label="Is Active?">
+                <ToggleSwitch v-model="model.is_active"></ToggleSwitch>
+            </Field>
+        </Form>
+    </ModalDialog>
 </template>

@@ -1,11 +1,11 @@
 <script>
 import ASMonitorService from '@/service/ASMonitorService';
-import ScanFindingCreateDialog from '@/components/attack_surface/ScanFindingCreateDialog.vue';
-import SeverityBadge from '@/components/SeverityBadge.vue';
+import ScanFindingCreateDialog from '@/components/dialogs/attack_surface/ScanFindingCreateDialog.vue';
+import SeverityBadge from '@/components/badges/SeverityBadge.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
-import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
-import ScanFindingBulkEditDialog from "@/components/attack_surface/ScanFindingBulkEditDialog.vue";
-import TagBadgeButton from '@/components/asmonitor/TagBadgeButton.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
+import ScanFindingBulkEditDialog from "@/components/dialogs/attack_surface/ScanFindingBulkEditDialog.vue";
+import TagBadgeButton from '@/components/badges/TagBadgeButton.vue';
 
 export default {
     name: 'ScanFindingList',

@@ -1,9 +1,9 @@
 <script>
 import ASMonitorService from '@/service/ASMonitorService';
-import ProgramCreateDialog from '@/components/attack_surface/ProgramCreateDialog.vue';
+import ProgramCreateDialog from '@/components/dialogs/attack_surface/ProgramCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
-import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
-import ProgramUpdateDialog from '@/components/attack_surface/ProgramUpdateDialog.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
+import ProgramUpdateDialog from '@/components/dialogs/attack_surface/ProgramUpdateDialog.vue';
 import { useListViewComposable } from '@/composables/listViewComposable';
 
 export default {
@@ -48,7 +48,7 @@ export default {
             this.getItems();
         },
         onGlobalSearch(query) {
-            this.getItems({search: query})
+            this.getItems({ search: query });
         },
         confirmDialogDelete(id) {
             this.$confirm.require({
@@ -76,7 +76,7 @@ export default {
 <template>
     <BaseListLayout :breadcrumbs="breadcrumbs">
         <template #head-right>
-            <div class="flex justify-content-end">
+            <div class="flex justify-end">
                 <ProgramCreateDialog @object-created="getItems"></ProgramCreateDialog>
             </div>
         </template>

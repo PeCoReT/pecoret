@@ -1,15 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import AppLayout from '@/layout/AppLayout.vue';
-import adminRoutes from '@/router/routes/admin';
-import projectRoutes from '@/router/routes/projects';
 import baseRoutes from '@/router/routes/base';
-import checklistRoutes from '@/router/routes/checklists';
-import companyRoutes from '@/router/routes/companies';
-import vulnerabilityTemplateRoutes from '@/router/routes/vulnerabilityTemplates';
+import projectRoutes from '@/router/routes/projects';
 import advisoryRoutes from '@/router/routes/advisories';
-import userRoutes from '@/router/routes/user';
+import adminRoutes from '@/router/routes/admin';
+import checklistRoutes from '@/router/routes/checklists';
+import vulnerabilityTemplateRoutes from '@/router/routes/vulnerabilityTemplates';
+import technologyRoutes from '@/router/routes/technologies';
 import asmonitorRoutes from '@/router/routes/asmonitor';
-import technologyRoutes from "@/router/routes/technologies";
+import companyRoutes from '@/router/routes/companies';
+import userRoutes from '@/router/routes/user';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -23,9 +23,8 @@ const router = createRouter({
                     name: 'Home',
                     component: () => import('@/views/Home.vue')
                 },
-
-                ...adminRoutes,
                 ...projectRoutes,
+                ...adminRoutes,
                 ...advisoryRoutes,
                 ...vulnerabilityTemplateRoutes,
                 ...checklistRoutes,
@@ -35,7 +34,16 @@ const router = createRouter({
                 ...technologyRoutes
             ]
         },
-        ...baseRoutes
+        ...baseRoutes,
+        {
+            name: 'AdvisoryShareTokenDownload',
+            path: '/advisories/:advisoryId/download/:token',
+            component: () => import('@/views/pages/advisories/ShareTokenAdvisoryDownload.vue')
+        },
+        {
+            path: '/:catchAll(.*)',
+            component: () => import('@/views/pages/404.vue')
+        }
     ]
 });
 
