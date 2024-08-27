@@ -23,6 +23,8 @@ import InlineField from '@/components/common/forms/InlineField.vue';
 import InlineFieldGroup from '@/components/common/forms/InlineFieldGroup.vue';
 import GenericDataTable from "@/components/common/GenericDataTable.vue";
 import ModalDialog from "@/components/common/ModalDialog.vue";
+import BaseLayout from "@/layout/base/BaseLayout.vue";
+import BaseListLayout from "@/layout/base/BaseListLayout.vue";
 
 const app = createApp(App);
 registerPlugins(app);
@@ -45,6 +47,12 @@ app.component('pBreadcrumb', pBreadcrumb);
 app.component('pTabMenu', pTabMenu);
 app.component('GenericDataTable', GenericDataTable);
 app.component('ModalDialog', ModalDialog);
+
+
+// LAYOUT COMPONENTS
+app.component('BaseLayout', BaseLayout);
+app.component('BaseListLayout', BaseListLayout);
+
 
 // common form components
 app.component('Form', Form);

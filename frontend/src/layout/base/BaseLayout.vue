@@ -23,7 +23,7 @@ export default {
         </div>
     </div>
     <slot name="pre-content">
-        <div class="grid grid-cols-12">
+        <div class="grid grid-cols-12 mt-3">
             <div class="col-span-6">
                 <slot name="pre-content-left"></slot>
             </div>
@@ -33,7 +33,7 @@ export default {
         </div>
     </slot>
 
-    <div class="grid grid-cols-12 gap-3">
+    <div class="grid grid-cols-12 gap-3 mt-3">
         <slot></slot>
     </div>
 </template>

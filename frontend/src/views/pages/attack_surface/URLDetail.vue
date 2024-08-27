@@ -59,32 +59,21 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3 grid-cols-12">
-        <div class="col-span-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
-    <div class="grid mt-3 grid-cols-12">
-        <div class="col-span-6"></div>
-        <div class="col-span-6">
+    <BaseLayout :breadcrumbs="breadcrumbs">
+        <template #pre-content-right>
             <div class="flex justify-end">
                 <Button label="Delete" severity="danger" outlined icon="fa fa-trash" @click="confirmDialogDelete"></Button>
             </div>
+        </template>
+        <div class="col-span-12 card">
+            <Form>
+                <Field label="URL">
+                    <InputText v-model="item.url" @update:model-value="patchData({ url: item.url })"></InputText>
+                </Field>
+                <Field label="Technologies">
+                    <TechnologyMultiSelectField v-model="item.technologies" @update:model-value="patchData({ technologies: item.technologies })"></TechnologyMultiSelectField>
+                </Field>
+            </Form>
         </div>
-    </div>
-    <div class="grid mt-3 grid-cols-12">
-        <div class="col-span-12">
-            <div class="card">
-                <Form>
-                    <Field label="URL">
-                        <InputText v-model="item.url" @update:model-value="patchData({ url: item.url })"></InputText>
-                    </Field>
-                    <Field label="Technologies">
-                        <TechnologyMultiSelectField v-model="item.technologies" @update:model-value="patchData({ technologies: item.technologies })"></TechnologyMultiSelectField>
-                    </Field>
-                </Form>
-            </div>
-        </div>
-    </div>
+    </BaseLayout>
 </template>
-

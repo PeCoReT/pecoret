@@ -3,7 +3,6 @@ import { useAuthStore } from '@/store/auth';
 import ProjectTabMenu from '@/components/navigation/ProjectTabMenu.vue';
 import AuthService from '@/service/AuthService';
 
-
 export default {
     name: 'AppTopbar',
     data() {
@@ -230,12 +229,11 @@ export default {
 </script>
 
 <template>
-    <Menubar :model="items" class="layout-topbar" :pt="{ rootList: {class: 'w-11/12 flex justify-end'}, submenu: {class: 'submenu'}}">
+    <Menubar :model="items" class="layout-topbar !rounded-none" :pt="{ rootList: { class: 'w-full flex justify-end rounded-none' } }">
         <template #start>
             <router-link to="/" class="">
                 <img src="/images/logo-no-slogan.svg" alt="logo" class="max-w-[10rem] md:max-h-[3rem]" />
             </router-link>
-            <span class="w-1/12 bg-primary-100"></span>
         </template>
         <template #item="{ label, item, props, root, hasSubmenu }">
             <router-link class="flex items-center" v-bind="props.action" :to="item.route" v-if="item.route">
@@ -245,18 +243,21 @@ export default {
             <a v-else :href="item.url" :target="item.target" v-bind="props.action">
                 <span v-bind="props.icon" />
                 <span v-bind="props.label">{{ label }}</span>
-                <span :class="[hasSubmenu && (root ? 'pi pi-fw pi-angle-down' : 'pi pi-fw pi-angle-right')]" v-bind="props.submenuicon" />
+                <span :class="[hasSubmenu && (root ? 'fa fa-chevron-down' : 'fa fa-chevron-down')]" v-bind="props.submenuicon" />
             </a>
         </template>
     </Menubar>
     <ProjectTabMenu v-if="this.$route.params.projectId"></ProjectTabMenu>
 </template>
 
-<style scoped>
-.submenu {
-    left: auto;
-    text-align: right;
-    position: absolute;
-    display: block;
+<style>
+.p-menubar-submenu {
+    right: 0 !important; /* Align the dropdown to the right */
+    left: auto !important; /* Ensure the left property is not overriding */
+    position: absolute !important; /* Ensure the dropdown is positioned correctly */
+}
+
+.p-menubar-item {
+    position: relative; /* Ensure the dropdown item is positioned correctly */
 }
 </style>

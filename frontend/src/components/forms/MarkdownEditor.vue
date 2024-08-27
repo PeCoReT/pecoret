@@ -14,6 +14,9 @@ export default {
                 return true;
             }
         },
+        maxHeight: {
+            default: '400px'
+        },
         highlight: {
             type: Boolean,
             default() {
@@ -69,9 +72,9 @@ export default {
                     autoDownloadFontAwesome: false,
                     initialValue: this.value,
                     previewRender: (plaintext, preview) => {
-                        this.$api.post("render-markdown/", { markdown: plaintext}).then((resp) => {
+                        this.$api.post('render-markdown/', { markdown: plaintext }).then((resp) => {
                             preview.innerHTML = resp.data.html;
-                        })
+                        });
                     },
                     renderingConfig: {
                         codeSyntaxHighlighting: true
@@ -79,7 +82,7 @@ export default {
                     toolbar: this.toolbar,
                     promptURLs: false,
                     uploadImage: false,
-                    maxHeight: '400px',
+                    maxHeight: this.maxHeight,
                     autofocus: false
                 },
                 this.configs
@@ -188,7 +191,7 @@ export default {
 
 .editor-toolbar button.active,
 .editor-toolbar button:hover {
-    background-color: var(--surface-card);
+    background-color: var(--surface-card) !important;
     color: var(--text-color);
 }
 

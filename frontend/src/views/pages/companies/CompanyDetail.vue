@@ -1,13 +1,13 @@
 <script>
 import CompanyService from '@/service/CompanyService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
-import CompanyInformationCreateDialog from '@/components/dialogs/CompanyInformationCreateDialog.vue';
 import CompanyUpdateDialog from '@/components/dialogs/CompanyUpdateDialog.vue';
 import CompanyTabMenu from '@/components/navigation/CompanyTabMenu.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 import markdown from '@/utils/markdown';
-import CompanyInformationUpdateDialog from '@/components/dialogs/CompanyInformationUpdateDialog.vue';
+import CommendCard from '@/components/common/CommentCard.vue';
 import { useAuthStore } from '@/store/auth';
+import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
     name: 'CompanyDetail',
@@ -21,7 +21,8 @@ export default {
             ],
             company: { report_template: {} },
             authStore: useAuthStore(),
-            companyInformation: []
+            companyInformation: [],
+            newInformationText: null
         };
     },
     methods: {
@@ -33,7 +34,15 @@ export default {
                 this.company = response.data;
             });
         },
-        confirmDialogDelete(id) {
+        createCompanyInformation() {
+            this.companyService.createCompanyInformation(this.$api, this.companyId, { text: this.newInformationText }).then((resp) => {
+                this.newInformationText = null;
+                this.getCompanyInformation();
+
+            });
+        },
+        confirmDialogDelete(comment) {
+            let id = comment.pk;
             this.$confirm.require({
                 message: 'Do you want to delete this item?',
                 header: 'Delete confirmation',
@@ -63,6 +72,12 @@ export default {
             this.companyService.getCompanyInformation(this.companyId).then((response) => {
                 this.companyInformation = response.data.results;
             });
+        },
+        companyInformationUpdated(information) {
+            let data = { text: information.text };
+            this.companyService.patchCompanyInformation(this.$api, this.companyId, information.pk, data).then((reps) => {
+                this.getCompanyInformation();
+            });
         }
     },
     mounted() {
@@ -70,12 +85,12 @@ export default {
         this.getCompanyInformation();
     },
     components: {
-        CompanyInformationUpdateDialog,
+        MarkdownEditor,
         DetailCardWithIcon,
-        CompanyInformationCreateDialog,
         CompanyUpdateDialog,
         CompanyTabMenu,
-        BlankSlate
+        BlankSlate,
+        CommendCard
     }
 };
 </script>
@@ -106,49 +121,32 @@ export default {
             <CompanyTabMenu></CompanyTabMenu>
             <div class="card border-noround-top">
                 <div class="grid grid-cols-12 gap-3">
-                    <div class="col-span-2 md:col-span-3">
+                    <div class="col-span-12 md:col-span-3">
                         <DetailCardWithIcon title="Street" icon="fa-road" class="bg-surface-950" :text="company.street"></DetailCardWithIcon>
                     </div>
-                    <div class="col-span-2 md:col-span-3">
+                    <div class="col-span-12 md:col-span-3">
                         <DetailCardWithIcon title="City" icon="fa-city" class="bg-surface-950" :text="company.city"></DetailCardWithIcon>
                     </div>
-                    <div class="col-span-2 md:col-span-3">
+                    <div class="col-span-12 md:col-span-3">
                         <DetailCardWithIcon title="Country" icon="fa-earth" class="bg-surface-950" :text="company.country"></DetailCardWithIcon>
                     </div>
-                    <div class="col-span-2 md:col-span-3">
+                    <div class="col-span-12 md:col-span-3">
                         <DetailCardWithIcon title="Report Template" icon="fa-file" class="bg-surface-950" :text="company.report_template"></DetailCardWithIcon>
                     </div>
                 </div>
                 <div class="grid grid-cols-12 mt-3">
                     <div class="col-span-12">
-                        <div class="grid grid-cols-12">
-                            <div class="col-span-6">
-                                <p class="text-xl">Company Information</p>
-                            </div>
-                            <div class="col-span-6 flex justify-end">
-                                <CompanyInformationCreateDialog @object-created="getCompanyInformation" :company-id="company.pk"></CompanyInformationCreateDialog>
-                            </div>
+                        <p class="text-xl">Company Information</p>
+                            <Form>
+                                <Field>
+                                    <MarkdownEditor max-height="200px" v-model="newInformationText"></MarkdownEditor>
+                                </Field>
+                                <Button class="w-full" label="Save" @click="createCompanyInformation"></Button>
+                            </Form>
+                        <div class="text-base pt-6 pb-6" v-for="info in companyInformation" :key="info.pk">
+                            <CommendCard :comment="info" @onDelete="confirmDialogDelete" @on-edit="companyInformationUpdated"></CommendCard>
                         </div>
 
-                        <Card v-for="info in companyInformation" :key="info.pk" class="!bg-surface-950 mt-3">
-                            <template #content>
-                                <div v-html="renderMarkdown(info.text)"></div>
-                            </template>
-                            <template #footer>
-                                <hr />
-                                <div class="grid grid-cols-12 mt-1">
-                                    <div class="col-span-12 md:col-span-6">
-                                        {{ info.user.username }} on {{ info.date_created }}<span v-if="info.user_edit">; edited by {{ info.user_edit.username }} on {{ info.date_updated }}</span>
-                                    </div>
-                                    <div class="col-span-12 md:col-span-6">
-                                        <div class="flex justify-end">
-                                            <CompanyInformationUpdateDialog :information="info" @object-updated="getCompanyInformation"></CompanyInformationUpdateDialog>
-                                            <Button size="small" icon="fa fa-trash" severity="danger" outlined @click="confirmDialogDelete(info.pk)"></Button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </template>
-                        </Card>
                         <BlankSlate v-if="companyInformation.length < 1" icon="fa fa-circle-info" text="No company information found!" title="No company information!"></BlankSlate>
                     </div>
                 </div>
