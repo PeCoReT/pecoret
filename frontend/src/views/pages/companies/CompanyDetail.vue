@@ -38,7 +38,6 @@ export default {
             this.companyService.createCompanyInformation(this.$api, this.companyId, { text: this.newInformationText }).then((resp) => {
                 this.newInformationText = null;
                 this.getCompanyInformation();
-
             });
         },
         confirmDialogDelete(comment) {
@@ -137,13 +136,13 @@ export default {
                 <div class="grid grid-cols-12 mt-3">
                     <div class="col-span-12">
                         <p class="text-xl">Company Information</p>
-                            <Form>
-                                <Field>
-                                    <MarkdownEditor max-height="200px" v-model="newInformationText"></MarkdownEditor>
-                                </Field>
-                                <Button class="w-full" label="Save" @click="createCompanyInformation"></Button>
-                            </Form>
-                        <div class="text-base pt-6 pb-6" v-for="info in companyInformation" :key="info.pk">
+                        <Form class="mb-3">
+                            <Field>
+                                <MarkdownEditor max-height="200px" v-model="newInformationText"></MarkdownEditor>
+                            </Field>
+                            <Button class="w-full" label="Save" @click="createCompanyInformation"></Button>
+                        </Form>
+                        <div class="text-base pt-2 pb-2" v-for="info in companyInformation" :key="info.pk">
                             <CommendCard :comment="info" @onDelete="confirmDialogDelete" @on-edit="companyInformationUpdated"></CommendCard>
                         </div>
 

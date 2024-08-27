@@ -20,7 +20,7 @@ export default {
                     label: 'Settings',
                     icon: 'fa fa-gear',
                     route: this.$router.resolve({
-                        name: 'UserSettingsDetail'
+                        name: 'UserProfileSettings'
                     })
                 },
                 {

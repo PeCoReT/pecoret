@@ -1,10 +1,10 @@
 <script>
 import markdown from '@/utils/markdown';
-import MarkdownEditor from "@/components/forms/MarkdownEditor.vue";
+import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
     name: 'CommentCard',
-    components: {MarkdownEditor},
+    components: { MarkdownEditor },
     props: {
         comment: {
             required: true
@@ -20,7 +20,7 @@ export default {
         },
         onCommentEdited() {
             this.$emit('onEdit', this.editedComment);
-            this.editMode = false
+            this.editMode = false;
         }
     },
     data() {
@@ -32,14 +32,14 @@ export default {
                     label: 'Edit',
                     icon: 'fa fa-edit',
                     command: () => {
-                        this.editMode = !this.editMode
+                        this.editMode = !this.editMode;
                     }
                 },
                 {
                     label: 'Delete',
                     icon: 'fa fa-trash',
                     command: () => {
-                        this.$emit('onDelete', this.comment)
+                        this.$emit('onDelete', this.comment);
                     }
                 }
             ]
@@ -49,28 +49,30 @@ export default {
 </script>
 
 <template>
-    <div class="flex justify-between items-center">
-        <div class="flex items-center">
-            <p class="inline-flex items-center mr-3 text-sm text-white font-semibold">
-                {{ comment.user.username }}
-            </p>
-            <p class="text-sm text-gray-400">{{ comment.date_created }}</p>
+    <div class="border rounded-xl p-5 border-gray-700">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center">
+                <p class="inline-flex items-center mr-3 text-sm text-white font-semibold">
+                    {{ comment.user.username }}
+                </p>
+                <p class="text-sm text-gray-400">{{ comment.date_created }}</p>
+            </div>
+            <Button size="small" text icon="fa fa-ellipsis-vertical" class="!text-gray-400 !p-0 !m-0" @click="menuToggle"></Button>
+            <Menu :model="menuItems" :popup="true" ref="menu"></Menu>
         </div>
-        <Button size="small" text icon="fa fa-ellipsis-vertical" class="!text-gray-400 !p-0 !m-0" @click="menuToggle"></Button>
-        <Menu :model="menuItems" :popup="true" ref="menu"> </Menu>
-    </div>
-    <div v-if="comment.user_edit">
-        <p class="text-sm text-gray-400">
-            edited by <strong class="font-semibold text-white">{{ comment.user_edit.username }}</strong>
-        </p>
-    </div>
-    <p class="text-gray-400 mt-3 markdown-block" v-html="render(comment.text)" v-if="editMode !== true"></p>
-    <div v-else>
-        <Form>
-            <Field>
-                <MarkdownEditor v-model="editedComment.text"></MarkdownEditor>
-            </Field>
-            <Button label="Save" class="w-full" @click="onCommentEdited"></Button>
-        </Form>
+        <div v-if="comment.user_edit">
+            <p class="text-sm text-gray-400">
+                edited by <strong class="font-semibold text-white">{{ comment.user_edit.username }}</strong>
+            </p>
+        </div>
+        <p class="text-gray-400 mt-3 markdown-block" v-html="render(comment.text)" v-if="editMode !== true"></p>
+        <div v-else>
+            <Form>
+                <Field>
+                    <MarkdownEditor v-model="editedComment.text"></MarkdownEditor>
+                </Field>
+                <Button label="Save" class="w-full" @click="onCommentEdited"></Button>
+            </Form>
+        </div>
     </div>
 </template>

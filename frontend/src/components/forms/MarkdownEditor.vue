@@ -167,7 +167,7 @@ export default {
 .CodeMirror {
     background: var(--surface-ground) !important;
     color: inherit !important;
-    border: 1px solid var(--p-inputtext-border-color) !important;
+    border: 1px solid var(--p-form-field-border-color) !important;
 }
 
 .editor-preview {
@@ -180,9 +180,9 @@ export default {
 }
 
 .editor-toolbar {
-    border-top: 1px solid var(--p-inputtext-border-color);
-    border-left: 1px solid var(--p-inputtext-border-color);
-    border-right: 1px solid var(--p-inputtext-border-color);
+    border-top: 1px solid var(--p-form-field-border-color);
+    border-left: 1px solid var(--p-form-field-border-color);
+    border-right: 1px solid var(--p-form-field-border-color);
 }
 
 .CodeMirror-cursor {
