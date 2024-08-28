@@ -47,7 +47,7 @@ export default {
             <DataView :value="items" v-if="loading === false">
                 <template #list="slotProps">
                     <div v-for="(item, index) in slotProps.items" :key="index">
-                        <div class="col-span-12 border-round border-1 card m-0 p-1 hover:surface-hover" @click="onLatestVisit(item.pk)">
+                        <div class="col-span-12 rounded border border-surface-700 p-1 hover:bg-surface-950 card m-0" @click="onLatestVisit(item.pk)">
                             <div class="flex p-4 gap-4">
                                 <div class="flex justify-start w-full">
                                     {{ item.vulnerability.name }} / {{ item.internal_name }} in

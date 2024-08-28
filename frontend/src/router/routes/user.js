@@ -2,12 +2,12 @@ const userRoutes = [
     {
         path: '/user/settings',
         name: 'UserProfileSettings',
-        component: () => import('@/views/pages/settings/UserProfileSettings.vue')
+        component: () => import('@/views/pages/user/UserProfileSettings.vue')
     },
     {
         path: '/user/settings/notifications',
         name: 'UserNotificationSettings',
-        component: () => import('@/views/pages/settings/UserNotificationSettings.vue')
+        component: () => import('@/views/pages/user/UserNotificationSettings.vue')
     },
     {
         path: '/user/api-tokens',

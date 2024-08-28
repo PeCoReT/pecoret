@@ -89,7 +89,7 @@ export default {
             <ProjectScopeCreateDialog @object-created="getItems"></ProjectScopeCreateDialog>
         </template>
         <template #table>
-            <GenericDataTable :total-records="totalRecords" :loading="loading" :pagination="pagination" blank-slate-text="No scopes found!" blank-slate-title="No Scopes!" blank-slate-icon="fa fa-start" :model-value="items" @page="onPage">
+            <GenericDataTable :total-records="totalRecords" :loading="loading" :pagination="pagination" blank-slate-text="No scopes found!" blank-slate-title="No Scopes!" blank-slate-icon="fa fa-star" :model-value="items" @page="onPage">
                 <Column field="details" header="Details"></Column>
                 <Column field="permission" header="Permission"></Column>
                 <Column header="Actions">
