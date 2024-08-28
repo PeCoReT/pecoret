@@ -9,6 +9,7 @@ export default {
             visible: false,
             projectId: this.$route.params.projectId,
             reportId: this.$route.params.reportId,
+            loading: false,
             model: {
                 name: null,
                 release_type: null
@@ -55,7 +56,7 @@ export default {
             <Field label="Name">
                 <InputText id="name" v-model="model.name"></InputText>
             </Field>
-            <Field label="Relese Type">
+            <Field label="Release Type">
                 <Select v-model="model.release_type" id="release_type" :options="releaseTypeChoices" optionLabel="title" optionValue="value"></Select>
             </Field>
         </Form>
