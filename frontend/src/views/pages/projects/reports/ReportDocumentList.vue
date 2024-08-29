@@ -111,7 +111,6 @@ export default {
         },
         getItems() {
             this.loading = true;
-            console.log('reloading...');
             let params = {
                 limit: this.pagination.limit,
                 page: this.pagination.page

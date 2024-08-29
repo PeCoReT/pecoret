@@ -14,7 +14,6 @@ export default {
     },
     methods: {
       getActiveClass(route) {
-          console.log(route)
           if (this.$route.path === route.path) {
               return 'pl-3 border-primary bg-gray-700 rounded border-l-2'
           }
