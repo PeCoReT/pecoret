@@ -44,16 +44,14 @@ export default {
 
 <template>
     <AuthLayout title="Activate Account">
-        <div class="formgroup p-fluid grid">
-            <div class="col-12 field">
-                <label for="password" class="text-900 text-xl font-medium mb-2">Password</label>
-                <Password id="password" v-model="model.password" placeholder="Password" :feedback="false" :toggleMask="true" inputClass="w-full" :inputStyle="{ padding: '1rem' }"></Password>
+        <Fluid>
+            <div class="col-12 field mb-6">
+                <Password id="password" v-model="model.password" placeholder="Password" :feedback="false" :toggleMask="true" inputClass="w-full"></Password>
             </div>
-            <div class="col-12 field">
-                <label for="password1" class="block text-900 font-medium text-xl mb-2">Password (confirm)</label>
-                <Password id="password1" v-model="model.password1" placeholder="Password" :feedback="false" :toggleMask="true" class="w-full mb-3" inputClass="w-full" :inputStyle="{ padding: '1rem' }"></Password>
+            <div class="col-12 field mb-6">
+                <Password id="password1" v-model="model.password1" placeholder="Password confirm" :feedback="false" :toggleMask="true" class="w-full mb-3" inputClass="w-full"></Password>
             </div>
-        </div>
+        </Fluid>
         <Button :loading="loading" label="Change Password" class="w-full p-3 text-xl" @click="activateAccount" :disabled="model.password !== model.password1 || model.password === null"></Button>
     </AuthLayout>
 </template>

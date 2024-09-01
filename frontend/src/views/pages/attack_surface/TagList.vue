@@ -1,10 +1,10 @@
 <script>
 import ASMonitorService from '@/service/ASMonitorService';
-import TagCreateDialog from '@/components/attack_surface/TagCreateDialog.vue';
-import AdvisoryLabelBadge from '@/components/advisories/AdvisoryLabelBadge.vue';
-import TagUpdateDialog from '@/components/attack_surface/TagUpdateDialog.vue';
+import TagCreateDialog from '@/components/dialogs/attack_surface/TagCreateDialog.vue';
+import AdvisoryLabelBadge from '@/components/badges/AdvisoryLabelBadge.vue';
+import TagUpdateDialog from '@/components/dialogs/attack_surface/TagUpdateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
-import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
 
 export default {
     name: 'TagList',

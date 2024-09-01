@@ -4,7 +4,7 @@ const baseRoutes = [
         name: 'Login',
         component: () => import('@/views/pages/auth/Login.vue')
     },
-    {
+  {
         path: '/reset_password',
         name: 'ResetPassword',
         component: () => import('@/views/pages/auth/ResetPassword.vue')

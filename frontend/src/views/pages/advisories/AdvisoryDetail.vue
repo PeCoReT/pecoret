@@ -1,7 +1,7 @@
 <script>
 import AdvisoryService, { AdvisoryStatusChoices, VulnerabilityStatusChoices } from '@/service/AdvisoryService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
-import AdvisoryTabMenu from '@/components/advisories/AdvisoryTabMenu.vue';
+import AdvisoryTabMenu from '@/components/navigation/AdvisoryTabMenu.vue';
 import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import { useAuthStore } from '@/store/auth';
@@ -161,9 +161,9 @@ export default {
         },
         containerCol() {
             if (this.showPreview === true) {
-                return 'col-6';
+                return 'col-span-6';
             }
-            return 'col-12';
+            return 'col-span-12';
         },
         previewUrl() {
             let blob = new Blob([this.previewData], { type: 'application/pdf' });
@@ -175,21 +175,21 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-6">
+            <div class="flex justify-start">
                 <p class="text-xl">
                     {{ advisory.vulnerability.name }} - {{ advisory.title }} ({{ advisory.advisory_id }}) <span v-if="advisory.cve_id">/ {{ advisory.cve_id }}</span>
                 </p>
             </div>
         </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
+        <div class="col-span-6">
+            <div class="flex justify-end">
                 <Button icon="fa fa-eye" outlined label="Preview" @click="togglePreview"></Button>
 
                 <Button label="Download" icon="fa fa-download" outlined :loading="downloadPending" :disabled="downloadPending" @click="downloadAsPDF"></Button>
@@ -199,54 +199,56 @@ export default {
         </div>
     </div>
 
-    <div class="grid">
+    <div class="grid grid-cols-12 gap-3 mt-3">
         <div :class="containerCol">
-            <AdvisoryTabMenu class="surface-card"></AdvisoryTabMenu>
+            <AdvisoryTabMenu></AdvisoryTabMenu>
             <div class="card border-noround-top" v-if="dataLoaded">
-                <div class="grid">
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Product" icon="fa fa-cart-shopping" class="surface-ground" :text="productDisplay"></DetailCardWithIcon>
+                <div class="grid grid-cols-12 gap-3">
+                    <div class="col-span-12 md:col-span-3">
+                        <DetailCardWithIcon title="Product" icon="fa fa-cart-shopping" class="bg-surface-950" :text="productDisplay"></DetailCardWithIcon>
                     </div>
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Affected Versions" icon="fa fa-circle-exclamation" class="surface-ground" :text="advisory.affected_versions"></DetailCardWithIcon>
+                    <div class="col-span-12 md:col-span-3">
+                        <DetailCardWithIcon title="Affected Versions" icon="fa fa-circle-exclamation" class="bg-surface-950" :text="advisory.affected_versions"></DetailCardWithIcon>
                     </div>
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Fixed Versions" icon="fa fa-screwdriver-wrench" class="surface-ground" :text="advisory.fixed_version || '-'"></DetailCardWithIcon>
+                    <div class="col-span-12 md:col-span-3">
+                        <DetailCardWithIcon title="Fixed Versions" icon="fa fa-screwdriver-wrench" class="bg-surface-950" :text="advisory.fixed_version || '-'"></DetailCardWithIcon>
                     </div>
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="User" icon="fa fa-user" class="surface-ground" :text="advisory.user.username"></DetailCardWithIcon>
-                    </div>
-                </div>
-                <div class="grid">
-                    <div class="col-12 md:col-3">
-                        <InfoCardWithForm class="surface-ground w-full" title="Severity" icon="fa fa-shield-halved">
-                            <Dropdown v-model="advisory.severity" :options="severityChoices" optionLabel="label" @change="patchAdvisory({ severity: advisory.severity })" optionValue="value"></Dropdown>
-                        </InfoCardWithForm>
-                    </div>
-                    <div class="col-12 md:col-3">
-                        <InfoCardWithForm class="surface-ground w-full" title="Vulnerability Status" icon="fa fa-file-pen">
-                            <Dropdown v-model="advisory.vulnerability_status" :options="vulnerabilityStatusChoices" optionLabel="label" optionValue="value" @change="patchAdvisory({ vulnerability_status: advisory.vulnerability_status })"></Dropdown>
-                        </InfoCardWithForm>
-                    </div>
-                    <div class="col-12 md:col-3">
-                        <InfoCardWithForm class="surface-ground w-full" title="Status" icon="fa fa-bookmark">
-                            <Dropdown v-model="advisory.status" :options="statusChoices" optionLabel="label" optionValue="value" @change="patchAdvisory({ status: advisory.status })"></Dropdown>
-                        </InfoCardWithForm>
-                    </div>
-                    <div class="col-12 md:col-3">
-                        <InfoCardWithForm class="surface-ground" title="Planned Disclosure" icon="fa-calendar">
-                            <Calendar v-model="advisory.date_planned_disclosure" @update:modelValue="patchAdvisoryDisclosureDate"></Calendar>
-                        </InfoCardWithForm>
+                    <div class="col-span-12 md:col-span-3">
+                        <DetailCardWithIcon title="User" icon="fa fa-user" class="bg-surface-950" :text="advisory.user.username"></DetailCardWithIcon>
                     </div>
                 </div>
-                <div class="grid formgrid p-fluid">
-                    <div class="field col-12">
-                        <label>Description</label>
-                        <MarkdownEditor v-model="advisory.description" @blur="patchAdvisoryDescription"></MarkdownEditor>
+                <div class="grid grid-cols-12 mt-3 gap-3">
+                    <div class="col-span-12 md:col-span-3">
+                        <InfoCardWithForm class="bg-surface-950 w-full" title="Severity" icon="fa fa-shield-halved">
+                            <Select v-model="advisory.severity" :options="severityChoices" optionLabel="label" @change="patchAdvisory({ severity: advisory.severity })" optionValue="value"></Select>
+                        </InfoCardWithForm>
                     </div>
-                    <div class="col-12 field">
-                        <label>Recommendation</label>
-                        <MarkdownEditor v-model="advisory.recommendation" @blur="patchRecommendation"></MarkdownEditor>
+                    <div class="col-span-12 md:col-span-3">
+                        <InfoCardWithForm class="bg-surface-950 w-full" title="Vulnerability Status" icon="fa fa-file-pen">
+                            <Select v-model="advisory.vulnerability_status" :options="vulnerabilityStatusChoices" optionLabel="label" optionValue="value" @change="patchAdvisory({ vulnerability_status: advisory.vulnerability_status })"></Select>
+                        </InfoCardWithForm>
+                    </div>
+                    <div class="col-span-12 md:col-span-3">
+                        <InfoCardWithForm class="bg-surface-950 w-full" title="Status" icon="fa fa-bookmark">
+                            <Select v-model="advisory.status" :options="statusChoices" optionLabel="label" optionValue="value" @change="patchAdvisory({ status: advisory.status })"></Select>
+                        </InfoCardWithForm>
+                    </div>
+                    <div class="col-span-12 md:col-span-3">
+                        <InfoCardWithForm class="bg-surface-950" title="Planned Disclosure" icon="fa-calendar">
+                            <DatePicker v-model="advisory.date_planned_disclosure" @update:modelValue="patchAdvisoryDisclosureDate"></DatePicker>
+                        </InfoCardWithForm>
+                    </div>
+                </div>
+                <div class="grid grid-cols-12 mt-3">
+                    <div class="col-span-12">
+                        <Form>
+                            <Field label="Description">
+                                <MarkdownEditor v-model="advisory.description" @blur="patchAdvisoryDescription"></MarkdownEditor>
+                            </Field>
+                            <Field label="Recommendation">
+                                <MarkdownEditor v-model="advisory.recommendation" @blur="patchRecommendation"></MarkdownEditor>
+                            </Field>
+                        </Form>
                     </div>
                 </div>
             </div>

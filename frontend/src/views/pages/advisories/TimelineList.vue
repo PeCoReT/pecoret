@@ -1,7 +1,7 @@
 <script>
 import AdvisoryService from '@/service/AdvisoryService';
-import AdvisoryTabMenu from '@/components/advisories/AdvisoryTabMenu.vue';
-import AdvisoryTimelineCreateDialog from '@/components/advisories/AdvisoryTimelineCreateDialog.vue';
+import AdvisoryTabMenu from '@/components/navigation/AdvisoryTabMenu.vue';
+import AdvisoryTimelineCreateDialog from '@/components/dialogs/advisories/AdvisoryTimelineCreateDialog.vue';
 
 export default {
     name: 'TimelineList',
@@ -67,26 +67,26 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-6">
+            <div class="flex justify-start"></div>
         </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
+        <div class="col-span-6">
+            <div class="flex justify-end">
                 <AdvisoryTimelineCreateDialog @object-created="getItems"></AdvisoryTimelineCreateDialog>
             </div>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-12">
-            <AdvisoryTabMenu class="surface-card"></AdvisoryTabMenu>
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-12">
+            <AdvisoryTabMenu></AdvisoryTabMenu>
             <div class="card border-noround-top">
                 <Timeline :value="items" class="mt-3">
                     <template #opposite="slotProps">

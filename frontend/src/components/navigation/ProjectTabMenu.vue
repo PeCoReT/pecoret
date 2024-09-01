@@ -192,13 +192,11 @@ export default {
 </script>
 
 <template>
-    <Menubar :model="items" class="surface-card">
+    <Menubar :model="items" class="w-screen">
         <template #item="{ label, item, props, root, hasSubmenu }">
-            <router-link v-if="item.route" v-slot="routerProps" :to="item.route">
-                <span v-bind="props.action">
+            <router-link v-if="item.route" :to="item.route" v-bind="props.action">
                     <span v-bind="props.icon" />
                     <span v-bind="props.label">{{ label }}</span>
-                </span>
             </router-link>
             <a v-else :href="item.url" :target="item.target" v-bind="props.action">
                 <span v-bind="props.icon" />

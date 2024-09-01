@@ -3,7 +3,7 @@ import UserAccountService from '@/service/UserAccountService';
 import UserAccountCreateDialog from '@/components/dialogs/UserAccountCreateDialog.vue';
 import UserAccountUpdateDialog from '@/components/dialogs/UserAccountUpdateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
-import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
 
 export default {
     name: 'UserAccountList',

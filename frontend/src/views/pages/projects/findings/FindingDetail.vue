@@ -1,12 +1,12 @@
 <script>
 import FindingService from '@/service/FindingService';
-import FindingTabMenu from '@/components/pages/FindingTabMenu.vue';
+import FindingTabMenu from '@/components/navigation/FindingTabMenu.vue';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
 import FindingAsAdvisoryDialog from '@/components/dialogs/FindingAsAdvisoryDialog.vue';
-import FileDrop from '@/components/elements/forms/FileDrop.vue';
+import FileDrop from '@/components/forms/fields/FileDrop.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
-import FindingUpdateDialog from '@/components/projects/findings/FindingUpdateDialog.vue';
+import FindingUpdateDialog from '@/components/dialogs/FindingUpdateDialog.vue';
 import { findingStatusChoices, severityChoices } from '@/utils/constants';
 
 export default {
@@ -42,9 +42,9 @@ export default {
     computed: {
         containerCol() {
             if (this.showPreview === true) {
-                return 'col-6';
+                return 'col-span-6';
             }
-            return 'col-12';
+            return 'col-span-12';
         },
         previewUrl() {
             let blob = new Blob([this.previewData], { type: 'application/pdf' });
@@ -160,20 +160,20 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-12">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-6">
+            <div class="flex justify-start">
                 <strong class="text-lg" v-if="finding.vulnerability">{{ finding.vulnerability.name }} / {{ finding.name }}</strong>
             </div>
         </div>
-        <div class="col-6 h-full">
-            <div class="flex justify-content-end">
+        <div class="col-span-6 h-full">
+            <div class="flex justify-end">
                 <Button icon="fa fa-eye" outlined label="Preview" @click="togglePreview"></Button>
                 <Button label="Download" outlined icon="fa fa-download" :loading="downloadPending" :disabled="downloadPending" @click="downloadAsPDF"></Button>
                 <FindingAsAdvisoryDialog></FindingAsAdvisoryDialog>
@@ -183,53 +183,53 @@ export default {
         </div>
     </div>
 
-    <div class="grid">
+    <div class="grid grid-cols-12 mt-3 gap-4">
         <div :class="containerCol">
             <FindingTabMenu class="surface-card" :finding="finding"></FindingTabMenu>
-            <div class="card border-noround-top">
-                <div class="grid">
-                    <div class="col-12 md:col-4">
-                        <DetailCardWithIcon title="Asset" icon="fa-crosshairs" class="surface-ground" :text="finding.component.display_name"></DetailCardWithIcon>
+            <div class="card border-t-0">
+                <div class="grid grid-cols-12 gap-3">
+                    <div class="col-span-12 md:col-span-4">
+                        <DetailCardWithIcon title="Asset" icon="fa-crosshairs" class="bg-surface-950" :text="finding.component.display_name"></DetailCardWithIcon>
                     </div>
-                    <div class="col-12 md:col-4">
-                        <DetailCardWithIcon title="User Account" icon="fa-user" class="surface-ground" :text="userAccountDisplay"></DetailCardWithIcon>
+                    <div class="col-span-12 md:col-span-4">
+                        <DetailCardWithIcon title="User Account" icon="fa-user" class="bg-surface-950" :text="userAccountDisplay"></DetailCardWithIcon>
                     </div>
-                    <div class="col-12 md:col-4">
-                        <DetailCardWithIcon title="Status" icon="fa-bookmark" class="surface-ground" :text="finding.status"></DetailCardWithIcon>
+                    <div class="col-span-12 md:col-span-4">
+                        <DetailCardWithIcon title="Status" icon="fa-bookmark" class="bg-surface-950" :text="finding.status"></DetailCardWithIcon>
                     </div>
                 </div>
-                <div class="grid">
-                    <div class="col-12 md:col-3">
-                        <InfoCardWithForm class="surface-ground w-full" title="Status" icon="fa-bookmark">
-                            <Dropdown v-model="finding.status" :options="findingStatusChoices()" optionValue="value" @change="patchFindingData({ status: finding.status })" optionLabel="title" class="w-full"></Dropdown>
+                <div class="grid mt-3 grid-cols-12 gap-3">
+                    <div class="col-span-12 md:col-span-3">
+                        <InfoCardWithForm class="bg-surface-950 w-full" title="Status" icon="fa-bookmark">
+                            <Select v-model="finding.status" :options="findingStatusChoices()" optionValue="value" @change="patchFindingData({ status: finding.status })" optionLabel="title" class="w-full"></Select>
                         </InfoCardWithForm>
                     </div>
-                    <div class="col-12 md:col-3">
-                        <InfoCardWithForm class="surface-ground" title="Finding Date" icon="fa-calendar">
-                            <Calendar v-model="finding.finding_date" @update:modelValue="patchFindingDate" dateFormat="yy-mm-dd"></Calendar>
+                    <div class="col-span-12 md:col-span-3">
+                        <InfoCardWithForm class="bg-surface-950" title="Finding Date" icon="fa-calendar">
+                            <DatePicker v-model="finding.finding_date" @update:modelValue="patchFindingDate" dateFormat="yy-mm-dd"></DatePicker>
                         </InfoCardWithForm>
                     </div>
-                    <div class="col-12 md:col-3">
-                        <InfoCardWithForm class="surface-ground" title="Severity" icon="fa fa-shield-halved">
-                            <Dropdown v-model="finding.severity" :options="severityChoices()" optionLabel="label" @change="patchFindingData({ severity: finding.severity })" optionValue="value"></Dropdown>
+                    <div class="col-span-12 md:col-span-3">
+                        <InfoCardWithForm class="bg-surface-950" title="Severity" icon="fa fa-shield-halved">
+                            <Select v-model="finding.severity" :options="severityChoices()" optionLabel="label" @change="patchFindingData({ severity: finding.severity })" optionValue="value"></Select>
                         </InfoCardWithForm>
                     </div>
-                    <div class="col-12 md:col-3">
-                        <InfoCardWithForm class="surface-ground" title="Needs review?" icon="fa-user-tag">
-                            <InputSwitch v-model="finding.needs_review" @change="patchFindingData({ needs_review: finding.needs_review })"></InputSwitch>
+                    <div class="col-span-12 md:col-span-3">
+                        <InfoCardWithForm class="bg-surface-950" title="Needs review?" icon="fa-user-tag">
+                            <ToggleSwitch v-model="finding.needs_review" @change="patchFindingData({ needs_review: finding.needs_review })"></ToggleSwitch>
                         </InfoCardWithForm>
                     </div>
                 </div>
 
-                <div class="grid formgrid p-fluid mt-3">
-                    <div class="col-12 field">
+                <div class="grid gap-4 mt-3">
+                    <div class="col-span-12">
                         <label>Proof</label>
                         <MarkdownEditor v-model="finding.proof_text"></MarkdownEditor>
                     </div>
-                    <div class="col-12">
+                    <div class="col-span-12">
                         <FileDrop></FileDrop>
                     </div>
-                    <div class="col-12 field">
+                    <div class="col-span-12">
                         <Button label="Save" @click="patchFindingData({ proof_text: finding.proof_text })"></Button>
                     </div>
                 </div>
@@ -237,7 +237,7 @@ export default {
         </div>
 
         <div :class="containerCol">
-            <ProgressBar v-if="!this.previewData && this.showPreview === true" mode="indeterminate" class="h-1rem"></ProgressBar>
+            <ProgressBar v-if="!this.previewData && this.showPreview === true" mode="indeterminate" class="h-1"></ProgressBar>
             <iframe :src="this.previewUrl" v-if="previewLoading !== true && this.previewData" class="w-full h-full" :key="previewData"></iframe>
         </div>
     </div>

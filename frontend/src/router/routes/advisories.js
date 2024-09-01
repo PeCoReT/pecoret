@@ -52,11 +52,6 @@ const advisoryRoutes = [
                 path: '/advisories/:advisoryId/share-tokens',
                 component: () => import('@/views/pages/advisories/ShareTokenList.vue')
             },
-            {
-                name: 'AdvisoryShareTokenDownload',
-                path: '/advisories/:advisoryId/download/:token',
-                component: () => import('@/views/pages/advisories/ShareTokenAdvisoryDownload.vue')
-            }
         ]
     }
 ];

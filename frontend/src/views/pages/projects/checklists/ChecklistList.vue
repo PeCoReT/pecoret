@@ -1,8 +1,9 @@
 <script>
 import ChecklistService from '@/service/ChecklistService';
 import markdown from '@/utils/markdown';
-import AssetSelectField from '@/components/elements/forms/AssetSelectField.vue';
+import AssetSelectField from '@/components/forms/fields/AssetSelectField.vue';
 import AssetChecklistCreateDialog from '@/components/dialogs/AssetChecklistCreateDialog.vue';
+import BaseLayout from '@/layout/base/BaseLayout.vue';
 
 export default {
     name: 'ChecklistList',
@@ -10,13 +11,13 @@ export default {
         return {
             projectId: this.$route.params.projectId,
             categories: [],
-            selectedKey: null,
             checklistChoices: [],
-            checklist: null,
-            expandedItem: null,
+            activeChecklist: null,
+            searchChecklist: null,
+            searchCategories: null,
             service: new ChecklistService(),
             asset: null,
-            model: null,
+            activeItem: null,
             breadcrumbs: [
                 {
                     label: 'Checklists',
@@ -26,27 +27,20 @@ export default {
         };
     },
     methods: {
-        getChecklists() {
-            this.service.getChecklists(this.$api).then((response) => {
-                this.checklistChoices = response.data.results;
-            });
-        },
         renderMarkdown(text) {
             return markdown.renderMarkdown(text);
+        },
+        doChecklistSearch(event) {
+            this.loadAssetChecklists({ search: event });
         },
         onAssetChange() {
             this.loadAssetChecklists();
         },
-        onChecklistChange() {
-            this.loadAssetCategories();
-        },
-        loadAssetCategories(event) {
+        loadAssetCategories(checklist) {
             let params = {
-                checklist: this.checklist
+                checklist: checklist.pk
             };
-            if (event) {
-                params['search'] = event;
-            }
+            this.activeChecklist = checklist;
             this.service.getAssetCategories(this.$api, this.projectId, params).then((response) => {
                 this.categories = response.data.results;
                 this.categories.forEach((category) => {
@@ -63,9 +57,13 @@ export default {
                 });
             });
         },
-        loadAssetChecklists() {
-            let params = {};
-            params[this.asset.type] = this.asset.pk;
+        loadAssetChecklists(params) {
+            if (!params) {
+                params = {};
+            }
+            if (this.asset && this.asset.pk) {
+                params[this.asset.type] = this.asset.pk;
+            }
             this.service.getAssetChecklists(this.$api, this.projectId, params).then((response) => {
                 this.checklistChoices = response.data.results;
             });
@@ -93,12 +91,11 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteAssetChecklist(this.$api, this.projectId, this.checklist).then((response) => {
-                        this.model = null;
-                        this.checklist = null;
+                    this.service.deleteAssetChecklist(this.$api, this.projectId, this.activeChecklist.pk).then(() => {
+                        this.activeChecklist = null;
                         this.asset = null;
-                        this.expandedItem = null;
                         this.categories = [];
+                        this.loadAssetChecklists();
                         this.$router.push({
                             name: 'ProjectChecklistList',
                             params: {
@@ -110,74 +107,97 @@ export default {
             });
         }
     },
-    mounted() {},
-    components: { AssetSelectField, AssetChecklistCreateDialog }
+    components: { BaseLayout, AssetSelectField, AssetChecklistCreateDialog }
 };
 </script>
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs" />
-        </div>
-    </div>
-    <div class="grid">
-        <div class="col-6"></div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <AssetChecklistCreateDialog @object-created="getChecklists"></AssetChecklistCreateDialog>
+    <BaseLayout :breadcrumbs="breadcrumbs">
+        <template #pre-content-right>
+            <div class="flex justify-end">
+                <AssetChecklistCreateDialog @object-created="loadAssetChecklists"></AssetChecklistCreateDialog>
             </div>
-        </div>
-    </div>
+        </template>
 
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <div class="p-fluid formgrid grid">
+        <div class="col-span-12">
+            <Form>
+                <InlineFieldGroup>
                     <AssetSelectField v-model="asset" :displayInline="true" @update:model-value="onAssetChange"></AssetSelectField>
-                    <div class="field col-10">
-                        <Dropdown :options="checklistChoices" placeholder="Checklist" v-model="checklist" @change="onChecklistChange" :disabled="checklistChoices.length < 1" optionLabel="name" optionValue="pk"></Dropdown>
-                    </div>
-                    <div class="field col-2">
-                        <Button label="Checklist" size="small" severity="danger" :disabled="this.checklist === null" icon="fa fa-trash" outlined @click="onDeleteDialogChecklist"></Button>
-                    </div>
+                </InlineFieldGroup>
+            </Form>
+        </div>
+        <div class="flex card col-span-12 gap-3">
+            <!-- Left Sidebar - Checklists -->
+            <div class="w-full md:w-1/5 p-4 shadow-md overflow-y-auto border-r border-gray-700">
+                <div class="flex justify-between">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Checklists</h2>
+                    <Button label="Checklist" size="small" severity="danger" v-if="this.activeChecklist && this.activeChecklist.pk" icon="fa fa-trash" outlined @click="onDeleteDialogChecklist"></Button>
                 </div>
-                <div class="grid">
-                    <div class="col-12 md:col">
-                        <div class="flex justify-content-between flex-column sm:flex-row">
-                            <IconField iconPosition="left">
-                                <InputIcon class="fa fa-search"></InputIcon>
-                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </IconField>
+
+                <!-- Search Bar for Checklists -->
+                <div class="mb-4">
+                    <Form>
+                        <Field>
+                            <InputText v-model="searchChecklist" placeholder="Search checklists" @update:modelValue="doChecklistSearch" :disabled="!this.asset"></InputText>
+                        </Field>
+                    </Form>
+                </div>
+
+                <ul>
+                    <li v-for="checklist in checklistChoices" :key="checklist.pk" class="w-full text-left mb-2 bg-gray-100 dark:bg-gray-700 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md focus:outline-none">
+                        <div class="flex items-center gap-3 p-2">
+                            <button @click="loadAssetCategories(checklist)" class="w-full">
+                                {{ checklist.name }}
+                            </button>
                         </div>
-                    </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Middle Section - Categories and Items -->
+            <div class="block w-full md:w-2/5 p-4 shadow-md overflow-y-auto border-r border-gray-700">
+                <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Categories</h2>
+
+                <!-- Search Bar for Categories -->
+                <div class="mb-4">
+                    <Form>
+                        <Field>
+                            <InputText v-model="searchCategories" placeholder="Search categories" :disabled="!this.asset"></InputText>
+                        </Field>
+                    </Form>
                 </div>
-                <div class="grid">
-                    <Accordion class="mt-3 w-full col">
-                        <AccordionTab v-for="category in categories" :key="category.pk">
-                            <template #header> {{ category.name }} ({{ category.closed_items }}/{{ category.items.length }}) </template>
-                            <div class="grid">
-                                <div class="col-12">
-                                    <div class="flex flex-column xl:flex-row xl:align-items-start p-2 gap-2" v-for="item in category.items">
-                                        <div class="flex align-items-center">
-                                            <Checkbox @change="onCheckboxChange($event, item, category)" :binary="true" v-model="item.checked"></Checkbox>
-                                            <label class="ml-3">
-                                                <Button @click="this.expandedItem = item" text class="text-color">
-                                                    {{ item.name }}
-                                                </Button>
-                                            </label>
-                                        </div>
-                                    </div>
+
+                <div>
+                    <div class="mb-6" v-for="category in categories" :key="category.pk">
+                        <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">{{ category.name }} ({{ category.closed_items }}/{{ category.items.length }})</h3>
+                        <ul>
+                            <li v-for="item in category.items" class="w-full text-left mb-2 bg-gray-100 dark:bg-gray-700 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md focus:outline-none">
+                                <div class="flex items-center gap-3 p-2">
+                                    <Checkbox @change="onCheckboxChange($event, item, category)" :binary="true" v-model="item.checked"></Checkbox>
+                                    <button
+                                        class="w-full"
+                                        @click="
+                                            () => {
+                                                this.activeItem = item;
+                                            }
+                                        "
+                                    >
+                                        {{ item.name }}
+                                    </button>
                                 </div>
-                            </div>
-                        </AccordionTab>
-                    </Accordion>
-                    <div class="col md:col-7 mt-3 h-full" v-if="expandedItem">
-                        <div class="card surface-ground">
-                            <div v-html="renderMarkdown(expandedItem.description)" class="checklist-description"></div>
-                        </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
+
+            <!-- Right Sidebar - Item Preview -->
+            <div class="block w-full md:w-2/5 shadow-md overflow-y-auto">
+                <h2 class="text-xl font-semibold mb-8 text-gray-900 dark:text-gray-100">Item Preview</h2>
+                <div id="item-preview" class="text-gray-700 dark:text-gray-300">
+                    <p class="text-lg" v-if="activeItem === null">Click on a checklist item to see the preview here.</p>
+                    <div class="markdown-block" v-else v-html="renderMarkdown(activeItem.description)"></div>
+                </div>
+            </div>
         </div>
-    </div>
+    </BaseLayout>
 </template>

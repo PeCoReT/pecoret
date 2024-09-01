@@ -10,6 +10,7 @@ export default {
         return {
             visible: false,
             projectId: this.$route.params.projectId,
+            loading: false,
             model: {
                 command: null,
                 output: null,
@@ -44,25 +45,17 @@ export default {
 <template>
     <Button icon="fa fa-plus" label="Command" outlined @click="open"></Button>
 
-    <Dialog header="Create Command" v-model:visible="visible" modal :style="{ width: '70vw' }">
-        <div class="p-fluid formgrid grid">
-            <div class="field col-12">
-                <label for="command">Command</label>
+    <ModalDialog header="Create Command" v-model="visible" v-model:loading="loading" @onSave="create">
+        <Form>
+            <Field label="Command">
                 <InputText id="name" type="text" v-model="model.command"></InputText>
-            </div>
-            <div class="field col-12">
-                <label for="output">Output</label>
+            </Field>
+            <Field label="Output">
                 <MarkdownEditor v-model="model.output"></MarkdownEditor>
-            </div>
-            <div class="field col-12">
-                <label for="date_expire">Date run?</label>
-                <Calendar v-model="model.date_run" id="date_expire"></Calendar>
-            </div>
-        </div>
-
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+            </Field>
+            <Field label="Date run?">
+                <DatePicker v-model="model.date_run" id="date_expire"></DatePicker>
+            </Field>
+        </Form>
+    </ModalDialog>
 </template>

@@ -1,6 +1,6 @@
 <script>
 import AdminService from '@/service/AdminService';
-import CompanySelectField from '@/components/elements/forms/CompanySelectField.vue';
+import CompanySelectField from '@/components/forms/fields/CompanySelectField.vue';
 
 export default {
     name: 'UserCreateDialog',
@@ -19,6 +19,7 @@ export default {
                 password: null,
                 is_active: false
             },
+            loading: false,
             service: new AdminService(),
             groupChoices: [],
             customerGroupId: null
@@ -83,42 +84,33 @@ export default {
 <template>
     <Button icon="fa fa-plus" label="User" outlined @click="open"></Button>
 
-    <Dialog header="Create User" v-model:visible="visible" modal :style="{ width: '70vw' }">
-        <div class="grid formgrid p-fluid">
-            <div class="field col-12">
-                <label for="username">Username</label>
+    <ModalDialog header="Create User" v-model="visible" :loading="loading" @onSave="create">
+        <Form>
+            <Field label="Username">
                 <InputText id="username" v-model="model.username"></InputText>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="first_name">First Name</label>
-                <InputText id="first_name" v-model="model.first_name"></InputText>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="last_name">Last Name</label>
-                <InputText id="last_name" v-model="model.last_name"></InputText>
-            </div>
-            <div class="field col-12">
-                <label for="email">E-Mail</label>
+            </Field>
+            <InlineFieldGroup>
+                <InlineField label="First Name">
+                    <InputText id="first_name" v-model="model.first_name"></InputText>
+                </InlineField>
+                <InlineField label="Last Name">
+                    <InputText id="last_name" v-model="model.last_name"></InputText>
+                </InlineField>
+            </InlineFieldGroup>
+            <Field label="E-Mail">
                 <InputText id="email" v-model="model.email"></InputText>
-            </div>
-            <div class="field col-12">
-                <label for="groups">Groups</label>
+            </Field>
+            <Field label="Groups">
                 <MultiSelect id="groups" v-model="model.groups" :options="groupChoices" @focus="getGroups" optionValue="pk" optionLabel="name"></MultiSelect>
-            </div>
-            <div class="field col-12" v-if="isCustomerSelected === true">
-                <label for="company">Company</label>
+            </Field>
+            <Field label="Company" v-if="isCustomerSelected === true">
                 <CompanySelectField v-model="model.company"></CompanySelectField>
-            </div>
-            <div class="field col-12">
-                <label for="password">Password</label>
-                <Password id="password" v-model="model.password" :feedback="false" :toggleMask="true"></Password>
+            </Field>
+            <Field label="Password">
+                <Password id="password" v-model="model.password" :feedback="false" :toggleMask="true" :pt="{ pcInput: { root: 'grow' } }"></Password>
                 <small>You can leave the password empty to send an activation mail to the user! Users where the password was set are inactive by default. Enable them using the update dialog!</small>
-            </div>
-        </div>
+            </Field>
+        </Form>
 
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+    </ModalDialog>
 </template>

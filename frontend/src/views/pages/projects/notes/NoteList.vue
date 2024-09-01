@@ -187,32 +187,32 @@ export default {
 };
 </script>
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-6">
+            <div class="flex justify-start"></div>
         </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
+        <div class="col-span-6">
+            <div class="flex justify-end space-x-2">
                 <Button icon="fa fa-plus" label="Note" outlined @click="createNote" v-if="!this.editMode"></Button>
                 <Button icon="fa fa-edit" label="Edit" outlined @click="enterEditMode" :disabled="!selectedNote" v-if="!this.editMode"></Button>
-                <Button icon="fa fa-edit" label="Exit" outlined @click="exitEditMode" :disabled="!selectedNote" v-else></Button>
+                <Button icon="fa fa-close" label="Exit" outlined @click="exitEditMode" :disabled="!selectedNote" v-else></Button>
                 <Button icon="fa fa-trash" label="Delete" outlined severity="danger" @click="deleteNote" :disabled="!selectedNote" v-if="!this.editMode"></Button>
             </div>
         </div>
     </div>
     <Message v-if="showMessage" :closable="false">Object is locked by user {{ this.selectedNote.object_lock.user.username }}! </Message>
 
-    <div class="card">
-        <div class="grid">
-            <div class="col-3 h-full">
+    <div class="card mt-3">
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-3 h-full">
                 <Listbox @change="onNoteSelected" v-model="selectedNote" :options="notes" filter @filter="onListFilter" optionLabel="title" class="w-full" :disabled="this.editMode">
                     <template #option="slotProps">
-                        <div class="flex align-items-center">
+                        <div class="flex items-center">
                             <div>
                                 {{ slotProps.option.title }}
                                 <Button class="m-0 p-0" icon="fa fa-lock" text :disabled="true" v-if="slotProps.option.object_lock !== null"></Button>
@@ -225,19 +225,19 @@ export default {
                 </Listbox>
                 <Paginator :rows="pagination.limit" :totalRecords="totalRecords" @page="onPage"></Paginator>
             </div>
-            <div class="col-9">
+            <div class="col-span-9">
                 <RenderedNote :note="selectedNote" v-if="selectedNote !== null && editMode === false"></RenderedNote>
 
                 <div v-if="editMode === true && selectedNote !== null">
-                    <div class="grid formgrid p-fluid">
-                        <div class="col-12 field">
-                            <InputText v-model="selectedNote.title" v-if="selectedNote !== null"></InputText>
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-12">
+                            <InputText class="w-full" v-model="selectedNote.title" v-if="selectedNote !== null"></InputText>
                         </div>
-                        <div class="col-12 field">
+                        <div class="col-span-12">
                             <MarkdownEditor v-if="selectedNote !== null" v-model="selectedNote.text"></MarkdownEditor>
                         </div>
-                        <div class="col-12 field">
-                            <Button label="Save" @click="patchNote" :loading="saveLoading" v-if="selectedNote !== null"></Button>
+                        <div class="col-span-12">
+                            <Button class="w-full" label="Save" @click="patchNote" :loading="saveLoading" v-if="selectedNote !== null"></Button>
                         </div>
                     </div>
                 </div>

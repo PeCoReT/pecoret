@@ -1,8 +1,8 @@
 <script>
 import ASMonitorService from '@/service/ASMonitorService';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
-import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
-import URLCreateDialog from '@/components/attack_surface/URLCreateDialog.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
+import URLCreateDialog from '@/components/dialogs/attack_surface/URLCreateDialog.vue';
 import TechnologyService from '@/service/TechnologyService';
 
 export default {

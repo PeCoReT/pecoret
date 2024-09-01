@@ -1,10 +1,9 @@
 <script>
-import ProjectService from "@/service/ProjectService";
-
+import ProjectService from '@/service/ProjectService';
 
 export default {
-    name: "ProjectFileCreateDialog",
-    emits: ["object-created"],
+    name: 'ProjectFileCreateDialog',
+    emits: ['object-created'],
     data() {
         return {
             visible: false,
@@ -13,13 +12,11 @@ export default {
                 file: null,
                 name: null
             },
+            loading: false,
             service: new ProjectService()
         };
     },
     methods: {
-        close() {
-            this.visible = false;
-        },
         open() {
             this.visible = true;
         },
@@ -33,12 +30,12 @@ export default {
             };
             this.service.createProjectFile(this.$api, this.projectId, data).then((response) => {
                 this.$toast.add({
-                    severity: "success",
-                    summary: "File added!",
+                    severity: 'success',
+                    summary: 'File added!',
                     life: 3000,
-                    detail: "New file was added!"
+                    detail: 'New file was added!'
                 });
-                this.$emit("object-created", response.data);
+                this.$emit('object-created', response.data);
                 this.visible = false;
             });
         }
@@ -49,22 +46,14 @@ export default {
 <template>
     <Button icon="fa fa-plus" label="File" outlined @click="open"></Button>
 
-    <Dialog header="Create File" v-model:visible="visible" modal :style="{ width: '70vw' }">
-        <div class="grid formgrid p-fluid">
-            <div class="col-12 field">
-                <label for="name">Name</label>
+    <ModalDialog header="Create File" v-model="visible" v-model:loading="loading" @onSave="create">
+        <Form>
+            <Field label="Name">
                 <InputText id="name" v-model="model.name"></InputText>
-            </div>
-            <div class="col-12 field">
-                <label for="file">File</label>
+            </Field>
+            <Field label="File">
                 <FileUpload mode="basic" id="file" @select="this.getFileObject"></FileUpload>
-            </div>
-        </div>
-
-
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+            </Field>
+        </Form>
+    </ModalDialog>
 </template>

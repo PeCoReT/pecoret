@@ -5,7 +5,6 @@ import baseRoutes from '@/router/routes/base';
 import checklistRoutes from '@/router/routes/checklists';
 import companyRoutes from '@/router/routes/companies';
 import vulnerabilityTemplateRoutes from '@/router/routes/vulnerabilityTemplates';
-import advisoryManagementRoutes from '@/router/routes/advisoryManagement';
 import userRoutes from '@/router/routes/user';
 
 const bundledRoutes = [
@@ -21,7 +20,6 @@ const bundledRoutes = [
     ...checklistRoutes,
     ...companyRoutes,
     ...vulnerabilityTemplateRoutes,
-    ...advisoryManagementRoutes,
     ...userRoutes
 ];
 

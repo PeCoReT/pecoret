@@ -20,10 +20,10 @@ from backend.filters.technology import TechnologyFilter
         operation_id='Delete a technology', tags=['Technologies']
     ),
     partial_update=extend_schema(
-        operation_id='Partially update a technology', tags=['Knowledge Base']
+        operation_id='Partially update a technology', tags=['Technologies']
     ),
     update=extend_schema(
-        operation_id='Update a technology', tags=['Knowledge Base', 'Technologies']
+        operation_id='Update a technology', tags=['Technologies']
     )
 )
 class TechnologyViewSet(PeCoReTModelViewSet):

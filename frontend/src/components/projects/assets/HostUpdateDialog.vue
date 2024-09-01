@@ -1,7 +1,7 @@
 <script>
 import AssetService from '@/service/AssetService';
-import AssetEnvironmentSelectField from '@/components/elements/forms/AssetEnvironmentSelectField.vue';
-import AssetAccessibleSelectField from '@/components/elements/forms/AssetAccessibleSelectField.vue';
+import AssetEnvironmentSelectField from '@/components/forms/fields/AssetEnvironmentSelectField.vue';
+import AssetAccessibleSelectField from '@/components/forms/fields/AssetAccessibleSelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
 

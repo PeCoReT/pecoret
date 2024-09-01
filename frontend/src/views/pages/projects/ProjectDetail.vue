@@ -13,7 +13,7 @@ export default {
     data() {
         return {
             projectId: this.$route.params.projectId,
-            project: {company: {}},
+            project: { company: {} },
             service: new ProjectService(),
             role: {},
             updatedSuccessToastTitle: 'Project updated!',
@@ -107,69 +107,65 @@ export default {
 
 <template>
     <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
+        <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
+    </div>
+
+    <div class="grid mt-3">
+        <div class="flex justify-end">
+            <ProjectUpdateDialog :project="project" @object-updated="getProject"></ProjectUpdateDialog>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-12">
-            <div class="flex justify-content-end">
-                <ProjectUpdateDialog :project="project" @object-updated="getProject"></ProjectUpdateDialog>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12 md:col-6 lg:col-6 xl:col-3">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mt-3">
+        <div class="col-span-1">
             <DetailCardWithIcon title="Dates" :text="projectDateDisplay" icon="fa-calendar"></DetailCardWithIcon>
         </div>
-        <div class="col-12 md:col-6 lg:col-6 xl:col-3">
+        <div class="col-span-1">
             <DetailCardWithIcon title="Role" icon="fa-crown" :text="role.role"></DetailCardWithIcon>
         </div>
-        <div class="col-12 md:col-6 lg:col-6 xl:col-3">
+        <div class="col-span-1">
             <InfoCardWithForm title="Status" icon="fa-bookmark">
-                <Dropdown v-model="project.status" :options="statusChoices" optionValue="value" @change="patchProject({ status: project.status })" optionLabel="label" class="w-full"></Dropdown>
+                <Select v-model="project.status" :options="statusChoices" optionValue="value" @change="patchProject({ status: project.status })" optionLabel="label" class="w-full"></Select>
             </InfoCardWithForm>
         </div>
-        <div class="col-12 md:col-6 lg:col-6 xl:col-3">
+        <div class="col-span-1">
             <InfoCardWithForm title="Pin Project" icon="fa fa-thumbtack">
                 <Checkbox :binary="true" v-model="project.pinned" @change="pinProject"></Checkbox>
             </InfoCardWithForm>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-12 md:col-6 lg:col-6 xl:col-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-3">
+        <div class="col-span-1">
             <LatestFindingsDashboard :project-id="this.projectId"></LatestFindingsDashboard>
             <DashboardFindingsCount></DashboardFindingsCount>
         </div>
-        <div class="col-12 md:col-6 lg:col-6 xl:col-4">
+        <div class="col-span-1">
             <DashboardSeverityChart></DashboardSeverityChart>
         </div>
-        <div class="col-12 md:col-6 lg:col-6 xl:col-4">
+        <div class="col-span-1">
             <Card class="card">
                 <template #title>Information</template>
                 <template #content>
-                    <div class="grid">
-                        <div class="col-6">Test Method</div>
-                        <div class="col-6">{{ project.test_method }}</div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>Test Method</div>
+                        <div>{{ project.test_method }}</div>
                     </div>
-                    <div class="grid">
-                        <div class="col-6">Company</div>
-                        <div class="col-6">{{ project.company.name }}</div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>Company</div>
+                        <div>{{ project.company.name }}</div>
                     </div>
-                    <div class="grid">
-                        <div class="col-6">Pentest Types</div>
-                        <div class="col-6">{{ getPentestTypeDisplay() }}</div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>Pentest Types</div>
+                        <div>{{ getPentestTypeDisplay() }}</div>
                     </div>
-                    <div class="grid">
-                        <div class="col-6">Language</div>
-                        <div class="col-6">{{ project.language }}</div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>Language</div>
+                        <div>{{ project.language }}</div>
                     </div>
-                    <div class="grid">
-                        <div class="col-6">Visibility</div>
-                        <div class="col-6">{{ project.visibility }}</div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>Visibility</div>
+                        <div>{{ project.visibility }}</div>
                     </div>
                 </template>
             </Card>

@@ -1,10 +1,10 @@
 <script>
 import markdown from '@/utils/markdown';
 import FindingService from '@/service/FindingService';
-import FindingTabMenu from '@/components/pages/FindingTabMenu.vue';
+import FindingTabMenu from '@/components/navigation/FindingTabMenu.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 import FindingCommentFormDialog from '@/components/projects/findings/FindingCommentFormDialog.vue';
-import CommentCard from '@/components/elements/CommentCard.vue';
+import CommentCard from '@/components/cards/CommentCard.vue';
 
 export default {
     name: 'FindingCommentList',
@@ -96,18 +96,18 @@ export default {
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-6">
-            <div class="justify-content-start flex"></div>
+    <div class="grid grid-cols-2 space-y-3">
+        <div class="col-span-1">
+            <div class="justify-start flex"></div>
         </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
+        <div class="col-span-1">
+            <div class="flex justify-end">
                 <FindingCommentFormDialog @object-created="getComments" :findingId="findingId" :projectId="projectId"></FindingCommentFormDialog>
             </div>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-12">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
             <FindingTabMenu class="surface-card"></FindingTabMenu>
             <div class="card border-noround-top" v-if="items.length > 0">
                 <CommentCard

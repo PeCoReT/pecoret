@@ -1,11 +1,11 @@
 <script>
 import { defineComponent } from 'vue';
 import AdvisoryService from '@/service/AdvisoryService';
-import LabelCreateDialog from '@/components/advisories/LabelCreateDialog.vue';
-import AdvisoryLabelBadge from '@/components/advisories/AdvisoryLabelBadge.vue';
-import LabelUpdateDialog from '@/components/advisories/LabelUpdateDialog.vue';
+import LabelCreateDialog from '@/components/dialogs/advisories/LabelCreateDialog.vue';
+import AdvisoryLabelBadge from '@/components/badges/AdvisoryLabelBadge.vue';
+import LabelUpdateDialog from '@/components/dialogs/advisories/LabelUpdateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
-import GenericDataTable from '@/components/elements/table/GenericDataTable.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
 
 export default defineComponent({
     name: 'LabelList',

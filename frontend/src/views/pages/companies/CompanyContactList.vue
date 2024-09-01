@@ -1,9 +1,9 @@
 <script>
-import CompanyTabMenu from '@/components/pages/CompanyTabMenu.vue';
+import CompanyTabMenu from '@/components/navigation/CompanyTabMenu.vue';
 import CompanyService from '@/service/CompanyService';
-import ContactCreateDialog from '../../../components/dialogs/ContactCreateDialog.vue';
+import ContactCreateDialog from '@/components/dialogs/ContactCreateDialog.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
-import CompanyContactUpdateDialog from "@/components/dialogs/CompanyContactUpdateDialog.vue";
+import CompanyContactUpdateDialog from '@/components/dialogs/CompanyContactUpdateDialog.vue';
 
 export default {
     name: 'CompanyContactList',
@@ -83,44 +83,36 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-6">
+    <div class="grid grid-col-12 mt-3">
+        <div class="col-span-6">
             <div class="flex justify-content-start"></div>
         </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
+        <div class="col-span-6">
+            <div class="flex justify-end">
                 <ContactCreateDialog @object-created="getContacts"></ContactCreateDialog>
             </div>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-12">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
             <CompanyTabMenu class="surface-card"></CompanyTabMenu>
             <div class="card border-noround-top">
-                <div class="col-12">
-                    <DataTable
-                        :paginator="true"
-                        dataKey="pk"
-                        :rowHover="items.length > 0"
-                        :rows="pagination.limit"
-                        :value="items"
-                        filterDisplay="menu"
-                        :lazy="true"
-                        responsiveLayout="scroll"
-                        :totalRecords="totalRecords"
+                <div class="col-span-12">
+                    <GenericDataTable
+                        :total-records="totalRecords"
                         :loading="loading"
+                        :pagination="pagination"
+                        blank-slate-text="No contacts found!"
+                        blank-slate-title="Not Contacts"
+                        blank-slate-icon="fa fa-address-card"
+                        :model-value="items"
                         @page="onPage"
-                        @sort="onSort"
-                        @filter="onFilter"
                     >
-                        <template #empty>
-                            <BlankSlate title="No contacts!" text="No contacts found!" icon="fa fa-address-card"></BlankSlate>
-                        </template>
                         <Column field="first_name" header="First Name"></Column>
                         <Column field="last_name" header="Last Name"></Column>
                         <Column field="email" header="E-Mail"></Column>
@@ -132,7 +124,7 @@ export default {
                                 <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
                             </template>
                         </Column>
-                    </DataTable>
+                    </GenericDataTable>
                 </div>
             </div>
         </div>

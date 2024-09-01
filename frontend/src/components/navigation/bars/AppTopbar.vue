@@ -7,7 +7,6 @@ export default {
     name: 'AppTopbar',
     data() {
         return {
-            topbarMenuActive: null,
             authStore: useAuthStore(),
             userMenuItems: [
                 {
@@ -21,7 +20,7 @@ export default {
                     label: 'Settings',
                     icon: 'fa fa-gear',
                     route: this.$router.resolve({
-                        name: 'UserSettingsDetail'
+                        name: 'UserProfileSettings'
                     })
                 },
                 {
@@ -100,14 +99,6 @@ export default {
                         }
                     ]
                 };
-                if (this.authStore.groups.isAdvisoryManagement === true) {
-                    advisories.items.push({
-                        label: 'Dashboard',
-                        route: this.$router.resolve({
-                            name: 'AdvisoryManagementDashboard'
-                        })
-                    });
-                }
                 items.push(advisories);
             }
 
@@ -238,23 +229,35 @@ export default {
 </script>
 
 <template>
-    <Menubar :model="items" class="surface-card layout-topbar" ref="menu" :pt="{ menu: { class: 'top-menu' } }">
+    <Menubar :model="items" class="layout-topbar !rounded-none" :pt="{ rootList: { class: 'w-full flex justify-end rounded-none' } }">
         <template #start>
-            <router-link to="/" class="layout-topbar-logo">
-                <img src="/images/logo-no-slogan.svg" alt="logo" />
+            <router-link to="/" class="">
+                <img src="/images/logo-no-slogan.svg" alt="logo" class="max-w-[10rem] md:max-h-[3rem]" />
             </router-link>
         </template>
         <template #item="{ label, item, props, root, hasSubmenu }">
-            <router-link class="flex" v-bind="props.action" :to="item.route" v-if="item.route">
+            <router-link class="flex items-center" v-bind="props.action" :to="item.route" v-if="item.route">
                 <span v-bind="props.icon" />
                 <span v-bind="props.label">{{ label }}</span>
             </router-link>
             <a v-else :href="item.url" :target="item.target" v-bind="props.action">
                 <span v-bind="props.icon" />
                 <span v-bind="props.label">{{ label }}</span>
-                <span :class="[hasSubmenu && (root ? 'pi pi-fw pi-angle-down' : 'pi pi-fw pi-angle-right')]" v-bind="props.submenuicon" />
+                <span :class="[hasSubmenu && (root ? 'fa fa-chevron-down' : 'fa fa-chevron-down')]" v-bind="props.submenuicon" />
             </a>
         </template>
     </Menubar>
     <ProjectTabMenu v-if="this.$route.params.projectId"></ProjectTabMenu>
 </template>
+
+<style>
+.p-menubar-submenu {
+    right: 0 !important; /* Align the dropdown to the right */
+    left: auto !important; /* Ensure the left property is not overriding */
+    position: absolute !important; /* Ensure the dropdown is positioned correctly */
+}
+
+.p-menubar-item {
+    position: relative; /* Ensure the dropdown item is positioned correctly */
+}
+</style>

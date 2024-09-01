@@ -2,7 +2,7 @@ const technologyRoutes = [
     {
         path: '/technologies',
         name: 'TechnologyList',
-        component: () => import('@/views/pages/technologies/TechnologyList.vue')
+        component: () => import('@/views/pages/knowledgebase/TechnologyList.vue')
     }
 ];
 

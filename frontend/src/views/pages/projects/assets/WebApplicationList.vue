@@ -2,6 +2,7 @@
 import AssetService from '@/service/AssetService';
 import WebApplicationCreateDialog from '@/components/projects/assets/WebApplicationCreateDialog.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 
 export default {
     name: 'WebApplicationList',
@@ -89,70 +90,43 @@ export default {
     mounted() {
         this.getItems();
     },
-    components: { WebApplicationCreateDialog, BlankSlate }
+    components: { BaseListLayout, WebApplicationCreateDialog, BlankSlate }
 };
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
-            <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
-        </div>
-    </div>
-    <div class="grid">
-        <div class="col-6">
-            <div class="flex justify-content-start"></div>
-        </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
-                <WebApplicationCreateDialog @object-created="getItems"></WebApplicationCreateDialog>
-            </div>
-        </div>
-    </div>
-    <div class="grid">
-        <div class="col-12">
-            <div class="card">
-                <DataTable
-                    paginator
-                    dataKey="pk"
-                    lazy
-                    :rows="pagination.limit"
-                    :value="items"
-                    filterDisplay="menu"
-                    :rowHover="items.length > 0"
-                    responsiveLayout="scroll"
-                    @page="onPage"
-                    :totalRecords="totalRecords"
-                    :loading="loading"
-                    @row-click="onRowClick"
-                >
-                    <template #empty>
-                        <BlankSlate icon="fa fa-earth-europe" title="No web applications!" text="No web applications found!"></BlankSlate>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <WebApplicationCreateDialog @object-created="getItems"></WebApplicationCreateDialog>
+        </template>
+        <template #table>
+            <GenericDataTable
+                :total-records="totalRecords"
+                :loading="loading"
+                :pagination="pagination"
+                blank-slate-icon="fa fa-earth-europe"
+                blank-slate-text="No web applications found!"
+                blank-slate-title="No Web Applications!"
+                :show-search="true"
+                @search="onGlobalSearch"
+                @row-click="onRowClick"
+                @page="onPage"
+                v-model="items"
+            >
+                <Column field="name" header="Name">
+                    <template #body="slotProps">
+                        {{ slotProps.data.name }}
                     </template>
-                    <template #header>
-                        <div class="flex justify-content-between flex-column sm:flex-row">
-                            <IconField iconPosition="left">
-                                <InputIcon class="fa fa-search"></InputIcon>
-                                <InputText @update:modelValue="onGlobalSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </IconField>
-                        </div>
+                </Column>
+                <Column field="base_url" header="Base URL"></Column>
+                <Column field="environment" header="Environment"></Column>
+                <Column field="accessible" header="Accessible"></Column>
+                <Column header="Actions">
+                    <template #body="slotProps">
+                        <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="onDeleteConfirmDialog(slotProps.data.pk)"></Button>
                     </template>
-
-                    <Column field="name" header="Name">
-                        <template #body="slotProps">
-                            {{ slotProps.data.name }}
-                        </template>
-                    </Column>
-                    <Column field="base_url" header="Base URL"></Column>
-                    <Column field="environment" header="Environment"></Column>
-                    <Column field="accessible" header="Accessible"></Column>
-                    <Column header="Actions">
-                        <template #body="slotProps">
-                            <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="onDeleteConfirmDialog(slotProps.data.pk)"></Button>
-                        </template>
-                    </Column>
-                </DataTable>
-            </div>
-        </div>
-    </div>
+                </Column>
+            </GenericDataTable>
+        </template>
+    </BaseListLayout>
 </template>

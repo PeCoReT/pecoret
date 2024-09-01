@@ -70,54 +70,51 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-6"></div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-6"></div>
+        <div class="col-span-6">
+            <div class="flex justify-end">
                 <Button label="Delete" severity="danger" outlined icon="fa fa-trash" @click="confirmDialogDelete"></Button>
             </div>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-12">
+    <div class="grid grid-cols-12 mt-3">
+        <div class="col-span-12">
             <div class="card">
-                <div class="grid">
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Name" icon="fa-fingerprint" class="surface-ground" :text="finding.name + `(by ${finding.tool})`"></DetailCardWithIcon>
+                <div class="grid grid-cols-12 gap-3">
+                    <div class="col-span-12 md:col-span-3">
+                        <DetailCardWithIcon title="Name" icon="fa-fingerprint" class="bg-surface-950" :text="finding.name + `(by ${finding.tool})`"></DetailCardWithIcon>
                     </div>
-                    <div class="col-12 md:col-3">
-                        <InfoCardWithForm class="surface-ground w-full" title="Status" icon="fa-bookmark">
-                            <Dropdown v-model="finding.status" :options="statusChoices" optionValue="value" @change="patchFindingData({ status: finding.status })" optionLabel="name" class="w-full"></Dropdown>
+                    <div class="col-span-12 md:col-span-3">
+                        <InfoCardWithForm class="bg-surface-950 w-full" title="Status" icon="fa-bookmark">
+                            <Select v-model="finding.status" :options="statusChoices" optionValue="value" @change="patchFindingData({ status: finding.status })" optionLabel="name" class="w-full"></Select>
                         </InfoCardWithForm>
                     </div>
-                    <div class="col-12 md:col-3">
-                        <InfoCardWithForm class="surface-ground" title="Severity" icon="fa fa-shield-halved">
-                            <Dropdown v-model="finding.severity" :options="severityChoices()" optionLabel="label" @change="patchFindingData({ severity: finding.severity })" optionValue="value"></Dropdown>
+                    <div class="col-span-12 md:col-span-3">
+                        <InfoCardWithForm class="bg-surface-950" title="Severity" icon="fa fa-shield-halved">
+                            <Select v-model="finding.severity" :options="severityChoices()" optionLabel="label" @change="patchFindingData({ severity: finding.severity })" optionValue="value"></Select>
                         </InfoCardWithForm>
                     </div>
-                    <div class="col-12 md:col-3">
-                        <DetailCardWithIcon title="Component" icon="fa-crosshairs" class="surface-ground" :text="finding.affected_component"></DetailCardWithIcon>
+                    <div class="col-span-12 md:col-span-3">
+                        <DetailCardWithIcon title="Component" icon="fa-crosshairs" class="bg-surface-950" :text="finding.affected_component"></DetailCardWithIcon>
                     </div>
                 </div>
-                <div class="grid formgrid p-fluid">
-                    <div class="field col-12">
-                        <label for="description">Result</label>
+                <Form class="mt-3">
+                    <Field label="Result">
                         <MarkdownEditor v-model="finding.result" @blur="patchFindingData({ result: finding.result })"></MarkdownEditor>
-                    </div>
-                    <div class="field col-12">
-                        <label for="proof">Full Output</label>
+                    </Field>
+                    <Field label="Full Output">
                         <MarkdownEditor v-model="finding.full_output" @blur="patchFindingData({ full_output: finding.full_output })"></MarkdownEditor>
-                    </div>
-                    <div class="field col-12">
-                        <label for="recommendation">Comment</label>
+                    </Field>
+                    <Field label="Comment">
                         <MarkdownEditor v-model="finding.comment" @blur="patchFindingData({ comment: finding.comment })"></MarkdownEditor>
-                    </div>
-                </div>
+                    </Field>
+                </Form>
             </div>
         </div>
     </div>

@@ -14,7 +14,8 @@ export default {
         return {
             visible: false,
             model: this.command,
-            service: new ProjectCommandService()
+            service: new ProjectCommandService(),
+            loading: false
         };
     },
     methods: {
@@ -52,25 +53,17 @@ export default {
 <template>
     <Button icon="fa fa-pen-to-square" size="small" @click="open" outlined></Button>
 
-    <Dialog header="Update Command" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
-        <div class="p-fluid formgrid grid">
-            <div class="field col-12">
-                <label for="command">Command</label>
+    <ModalDialog header="Update Command" v-model="visible" v-model:loading="loading" @onSave="patch">
+        <Form>
+            <Field label="Command">
                 <InputText id="name" type="text" v-model="model.command"></InputText>
-            </div>
-            <div class="field col-12">
-                <label for="output">Output</label>
+            </Field>
+            <Field label="Output">
                 <MarkdownEditor v-model="model.output"></MarkdownEditor>
-            </div>
-            <div class="field col-12">
-                <label for="date_expire">Date run?</label>
-                <Calendar v-model="model.date_run" id="date_expire"></Calendar>
-            </div>
-        </div>
-
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="patch" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+            </Field>
+            <Field label="Date run?">
+                <DatePicker v-model="model.date_run" id="date_expire"></DatePicker>
+            </Field>
+        </Form>
+    </ModalDialog>
 </template>

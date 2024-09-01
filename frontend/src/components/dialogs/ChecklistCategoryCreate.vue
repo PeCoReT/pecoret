@@ -13,6 +13,7 @@ export default {
                 category_id: null,
                 name: null,
                 summary: null,
+                loading: false
             },
             service: new ChecklistService()
         };
@@ -43,26 +44,17 @@ export default {
 <template>
     <Button icon="fa fa-plus" label="Category" outlined @click="open"></Button>
 
-    <Dialog header="Create Category" v-model:visible="visible" modal :style="{ width: '70vw' }">
-        <div class="p-fluid formgrid grid">
-            <div class="field col-12">
-                <label for="category_id">Category ID</label>
+    <ModalDialog header="Create Category" v-model="visible" :loading="loading" @onSave="create">
+        <Form>
+            <Field label="Category ID">
                 <InputText id="category_id" v-model="model.category_id"></InputText>
-            </div>
-            <div class="field col-12">
-                <label for="name">Name</label>
+            </Field>
+            <Field label="Name">
                 <InputText id="name" type="text" v-model="model.name"></InputText>
-            </div>
-
-            <div class="field col-12">
-                <label for="summary">Summary</label>
+            </Field>
+            <Field label="Summary">
                 <MarkdownEditor v-model="model.summary" id="summary"></MarkdownEditor>
-            </div>
-        </div>
-
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+            </Field>
+        </Form>
+    </ModalDialog>
 </template>

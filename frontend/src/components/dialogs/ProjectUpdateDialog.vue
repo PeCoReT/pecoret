@@ -3,8 +3,10 @@ import PentestTypeSelectField from '@/components/forms/fields/PentestTypeSelectF
 import CompanyService from '@/service/CompanyService';
 import ProjectService from '@/service/ProjectService';
 import { useAuthStore } from '@/store/auth';
-import CompanySelectField from "@/components/elements/forms/CompanySelectField.vue";
-
+import CompanySelectField from '@/components/forms/fields/CompanySelectField.vue';
+import ModalDialog from '@/components/common/ModalDialog.vue';
+import InlineFieldGroup from '@/components/common/forms/InlineFieldGroup.vue';
+import InlineField from '@/components/common/forms/InlineField.vue';
 
 export default {
     name: 'ProjectUpdateDialog',
@@ -16,7 +18,7 @@ export default {
     emits: ['object-updated'],
     data() {
         return {
-            visible: false,
+            showDialog: false,
             loading: false,
             authStore: useAuthStore(),
             model: this.project,
@@ -41,11 +43,8 @@ export default {
         this.getLanguages();
     },
     methods: {
-        close() {
-            this.visible = false;
-        },
         open() {
-            this.visible = true;
+            this.showDialog = true;
         },
         getLanguages() {
             let url = '/projects/available-languages/';
@@ -53,7 +52,7 @@ export default {
                 this.availableLanguages = response.data;
             });
         },
-        patchProject() {
+        save() {
             this.loading = true;
             if (typeof this.model.pentest_types === 'object') {
                 if (this.model.pentest_types.length > 0) {
@@ -75,14 +74,14 @@ export default {
                 visibility: this.model.visibility
             };
             if (this.model.company && this.model.company.pk) {
-                data['company'] = this.model.company.pk
+                data['company'] = this.model.company.pk;
             }
             this.service
                 .patchProject(this.$api, this.projectId, data)
                 .then(() => {
                     this.authStore.activateProject(this.model);
                     this.$emit('object-updated', this.model);
-                    this.visible = false;
+                    this.showDialog = false;
                 })
                 .finally(() => {
                     this.loading = false;
@@ -101,62 +100,51 @@ export default {
             }
         }
     },
-    components: {CompanySelectField, PentestTypeSelectField }
+    components: { InlineField, InlineFieldGroup, ModalDialog, CompanySelectField, PentestTypeSelectField }
 };
 </script>
 
 <template>
     <Button icon="fa fa-pen-to-square" label="Edit" @click="open()" outlined></Button>
 
-    <Dialog header="Edit Project" v-model:visible="visible" :breakpoints="{ '960px': '75vw' }" :style="{ width: '70vw' }" :modal="true">
-        <div class="p-fluid formgrid grid">
-            <div class="field col-12">
-                <label for="name">Name</label>
+    <ModalDialog v-model:loading="loading" header="Edit Project" v-model="showDialog" @onSave="save">
+        <Form>
+            <Field label="Name">
                 <InputText id="name" type="text" v-model="model.name" label="Name"></InputText>
-            </div>
-
-            <div class="field col-12 md:col-6">
-                <label for="start_date">Start Date</label>
-                <Calendar v-model="model.start_date"></Calendar>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="end_date">End Date</label>
-                <Calendar v-model="model.end_date"></Calendar>
-            </div>
-
-            <div class="field col-12">
-                <label for="test_method">Test Method</label>
-                <Dropdown v-model="model.test_method" :options="testMethodChoices" optionLabel="title" optionValue="value"></Dropdown>
-            </div>
-            <div class="field col-12 md:col-6">
-                <PentestTypeSelectField v-model="model.pentest_types"></PentestTypeSelectField>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="language">Language</label>
-                <Dropdown optionLabel="language" optionValue="language" v-model="model.language" :options="availableLanguages"></Dropdown>
-            </div>
-
-            <div class="field col-12 md:col-6">
-                <label for="company">Company</label>
-                <CompanySelectField v-model="model.company" :clear="false"></CompanySelectField>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="visibility">Visibility</label>
-                <Dropdown :options="service.getVisibilityChoices()" optionLabel="label" optionValue="value" v-model="model.visibility"></Dropdown>
-            </div>
-            <div class="field col-12">
-                <label for="require_cvss_score">Require CVSS Score</label>
-                <Dropdown :options="scoreChoices" :show-clear="true" optionLabel="label" optionValue="value" v-model="model.require_cvss_score"></Dropdown>
-            </div>
-            <div class="field col-12">
-                <label for="description">Description</label>
+            </Field>
+            <InlineFieldGroup>
+                <InlineField label="Start Date">
+                    <DatePicker v-model="model.start_date"></DatePicker>
+                </InlineField>
+                <InlineField label="End Date">
+                    <DatePicker v-model="model.end_date"></DatePicker>
+                </InlineField>
+            </InlineFieldGroup>
+            <Field label="Test Method">
+                <Select v-model="model.test_method" :options="testMethodChoices" optionLabel="title" optionValue="value"></Select>
+            </Field>
+            <InlineFieldGroup>
+                <InlineField label="Project Types">
+                    <PentestTypeSelectField v-model="model.pentest_types"></PentestTypeSelectField>
+                </InlineField>
+                <InlineField label="Language">
+                    <Select optionLabel="language" optionValue="language" v-model="model.language" :options="availableLanguages"></Select>
+                </InlineField>
+            </InlineFieldGroup>
+            <InlineFieldGroup>
+                <InlineField label="Company">
+                    <CompanySelectField v-model="model.company" :clear="false"></CompanySelectField>
+                </InlineField>
+                <InlineField label="Visibility">
+                    <Select :options="service.getVisibilityChoices()" optionLabel="label" optionValue="value" v-model="model.visibility"></Select>
+                </InlineField>
+            </InlineFieldGroup>
+            <Field label="Require CVSS Score">
+                <Select :options="scoreChoices" :show-clear="true" optionLabel="label" optionValue="value" v-model="model.require_cvss_score"></Select>
+            </Field>
+            <Field label="Description">
                 <Textarea v-model="model.description" autoResize rows="5" cols="30"></Textarea>
-            </div>
-        </div>
-
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="patchProject" :loading="loading" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+            </Field>
+        </Form>
+    </ModalDialog>
 </template>

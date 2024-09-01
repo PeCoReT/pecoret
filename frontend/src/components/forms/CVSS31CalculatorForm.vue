@@ -1,6 +1,9 @@
 <script>
+import InlineFieldGroup from '@/components/common/forms/InlineFieldGroup.vue';
+
 export default {
     name: 'CVSS31CalculatorForm',
+    components: { InlineFieldGroup },
     props: {
         modelValue: {
             required: true
@@ -131,9 +134,7 @@ export default {
     },
     methods: {
         vectorToObject(value) {
-            let regex =
-                'CVSS:3\\.1\\/AV:(?<av>[N|A|L|P])\\/AC:(?<ac>[L|H])\\/PR:(?<pr>[N|L|H])\\/UI:(?<ui>' +
-                '[N|R])\\/S:(?<s>[U|C])\\/C:(?<c>[H|L|N])\\/I:(?<i>[H|L|N])\\/A:(?<a>[H|L|N])';
+            let regex = 'CVSS:3\\.1\\/AV:(?<av>[N|A|L|P])\\/AC:(?<ac>[L|H])\\/PR:(?<pr>[N|L|H])\\/UI:(?<ui>' + '[N|R])\\/S:(?<s>[U|C])\\/C:(?<c>[H|L|N])\\/I:(?<i>[H|L|N])\\/A:(?<a>[H|L|N])';
             let re = RegExp(regex).exec(value);
             if (re === null) {
                 return;
@@ -169,51 +170,45 @@ export default {
 </script>
 
 <template>
-    <div class="grid formgrid p-fluid">
-        <Card class="card surface-ground col-12">
-            <template #title>Exploitability Metrics</template>
-            <template #content>
-                <div class="grid">
-                    <div class="col-12 field">
-                        <label for="av">Attack Vector (AV)</label>
-                        <SelectButton v-model="av" :options="avChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                    </div>
-                    <div class="col-12 md:col-6 field">
-                        <label for="ac">Attack Complexity (AC)</label>
+    <div class="grid grid-col-1">
+        <div class="col-span-1 card">
+            <h3 class="text-2xl">Exploitability Metrics</h3>
+            <Form>
+                <Field label="Attack Vector (AV)">
+                    <SelectButton v-model="av" :options="avChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
+                </Field>
+                <InlineFieldGroup>
+                    <InlineField label="Attack Complexity (AC)">
                         <SelectButton v-model="ac" :options="acChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                    </div>
-                    <div class="col-12 md:col-6 field">
-                        <label for="pr">Privileges Required (PR)</label>
+                    </InlineField>
+                    <InlineField label="Privileges Required (PR)">
                         <SelectButton v-model="pr" :options="prChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                    </div>
-                    <div class="col-12 md:col-6 field">
-                        <label for="ui">User Interaction (UI)</label>
+                    </InlineField>
+                </InlineFieldGroup>
+                <InlineFieldGroup>
+                    <InlineField label="User Interaction (UI)">
                         <SelectButton v-model="ui" :options="uiChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                    </div>
-                    <div class="col-12 md:col-6 field">
-                        <label for="s">Scope (S)</label>
+                    </InlineField>
+                    <InlineField label="Scope (S)">
                         <SelectButton v-model="s" :options="sChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                    </div>
-                </div>
-            </template>
-        </Card>
-        <Card class="surface-ground col-12 md:col-12 card h-full">
-            <template #title>Impact Metrics</template>
-            <template #content>
-                <div class="col-12 field">
-                    <label for="c">Confidentiality (C)</label>
+                    </InlineField>
+                </InlineFieldGroup>
+            </Form>
+        </div>
+        <div class="col-span-1 card">
+            <h3 class="text-2xl">Impact Metrics</h3>
+            <Form>
+                <Field label="Confidentiality (C)">
                     <SelectButton v-model="c" :options="impactChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                </div>
-                <div class="col-12 field">
-                    <label for="i">Integrity (I)</label>
+                </Field>
+                <Field label="Integrity (I)">
                     <SelectButton v-model="i" :options="impactChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                </div>
-                <div class="col-12 field">
-                    <label for="a">Availability (A)</label>
+                </Field>
+                <Field label="Availability (A)">
                     <SelectButton v-model="a" :options="impactChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                </div>
-            </template>
-        </Card>
+                </Field>
+            </Form>
+        </div>
     </div>
 </template>
 

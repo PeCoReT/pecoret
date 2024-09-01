@@ -1,6 +1,6 @@
 <script>
 import ReportService from '@/service/ReportService';
-import ReportTemplateSelectField from "@/components/elements/forms/ReportTemplateSelectField.vue";
+import ReportTemplateSelectField from "@/components/forms/fields/ReportTemplateSelectField.vue";
 
 export default {
     name: 'ReportCreateDialog',
@@ -58,20 +58,14 @@ export default {
 <template>
     <Button icon="fa fa-plus" label="Report" outlined @click="open"></Button>
 
-    <Dialog header="Create Report" v-model:visible="visible" modal :style="{ width: '70vw' }">
-        <div class="grid formgrid p-fluid">
-            <div class="field col-12">
-                <label for="name">Name</label>
+    <ModalDialog header="Create Report" v-model="visible" :loading="loading" @onSave="create">
+        <Form>
+            <Field label="Name">
                 <InputText id="name" v-model="model.name"></InputText>
-            </div>
-            <div class="field col-12">
+            </Field>
+            <Field label="Report Template">
                 <ReportTemplateSelectField v-model="model.template"></ReportTemplateSelectField>
-            </div>
-        </div>
-
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="create" :loading="loading" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+            </Field>
+        </Form>
+    </ModalDialog>
 </template>

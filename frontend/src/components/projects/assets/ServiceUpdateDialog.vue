@@ -1,7 +1,6 @@
 <script>
 import AssetService from '@/service/AssetService';
 
-
 export default {
     name: 'ServiceUpdateDialog',
     props: {
@@ -12,7 +11,8 @@ export default {
     emits: ['object-updated'],
     data() {
         return {
-            visible: false,
+            showDialog: false,
+            loading: false,
             model: this.asset,
             service: new AssetService(),
             protocolChoices: [
@@ -42,11 +42,8 @@ export default {
         };
     },
     methods: {
-        close() {
-            this.visible = false;
-        },
         open() {
-            this.visible = true;
+            this.showDialog = true;
         },
         patch() {
             let data = {
@@ -58,9 +55,9 @@ export default {
             };
             this.service.patchService(this.$api, this.$route.params.projectId, this.asset.pk, data).then(() => {
                 this.$emit('object-updated', this.model);
-                this.visible = false;
+                this.showDialog = false;
             });
-        },
+        }
     },
     watch: {
         asset: {
@@ -70,40 +67,34 @@ export default {
                 this.model = value;
             }
         }
-    },
+    }
 };
 </script>
 
 <template>
     <Button icon="fa fa-pen-to-square" size="small" @click="open" outlined></Button>
 
-    <Dialog header="Update Service" v-model:visible="visible" :modal="true" :style="{ width: '70vw' }">
-        <div class="p-fluid formgrid grid">
-            <div class="field col-12 md:col-6">
-                <label for="name">Name</label>
-                <InputText id="name" type="text" v-model="model.name"></InputText>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="port">Port</label>
-                <InputText id="port" type="text" v-model="model.port"></InputText>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="protocol">Protocol</label>
-                <Dropdown :options="protocolChoices" optionLabel="label" optionValue="value" id="protocol" type="text" v-model="model.protocol"></Dropdown>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="product">Product</label>
-                <InputText id="product" type="text" v-model="model.product"></InputText>
-            </div>
-            <div class="field col-12 md:col-12">
-                <label for="state">State</label>
-                <Dropdown :options="stateChoices" optionLabel="label" optionValue="value" id="state" type="text" v-model="model.state"></Dropdown>
-            </div>
-        </div>
-
-        <template #footer>
-            <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="patch" icon="pi pi-check" class="p-button-outlined"></Button>
-        </template>
-    </Dialog>
+    <ModalDialog header="Update Service" v-model="showDialog" v-model:loading="loading" @onSave="patch">
+        <Form>
+            <InlineFieldGroup>
+                <InlineField label="Name">
+                    <InputText id="name" type="text" v-model="model.name"></InputText>
+                </InlineField>
+                <InlineField label="Port">
+                    <InputText id="port" type="text" v-model="model.port"></InputText>
+                </InlineField>
+            </InlineFieldGroup>
+            <InlineFieldGroup>
+                <InlineField label="Protocol">
+                    <Select :options="protocolChoices" optionLabel="label" optionValue="value" id="protocol" type="text" v-model="model.protocol"></Select>
+                </InlineField>
+                <InlineField label="Product">
+                    <InputText id="product" type="text" v-model="model.product"></InputText>
+                </InlineField>
+            </InlineFieldGroup>
+            <Field label="State">
+                <Select :options="stateChoices" optionLabel="label" optionValue="value" id="state" type="text" v-model="model.state"></Select>
+            </Field>
+        </Form>
+    </ModalDialog>
 </template>

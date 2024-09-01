@@ -1,6 +1,6 @@
 <script>
 import FindingService from '@/service/FindingService';
-import FindingTabMenu from '@/components/pages/FindingTabMenu.vue';
+import FindingTabMenu from '@/components/navigation/FindingTabMenu.vue';
 
 export default {
     name: 'TimelineList',
@@ -47,13 +47,13 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid grid-cols-1 mt-3">
+        <div class="col-span-1">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-12">
+    <div class="grid grid-cols-1 mt-3">
+        <div class="col-span-1">
             <FindingTabMenu class="surface-card"></FindingTabMenu>
             <div class="card border-noround-top">
                 <Timeline :value="items" class="mt-3">

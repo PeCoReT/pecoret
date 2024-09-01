@@ -1,6 +1,9 @@
 <script>
+import InlineFieldGroup from '@/components/common/forms/InlineFieldGroup.vue';
+
 export default {
     name: 'CVSS4CalculatorForm',
+    components: { InlineFieldGroup },
     props: {
         modelValue: {
             required: true
@@ -180,69 +183,68 @@ export default {
 </script>
 
 <template>
-    <div class="grid formgrid p-fluid">
-        <Card class="card surface-ground col-12">
-            <template #title> Exploitability Metrics</template>
-            <template #content>
-                <div class="grid">
-                    <div class="col-12 field">
-                        <label for="av">Attack Vector (AV)</label>
+    <div class="grid grid-col-1">
+        <div class="col-span-1 card">
+            <h3 class="text-2xl">Exploitability Metrics</h3>
+            <Form>
+                <InlineFieldGroup>
+                    <InlineField label="Attack Vector (AV)">
                         <SelectButton v-model="av" :options="avChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                    </div>
-                    <div class="col-12 md:col-6 field">
-                        <label for="ac">Attack Complexity (AC)</label>
+                    </InlineField>
+                    <InlineField label="Attack Complexity (AC)">
                         <SelectButton v-model="ac" :options="acChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                    </div>
-                    <div class="col-12 md:col-6 field">
-                        <label for="at">Attack Requirements (AT)</label>
+                    </InlineField>
+                </InlineFieldGroup>
+                <InlineFieldGroup>
+                    <InlineField label="Attack Requirements (AT)">
                         <SelectButton v-model="at" :options="atChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                    </div>
-                    <div class="col-12 md:col-6 field">
-                        <label for="pr">Privileges Required (PR)</label>
+                    </InlineField>
+                    <InlineField label="Privileges Required (PR)">
                         <SelectButton v-model="pr" :options="prChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                    </div>
-                    <div class="col-12 md:col-6 field">
-                        <label for="ui">User Interaction (UI)</label>
+                    </InlineField>
+                </InlineFieldGroup>
+                <InlineFieldGroup>
+                    <InlineField label="User Interaction (UI)">
                         <SelectButton v-model="ui" :options="uiChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                    </div>
-                </div>
-            </template>
-        </Card>
-        <Card class="surface-ground col-12 md:col-6 card h-full">
-            <template #title>Vulnerable System Impact Metrics</template>
-            <template #content>
-                <div class="col-12 field">
-                    <label for="vc">Confidentiality (VC)</label>
+                    </InlineField>
+                </InlineFieldGroup>
+            </Form>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2">
+        <div class="col-span-1 card h-full">
+            <h3 class="text-2xl">Vulnerable System Impact Metrics</h3>
+            <Form>
+                <Field label="Confidentiality (VC)">
                     <SelectButton v-model="vc" :options="impactChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                </div>
-                <div class="col-12 field">
-                    <label for="vi">Integrity (VI)</label>
+                </Field>
+                <Field label="Integrity (VI)">
                     <SelectButton v-model="vi" :options="impactChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                </div>
-                <div class="col-12 field">
-                    <label for="va">Availability (VA)</label>
+                </Field>
+                <Field label="Availability (VA)">
                     <SelectButton v-model="va" :options="impactChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                </div>
-            </template>
-        </Card>
-        <Card class="surface-ground col-12 md:col-6 card h-full">
-            <template #title>Subsequent System Impact Metrics</template>
-            <template #content>
-                <div class="col-12 field">
-                    <label for="sc">Confidentiality (SC)</label>
+                </Field>
+            </Form>
+        </div>
+        <div class="col-span-1 card h-full">
+            <h3 class="text-2xl">Subsequent System Impact Metrics</h3>
+            <Form>
+                <Field label="Confidentiality (SC)">
                     <SelectButton v-model="sc" :options="impactChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                </div>
-                <div class="col-12 field">
-                    <label for="si">Integrity (SI)</label>
+                </Field>
+                <Field label="Integrity (SI)">
                     <SelectButton v-model="si" :options="impactChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                </div>
-                <div class="col-12 field">
-                    <label for="sa">Availability (SA)</label>
+                </Field>
+                <Field label="Availability (SA)">
                     <SelectButton v-model="sa" :options="impactChoices" option-label="label" option-value="value" @change="getScore" :allow-empty="false"></SelectButton>
-                </div>
-            </template>
-        </Card>
+                </Field>
+            </Form>
+        </div>
     </div>
 </template>
 
-<style scoped></style>
+<style>
+.p-togglebutton.p-component {
+    flex-grow: 1;
+}
+</style>

@@ -1,6 +1,6 @@
 <script>
 import AdminService from '@/service/AdminService';
-import ProjectTypeUpdateDialog from '../../../components/dialogs/ProjectTypeUpdateDialog.vue';
+import ProjectTypeUpdateDialog from '@/components/dialogs/ProjectTypeUpdateDialog.vue';
 import ProjectTypeCreateDialog from '@/components/dialogs/ProjectTypeCreateDialog.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 
@@ -70,24 +70,24 @@ export default {
 </script>
 
 <template>
-    <div class="grid mt-3">
-        <div class="col-12">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-12">
             <pBreadcrumb v-model="breadcrumbs"></pBreadcrumb>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-6">
-            <div class="justify-content-start flex"></div>
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-6">
+            <div class="justify-start flex"></div>
         </div>
-        <div class="col-6">
-            <div class="flex justify-content-end">
+        <div class="col-span-6">
+            <div class="flex justify-end">
                 <ProjectTypeCreateDialog @object-created="getItems"></ProjectTypeCreateDialog>
             </div>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="col-12">
+    <div class="grid mt-3 grid-cols-12">
+        <div class="col-span-12">
             <Card>
                 <template #content>
                     <DataTable paginator :rowHover="items.length > 0" :rows="pagination.limit" :value="items" lazy dataKey="pk" filterDisplay="menu" :totalRecords="totalRecords" :loading="loading" @page="onPage" responsiveLayout="scroll">
