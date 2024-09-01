@@ -1,7 +1,7 @@
-import { createApp } from 'vue';
+import {createApp} from 'vue';
 import App from './App.vue';
 import router from './router';
-import { registerPlugins } from '@/plugins';
+import {registerPlugins} from '@/plugins';
 
 import PeCoReTAuraPreset from '@/presets/aura';
 import PrimeVue from 'primevue/config';
@@ -48,11 +48,9 @@ app.component('pTabMenu', pTabMenu);
 app.component('GenericDataTable', GenericDataTable);
 app.component('ModalDialog', ModalDialog);
 
-
 // LAYOUT COMPONENTS
 app.component('BaseLayout', BaseLayout);
 app.component('BaseListLayout', BaseListLayout);
-
 
 // common form components
 app.component('Form', Form);

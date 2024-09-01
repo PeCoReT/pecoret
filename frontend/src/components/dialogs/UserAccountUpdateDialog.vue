@@ -60,12 +60,13 @@ export default {
     <Button icon="fa fa-pen-to-square" size="small" @click="open" outlined></Button>
 
     <ModalDialog header="Update User Account" v-model="visible" v-model:loading="loading" @onSave="patch">
-          <Form>
+        <Form>
             <Field label="Username">
                 <InputText id="username" v-model="model.username"></InputText>
             </Field>
             <Field label="Password">
-                <Password v-model="model.password" :feedback="false" toggleMask :pt="{ pcInput: { root: 'grow' } }"></Password>
+                <Password v-model="model.password" :feedback="false" toggleMask
+                          :pt="{ pcInput: { root: 'grow' } }"></Password>
             </Field>
             <Field label="Role">
                 <InputText id="role" v-model="model.role"></InputText>
