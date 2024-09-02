@@ -1,13 +1,15 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.decorators import action
-from rest_framework.serializers import ValidationError
 from rest_framework.response import Response
+from rest_framework.serializers import ValidationError
+from rest_framework.status import HTTP_200_OK
+
 from backend.models import Membership
 from backend.models.membership import Roles
 from backend.serializers.memberships import MembershipSerializer, MembershipCreateUpdateSerializer
-from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core import permissions
 from pecoret.core.utils.schema import extend_viewset_schema
+from pecoret.core.viewsets import PeCoReTModelViewSet
 
 
 @extend_viewset_schema(tags=['Projects'], verbose_name='membership')
@@ -41,6 +43,8 @@ class MembershipViewSet(PeCoReTModelViewSet):
 
     @action(detail=False, methods=["get"])
     def me(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return Response(status=HTTP_200_OK)
         try:
             obj = Membership.objects.get(user=request.user, project=request.project)
         except Membership.DoesNotExist:

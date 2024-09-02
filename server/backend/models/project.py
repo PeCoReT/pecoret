@@ -32,6 +32,8 @@ class ProjectQuerySet(models.QuerySet):
         return self.filter(pk=project)
 
     def for_user(self, user):
+        if user.is_superuser:
+            return self.all()
         if user.is_pentester_or_management:
             return self.filter(models.Q(membership__user=user) | models.Q(visibility=Visibility.PENTESTERS))
         return self.filter(membership__user=user)

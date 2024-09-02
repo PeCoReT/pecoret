@@ -35,7 +35,7 @@ class UserViewSet(PeCoReTModelViewSet):
     api_scope = None
     permission_classes = [
         permissions.GroupPermission(
-            read_write_groups=[permissions.Groups.SUPERUSER],
+            read_write_groups=[],
             read_only_groups=[permissions.Groups.GROUP_MANAGEMENT]
         )
     ]
@@ -167,6 +167,6 @@ class GroupViewSet(PeCoReTReadOnlyModelViewSet):
     api_scope = None  # do not allow api token access
     search_fields = ["name"]
     permission_classes = [
-        permissions.GroupPermission(read_write_groups=[permissions.Groups.SUPERUSER], read_only_groups=[])
+        permissions.GroupPermission(read_write_groups=[], read_only_groups=[])
     ]
     serializer_class = serializers.GroupSerializer

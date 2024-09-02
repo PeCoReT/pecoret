@@ -73,6 +73,9 @@ export default {
                 company: this.model.company,
                 visibility: this.model.visibility
             };
+            if (this.authStore.groups.isManagement !== true) {
+                delete data['visibility'];
+            }
             if (this.model.company && this.model.company.pk) {
                 data['company'] = this.model.company.pk;
             }

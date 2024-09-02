@@ -16,7 +16,7 @@ export default {
         return {
             service: new CompanyService(),
             items: [],
-            model: this.modelValue.pk
+            model: null
         };
     },
     methods: {
@@ -25,10 +25,13 @@ export default {
                 this.getItems();
             }
         },
-        getItems() {
-            this.service.getCompanies().then((response) => {
+        getItems(params) {
+            this.service.getCompanies(params).then((response) => {
                 this.items = response.data.results;
             });
+        },
+        filter(event) {
+            this.getItems({ search: event.value });
         }
     },
     watch: {
@@ -36,10 +39,12 @@ export default {
             deep: true,
             immediate: true,
             handler(value) {
-                if (this.items.length === 0) {
-                    this.items = [value];
+                if (value && value.pk) {
+                    this.model = value.pk;
+                    if (this.items.length === 0) {
+                        this.items = [value];
+                    }
                 }
-                this.model = value.pk;
             }
         }
     }
@@ -47,5 +52,5 @@ export default {
 </script>
 
 <template>
-    <Select @focus="onFocus" option-label="name" option-value="pk" v-model="model" :options="items" :show-clear="clear" @update:model-value="this.$emit('update:modelValue', this.model)"></Select>
+    <Select @focus="onFocus" option-label="name" option-value="pk" v-model="model" :options="items" :show-clear="clear" @update:model-value="this.$emit('update:modelValue', this.model)" :filter="true" @filter="filter"></Select>
 </template>

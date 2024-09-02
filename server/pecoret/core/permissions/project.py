@@ -49,6 +49,9 @@ class ProjectPermission(BasePermission, TokenPermissionMixin):
         project = self.project_from_request(request)
         if not project or not request.user.is_authenticated:
             return False
+        if request.user.is_superuser:
+            request.project = project
+            return True
         # allow public projects for pentesters and management users
         if project.visibility == Visibility.PENTESTERS:
             if request.user.is_pentester_or_management:

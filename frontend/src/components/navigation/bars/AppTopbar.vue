@@ -8,6 +8,14 @@ export default {
     data() {
         return {
             authStore: useAuthStore(),
+            showLinks: {
+                projects: ['isPentester', 'isAdmin', 'isManagement'],
+                advisories: ['isPentester', 'isAdmin', 'isVendor'],
+                companies: ['isPentester', 'isAdmin', 'isManagement', 'isCustomer'],
+                attackSurface: ['isPentester', 'isAdmin'],
+                kbChecklists: ['isPentester', 'isAdmin', 'isManagement'],
+                kbVulnTemplates: ['isPentester', 'isAdmin', 'isManagement']
+            },
             userMenuItems: [
                 {
                     label: 'API-Tokens',
@@ -37,21 +45,21 @@ export default {
     computed: {
         items() {
             let items = [];
-            if (this.showProjectButton === true) {
+            if (this.checkShowLink('projects') === true) {
                 items.push({
                     label: 'Projects',
                     route: this.$router.resolve({ name: 'ProjectList' })
                 });
             }
-            if (this.showCompanyButton === true) {
+            if (this.checkShowLink('companies') === true) {
                 items.push({
                     label: 'Companies',
                     route: this.$router.resolve({ name: 'CompanyList' })
                 });
             }
-            if (this.showChecklistButton === true || this.showVulnerabilityTemplatesButton === true) {
+            if (this.checkShowLink('kbVulnTemplates') === true || this.checkShowLink('kbChecklists') === true) {
                 let knowledgeItems = [];
-                if (this.showVulnerabilityTemplatesButton === true) {
+                if (this.checkShowLink('kbVulnTemplates') === true) {
                     knowledgeItems.push({
                         label: 'Vulnerability Templates',
                         route: this.$router.resolve({ name: 'VulnerabilityTemplateList' })
@@ -61,7 +69,7 @@ export default {
                         route: this.$router.resolve({ name: 'TechnologyList' })
                     });
                 }
-                if (this.showChecklistButton === true) {
+                if (this.checkShowLink('kbChecklists') === true) {
                     knowledgeItems.push({
                         label: 'Checklists',
                         items: [
@@ -81,7 +89,7 @@ export default {
                     items: knowledgeItems
                 });
             }
-            if (this.showAdvisoriesButton === true) {
+            if (this.checkShowLink('advisories') === true) {
                 let advisories = {
                     label: 'Advisories',
                     items: [
@@ -102,7 +110,7 @@ export default {
                 items.push(advisories);
             }
 
-            if (this.showASMonitorButton === true) {
+            if (this.checkShowLink('attackSurface') === true) {
                 items.push({
                     label: 'Attack Surface',
                     items: [
@@ -178,13 +186,6 @@ export default {
             }
             return items;
         },
-
-        showCompanyButton() {
-            if (this.authStore.groups.isVendor === true) {
-                return false;
-            }
-            return true;
-        },
         showVulnerabilityTemplatesButton() {
             if (this.authStore.groups.isVendor === true || this.authStore.groups.isCustomer === true) {
                 return false;
@@ -197,26 +198,11 @@ export default {
             }
             return false;
         },
-        showProjectButton() {
-            if (this.authStore.groups.isVendor === true) {
-                return false;
-            }
-            return true;
-        },
-        showAdvisoriesButton() {
-            if (this.authStore.groups.isCustomer === true) {
-                return false;
-            }
-            return true;
-        },
-        showASMonitorButton() {
-            if (this.authStore.groups.isPentester === true) {
-                return true;
-            }
-            return false;
-        }
     },
     methods: {
+        checkShowLink(name) {
+            return this.showLinks[name].some(attr => this.authStore.groups[attr] === true);
+        },
         onLogout() {
             const authService = new AuthService();
             authService.logout(this.$api).then(() => {

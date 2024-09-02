@@ -12,9 +12,9 @@ export default {
             model: {
                 category_id: null,
                 name: null,
-                summary: null,
-                loading: false
+                summary: null
             },
+            loading: false,
             service: new ChecklistService()
         };
     },

@@ -9,7 +9,6 @@ class Groups(object):
     GROUP_MANAGEMENT = 'Management'
     VENDOR = 'Vendor'
     CUSTOMER = 'Customer'
-    SUPERUSER = 'Superuser'
 
 
 class GroupPermission(BasePermission, TokenPermissionMixin):
@@ -24,9 +23,7 @@ class GroupPermission(BasePermission, TokenPermissionMixin):
 
     @staticmethod
     def check_superuser(groups):
-        if Groups.SUPERUSER in groups:
-            return True
-        return False
+        return True
 
     def _check_read_write(self, request, view):
         if request.user.is_superuser:

@@ -121,7 +121,7 @@ export default {
             <DetailCardWithIcon title="Dates" :text="projectDateDisplay" icon="fa-calendar"></DetailCardWithIcon>
         </div>
         <div class="col-span-1">
-            <DetailCardWithIcon title="Role" icon="fa-crown" :text="role.role"></DetailCardWithIcon>
+            <DetailCardWithIcon title="Role" icon="fa-crown" :text="role.role || 'Unknown'"></DetailCardWithIcon>
         </div>
         <div class="col-span-1">
             <InfoCardWithForm title="Status" icon="fa-bookmark">

@@ -23,9 +23,8 @@ class SettingViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, Gener
     api_scope = None
     permission_classes = [
         permissions.GroupPermission(
-            read_write_groups=[
-                permissions.Groups.SUPERUSER
-            ], read_only_groups=[]
+            read_write_groups=[],
+            read_only_groups=[]
         )
     ]
     serializer_class = SettingSerializer
