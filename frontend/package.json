@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@primevue/themes": "^4.0.0",
-    "chart.js": "3.3.2",
+    "chart.js": "3.9.1",
     "primeicons": "^6.0.1",
     "primevue": "^4.0.0",
     "vue": "^3.4.34",
