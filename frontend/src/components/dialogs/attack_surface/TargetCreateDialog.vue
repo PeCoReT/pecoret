@@ -3,12 +3,11 @@ import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import ModalDialog from '@/components/common/ModalDialog.vue';
 import ASMonitorService from '@/service/ASMonitorService';
 import TechnologyService from '@/service/TechnologyService';
-import TagSelectField from '@/components/forms/fields/TagSelectField.vue';
 import ProgramSelectField from '@/components/forms/fields/ProgramSelectField.vue';
 
 export default {
     name: 'TargetCreateDialog',
-    components: { ProgramSelectField, TagSelectField, MarkdownEditor, ModalDialog },
+    components: { ProgramSelectField,  MarkdownEditor, ModalDialog },
     emits: ['object-created'],
     data() {
         return {
@@ -17,9 +16,7 @@ export default {
                 data: null,
                 scope: 'Undefined',
                 program: null,
-                description: null,
-                technologies: null,
-                tags: null
+                description: null
             },
             loading: false,
             service: new ASMonitorService(),
@@ -31,26 +28,7 @@ export default {
         open() {
             this.showDialog = true;
         },
-        getTechnologies() {
-            this.techService.getTechnologies(this.$api).then((response) => {
-                this.technologies = response.data.results;
-            });
-        },
-        onTechnologyFilter(event) {
-            let data = {
-                search: event.value
-            };
-            this.techService.getTechnologies(this.$api, data).then((response) => {
-                this.technologies = response.data.results;
-            });
-        },
         create() {
-            if (this.model.tags === null) {
-                this.model.tags = [];
-            }
-            if (this.model.technologies === null) {
-                this.model.technologies = [];
-            }
             this.service.createTarget(this.$api, this.model).then(() => {
                 this.$toast.add({
                     severity: 'success',
@@ -81,12 +59,6 @@ export default {
             </Field>
             <Field label="Scope">
                 <Select :options="service.getInScopeChoices()" optionLabel="name" optionValue="value" v-model="model.scope"></Select>
-            </Field>
-            <Field label="Technologies">
-                <MultiSelect id="technologies" filter @filter="onTechnologyFilter" @focus="getTechnologies" v-model="model.technologies" :options="technologies" optionLabel="name" optionValue="pk"></MultiSelect>
-            </Field>
-            <Field label="Tags">
-                <TagSelectField v-model="model.tags"></TagSelectField>
             </Field>
             <Field label="Description">
                 <MarkdownEditor v-model="model.description" id="description"></MarkdownEditor>

@@ -46,7 +46,7 @@ export default {
                 technologies: this.filters.technologies.value
             };
             this.service
-                .getURLs(this.$api, params)
+                .getURLs(params)
                 .then((resp) => {
                     this.items = resp.data.results;
                     this.totalRecords = resp.data.count;
@@ -75,7 +75,7 @@ export default {
             let params = {
                 search: event
             };
-            this.service.getURLs(this.$api, params).then((resp) => {
+            this.service.getURLs(params).then((resp) => {
                 this.items = resp.data.results;
                 this.totalRecords = resp.data.count;
             });
@@ -156,7 +156,7 @@ export default {
                         <span v-else>{{ slotProps.data.url }}</span>
                     </template>
                 </Column>
-                <Column field="program.name" header="Program"></Column>
+                <Column field="service.target.program.name" header="Program"></Column>
                 <Column field="status_code" header="Status Code">
                     <template #body="slotProps">
                         <span v-if="slotProps.data.status_code">{{ slotProps.data.status_code }}</span>
@@ -180,12 +180,6 @@ export default {
                     </template>
                     <template #body="slotProps">
                         {{ getTechnologyDisplay(slotProps.data) }}
-                    </template>
-                </Column>
-                <Column field="last_seen" header="Last Seen">
-                    <template #body="slotProps">
-                        <span v-if="slotProps.data.last_seen">{{ slotProps.data.last_seen }}</span>
-                        <span v-else>Never</span>
                     </template>
                 </Column>
                 <Column field="date_updated" header="Updated"></Column>

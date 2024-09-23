@@ -42,7 +42,7 @@ export default {
         <slot></slot>
         <template #footer>
             <Button label="Cancel" @click="close" class="p-button-outlined"></Button>
-            <Button label="Save" @click="this.$emit('onSave')" icon="pi pi-check" class="p-button-outlined" :loading="this.saveLoading"></Button>
+            <Button label="Save" @click="this.$emit('onSave')" icon="fa fa-check" class="p-button-outlined" :loading="this.saveLoading"></Button>
         </template>
     </Dialog>
 </template>

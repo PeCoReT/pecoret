@@ -2,21 +2,21 @@
 import ModalDialog from '@/components/common/ModalDialog.vue';
 import TechnologyService from '@/service/TechnologyService';
 import ASMonitorService from '@/service/ASMonitorService';
-import ProgramSelectField from '@/components/forms/fields/ProgramSelectField.vue';
 import TagSelectField from '@/components/forms/fields/TagSelectField.vue';
+import ServiceSelectField from '@/components/forms/fields/ServiceSelectField.vue';
 
 export default {
     name: 'URLCreateDialog',
-    components: { TagSelectField, ProgramSelectField, ModalDialog },
+    components: { ServiceSelectField, TagSelectField, ModalDialog },
     emits: ['object-created'],
     data() {
         return {
             showDialog: false,
             model: {
-                program: null,
                 url: null,
                 tags: null,
-                technologies: null
+                technologies: null,
+                service: null,
             },
             service: new ASMonitorService(),
             techService: new TechnologyService(),
@@ -70,9 +70,10 @@ export default {
             <Field label="URL">
                 <InputText v-model="model.url"></InputText>
             </Field>
-            <Field label="Program">
-                <ProgramSelectField v-model="model.program"></ProgramSelectField>
+            <Field label="Service">
+                <ServiceSelectField v-model="model.service"></ServiceSelectField>
             </Field>
+
             <Field label="Technologies">
                 <MultiSelect id="technologies" filter @filter="onTechnologyFilter" @focus="getTechnologies" v-model="model.technologies" :options="technologies" optionLabel="name" optionValue="pk"></MultiSelect>
             </Field>

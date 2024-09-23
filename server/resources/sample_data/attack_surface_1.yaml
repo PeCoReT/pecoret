@@ -1,0 +1,151 @@
+attack-surface:
+  programs:
+    - name: 'Hackerone - Oportun'
+      targets:
+        - data: oportun.com
+          data_type: DOMAIN
+        - data: oe.oportun.com
+          data_type: SUBDOMAIN
+          ip: 10.10.10.25
+          services:
+            - port: tcp/22
+              banner: SSH-2.0-OpenSSH_5.3p1 Debian-3ubuntu7
+            - port: tcp/80
+              banner: |
+                HTTP/1.1 200 OK
+                Date: Fri, 13 Sep 2024 19:38:11 GMT
+                Server: Apache
+                Vary: Accept-Encoding
+                Content-Length: 726
+                Content-Type: text/html
+        - data: quickapply.oportun.com
+          data_type: SUBDOMAIN
+          ip: 10.10.10.25
+          services:
+            - port: tcp/22
+              banner: SSH-2.0-OpenSSH_5.3p1 Debian-3ubuntu7
+            - port: tcp/80
+              banner: |
+                HTTP/1.1 200 OK
+                Date: Fri, 13 Sep 2024 19:38:11 GMT
+                Server: Apache
+                Vary: Accept-Encoding
+                Content-Length: 726
+                Content-Type: text/html
+        - data: space.oportun.com
+          data_type: SUBDOMAIN
+          ip: 10.10.10.25
+          services:
+            - port: tcp/22
+              banner: SSH-2.0-OpenSSH_5.3p1 Debian-3ubuntu7
+            - port: tcp/80
+              banner: |
+                HTTP/1.1 200 OK
+                Date: Fri, 13 Sep 2024 19:38:11 GMT
+                Server: Apache
+                Vary: Accept-Encoding
+                Content-Length: 726
+                Content-Type: text/html
+        - data: aplica.oportun.com
+          data_type: SUBDOMAIN
+          ip: 10.10.10.10
+          services:
+            - port: tcp/22
+              banner: SSH-2.0-OpenSSH_8.4p2
+        - data: collections.oportun.com
+          data_type: SUBDOMAIN
+          ip: 10.10.10.12
+          services:
+            - port: tcp/22
+              banner: SSH-2.0-OpenSSH_8.4p1
+        - data: confluence.oportun.com
+          data_type: SUBDOMAIN
+        - data: account.oportun.com
+          data_type: SUBDOMAIN
+          ip: 10.10.10.25
+          services:
+            - port: tcp/22
+              banner: SSH-2.0-OpenSSH_5.3p1 Debian-3ubuntu7
+            - port: tcp/80
+              banner: |
+                HTTP/1.1 200 OK
+                Date: Fri, 13 Sep 2024 19:38:11 GMT
+                Server: Apache
+                Vary: Accept-Encoding
+                Content-Length: 726
+                Content-Type: text/html
+        - data: callback.oportun.com
+          data_type: SUBDOMAIN
+        - data: services.oportun.com
+          data_type: SUBDOMAIN
+          ip: 10.10.10.25
+          services:
+            - port: tcp/22
+              banner: SSH-2.0-OpenSSH_5.3p1 Debian-3ubuntu7
+            - port: tcp/80
+              banner: |
+                HTTP/1.1 200 OK
+                Date: Fri, 13 Sep 2024 19:38:11 GMT
+                Server: Apache
+                Vary: Accept-Encoding
+                Content-Length: 726
+                Content-Type: text/html
+        - data: apply.oportun.com
+          ip: 10.10.10.25
+          services:
+            - port: tcp/22
+              banner: SSH-2.0-OpenSSH_5.3p1 Debian-3ubuntu7
+            - port: tcp/80
+              banner: |
+                HTTP/1.1 200 OK
+                Date: Fri, 13 Sep 2024 19:38:11 GMT
+                Server: Apache
+                Vary: Accept-Encoding
+                Content-Length: 726
+                Content-Type: text/html
+          data_type: SUBDOMAIN
+        - data: jira.oportun.com
+          data_type: SUBDOMAIN
+          ip: 10.10.10.25
+          services:
+            - port: tcp/22
+              banner: SSH-2.0-OpenSSH_5.3p1 Debian-3ubuntu7
+            - port: tcp/80
+              banner: |
+                HTTP/1.1 200 OK
+                Date: Fri, 13 Sep 2024 19:38:11 GMT
+                Server: Apache
+                Vary: Accept-Encoding
+                Content-Length: 726
+                Content-Type: text/html
+        - data: creditcard.oportun.com
+          data_type: SUBDOMAIN
+          ip: 10.10.10.25
+          services:
+            - port: tcp/22
+              banner: SSH-2.0-OpenSSH_5.3p1 Debian-3ubuntu7
+            - port: tcp/80
+              banner: |
+                HTTP/1.1 200 OK
+                Date: Fri, 13 Sep 2024 19:38:11 GMT
+                Server: Apache
+                Vary: Accept-Encoding
+                Content-Length: 726
+                Content-Type: text/html
+      hosts:
+        - ip: 10.10.10.10
+          ports:
+            - port: tcp/22
+              service: ssh
+        - ip: 10.10.10.12
+          ports:
+            - port: tcp/21
+              service: ftp
+            - port: tcp/22
+              service: ssh
+        - ip: 10.10.10.25
+          ports:
+            - port: tcp/22
+              service: ssh
+            - port: tcp/80
+              service: http

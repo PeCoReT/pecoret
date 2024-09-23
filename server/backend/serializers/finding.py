@@ -81,7 +81,7 @@ class FindingCopySerializer(FindingSerializer):
             "severity",
             "status",
             "needs_review",
-            "asset",
+            "component",
             "vulnerability_id",
         ]
 

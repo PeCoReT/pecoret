@@ -160,6 +160,7 @@ export default {
                     <div v-if="showRefreshButton === true" class="justify-end flex pr-0">
                         <Button @click="onRefresh" icon="fa fa-refresh" rounded outlined severity="secondary"></Button>
                     </div>
+                    <slot name="header-right"></slot>
                 </div>
             </slot>
         </template>

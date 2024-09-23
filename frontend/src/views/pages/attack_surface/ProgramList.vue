@@ -99,6 +99,7 @@ export default {
                 "
                 :removable-sort="true"
             >
+                <Column field="pk" header="ID"></Column>
                 <Column field="name" header="Name" sortable></Column>
                 <Column field="date_created" header="Created" sortable></Column>
                 <Column field="date_updated" header="Updated" sortable></Column>

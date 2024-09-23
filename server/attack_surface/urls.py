@@ -14,8 +14,16 @@ router.register('urls', viewsets.URLViewSet, 'url')
 router.register('targets', viewsets.TargetViewSet, 'target')
 router.register('tags', viewsets.TagViewSet, 'tag')
 router.register('ports', viewsets.PortViewSet, 'port')
+router.register('services', viewsets.ServiceViewSet, 'service')
+router.register('hosts', viewsets.HostViewSet, 'host')
+router.register('asns', viewsets.ASNViewSet, 'asn')
 
+scan_router = DefaultRouter()
+scan_router.register('scan-types', viewsets.ScanTypeViewSet, 'scan-type')
+scan_router.register('scanners', viewsets.ScannerViewSet, 'scanner')
+scan_router.register('scans', viewsets.ScanViewSet, 'scan')
 
 urlpatterns = [
-    path('attack-surface/', include(router.urls))
+    path('attack-surface/', include(router.urls)),
+    path('attack-surface/scanning/', include(scan_router.urls)),
 ]

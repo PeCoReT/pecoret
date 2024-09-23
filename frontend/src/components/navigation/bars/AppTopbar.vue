@@ -2,6 +2,7 @@
 import { useAuthStore } from '@/store/auth';
 import ProjectTabMenu from '@/components/navigation/ProjectTabMenu.vue';
 import AuthService from '@/service/AuthService';
+import AttackSurfaceTabMenu from '@/components/navigation/AttackSurfaceTabMenu.vue';
 
 export default {
     name: 'AppTopbar',
@@ -113,44 +114,9 @@ export default {
             if (this.checkShowLink('attackSurface') === true) {
                 items.push({
                     label: 'Attack Surface',
-                    items: [
-                        {
-                            label: 'Programs',
-                            route: this.$router.resolve({
-                                name: 'AttackSurfaceProgramList'
-                            })
-                        },
-                        {
-                            label: 'Targets',
-                            route: this.$router.resolve({
-                                name: 'AttackSurfaceTargetList'
-                            })
-                        },
-                        {
-                            label: 'Ports',
-                            route: this.$router.resolve({
-                                name: 'AttackSurfacePortList'
-                            })
-                        },
-                        {
-                            label: 'URLs',
-                            route: this.$router.resolve({
-                                name: 'AttackSurfaceURLList'
-                            })
-                        },
-                        {
-                            label: 'Scan Findings',
-                            route: this.$router.resolve({
-                                name: 'AttackSurfaceScanFindingList'
-                            })
-                        },
-                        {
-                            label: 'Tags',
-                            route: this.$router.resolve({
-                                name: 'AttackSurfaceTagList'
-                            })
-                        }
-                    ]
+                    route: this.$router.resolve({
+                        name: 'AttackSurfaceSearch'
+                    })
                 });
             }
 
@@ -175,6 +141,23 @@ export default {
                             route: this.$router.resolve({
                                 name: 'AdminSettings'
                             })
+                        },
+                        {
+                            label: 'Attack Surface',
+                            items: [
+                                {
+                                    label: 'Scanners',
+                                    route: this.$router.resolve({
+                                        name: 'AdminAttackSurfaceScannerList'
+                                    })
+                                },
+                                {
+                                    label: 'Scan Types',
+                                    route: this.$router.resolve({
+                                        name: 'AdminAttackSurfaceScanTypeList'
+                                    })
+                                }
+                            ]
                         }
                     ]
                 });
@@ -185,32 +168,26 @@ export default {
                 items.push(user);
             }
             return items;
-        },
-        showVulnerabilityTemplatesButton() {
-            if (this.authStore.groups.isVendor === true || this.authStore.groups.isCustomer === true) {
-                return false;
-            }
-            return true;
-        },
-        showChecklistButton() {
-            if (this.authStore.groups.isPentester === true) {
-                return true;
-            }
-            return false;
-        },
+        }
     },
     methods: {
         checkShowLink(name) {
-            return this.showLinks[name].some(attr => this.authStore.groups[attr] === true);
+            return this.showLinks[name].some((attr) => this.authStore.groups[attr] === true);
         },
         onLogout() {
             const authService = new AuthService();
             authService.logout(this.$api).then(() => {
                 this.$router.push({ name: 'Login' });
             });
+        },
+        isAttackSurfaceRoute() {
+            if (this.$route.name && this.$route.name.startsWith('AttackSurface')) {
+                return true;
+            }
+            return false;
         }
     },
-    components: { ProjectTabMenu }
+    components: { AttackSurfaceTabMenu, ProjectTabMenu }
 };
 </script>
 
@@ -234,6 +211,7 @@ export default {
         </template>
     </Menubar>
     <ProjectTabMenu v-if="this.$route.params.projectId"></ProjectTabMenu>
+    <AttackSurfaceTabMenu v-else-if="isAttackSurfaceRoute()"></AttackSurfaceTabMenu>
 </template>
 
 <style>

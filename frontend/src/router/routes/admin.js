@@ -16,6 +16,16 @@ const adminRoutes = [
                 path: '/admins/settings',
                 name: 'AdminSettings',
                 component: () => import('@/views/pages/admin/Settings.vue')
+            },
+            {
+                path: '/admin/attack-surface/scanners',
+                name: 'AdminAttackSurfaceScannerList',
+                component: () => import('@/views/pages/admin/ASScannerList.vue')
+            },
+            {
+                path: '/admin/attack-surface/scan-types',
+                name: 'AdminAttackSurfaceScanTypeList',
+                component: () => import('@/views/pages/admin/ASScanTypeList.vue')
             }
         ]
     }

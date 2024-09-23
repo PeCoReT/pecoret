@@ -1,0 +1,23 @@
+attack-surface:
+  scan_types:
+    - name: port-scan-top-1000
+      description: Performs portscan for Top1000 TCP ports
+      allowed_object_type: host
+    - name: nuclei-tech-detect
+      description: Uses nuclei to perform tech detection
+      allowed_object_type: service
+      condition: 'service_name ~ "http"'
+    - name: nuclei-critical-high-vuln
+      description: Run nuclei critical and high severity templates
+      allowed_object_type: service
+      condition: 'service_name ~ "http"'
+    - name: asn-enrich
+      description: Enrich hosts with ASN data
+      can_run_manually: false
+      allowed_object_type: host
+    - name: resolve-target
+      description: Resolve targets to hosts
+      allowed_object_type: target
+    - name: service-discovery
+      description: Iterates over the target hosts ports and perform service discovery
+      allowed_object_type: target

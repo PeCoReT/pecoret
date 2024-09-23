@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "generic_relations",
     "extra_settings",
+    "djangoql",
     "backend.apps.BackendConfig",
     "advisories.apps.AdvisoriesConfig",
     "checklists.apps.ChecklistsConfig",
@@ -167,7 +168,7 @@ SPECTACULAR_SETTINGS = {
             },
             {
                 'name': 'Attack Surface',
-                'tags': ['Attack Surface']
+                'tags': ['Attack Surface', 'Attack Surface Scanning']
             },
             {
                 'name': 'Knowledge Base',
@@ -292,3 +293,13 @@ REPORT_TEMPLATE_PRESETS = {
         'path': BASE_DIR / 'resources/report_templates/default_template/report_template.py'
     }
 }
+
+
+############################
+# Attack Surface Application
+############################
+
+# enable requesting scans in PeCoReT
+# the scans are NOT performed by pecoret, just managed. You must add your own tooling
+AS_ENABLE_SCANNING = False
+AS_QUEUE = {}

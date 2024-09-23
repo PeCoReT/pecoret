@@ -1,26 +1,27 @@
 from drf_spectacular.utils import extend_schema_view, extend_schema
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework import status
-from pecoret.core.viewsets import PeCoReTModelViewSet
-from pecoret.core import permissions
-from attack_surface.serializers.url import URLSerializer, URL
+
 from attack_surface.filters.url import URLFilter
+from attack_surface.mixins import ScanningAuthMixin
+from attack_surface.permissions import ScanningPermission
+from attack_surface.serializers.url import URLSerializer, URL
+from pecoret.core import permissions
 from pecoret.core.utils.schema import extend_viewset_schema
+from pecoret.core.viewsets import PeCoReTModelViewSet
 
 
 @extend_viewset_schema(tags=['Attack Surface'], verbose_name='url')
 @extend_schema_view(
     create_or_update=extend_schema(operation_id='Get or create a url', tags=['Attack Surface'])
 )
-class URLViewSet(PeCoReTModelViewSet):
+class URLViewSet(ScanningAuthMixin, PeCoReTModelViewSet):
     queryset = URL.objects.all()
     serializer_class = URLSerializer
     permission_classes = [
-        permissions.GroupPermission(
-            read_only_groups=[],
-            read_write_groups=[permissions.Groups.GROUP_PENTESTER]
-        )
+        ScanningPermission(read_write_groups=[permissions.Groups.GROUP_PENTESTER], scanner_write=True,
+                           scanner_read=True)
     ]
     api_scope = 'scope_attack_surface'
     search_fields = ['url']
@@ -29,7 +30,7 @@ class URLViewSet(PeCoReTModelViewSet):
 
     @action(detail=False, methods=["post"])
     def create_or_update(self, request, *args, **kwargs):
-        qs = URL.objects.filter_unique(request.data['url'], request.data['program'])
+        qs = URL.objects.filter_unique(request.data['url'], request.data['service'])
         if qs.exists():
             serializer = self.get_serializer(qs.get(), data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
