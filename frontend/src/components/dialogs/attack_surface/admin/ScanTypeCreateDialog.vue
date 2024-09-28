@@ -14,7 +14,9 @@ export default {
                 description: null,
                 can_run_manually: false,
                 allowed_object_type: null,
-                conditions: null
+                conditions: null,
+                priority: 4,
+                enabled: true
             },
             loading: false,
             service: new ASMonitorService()
@@ -33,7 +35,9 @@ export default {
                 description: this.model.description,
                 can_run_manually: this.model.can_run_manually,
                 conditions: this.model.conditions,
-                allowed_object_type: this.model.allowed_object_type
+                allowed_object_type: this.model.allowed_object_type,
+                priority: this.model.priority,
+                enabled: this.model.enabled
             };
             this.service.createScanType(data).then(() => {
                 this.$toast.add({
@@ -61,8 +65,15 @@ export default {
             <Field label="Allowed Object Type">
                 <Select :options="allowedObjectTypeChoices()" optionLabel="label" optionValue="value" v-model="model.allowed_object_type"></Select>
             </Field>
+            <Field label="Priority">
+                <InputNumber v-model="model.priority"></InputNumber>
+                <small>Higher priority will be queued last</small>
+            </Field>
             <Field label="Can Run Manually?">
                 <ToggleSwitch v-model="model.can_run_manually"></ToggleSwitch>
+            </Field>
+            <Field label="Enabled?">
+                <ToggleSwitch v-model="model.enabled"></ToggleSwitch>
             </Field>
             <Field label="Description">
                 <Textarea v-model="model.description"></Textarea>

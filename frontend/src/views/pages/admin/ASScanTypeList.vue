@@ -94,6 +94,8 @@ export default {
                 <Column header="Name" field="name"></Column>
                 <Column field="allowed_object_type" header="Allowed Object Type"></Column>
                 <Column field="can_run_manually" header="Can Run Manually?"></Column>
+                <Column field="priority" header="Priority"></Column>
+                <Column field="enabled" header="Enabled"></Column>
                 <Column field="conditions" header="Conditions"></Column>
                 <Column header="Actions">
                     <template #body="slotProps">

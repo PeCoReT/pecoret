@@ -3,8 +3,9 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.utils.encoding import smart_str
 from rest_framework import serializers
 from generic_relations.relations import GenericRelatedField
-from attack_surface.models import ScanObject, Host, Target, Service, URL
+from attack_surface.models import ScanObject, Host, Target, Service, URL, Port
 from attack_surface.serializers.host import HostSerializer
+from attack_surface.serializers.port import PortSerializer
 from attack_surface.serializers.service import ServiceSerializer
 from attack_surface.serializers.target import TargetSerializer
 from attack_surface.serializers.url import URLSerializer
@@ -34,7 +35,8 @@ class ScanObjectSerializer(serializers.ModelSerializer):
         Host: HostSerializer(),
         Target: TargetSerializer(),
         Service: ServiceSerializer(),
-        URL: URLSerializer()
+        URL: URLSerializer(),
+        Port: PortSerializer()
     })
 
     class Meta:

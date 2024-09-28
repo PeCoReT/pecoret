@@ -53,5 +53,5 @@ export default {
 </script>
 
 <template>
-    <MultiSelect filter @filter="onFilter" v-model="items" :loading="loading" optionLabel="name" optionValue="pk" @focus="getItems" @update:model-value="change" :options="choices"></MultiSelect>
+    <MultiSelect filter display="chip" @filter="onFilter" v-model="items" :loading="loading" optionLabel="name" optionValue="pk" @focus="getItems" @update:model-value="change" :options="choices"></MultiSelect>
 </template>

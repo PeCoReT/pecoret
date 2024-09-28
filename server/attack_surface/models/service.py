@@ -1,8 +1,10 @@
-from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
+from django.db import models
 from djangoql.queryset import DjangoQLQuerySet
-from pecoret.core.models import TimestampedModel
+
 from attack_surface.utils.djangoql import PortQLSchema
+from pecoret.core.models import TimestampedModel
 
 
 class ServiceQuerySet(DjangoQLQuerySet):
@@ -34,6 +36,7 @@ class Service(TimestampedModel):
     cert_public_key_info = models.CharField(max_length=255, blank=True,
                                             null=True)  # Public key details (e.g., RSA 2048 Public Key)
     cert_san = models.TextField(blank=True, null=True)
+    scan_objects = GenericRelation('attack_surface.ScanObject', related_query_name='services')
 
     class Meta:
         unique_together = (('port', 'target'),)
@@ -62,6 +65,9 @@ class Service(TimestampedModel):
         return super().save(*args, **kwargs)
 
     def clean(self):
+        if not self.target.host:
+            self.target.host = self.port.host
+            self.target.save()
         if self.port.host.pk != self.target.host.pk:
             raise ValidationError({'port': 'Port does not belong to host'})
         return super().clean()

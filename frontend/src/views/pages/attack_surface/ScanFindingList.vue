@@ -4,7 +4,7 @@ import ScanFindingCreateDialog from '@/components/dialogs/attack_surface/ScanFin
 import SeverityBadge from '@/components/badges/SeverityBadge.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
-import ScanFindingBulkEditDialog from "@/components/dialogs/attack_surface/ScanFindingBulkEditDialog.vue";
+import ScanFindingBulkEditDialog from '@/components/dialogs/attack_surface/ScanFindingBulkEditDialog.vue';
 import TagBadgeButton from '@/components/badges/TagBadgeButton.vue';
 
 export default {
@@ -33,7 +33,7 @@ export default {
             totalRecords: 0,
             deleteButtonLoading: false,
             filters: {
-                status: { value: null },
+                status: { value: 'Open' },
                 severity: { value: null }
             }
         };
@@ -70,7 +70,9 @@ export default {
         onGlobalSearch(query) {
             this.loading = true;
             let params = {
-                search: query
+                search: query,
+                status: this.filters.status.value,
+                severity: this.filters.severity.value
             };
             this.service
                 .getScanFindings(this.$api, params)
@@ -115,6 +117,7 @@ export default {
 
 <template>
     <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #head-left> There are {{ totalRecords }} findings </template>
         <template #create-button>
             <ScanFindingCreateDialog @object-created="getItems"></ScanFindingCreateDialog>
         </template>

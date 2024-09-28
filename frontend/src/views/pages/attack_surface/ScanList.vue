@@ -67,7 +67,7 @@ export default {
         <div class="card text-gray-100 p-8">
             <h1 class="text-3xl font-semibold mb-8">Scans Overview</h1>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" v-if="loading === false">
                 <div class="bg-surface-950 rounded-lg shadow-lg p-6 flex flex-col h-72" v-for="scan in items" :key="scan.pk">
                     <div class="flex justify-between items-center mb-4">
                         <div>
@@ -82,7 +82,7 @@ export default {
                         <ul class="list-disc list-inside space-y-1">
                             <li v-for="obj in scan.scan_objects.slice(0, 5)" :key="obj.content_type + '-' + obj.object_id">
                                 {{ obj.content_type.charAt(0).toUpperCase() + obj.content_type.slice(1) }}:
-                                {{ obj.asset.display_name }}
+                                <span v-if="obj.asset">{{ obj.asset.display_name }}</span>
                             </li>
                         </ul>
                     </div>
@@ -94,6 +94,13 @@ export default {
                 <div class="lg:col-span-3 md:grid-cols-2 grid-cols-1" v-if="items.length < 1">
                     <BlankSlate title="No Scans!" text="No scans found!" icon="fa fa-binoculars"></BlankSlate>
                 </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" v-else>
+                <Skeleton class="mb-2"></Skeleton>
+                <Skeleton width="10rem" class="mb-2"></Skeleton>
+                <Skeleton width="5rem" class="mb-2"></Skeleton>
+                <Skeleton height="2rem" class="mb-2"></Skeleton>
+                <Skeleton width="10rem" height="4rem"></Skeleton>
             </div>
         </div>
         <div class="pb-6">

@@ -3,9 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from . import viewsets
 
-
 app_name = 'attack_surface'
-
 
 router = DefaultRouter()
 router.register('programs', viewsets.ProgramViewSet, 'program')
@@ -17,6 +15,7 @@ router.register('ports', viewsets.PortViewSet, 'port')
 router.register('services', viewsets.ServiceViewSet, 'service')
 router.register('hosts', viewsets.HostViewSet, 'host')
 router.register('asns', viewsets.ASNViewSet, 'asn')
+router.register('search-queries', viewsets.UserSearchQueryViewSet, 'search-query')
 
 scan_router = DefaultRouter()
 scan_router.register('scan-types', viewsets.ScanTypeViewSet, 'scan-type')

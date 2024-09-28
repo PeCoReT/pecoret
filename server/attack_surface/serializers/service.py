@@ -4,16 +4,16 @@ from rest_framework import serializers
 from attack_surface import tasks
 from attack_surface.models import Service
 from attack_surface.serializers.port import PortSerializer
-from attack_surface.serializers.target import TargetSerializer
-from backend.serializers.technology import TechnologySerializer
+from attack_surface.serializers.target import MinimalTargetSerializer
+from backend.serializers.technology import FlatTechnologySerializer
 from pecoret.core.serializers import PrimaryKeyRelatedField
 from .tag import TagSerializer
 
 
 class ServiceSerializer(serializers.ModelSerializer):
     port = PrimaryKeyRelatedField(serializer=PortSerializer)
-    target = PrimaryKeyRelatedField(serializer=TargetSerializer)
-    technologies = PrimaryKeyRelatedField(serializer=TechnologySerializer, many=True, required=False)
+    target = PrimaryKeyRelatedField(serializer=MinimalTargetSerializer)
+    technologies = PrimaryKeyRelatedField(serializer=FlatTechnologySerializer, many=True, required=False)
     tags = PrimaryKeyRelatedField(serializer=TagSerializer, many=True, required=False)
 
     class Meta:

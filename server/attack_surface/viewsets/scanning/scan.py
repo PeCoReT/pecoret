@@ -17,7 +17,7 @@ class ScanViewSet(ScanFeatureDispatchMixin, ScanningAuthMixin, PeCoReTModelViewS
     permission_classes = [
         ScanningPermission(read_write_groups=[permissions.Groups.GROUP_PENTESTER], scanner_write=True,
                            scanner_read=True)]
-    search_fields = ['scan_id', 'name']
+    search_fields = ['scan_id', 'name', 'scan_type__name']
     api_scope = 'scope_attack_surface'
 
     def get_serializer_class(self):

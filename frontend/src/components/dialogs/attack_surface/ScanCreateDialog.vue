@@ -44,7 +44,7 @@ export default {
             } else if (this.asset_type === 'port') {
                 method = this.service.getPorts;
             } else if (this.asset_type === 'url') {
-                method = this.service.getURLs
+                method = this.service.getURLs;
             } else {
                 return null;
             }

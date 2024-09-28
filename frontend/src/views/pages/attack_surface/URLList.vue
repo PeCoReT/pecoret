@@ -183,11 +183,7 @@ export default {
                     </template>
                 </Column>
                 <Column field="date_updated" header="Updated"></Column>
-                <Column header="Actions">
-                    <template #body="slotProps">
-                        <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
-                    </template>
-                </Column>
+
             </GenericDataTable>
         </template>
     </BaseListLayout>

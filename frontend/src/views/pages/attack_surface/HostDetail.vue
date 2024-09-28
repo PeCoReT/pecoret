@@ -51,6 +51,10 @@ export default {
             <div class="card">
                 <table class="table-auto w-full">
                     <tr>
+                        <th class="text-left">IP Address:</th>
+                        <td>{{ host.ip_address }}</td>
+                    </tr>
+                    <tr>
                         <th class="text-left">Country:</th>
                         <td v-if="host.asn">
                             <CountryFlag v-if="host.asn" :country-code="host.asn.country_code"></CountryFlag>

@@ -1,5 +1,6 @@
 from urllib.parse import urlparse
 
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -24,6 +25,10 @@ class URL(TimestampedModel):
     is_base = models.BooleanField(editable=False)
     tags = models.ManyToManyField('attack_surface.Tag', blank=True)
     technologies = models.ManyToManyField('backend.Technology', blank=True)
+    favicon_hash = models.CharField(max_length=128, blank=True, null=True)
+    fuzzy_hash_body = models.CharField(max_length=512, blank=True, null=True)
+    fuzzy_hash_headers = models.CharField(max_length=512, blank=True, null=True)
+    scan_objects = GenericRelation('attack_surface.ScanObject', related_query_name='urls')
 
     class Meta:
         ordering = ['-date_updated', 'url']

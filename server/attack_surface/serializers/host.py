@@ -6,7 +6,7 @@ from .asn import ASNSerializer
 
 
 class HostSerializer(serializers.ModelSerializer):
-    asn = PrimaryKeyRelatedField(serializer=ASNSerializer, required=False)
+    asn = PrimaryKeyRelatedField(serializer=ASNSerializer, required=False, allow_null=True)
 
     class Meta:
         model = Host

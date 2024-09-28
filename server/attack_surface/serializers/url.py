@@ -1,16 +1,16 @@
-from rest_framework import serializers
 from django_q.tasks import async_task
+from rest_framework import serializers
 
-from pecoret.core.serializers import PrimaryKeyRelatedField
-from backend.serializers.technology import TechnologySerializer
-from attack_surface.models.url import URL
 from attack_surface import tasks
+from attack_surface.models.url import URL
+from backend.serializers.technology import FlatTechnologySerializer
+from pecoret.core.serializers import PrimaryKeyRelatedField
 from .service import ServiceSerializer
 from .tag import TagSerializer
 
 
 class URLSerializer(serializers.ModelSerializer):
-    technologies = PrimaryKeyRelatedField(serializer=TechnologySerializer, many=True, required=False)
+    technologies = PrimaryKeyRelatedField(serializer=FlatTechnologySerializer, many=True, required=False)
     tags = PrimaryKeyRelatedField(serializer=TagSerializer, many=True, required=False)
     service = PrimaryKeyRelatedField(serializer=ServiceSerializer)
 

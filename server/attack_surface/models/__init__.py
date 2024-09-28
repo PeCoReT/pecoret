@@ -11,3 +11,4 @@ from .scanner import Scanner
 from .scan_type import ScanType
 from .scan import Scan
 from .scan_object import ScanObject
+from .search_query import UserSearchQuery

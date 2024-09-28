@@ -46,6 +46,14 @@ export const allowedObjectTypeChoices = [
     {
         label: 'URL',
         value: 'url'
+    },
+    {
+        label: 'Port',
+        value: 'port'
+    },
+    {
+        label: 'Target',
+        value: 'target'
     }
 ];
 
@@ -197,7 +205,7 @@ export default class ASMonitorService {
         return api.get(url);
     }
 
-    getPorts(api, params) {
+    getPorts(params) {
         let config = {};
         if (params) {
             config['params'] = params;
@@ -367,5 +375,19 @@ export default class ASMonitorService {
     deleteScanner(id) {
         let url = `/attack-surface/scanning/scanners/${id}/`;
         return api.delete(url);
+    }
+
+    getSearchQueries(params) {
+        let url = `/attack-surface/search-queries/`;
+        let config = {};
+        if (params) {
+            config['params'] = params;
+        }
+        return api.get(url, config);
+    }
+
+    saveSearchQuery(data) {
+        let url = `/attack-surface/search-queries/`;
+        return api.post(url, data);
     }
 }

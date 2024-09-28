@@ -122,30 +122,30 @@ export default {
                             <div class="grid grid-cols-1 gap-6">
                                 <div class="flex flex-col md:flex-row">
                                     <div class="md:w-1/3 w-full space-y-3">
-                                        <p class="text-blue-500 hover:underline" @click="setSearchQuery(`target.host.ip_address=&quot;${item.target.host.ip_address}&quot;`)">
-                                            {{ item.target.host.ip_address }}
+                                        <p class="text-blue-500 hover:underline" @click="setSearchQuery(`target.host.ip_address=&quot;${item.port.host.ip_address}&quot;`)">
+                                            {{ item.port.host.ip_address }}
                                         </p>
-                                        <p v-if="item.target.host.asn">
-                                            <CountryFlag v-if="item.target.host.asn.country_code" :country-code="item.target.host.asn.country_code"></CountryFlag>
-                                            {{ item.target.host.asn.country }} / {{ item.target.host.asn.region_name }}
+                                        <p v-if="item.port.host.asn">
+                                            <CountryFlag v-if="item.port.host.asn.country_code" :country-code="item.port.host.asn.country_code"></CountryFlag>
+                                            {{ item.port.host.asn.country }} / {{ item.port.host.asn.region_name }}
                                             /
-                                            {{ item.target.host.asn.city }}
+                                            {{ item.port.host.asn.city }}
                                         </p>
-                                        <p v-if="item.target.host.asn"><span class="font-bold">ASN:</span> {{ item.target.host.asn.value }}</p>
-                                        <p v-if="item.target.host.asn && item.target.host.asn.organisation"><span class="font-bold">Organization:</span> {{ item.target.host.asn.organisation }}</p>
-                                        <p v-if="item.target.host.asn && item.target.host.asn.isp"><span class="font-bold">ISP:</span> {{ item.target.host.asn.isp }}</p>
+                                        <p v-if="item.port.host.asn"><span class="font-bold">ASN:</span> {{ item.port.host.asn.value }}</p>
+                                        <p v-if="item.port.host.asn && item.port.host.asn.organisation"><span class="font-bold">Organization:</span> {{ item.port.host.asn.organisation }}</p>
+                                        <p v-if="item.port.host.asn && item.port.host.asn.isp"><span class="font-bold">ISP:</span> {{ item.port.host.asn.isp }}</p>
 
                                         <p>
                                             <span class="font-bold">Program:</span> <span class="text-blue-500 hover:underline" @click="setSearchQuery(`target.program.id=${item.target.program.pk}`)">{{ item.target.program.name }}</span>
                                         </p>
                                         <p><span class="font-bold">Scope: </span> {{ item.target.scope }}</p>
                                         <p>
-                                            <small>Updated: {{ item.target.host.date_asn_last_updated || 'Never' }}</small>
+                                            <small>Updated: {{ item.port.host.date_asn_last_updated || 'Never' }}</small>
                                         </p>
 
                                         <div class="flex flex-wrap gap-2">
                                             <span
-                                                class="bg-gray-600 text-white text-xs px-2 py-1 rounded border-1 border-gray-200 hover:bg-gray-500 hover:cursor-pointer"
+                                                class="bg-surface-950 text-white text-sm px-2 py-1 rounded border border-gray-800 hover:bg-surface-800 hover:cursor-pointer"
                                                 v-for="technology in item.technologies"
                                                 :key="technology.pk"
                                                 @click="setSearchQuery(`technologies.name=&quot;${technology.name}&quot;`)"
@@ -155,7 +155,7 @@ export default {
                                         </div>
 
                                         <div class="flex space-x-4">
-                                            <router-link :to="{ name: 'AttackSurfaceHostDetail', params: { hostId: item.target.host.pk } }" class="text-blue-500 hover:underline" target="_blank">Host Details </router-link>
+                                            <router-link :to="{ name: 'AttackSurfaceHostDetail', params: { hostId: item.port.host.pk } }" class="text-blue-500 hover:underline" target="_blank">Host Details </router-link>
                                             <a target="_blank" :href="item.scheme" class="text-blue-500 hover:underline" v-if="item.scheme.startsWith('https://') || item.scheme.startsWith('http://')">Visit site</a>
                                         </div>
                                     </div>

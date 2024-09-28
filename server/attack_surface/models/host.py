@@ -1,4 +1,6 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
+
 from pecoret.core.models import TimestampedModel
 
 
@@ -12,6 +14,7 @@ class Host(TimestampedModel):
     ip_address = models.GenericIPAddressField(unique=True)
     date_asn_last_updated = models.DateTimeField(null=True, blank=True)
     asn = models.ForeignKey('attack_surface.ASN', on_delete=models.SET_NULL, null=True, blank=True)
+    scan_objects = GenericRelation('attack_surface.ScanObject', related_query_name='hosts')
 
     @property
     def hostnames(self):

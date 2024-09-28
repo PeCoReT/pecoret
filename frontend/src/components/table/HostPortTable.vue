@@ -74,7 +74,7 @@ export default {
             let data = this.listComposable.buildParams(this.pagination, {}, params);
             data['host'] = this.host.pk;
             this.service
-                .getPorts(this.$api, data)
+                .getPorts(data)
                 .then((resp) => {
                     this.items = resp.data.results;
                     this.totalRecords = resp.data.count;

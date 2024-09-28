@@ -42,7 +42,7 @@ class TargetCreateView(APITestCase, PeCoReTTestCaseMixin):
             'data': 'example.com',
             'program': self.program.pk,
             'scope': ScopeChoices.IN_SCOPE.label,
-            'data_type': DataTypes.DOMAIN.label
+            'data_type': DataTypes.SUBDOMAIN.label
         }
         self.url = self.get_url('attack_surface:target-list')
         self.allowed_users = [

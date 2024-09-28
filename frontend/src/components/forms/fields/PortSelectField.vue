@@ -36,7 +36,7 @@ export default {
         loadData() {
             this.loading = true;
             this.service
-                .getPorts(this.$api, { target: this.target, is_web: true })
+                .getPorts({ target: this.target, is_web: true })
                 .then((response) => {
                     this.choices = response.data.results;
                     this.loaded = true;
@@ -49,7 +49,7 @@ export default {
             let params = {
                 search: event.value
             };
-            this.service.getPorts(this.$api, params).then((response) => {
+            this.service.getPorts(params).then((response) => {
                 this.choices = response.data.results;
             });
         }
@@ -78,5 +78,5 @@ export default {
 </script>
 
 <template>
-    <Select :disabled="!target" v-model="model" :options="choices" @focus="onFocus" optionLabel="display" optionValue="pk" @change="change" :loading="loading" :filter="true" @filter="onFilter"></Select>
+    <Select :disabled="!target" v-model="model" :options="choices" @focus="onFocus" optionLabel="display_name" optionValue="pk" @change="change" :loading="loading" :filter="true" @filter="onFilter"></Select>
 </template>

@@ -58,7 +58,7 @@ export default {
         <template #table>
             <GenericDataTable :total-records="totalRecords" :loading="loading" :pagination="pagination" blank-slate-text="No services found!" blank-slate-title="No Services!" blank-slate-icon="fa fa-network" :model-value="this.items" @page="onPage">
                 <Column field="target.data" header="Target"></Column>
-                <Column header="Port" field="port.display"></Column>
+                <Column header="Port" field="port.display_name"></Column>
                 <Column header="Scheme" field="scheme"></Column>
             </GenericDataTable>
         </template>

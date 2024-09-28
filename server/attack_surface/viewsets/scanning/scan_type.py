@@ -14,3 +14,8 @@ class ScanTypeViewSet(ScanFeatureDispatchMixin, PeCoReTModelViewSet):
         permissions.GroupPermission(read_only_groups=[permissions.Groups.GROUP_PENTESTER], read_write_groups=[])]
     search_fields = ['name']
     api_scope = 'scope_attack_surface'
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return ScanType.objects.all()
+        return ScanType.objects.enabled()

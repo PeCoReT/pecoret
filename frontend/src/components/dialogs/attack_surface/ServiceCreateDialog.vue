@@ -60,8 +60,8 @@ export default {
 </script>
 
 <template>
-    <Button icon="fa fa-plus" label="Scan" outlined @click="open"></Button>
-    <ModalDialog :loading="loading" header="New Scan" v-model="showDialog" @onSave="create">
+    <Button icon="fa fa-plus" label="Service" outlined @click="open"></Button>
+    <ModalDialog :loading="loading" header="New Service" v-model="showDialog" @onSave="create">
         <Form>
             <InlineFieldGroup>
                 <InlineField label="Target">

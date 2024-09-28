@@ -45,7 +45,7 @@ export default {
                 service_name: this.filters.service.value
             };
             this.service
-                .getPorts(this.$api, params)
+                .getPorts(params)
                 .then((resp) => {
                     this.items = resp.data.results;
                     this.totalRecords = resp.data.count;
@@ -62,7 +62,7 @@ export default {
             let params = {
                 search: event
             };
-            this.service.getPorts(this.$api, params).then((resp) => {
+            this.service.getPorts(params).then((resp) => {
                 this.items = resp.data.results;
                 this.totalRecords = resp.data.count;
             });

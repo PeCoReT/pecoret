@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from attack_surface.filters.scan_finding import ScanFindingFilter
 from attack_surface.mixins import ScanningAuthMixin
 from attack_surface.models.scan_finding import ScanFinding
 from attack_surface.permissions import ScanningPermission
@@ -26,7 +27,7 @@ class ScanFindingViewSet(ScanningAuthMixin, PeCoReTModelViewSet):
     api_scope = 'scope_attack_surface'
     search_fields = ['name', 'affected_component']
     ordering_field = ['date_created', 'date_updated', 'severity']
-    filterset_class = None
+    filterset_class = ScanFindingFilter
 
     @action(detail=False, methods=["post"])
     def create_or_update(self, request, *args, **kwargs):

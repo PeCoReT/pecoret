@@ -1,13 +1,15 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core.validators import MaxValueValidator, RegexValidator
-from djangoql.queryset import DjangoQLQuerySet
 from django.db import models
+from djangoql.queryset import DjangoQLQuerySet
+
 from attack_surface.utils.djangoql import PortQLSchema
 from pecoret.core.models import TimestampedModel
-
 
 WEB_SERVICES = [
     'http', 'https'
 ]
+
 
 class Protocol(models.IntegerChoices):
     TCP = 0, 'TCP'
@@ -45,6 +47,7 @@ class Port(TimestampedModel):
     protocol = models.PositiveSmallIntegerField(choices=Protocol.choices, default=Protocol.TCP)
     uses_encryption = models.BooleanField(default=False, help_text='Uses TLS/SSL encryption')
     status = models.PositiveSmallIntegerField(choices=PortStatus.choices, default=PortStatus.OPEN)
+    scan_objects = GenericRelation('attack_surface.ScanObject', related_query_name='ports')
 
     class Meta:
         unique_together = [
@@ -53,8 +56,8 @@ class Port(TimestampedModel):
         ordering = ['number', 'protocol']
 
     @property
-    def display(self):
-        return f'{self.get_protocol_display().lower()}/{str(self.number)}/{self.service_name}'
+    def display_name(self):
+        return f'{self.get_protocol_display().lower()}/{str(self.number)}/{self.service_name} {self.host.display_name}'
 
     @property
     def is_web(self):

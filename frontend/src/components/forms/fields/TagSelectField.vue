@@ -7,6 +7,9 @@ export default {
     props: {
         modelValue: {
             required: true
+        },
+        display: {
+            default: 'comma'
         }
     },
     data() {
@@ -53,5 +56,5 @@ export default {
 </script>
 
 <template>
-    <MultiSelect filter @filter="onFilter" v-model="tags" :loading="loading" optionLabel="name" optionValue="pk" @focus="getTags" @change="change" :options="tagChoices"></MultiSelect>
+    <MultiSelect filter :display="this.display" @filter="onFilter" v-model="tags" :loading="loading" optionLabel="name" optionValue="pk" @focus="getTags" @change="change" :options="tagChoices"></MultiSelect>
 </template>

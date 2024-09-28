@@ -24,6 +24,7 @@ class Scan(TimestampedModel):
     started_at = models.DateTimeField(null=True, blank=True)
     finished_at = models.DateTimeField(null=True, blank=True)
     job_id = models.CharField(max_length=255, null=True, blank=True, help_text="Job ID received from rq")
+    user = models.ForeignKey('backend.User', null=True, blank=True, on_delete=models.SET_NULL)
 
     def delete(self, using=None, keep_parents=False):
         if self.status == ScanStatus.PENDING.value:

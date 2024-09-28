@@ -1,8 +1,11 @@
 import ipaddress
 import re
+
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db import models
 
+from attack_surface.utils import is_subdomain
 from pecoret.core.models import TimestampedModel
 
 DOMAIN_REGEX = r'^(?:[a-zA-Z0-9-]+\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$'
@@ -44,6 +47,7 @@ class Target(TimestampedModel):
     description = models.TextField(blank=True, null=True)
     data_type = models.PositiveSmallIntegerField(choices=DataTypes.choices)
     host = models.ForeignKey('attack_surface.Host', on_delete=models.SET_NULL, null=True, blank=True)
+    scan_objects = GenericRelation('attack_surface.ScanObject', related_query_name='targets')
 
     class Meta:
         ordering = ['-date_updated', 'data']
@@ -55,21 +59,37 @@ class Target(TimestampedModel):
     def display_name(self):
         return self.data
 
+    def _calculate_data_type(self):
+        try:
+            ipaddress.ip_address(self.data)
+            return DataTypes.IP
+        except ValueError:
+            pass
+        if re.match(DOMAIN_REGEX, self.data) and not is_subdomain(self.data):
+            return DataTypes.DOMAIN
+        elif re.match(SUBDOMAIN_REGEX, self.data) and is_subdomain(self.data):
+            return DataTypes.SUBDOMAIN
+        return
+
     def save(self, *args, **kwargs):
+        if not self.data_type:
+            self.data_type = self._calculate_data_type()
         self.full_clean()
         super().save(*args, **kwargs)
         self.program.save()
 
     def clean(self):
+        if not self.data_type:
+            raise ValidationError({'data_type': 'Data type could not be detected automatically.'})
         if self.data_type == DataTypes.IP:
             try:
                 ipaddress.ip_address(self.data)
             except ValueError:
                 raise ValidationError({'data': 'Invalid IP'})
         elif self.data_type == DataTypes.DOMAIN:
-            if not re.match(DOMAIN_REGEX, self.data):
+            if not re.match(DOMAIN_REGEX, self.data) or is_subdomain(self.data):
                 raise ValidationError({'data': 'Invalid domain'})
         elif self.data_type == DataTypes.SUBDOMAIN:
-            if not re.match(SUBDOMAIN_REGEX, self.data):
+            if not re.match(SUBDOMAIN_REGEX, self.data) or not is_subdomain(self.data):
                 raise ValidationError({'data': 'Invalid subdomain'})
         return super().clean()
