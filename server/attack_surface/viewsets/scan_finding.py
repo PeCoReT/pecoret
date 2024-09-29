@@ -3,7 +3,10 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from attack_surface.filters.scan_finding import ScanFindingFilter
+from attack_surface.mixins import ScanningAuthMixin
 from attack_surface.models.scan_finding import ScanFinding
+from attack_surface.permissions import ScanningPermission
 from attack_surface.serializers.scan_finding import ScanFindingSerializer
 from pecoret.core import permissions
 from pecoret.core.utils.schema import extend_viewset_schema
@@ -14,19 +17,17 @@ from pecoret.core.viewsets import PeCoReTModelViewSet
 @extend_schema_view(
     create_or_update=extend_schema(operation_id='Get or create a scan finding', tags=['Attack Surface'])
 )
-class ScanFindingViewSet(PeCoReTModelViewSet):
+class ScanFindingViewSet(ScanningAuthMixin, PeCoReTModelViewSet):
     queryset = ScanFinding.objects.all()
     serializer_class = ScanFindingSerializer
     permission_classes = [
-        permissions.GroupPermission(
-            read_only_groups=[],
-            read_write_groups=[permissions.Groups.GROUP_PENTESTER]
-        )
+        ScanningPermission(read_write_groups=[permissions.Groups.GROUP_PENTESTER], scanner_write=True,
+                           scanner_read=True)
     ]
     api_scope = 'scope_attack_surface'
     search_fields = ['name', 'affected_component']
     ordering_field = ['date_created', 'date_updated', 'severity']
-    filterset_class = None
+    filterset_class = ScanFindingFilter
 
     @action(detail=False, methods=["post"])
     def create_or_update(self, request, *args, **kwargs):

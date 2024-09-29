@@ -17,3 +17,6 @@ REPORT_TEMPLATES = {
         'path': BASE_DIR / 'resources/report_templates/default_template/report_template.py'
     }
 }
+
+AS_ENABLE_SCANNING = True
+AS_QUEUE = {'host': 'localhost', 'port': 6739, 'is_test': True}

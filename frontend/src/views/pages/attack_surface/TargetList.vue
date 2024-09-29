@@ -2,7 +2,6 @@
 import ASMonitorService from '@/service/ASMonitorService';
 import TargetCreateDialog from '@/components/dialogs/attack_surface/TargetCreateDialog.vue';
 import TargetUpdateDialog from '@/components/dialogs/attack_surface/TargetUpdateDialog.vue';
-import TagBadgeButton from '@/components/badges/TagBadgeButton.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
 import TechnologyService from '@/service/TechnologyService';
@@ -13,8 +12,7 @@ export default {
         GenericDataTable,
         BaseListLayout,
         TargetUpdateDialog,
-        TargetCreateDialog,
-        TagBadgeButton
+        TargetCreateDialog
     },
     data() {
         return {
@@ -38,30 +36,15 @@ export default {
             dataTypeChoices: [
                 { name: 'Domain', value: 'Domain' },
                 { name: 'Subdomain', value: 'Subdomain' },
-                { name: 'IP', value: 'IP' },
-                { name: 'Network', value: 'Network' }
+                { name: 'IP', value: 'IP' }
             ],
             filters: {
-                tags: { value: null },
-                technologies: { value: null },
                 data_type: { value: null },
                 scope: { value: null }
             }
         };
     },
     methods: {
-        getTechnologyDisplay(item) {
-            let names = [];
-            if (item.technologies && item.technologies.length > 0) {
-                item.technologies.forEach((item) => {
-                    names.push(item.name);
-                });
-            }
-            if (names.length < 1) {
-                return '-';
-            }
-            return names.join(',');
-        },
         bulkDeleteConfirm() {
             this.$confirm.require({
                 message: 'Do you want to delete all selected items?',
@@ -89,14 +72,13 @@ export default {
         onSort(event) {
             this.loading = true;
             let params = {
-                ordering: event.sortField,
-                tags: this.filters.tags.value
+                ordering: event.sortField
             };
             if (event.sortOrder === -1) {
                 params['ordering'] = `-${event.sortField}`;
             }
             this.service
-                .getTargets(this.$api, params)
+                .getTargets(params)
                 .then((response) => {
                     this.items = response.data.results;
                     this.totalRecords = response.data.count;
@@ -110,13 +92,11 @@ export default {
             let data = {
                 limit: this.pagination.limit,
                 page: this.pagination.page,
-                tags: this.filters.tags.value,
-                technologies: this.filters.technologies.value,
                 data_type: this.filters.data_type.value,
                 scope: this.filters.scope.value
             };
             this.service
-                .getTargets(this.$api, data)
+                .getTargets(data)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -135,7 +115,7 @@ export default {
                 search: query
             };
             this.service
-                .getTargets(this.$api, params)
+                .getTargets(params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -143,22 +123,6 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
-        },
-        tagFilter(event) {
-            let params = {
-                search: event.value
-            };
-            this.service.getTags(this.$api, params).then((response) => {
-                this.tagChoices = response.data.results;
-            });
-        },
-        techFilter(event) {
-            let params = {
-                search: event.value
-            };
-            this.techService.getTechnologies(this.$api, params).then((response) => {
-                this.techChoices = response.data.results;
-            });
         },
         confirmDialogDelete(id) {
             this.$confirm.require({
@@ -223,37 +187,10 @@ export default {
                         <Dropdown v-model="filterModel.value" :options="service.getDataTypeChoices()" :showClear="true" optionLabel="name" optionValue="value"></Dropdown>
                     </template>
                 </Column>
-                <Column field="last_seen" header="Last Seen" sortable>
+                <Column header="IP">
                     <template #body="slotProps">
-                        {{ slotProps.data.last_seen || 'Unknown' }}
-                    </template>
-                </Column>
-                <Column field="tags" header="Tags" :showFilterMatchModes="false">
-                    <template #body="slotProps">
-                        <span v-if="slotProps.data.tags.length > 0"> <TagBadgeButton :label="tag" v-for="tag in slotProps.data.tags" :key="tag.pk"></TagBadgeButton> </span>
+                        <span v-if="slotProps.data.host">{{ slotProps.data.host.ip_address}}</span>
                         <span v-else>-</span>
-                    </template>
-                    <template #filter="{ filterModel }">
-                        <MultiSelect v-model="filterModel.value" :options="tagChoices" @filter="tagFilter" placeholder="Select tags" filter @focus="tagFilter" class="p-column-filter" showClear optionLabel="name" optionValue="pk"></MultiSelect>
-                    </template>
-                </Column>
-                <Column field="technologies" header="Technologies" :showFilterMatchModes="false">
-                    <template #filter="{ filterModel }">
-                        <MultiSelect
-                            v-model="filterModel.value"
-                            :options="techChoices"
-                            @filter="techFilter"
-                            placeholder="Select technologies"
-                            filter
-                            @focus="techFilter"
-                            class="p-column-filter"
-                            showClear
-                            optionLabel="name"
-                            optionValue="pk"
-                        ></MultiSelect>
-                    </template>
-                    <template #body="slotProps">
-                        {{ getTechnologyDisplay(slotProps.data) }}
                     </template>
                 </Column>
                 <Column field="date_updated" header="Updated" sortable></Column>

@@ -127,11 +127,11 @@ class PeCoReTTestCaseMixin:
     def get_content_type_for_model(self, model):
         return ContentType.objects.get_for_model(model)
 
-    def basic_status_code_check(self, url, req_func, status_code, data=None, debug=False, format="json"):
+    def basic_status_code_check(self, url, req_func, status_code, data=None, debug=False, format="json", **kwargs):
         if data is None:
-            response = req_func(url)
+            response = req_func(url, **kwargs)
         else:
-            response = req_func(url, data, format=format)
+            response = req_func(url, data, format=format, **kwargs)
         if debug:
             print(response.json())
         self.assertEqual(response.status_code, status_code)

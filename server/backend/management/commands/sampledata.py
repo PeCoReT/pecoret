@@ -6,6 +6,9 @@ from django.contrib.auth.models import Group
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
+from attack_surface import models as attack_models
+from attack_surface.models.port import Protocol
+from attack_surface.models.target import DataTypes
 from backend import models
 from backend.models.membership import Roles
 from backend.models.project import TestMethod
@@ -32,7 +35,7 @@ class Command(BaseCommand):
             self.create_projects()
             self.create_checklists()
             self.create_technologies()
-            # self.create_attack_surface_data()
+            self.create_attack_surface_data()
 
     def create_users(self):
         self.stdout.write('Creating users...')
@@ -128,53 +131,95 @@ class Command(BaseCommand):
                 'description': item.get('description')
             })
 
-    """
     def create_attack_surface_data(self):
         if not self.data.get('attack-surface'):
             return
         self.stdout.write('Create Attack Surface Dashboard data...')
-        for data in self.data.get('attack-surface', {}).get('tags', []):
-            _tag, _created = asmonitor_models.Tag.objects.get_or_create(name=data['name'], defaults={
-                'description': data['description'],
-                'color': data['color']
-            })
 
         for data in self.data['attack-surface'].get('programs', []):
-            program, _created = asmonitor_models.Program.objects.get_or_create(name=data['name'], defaults={
+            program, _created = attack_models.Program.objects.get_or_create(name=data['name'], defaults={
                 'description': data.get('description')
             })
+            for host_data in data.get('hosts', []):
+                host, _created = attack_models.Host.objects.get_or_create(ip_address=host_data['ip'])
+                for port_data in host_data.get('ports', []):
+                    protocol, number = port_data['port'].split("/")
+                    _, _created = attack_models.Port.objects.get_or_create(
+                        host=host, protocol=Protocol[protocol.upper()], number=number,
+                        service_name=port_data['service'], )
             for target_data in data.get('targets', []):
                 defaults = {
-                    'last_seen': target_data.get('last_seen'), 'description': target_data.get('description')
+                    'description': target_data.get('description')
                 }
-                if target_data.get('scope'):
-                    defaults['scope'] = target_data['scope']
-                # if no ip set name to ip
-                if not target_data.get('name'):
-                    target_data['name'] = target_data['ip']
-                target, created = asmonitor_models.Target.objects.get_or_create(
-                    ip=target_data['ip'], program=program, defaults=defaults)
-                for tech_data in target_data.get('technologies', []):
-                    tech, _created = models.Technology.objects.get_or_create(name=tech_data['name'], defaults={
-                        'description': tech_data.get('description'),
-                        'cpe': tech_data.get('cpe'), 'homepage': tech_data.get('homepage')
-                    })
-                    target.technologies.add(tech)
-                for tag_data in target_data.get('tags', []):
-                    tag, _created = asmonitor_models.Tag.objects.get_or_create(name=tag_data['name'], defaults={
-                        'description': data.get('description'),
-                        'color': data.get('color')
-                    })
-                    target.tags.add(tag)
-                for url_data in target_data.get('urls', []):
-                    _, _ = asmonitor_models.URL.objects.get_or_create(url=url_data['url'], target=target)
-                target.save()
-                for finding_data in target_data.get('findings', []):
-                    _finding, _created = asmonitor_models.Finding.objects.get_or_create(name=finding_data['name'],
-                                                                                        program=program,
-                                                                                        target=target, defaults={
-                            'severity': Severity[finding_data['severity'].upper()].value,
-                            'proof_text': finding_data['proof_text'],
-                            'user': models.User.objects.get(username=finding_data['user'])
-                        })
+                data_type = DataTypes[target_data['data_type']].value
+                target, _created = attack_models.Target.objects.get_or_create(data=target_data['data'],
+                                                                              data_type=data_type,
+                                                                              program=program,
+                                                                              defaults=defaults)
+                if target_data.get('ip'):
+                    host, _created = attack_models.Host.objects.get_or_create(ip_address=target_data['ip'])
+                    target.host = host
+                    target.save()
+                for service_data in target_data.get('services', []):
+                    protocol, number = service_data['port'].split("/")
+                    port = attack_models.Port.objects.get(protocol=Protocol[protocol.upper()], number=number,
+                                                          host__target=target)
+                    service = attack_models.Service.objects.get_or_create(
+                        port=port, target=target, banner=service_data['banner']
+                    )
+        for data in self.data['attack-surface'].get('scan_types', []):
+            scan_type, _ = attack_models.ScanType.objects.get_or_create(name=data['name'], defaults={
+                'description': data.get('description'), 'allowed_object_type': data['allowed_object_type']
+            })
+
+
             """
+            def create_attack_surface_data(self):
+                if not self.data.get('attack-surface'):
+                    return
+                self.stdout.write('Create Attack Surface Dashboard data...')
+                for data in self.data.get('attack-surface', {}).get('tags', []):
+                    _tag, _created = asmonitor_models.Tag.objects.get_or_create(name=data['name'], defaults={
+                        'description': data['description'],
+                        'color': data['color']
+                    })
+        
+                for data in self.data['attack-surface'].get('programs', []):
+                    program, _created = asmonitor_models.Program.objects.get_or_create(name=data['name'], defaults={
+                        'description': data.get('description')
+                    })
+                    for target_data in data.get('targets', []):
+                        defaults = {
+                            'last_seen': target_data.get('last_seen'), 'description': target_data.get('description')
+                        }
+                        if target_data.get('scope'):
+                            defaults['scope'] = target_data['scope']
+                        # if no ip set name to ip
+                        if not target_data.get('name'):
+                            target_data['name'] = target_data['ip']
+                        target, created = asmonitor_models.Target.objects.get_or_create(
+                            ip=target_data['ip'], program=program, defaults=defaults)
+                        for tech_data in target_data.get('technologies', []):
+                            tech, _created = models.Technology.objects.get_or_create(name=tech_data['name'], defaults={
+                                'description': tech_data.get('description'),
+                                'cpe': tech_data.get('cpe'), 'homepage': tech_data.get('homepage')
+                            })
+                            target.technologies.add(tech)
+                        for tag_data in target_data.get('tags', []):
+                            tag, _created = asmonitor_models.Tag.objects.get_or_create(name=tag_data['name'], defaults={
+                                'description': data.get('description'),
+                                'color': data.get('color')
+                            })
+                            target.tags.add(tag)
+                        for url_data in target_data.get('urls', []):
+                            _, _ = asmonitor_models.URL.objects.get_or_create(url=url_data['url'], target=target)
+                        target.save()
+                        for finding_data in target_data.get('findings', []):
+                            _finding, _created = asmonitor_models.Finding.objects.get_or_create(name=finding_data['name'],
+                                                                                                program=program,
+                                                                                                target=target, defaults={
+                                    'severity': Severity[finding_data['severity'].upper()].value,
+                                    'proof_text': finding_data['proof_text'],
+                                    'user': models.User.objects.get(username=finding_data['user'])
+                                })
+                    """

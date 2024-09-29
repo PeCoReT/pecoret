@@ -2,13 +2,11 @@
 import ASMonitorService from '@/service/ASMonitorService';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import ModalDialog from '@/components/common/ModalDialog.vue';
-import TagSelectField from '@/components/forms/fields/TagSelectField.vue';
-import TechnologyService from '@/service/TechnologyService';
 import ProgramSelectField from '@/components/forms/fields/ProgramSelectField.vue';
 
 export default {
     name: 'TargetUpdateDialog',
-    components: { ProgramSelectField, TagSelectField, ModalDialog, MarkdownEditor },
+    components: { ProgramSelectField, ModalDialog, MarkdownEditor },
     emits: ['object-updated'],
     props: {
         target: {
@@ -20,10 +18,7 @@ export default {
             showDialog: false,
             model: this.target,
             loading: false,
-            service: new ASMonitorService(),
-            techService: new TechnologyService(),
-            technologyChoices: [],
-            technologies: []
+            service: new ASMonitorService()
         };
     },
     watch: {
@@ -32,12 +27,6 @@ export default {
             deep: true,
             handler(value) {
                 this.model = value;
-                if (value.technologies && this.technologies.length < 1) {
-                    for (let i = 0; i < value.technologies.length; i++) {
-                        this.technologies.push(value.technologies[i].pk);
-                    }
-                }
-                this.technologyChoices = value.technologies;
             }
         }
     },
@@ -45,32 +34,14 @@ export default {
         open() {
             this.showDialog = true;
         },
-        onTechnologyFilter(event) {
-            let data = {
-                search: event.value
-            };
-            this.techService.getTechnologies(this.$api, data).then((response) => {
-                this.technologyChoices = response.data.results;
-            });
-        },
-        getTechnologies() {
-            this.techService.getTechnologies(this.$api).then((response) => {
-                this.technologyChoices = response.data.results;
-            });
-        },
         patch() {
             this.loading = true;
             let data = {
                 description: this.model.description,
                 data_type: this.model.data_type,
                 scope: this.model.scope,
-                tags: this.model.tags,
-                technologies: this.technologies,
                 data: this.model.data
             };
-            if (this.model.tags.length > 0 && this.model.tags[0].pk) {
-                delete data.tags;
-            }
             this.service
                 .patchTarget(this.$api, this.target.pk, data)
                 .then(() => {
@@ -105,12 +76,6 @@ export default {
             </Field>
             <Field label="Scope">
                 <Select :options="service.getInScopeChoices()" optionLabel="name" optionValue="value" v-model="model.scope"></Select>
-            </Field>
-            <Field label="Technologies">
-                <MultiSelect id="technologies" filter @filter="onTechnologyFilter" @focus="getTechnologies" v-model="model.technologies" :options="technologies" optionLabel="name" optionValue="pk"></MultiSelect>
-            </Field>
-            <Field label="Tags">
-                <TagSelectField v-model="model.tags"></TagSelectField>
             </Field>
             <Field label="Description">
                 <MarkdownEditor v-model="model.description" id="description"></MarkdownEditor>

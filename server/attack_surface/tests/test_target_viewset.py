@@ -39,10 +39,10 @@ class TargetCreateView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.program = self.create_instance(Program)
         self.data = {
-            'data': 'Test',
+            'data': 'example.com',
             'program': self.program.pk,
             'scope': ScopeChoices.IN_SCOPE.label,
-            'data_type': DataTypes.DOMAIN.label
+            'data_type': DataTypes.SUBDOMAIN.label
         }
         self.url = self.get_url('attack_surface:target-list')
         self.allowed_users = [
@@ -56,7 +56,7 @@ class TargetCreateView(APITestCase, PeCoReTTestCaseMixin):
     def test_allowed(self):
         for user in self.allowed_users:
             self.client.force_login(user)
-            self.data['data'] = user.username
+            self.data['data'] = f'{user.username}.example.com'
             self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
 
     def test_forbidden(self):
@@ -66,7 +66,7 @@ class TargetCreateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_api_token_allowed(self):
         for user in self.allowed_users:
-            self.data['data'] = user.username
+            self.data['data'] = f'{user.username}.example.com'
             self.api_token_check(user, 'scope_attack_surface', self.url, self.client.post, 403, 201, 403,
                                  data=self.data)
 

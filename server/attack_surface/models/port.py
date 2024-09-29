@@ -1,6 +1,14 @@
+from django.contrib.contenttypes.fields import GenericRelation
+from django.core.validators import MaxValueValidator, RegexValidator
 from django.db import models
-from django.core.validators import MaxValueValidator
+from djangoql.queryset import DjangoQLQuerySet
+
+from attack_surface.utils.djangoql import PortQLSchema
 from pecoret.core.models import TimestampedModel
+
+WEB_SERVICES = [
+    'http', 'https'
+]
 
 
 class Protocol(models.IntegerChoices):
@@ -8,29 +16,49 @@ class Protocol(models.IntegerChoices):
     UDP = 1, 'UDP'
 
 
-class PortQuerySet(models.QuerySet):
-    def for_target(self, target):
-        return self.filter(target=target)
+class PortStatus(models.IntegerChoices):
+    OPEN = 0, 'Open'
+    CLOSED = 1, 'Closed'
 
-    def filter_unique(self, protocol, port, target):
-        return self.for_target(target).filter(protocol=Protocol[protocol].value, port=port)
+
+class PortQuerySet(DjangoQLQuerySet):
+    djangoql_schema = PortQLSchema
+
+    def for_host(self, host):
+        return self.filter(host=host)
+
+    def for_target(self, target):
+        return self.filter(host__target=target)
+
+    def is_web(self, value):
+        if value is True:
+            return self.filter(service_name__in=WEB_SERVICES)
+        return self.filter()
+
+    def filter_unique(self, number, protocol, host):
+        return self.for_host(host).filter(number=number, protocol=Protocol[protocol].value)
 
 
 class Port(TimestampedModel):
     objects = PortQuerySet.as_manager()
-    target = models.ForeignKey('attack_surface.Target', on_delete=models.CASCADE)
-    port = models.PositiveSmallIntegerField(validators=[MaxValueValidator(65535)])
-    service = models.CharField(max_length=32, null=True, blank=True)
+    host = models.ForeignKey('attack_surface.Host', on_delete=models.CASCADE)
+    number = models.PositiveSmallIntegerField(validators=[MaxValueValidator(65535)])
+    service_name = models.CharField(max_length=32, validators=[RegexValidator(regex='^[a-zA-Z0-9]+$')])
     protocol = models.PositiveSmallIntegerField(choices=Protocol.choices, default=Protocol.TCP)
-    banner = models.CharField(max_length=1024, null=True, blank=True)
-    last_seen = models.DateTimeField(blank=True, null=True)
+    uses_encryption = models.BooleanField(default=False, help_text='Uses TLS/SSL encryption')
+    status = models.PositiveSmallIntegerField(choices=PortStatus.choices, default=PortStatus.OPEN)
+    scan_objects = GenericRelation('attack_surface.ScanObject', related_query_name='ports')
 
     class Meta:
         unique_together = [
-            ('target', 'port', 'protocol')
+            ('host', 'number', 'protocol')
         ]
-        ordering = ['port', 'protocol']
+        ordering = ['number', 'protocol']
 
     @property
-    def program(self):
-        return self.target.program
+    def display_name(self):
+        return f'{self.get_protocol_display().lower()}/{str(self.number)}/{self.service_name} {self.host.display_name}'
+
+    @property
+    def is_web(self):
+        return self.service_name in WEB_SERVICES

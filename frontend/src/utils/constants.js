@@ -11,3 +11,14 @@ export const findingStatusChoices = [
     { title: 'Fixed', value: 'Fixed' },
     { title: "Won't Fix", value: 'Wont Fix' }
 ];
+
+export const serviceProtocolChoices = [
+    {
+        label: 'TCP',
+        value: 'TCP'
+    },
+    {
+        label: 'UDP',
+        value: 'UDP'
+    }
+];

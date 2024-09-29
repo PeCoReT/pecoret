@@ -8,6 +8,7 @@
     "lint": "eslint --fix . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.4.0",
     "@primevue/themes": "^4.0.0",
     "chart.js": "4.4.4",
     "primeicons": "^6.0.1",
@@ -16,9 +17,9 @@
     "vue-router": "^4.4.0",
     "pinia": "^2.1.7",
     "axios": "^1.4.0",
-    "@fortawesome/fontawesome-free": "^6.4.0",
+    "easymde": "^2.18.0",
+    "flag-icons": "^7.2.3",
     "markdown-it": "^14.0.0",
-    "easymde": "^2.18.0"
   },
   "devDependencies": {
     "@primevue/auto-import-resolver": "^4.0.1",

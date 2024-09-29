@@ -1,10 +1,11 @@
 <script>
 import ASMonitorService from '@/service/ASMonitorService';
 import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
+import TagSelectField from '@/components/forms/fields/TagSelectField.vue';
 
 export default {
     name: 'ScanFindingDetail',
-    components: { TechnologyMultiSelectField },
+    components: { TagSelectField, TechnologyMultiSelectField },
     data() {
         return {
             item: {},
@@ -49,6 +50,7 @@ export default {
             });
         },
         patchData(data) {
+
             this.service.patchURL(this.$api, this.urlId, data).then((response) => {
                 this.item = response.data;
                 this.$toast.add({ severity: 'success', summary: 'Updated', detail: 'URL updated!', life: 3000 });
@@ -72,6 +74,9 @@ export default {
                 </Field>
                 <Field label="Technologies">
                     <TechnologyMultiSelectField v-model="item.technologies" @update:model-value="patchData({ technologies: item.technologies })"></TechnologyMultiSelectField>
+                </Field>
+                <Field label="Tags">
+                    <TagSelectField v-model="item.tags" display="chip" @update:model-value="patchData({ tags: item.tags })"></TagSelectField>
                 </Field>
             </Form>
         </div>

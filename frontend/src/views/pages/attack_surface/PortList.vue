@@ -2,12 +2,11 @@
 import ASMonitorService from '@/service/ASMonitorService';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
-import ProgramSelectField from '@/components/forms/fields/ProgramSelectField.vue';
+
 
 export default {
     name: 'PortList',
     components: {
-        ProgramSelectField,
         GenericDataTable,
         BaseListLayout
     },
@@ -42,12 +41,11 @@ export default {
             let params = {
                 page: this.pagination.page,
                 limit: this.pagination.limit,
-                port: this.filters.port.value,
-                program: this.filters['target.program.name'].value,
-                service: this.filters.service.value
+                number: this.filters.port.value,
+                service_name: this.filters.service.value
             };
             this.service
-                .getPorts(this.$api, params)
+                .getPorts(params)
                 .then((resp) => {
                     this.items = resp.data.results;
                     this.totalRecords = resp.data.count;
@@ -64,7 +62,7 @@ export default {
             let params = {
                 search: event
             };
-            this.service.getPorts(this.$api, params).then((resp) => {
+            this.service.getPorts(params).then((resp) => {
                 this.items = resp.data.results;
                 this.totalRecords = resp.data.count;
             });
@@ -80,7 +78,7 @@ export default {
                     this.loading = true;
                     let itemsDeleted = 0;
                     this.selectedItems.forEach((item) => {
-                        this.service.deletePort(this.$api, item.pk).then(() => {
+                        this.service.deletePort(item.pk).then(() => {
                             itemsDeleted++;
                             if (itemsDeleted === this.selectedItems.length) {
                                 this.loading = false;
@@ -121,39 +119,23 @@ export default {
                     <Button v-if="selectedItems.length > 0" icon="fa fa-trash" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2"></Button>
                 </template>
                 <Column selection-mode="multiple" headerStyle=""></Column>
-                <Column field="port" header="Port" :show-filter-match-modes="false">
+                <Column field="number" header="Port" :show-filter-match-modes="false">
                     <template #filter="{ filterModel }">
                         <InputText v-model="filterModel.value"></InputText>
                     </template>
                 </Column>
                 <Column field="protocol" header="Protocol"></Column>
-                <Column field="service" header="Service" :show-filter-match-modes="false">
+                <Column header="Service" :show-filter-match-modes="false">
                     <template #filter="{ filterModel }">
                         <InputText v-model="filterModel.value"></InputText>
                     </template>
                     <template #body="slotProps">
-                        <span v-if="slotProps.data.service">{{ slotProps.data.service }}</span>
+                        <span v-if="slotProps.data.service_name">{{ slotProps.data.service_name }}</span>
                         <span v-else>-</span>
                     </template>
                 </Column>
-                <Column field="banner" header="Banner">
-                    <template #body="slotProps">
-                        <span v-if="slotProps.data.banner">{{ slotProps.data.banner }}</span>
-                        <span v-else>-</span>
-                    </template>
-                </Column>
-                <Column field="target.data" header="Target"></Column>
-                <Column field="target.program.name" header="Program" :show-filter-match-modes="false">
-                    <template #filter="{ filterModel }">
-                        <ProgramSelectField v-model="filterModel.value"></ProgramSelectField>
-                    </template>
-                </Column>
+                <Column field="host.ip_address" header="Host"></Column>
                 <Column field="date_created" header="Created"></Column>
-                <Column header="Actions">
-                    <template #body="slotProps">
-                        <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
-                    </template>
-                </Column>
             </GenericDataTable>
         </template>
     </BaseListLayout>
