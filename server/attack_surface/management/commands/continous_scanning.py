@@ -13,6 +13,7 @@ from attack_surface.serializers.scanning.scan import ScanSerializer
 
 
 class Command(BaseCommand):
+    """ enqueue scans for all enabled scan types, when queue has less than 10 items and scan was not performed in last 6h"""
     # TODO: also check if scan was performed this day already
     queue_size = 10
     timediff = 6  # in hours

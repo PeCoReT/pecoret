@@ -1,6 +1,6 @@
 import time
 from django.apps import apps
-
+from django.conf import settings
 from attack_surface.models import URL, ScanType
 from attack_surface.queue import enqueue_scan
 from attack_surface.serializers.scanning.scan import ScanSerializer
@@ -31,7 +31,7 @@ def enqueue_for_scan_seed(app_label, pk):
         obj = model.objects.get(pk=pk)
     except model.DoesNotExist:
         return
-    scan_types = ScanType.objects.for_asset(obj).enabled()
+    scan_types = ScanType.objects.for_asset(obj).enabled().filter(name__in=settings.AS_ALLOWED_SCAN_TYPES_ON_CREATION)
     previous_job = None
     job = None
     for scan_type in scan_types.order_by('-priority'):

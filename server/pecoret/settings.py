@@ -306,3 +306,6 @@ AS_QUEUE = {}
 
 # scan item on creation
 AS_ENABLE_SCAN_ON_CREATION = False
+
+# fill the names with scan types that can be triggered on item creation
+AS_ALLOWED_SCAN_TYPES_ON_CREATION = []
