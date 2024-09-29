@@ -1,5 +1,3 @@
-from dill import settings
-
 from attack_surface.mixins import ScanFeatureDispatchMixin, ScanningAuthMixin
 from attack_surface.models import Scan
 from attack_surface.permissions import ScanningPermission
