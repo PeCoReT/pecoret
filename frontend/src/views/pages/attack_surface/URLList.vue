@@ -145,6 +145,7 @@ export default {
                 @row-click="onRowClick"
                 filter-display="menu"
                 v-model:selection="selectedItems"
+                @page="onPage"
             >
                 <template #bulk-edit>
                     <Button v-if="selectedItems.length > 0" icon="fa fa-trash" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2"></Button>
