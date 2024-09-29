@@ -19,7 +19,7 @@
     "axios": "^1.4.0",
     "easymde": "^2.18.0",
     "flag-icons": "^7.2.3",
-    "markdown-it": "^14.0.0",
+    "markdown-it": "^14.0.0"
   },
   "devDependencies": {
     "@primevue/auto-import-resolver": "^4.0.1",
