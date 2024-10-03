@@ -20,4 +20,4 @@ django-extra-settings==0.12.0
 djangoql==0.18.1
 rq==1.16.2
 tldextract==5.1.2
-psycopg2==2.9.9
+psycopg2-binary==2.9.9
