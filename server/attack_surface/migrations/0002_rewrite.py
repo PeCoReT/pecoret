@@ -66,38 +66,6 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Host',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date_created', models.DateTimeField(auto_now_add=True)),
-                ('date_updated', models.DateTimeField(auto_now=True)),
-                ('ip_address', models.GenericIPAddressField()),
-                ('date_asn_last_updated', models.DateTimeField(blank=True, null=True)),
-                ('asn', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='attack_surface.asn')),
-            ],
-            options={
-                'ordering': ['-date_created', '-date_updated'],
-                'abstract': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='Port',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date_created', models.DateTimeField(auto_now_add=True)),
-                ('date_updated', models.DateTimeField(auto_now=True)),
-                ('number', models.PositiveSmallIntegerField(validators=[django.core.validators.MaxValueValidator(65535)])),
-                ('service_name', models.CharField(max_length=32, validators=[django.core.validators.RegexValidator(regex='^[a-zA-Z0-9]+$')])),
-                ('protocol', models.PositiveSmallIntegerField(choices=[(0, 'TCP'), (1, 'UDP')], default=0)),
-                ('uses_encryption', models.BooleanField(default=False, help_text='Uses TLS/SSL encryption')),
-                ('host', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='attack_surface.host')),
-            ],
-            options={
-                'ordering': ['number', 'protocol'],
-                'unique_together': {('host', 'number', 'protocol')},
-            },
-        ),
-        migrations.CreateModel(
             name='ScanFinding',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -128,8 +96,10 @@ class Migration(migrations.Migration):
                 ('scope', models.PositiveSmallIntegerField(choices=[(0, 'In Scope'), (1, 'Undefined'), (2, 'Out of Scope')], default=1)),
                 ('description', models.TextField(blank=True, null=True)),
                 ('data_type', models.PositiveSmallIntegerField(choices=[(0, 'IP'), (2, 'Domain'), (3, 'Subdomain')])),
-                ('host', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='attack_surface.host')),
                 ('program', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='attack_surface.program')),
+                ('asn', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='attack_surface.ASN')),
+                ('date_asn_last_updated', models.DateTimeField(null=True, blank=True)),
+                ('resolved_ip', models.GenericIPAddressField(null=True, blank=True))
             ],
             options={
                 'ordering': ['-date_updated', 'data'],
@@ -150,13 +120,16 @@ class Migration(migrations.Migration):
                 ('cert_fingerprint', models.CharField(blank=True, max_length=64, null=True)),
                 ('cert_public_key_info', models.CharField(blank=True, max_length=255, null=True)),
                 ('cert_san', models.TextField(blank=True, null=True)),
-                ('port', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='attack_surface.port')),
                 ('technologies', models.ManyToManyField(blank=True, to='backend.technology')),
                 ('tags', models.ManyToManyField(blank=True, to='attack_surface.tag')),
                 ('target', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='attack_surface.target')),
+                ('port_number', models.PositiveSmallIntegerField()),
+                ('service_name', models.CharField(max_length=32)),
+                ('protocol', models.PositiveSmallIntegerField()),
+                ('port_status', models.PositiveSmallIntegerField())
             ],
             options={
-                'unique_together': {('port', 'target')},
+                'unique_together': {('port_number', 'target', 'protocol')},
             },
         ),
         migrations.CreateModel(

@@ -1,11 +1,10 @@
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.utils.encoding import smart_str
-from rest_framework import serializers
 from generic_relations.relations import GenericRelatedField
-from attack_surface.models import ScanObject, Host, Target, Service, URL, Port
-from attack_surface.serializers.host import HostSerializer
-from attack_surface.serializers.port import PortSerializer
+from rest_framework import serializers
+
+from attack_surface.models import ScanObject, Target, Service, URL
 from attack_surface.serializers.service import ServiceSerializer
 from attack_surface.serializers.target import TargetSerializer
 from attack_surface.serializers.url import URLSerializer
@@ -32,11 +31,9 @@ class ScanObjectSerializer(serializers.ModelSerializer):
     content_type = ContentTypeRelatedField(slug_field='model', queryset=ContentType.objects.all())
     object_id = serializers.IntegerField()
     asset = GenericRelatedField(read_only=True, serializers={
-        Host: HostSerializer(),
         Target: TargetSerializer(),
         Service: ServiceSerializer(),
         URL: URLSerializer(),
-        Port: PortSerializer()
     })
 
     class Meta:

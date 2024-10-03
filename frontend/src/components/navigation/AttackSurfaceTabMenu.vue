@@ -35,18 +35,6 @@ export default {
                     })
                 },
                 {
-                    label: 'Ports',
-                    route: this.$router.resolve({
-                        name: 'AttackSurfacePortList'
-                    })
-                },
-                {
-                    label: 'Hosts',
-                    route: this.$router.resolve({
-                        name: 'AttackSurfaceHostList'
-                    })
-                },
-                {
                     label: 'Scan Findings',
                     route: this.$router.resolve({
                         name: 'AttackSurfaceScanFindingList'

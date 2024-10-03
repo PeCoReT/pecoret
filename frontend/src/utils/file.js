@@ -9,7 +9,7 @@ function forceFileDownload(response) {
 }
 
 function filename_from_response(response) {
-    return response.headers['content-disposition'].split('filename=')[1].split(';')[0];
+    return response.headers['content-disposition'].split('filename=')[1].split(';')[0].replaceAll('"', '');
 }
 
 export default forceFileDownload;

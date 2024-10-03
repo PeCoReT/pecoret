@@ -38,14 +38,9 @@ const asmonitorRoutes = [
                 component: () => import('@/views/pages/attack_surface/FindingDetail.vue')
             },
             {
-                path: '/attack-surface/ports',
-                name: 'AttackSurfacePortList',
-                component: () => import('@/views/pages/attack_surface/PortList.vue')
-            },
-            {
-                path: '/attack-surface/hosts/:hostId',
-                name: 'AttackSurfaceHostDetail',
-                component: () => import('@/views/pages/attack_surface/HostDetail.vue')
+                path: '/attack-surface/targets/:targetId',
+                name: 'AttackSurfaceTargetDetail',
+                component: () => import('@/views/pages/attack_surface/TargetDetail.vue')
             },
             {
                 path: '/attack-surface/services',
@@ -56,11 +51,6 @@ const asmonitorRoutes = [
                 path: '/attack-surface',
                 name: 'AttackSurfaceSearch',
                 component: () => import('@/views/pages/attack_surface/Search.vue')
-            },
-            {
-                path: '/attack-surface/hosts',
-                name: 'AttackSurfaceHostList',
-                component: () => import('@/views/pages/attack_surface/HostList.vue')
             },
             {
                 path: '/attack-surface/scanning/scans',

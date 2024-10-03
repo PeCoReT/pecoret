@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from rest_framework.test import APITestCase
 
-from attack_surface.models import ScanType, Host, Scan, ScanObject
+from attack_surface.models import ScanType, Target, Scan, ScanObject
 from attack_surface.models.scan import ScanStatus
 from pecoret.core.test import PeCoReTTestCaseMixin
 
@@ -10,12 +10,12 @@ class ScanCreateViewSet(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
         self.url = self.get_url('attack_surface:scan-list')
-        self.scan_type = self.create_instance(ScanType, allowed_object_type='host')
+        self.scan_type = self.create_instance(ScanType, allowed_object_type='target')
         self.scan_type2 = self.create_instance(ScanType, allowed_object_type='service')
-        self.host = self.create_instance(Host)
+        self.host = self.create_instance(Target, data='example.com')
         self.data = {
             'name': 'test', 'scan_type': self.scan_type.pk,
-            'scan_objects': [{'content_type': 'host', 'object_id': self.host.pk}]
+            'scan_objects': [{'content_type': 'target', 'object_id': self.host.pk}]
         }
         self.allowed_users = [self.pentester2, self.pentester1, self.read_only1]
         self.forbidden_users = [self.management1, self.management2, self.customer1, self.customer2, self.vendor1,
@@ -54,10 +54,10 @@ class ScanCreateViewSet(APITestCase, PeCoReTTestCaseMixin):
 class ScanUpdateDeleteView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.scan_type = self.create_instance(ScanType, allowed_object_type='host')
+        self.scan_type = self.create_instance(ScanType, allowed_object_type='target')
         self.scan_type2 = self.create_instance(ScanType, allowed_object_type='service')
-        self.host = self.create_instance(Host)
-        self.host2 = self.create_instance(Host)
+        self.host = self.create_instance(Target, data='test.example.com')
+        self.host2 = self.create_instance(Target, data='example.com')
         self.scan = self.create_instance(Scan, scan_type=self.scan_type)
         ct = ContentType.objects.get_for_model(self.host)
         self.scan_object = self.create_instance(ScanObject, scan=self.scan, content_type=ct, object_id=self.host.pk)

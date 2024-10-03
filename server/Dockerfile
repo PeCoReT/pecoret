@@ -7,7 +7,7 @@ RUN apt update && apt install -y fonts-font-awesome libldap2-dev libsasl2-dev gc
     libcairo-gobject2 libpango-1.0-0 libpangoft2-1.0-0 git
 
 RUN pip install -r requirements.txt && \
-    pip install psycopg2-binary gunicorn
+    pip install gunicorn
 
 RUN chmod +x /app/docker/entrypoint.sh
 

@@ -8,8 +8,8 @@ from django.db import models
 from attack_surface.utils import is_subdomain
 from pecoret.core.models import TimestampedModel
 
-DOMAIN_REGEX = r'^(?:[a-zA-Z0-9-]+\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$'
-SUBDOMAIN_REGEX = r'^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$'
+DOMAIN_REGEX = r'^(?:[a-zA-Z0-9-_]+\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$'
+SUBDOMAIN_REGEX = r'^([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,}$'
 
 
 class ScopeChoices(models.IntegerChoices):
@@ -38,6 +38,9 @@ class TargetQuerySet(models.QuerySet):
     def filter_unique(self, data, program):
         return self.for_program(program).filter(data=data)
 
+    def with_ip(self, ip):
+        return self.filter(resolved_ip=ip)
+
 
 class Target(TimestampedModel):
     objects = TargetQuerySet.as_manager()
@@ -46,8 +49,10 @@ class Target(TimestampedModel):
     program = models.ForeignKey('attack_surface.Program', on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True)
     data_type = models.PositiveSmallIntegerField(choices=DataTypes.choices)
-    host = models.ForeignKey('attack_surface.Host', on_delete=models.SET_NULL, null=True, blank=True)
+    resolved_ip = models.GenericIPAddressField(null=True, blank=True)
     scan_objects = GenericRelation('attack_surface.ScanObject', related_query_name='targets')
+    date_asn_last_updated = models.DateTimeField(null=True, blank=True)
+    asn = models.ForeignKey('attack_surface.ASN', on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         ordering = ['-date_updated', 'data']
@@ -58,6 +63,11 @@ class Target(TimestampedModel):
     @property
     def display_name(self):
         return self.data
+
+    @property
+    def hostnames(self):
+        t = Target.objects.with_ip(self.resolved_ip)
+        return list(t.values_list('data', flat=True))
 
     def _calculate_data_type(self):
         try:
@@ -84,6 +94,7 @@ class Target(TimestampedModel):
         if self.data_type == DataTypes.IP:
             try:
                 ipaddress.ip_address(self.data)
+                self.resolved_ip = self.data
             except ValueError:
                 raise ValidationError({'data': 'Invalid IP'})
         elif self.data_type == DataTypes.DOMAIN:

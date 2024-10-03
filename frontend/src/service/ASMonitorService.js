@@ -36,20 +36,12 @@ const SeverityChoices = [
 
 export const allowedObjectTypeChoices = [
     {
-        label: 'Host',
-        value: 'host'
-    },
-    {
         label: 'Service',
         value: 'service'
     },
     {
         label: 'URL',
         value: 'url'
-    },
-    {
-        label: 'Port',
-        value: 'port'
     },
     {
         label: 'Target',
@@ -174,6 +166,11 @@ export default class ASMonitorService {
     patchTarget(api, id, data) {
         let url = `/attack-surface/targets/${id}/`;
         return api.patch(url, data);
+    }
+
+    getTarget(id) {
+        let url = `/attack-surface/targets/${id}/`;
+        return api.get(url);
     }
 
     getScanFindings(api, params) {

@@ -1,5 +1,5 @@
 from django.contrib.contenttypes.fields import GenericRelation
-from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, RegexValidator
 from django.db import models
 from djangoql.queryset import DjangoQLQuerySet
 
@@ -7,22 +7,37 @@ from attack_surface.utils.djangoql import PortQLSchema
 from pecoret.core.models import TimestampedModel
 
 
+class Protocol(models.IntegerChoices):
+    TCP = 0, 'TCP'
+    UDP = 1, 'UDP'
+
+
+class PortStatus(models.IntegerChoices):
+    OPEN = 0, 'Open'
+    CLOSED = 1, 'Closed'
+
+
 class ServiceQuerySet(DjangoQLQuerySet):
     djangoql_schema = PortQLSchema
 
     def is_web(self, value):
         if value is True:
-            return self.filter(port__service_name__in=['http', 'https'])
-        return self.exclude(port__service_name__in=['http', 'https'])
+            return self.filter(service_name__in=['http', 'https'])
+        return self.exclude(service_name__in=['http', 'https'])
 
-    def filter_unique(self, port, target):
-        return self.filter(port=port, target=target)
+    def filter_unique(self, port_number, protocol, target):
+        return self.filter(port_number=port_number, protocol=Protocol[protocol.upper()].value, target=target)
 
 
 class Service(TimestampedModel):
     objects = ServiceQuerySet.as_manager()
-    port = models.ForeignKey('attack_surface.Port', on_delete=models.CASCADE)
     target = models.ForeignKey('attack_surface.Target', on_delete=models.CASCADE)
+    port_number = models.PositiveSmallIntegerField(validators=[MaxValueValidator(65535)])
+    service_name = models.CharField(max_length=32, validators=[RegexValidator(regex='^[a-zA-Z0-9]+$')])
+    protocol = models.PositiveSmallIntegerField(choices=Protocol.choices, default=Protocol.TCP)
+    uses_encryption = models.BooleanField(default=False, help_text='Uses TLS/SSL encryption')
+    port_status = models.PositiveSmallIntegerField(choices=PortStatus.choices, default=PortStatus.OPEN)
+
     banner = models.TextField(null=True, blank=True)
     technologies = models.ManyToManyField('backend.Technology', blank=True)
     tags = models.ManyToManyField('attack_surface.Tag', blank=True)
@@ -39,7 +54,7 @@ class Service(TimestampedModel):
     scan_objects = GenericRelation('attack_surface.ScanObject', related_query_name='services')
 
     class Meta:
-        unique_together = (('port', 'target'),)
+        unique_together = (('port_number', 'target', 'protocol'),)
         ordering = ['-date_updated']
 
     @property
@@ -52,22 +67,10 @@ class Service(TimestampedModel):
 
     @property
     def scheme(self):
-        return f'{self.port.service_name}://{self.target.data}:{self.port.number}'
+        return f'{self.service_name}://{self.target.data}:{self.port_number}'
 
     @property
     def is_web(self):
-        if self.port.service_name in ['http', 'https']:
+        if self.service_name in ['http', 'https']:
             return True
         return False
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        return super().save(*args, **kwargs)
-
-    def clean(self):
-        if not self.target.host:
-            self.target.host = self.port.host
-            self.target.save()
-        if self.port.host.pk != self.target.host.pk:
-            raise ValidationError({'port': 'Port does not belong to host'})
-        return super().clean()

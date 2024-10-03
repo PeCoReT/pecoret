@@ -5,6 +5,7 @@ import { useListViewComposable } from '@/composables/listViewComposable';
 import CountryFlag from '@/components/icons/CountryFlag.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 import TagBadgeButton from '@/components/badges/TagBadgeButton.vue';
+import forceFileDownload from '@/utils/file';
 
 export default {
     name: 'Search',
@@ -20,6 +21,7 @@ export default {
                 country: { value: null }
             },
             totalRecords: 0,
+            downloadLoading: false,
             searchQuery: null,
             pagination: { page: 1, limit: 20 },
             breadcrumbs: [
@@ -57,6 +59,22 @@ export default {
         setSearchQuery(value) {
             this.searchQuery = value;
             this.onSearch();
+        },
+        downloadResults() {
+            let downloadLoading = true;
+            let params = { download: true };
+            if (this.searchQuery) {
+                params['search'] = btoa(this.searchQuery);
+            }
+            let data = this.listComposable.buildParams(this.pagination, this.filters, params);
+            this.service
+                .searchServices(data)
+                .then((response) => {
+                    forceFileDownload(response);
+                })
+                .finally(() => {
+                    downloadLoading = false;
+                });
         },
         getItems(params) {
             this.loading = true;
@@ -100,6 +118,7 @@ export default {
                 <!-- End search bar -->
                 <div class="flex mt-3">
                     <p class="flex justify-start grow"><span class="font-space-small">Search Results: </span> {{ totalRecords }}</p>
+                    <Button @click="downloadResults" size="small" icon="fa fa-download" :loading="downloadLoading"></Button>
                 </div>
                 <!--
                 <div class="mt-6 flex justify-center space-x-4">
@@ -115,32 +134,32 @@ export default {
                         <template #header>
                             <div class="flex justify-between items-center border-gray-700 border-b p-4">
                                 <h2 class="text-lg font-bold">{{ item.target.data }}</h2>
-                                <span class="text-lg">{{ item.port.protocol.toLowerCase() }}/{{ item.port.number }}/{{ item.port.service_name }}</span>
+                                <span class="text-lg">{{ item.protocol.toLowerCase() }}/{{ item.port_number }}/{{ item.service_name }}</span>
                             </div>
                         </template>
                         <template #content>
                             <div class="grid grid-cols-1 gap-6">
                                 <div class="flex flex-col md:flex-row">
                                     <div class="md:w-1/3 w-full space-y-3">
-                                        <p class="text-blue-500 hover:underline" @click="setSearchQuery(`target.host.ip_address=&quot;${item.port.host.ip_address}&quot;`)">
-                                            {{ item.port.host.ip_address }}
+                                        <p class="text-blue-500 hover:underline" @click="setSearchQuery(`target.resolved_ip=&quot;${item.target.resolved_ip}&quot;`)">
+                                            {{ item.target.resolved_ip || '-' }}
                                         </p>
-                                        <p v-if="item.port.host.asn">
-                                            <CountryFlag v-if="item.port.host.asn.country_code" :country-code="item.port.host.asn.country_code"></CountryFlag>
-                                            {{ item.port.host.asn.country }} / {{ item.port.host.asn.region_name }}
+                                        <p v-if="item.target.asn">
+                                            <CountryFlag v-if="item.target.asn.country_code" :country-code="item.target.asn.country_code"></CountryFlag>
+                                            {{ item.target.asn.country }} / {{ item.target.asn.region_name }}
                                             /
-                                            {{ item.port.host.asn.city }}
+                                            {{ item.target.asn.city }}
                                         </p>
-                                        <p v-if="item.port.host.asn"><span class="font-bold">ASN:</span> {{ item.port.host.asn.value }}</p>
-                                        <p v-if="item.port.host.asn && item.port.host.asn.organisation"><span class="font-bold">Organization:</span> {{ item.port.host.asn.organisation }}</p>
-                                        <p v-if="item.port.host.asn && item.port.host.asn.isp"><span class="font-bold">ISP:</span> {{ item.port.host.asn.isp }}</p>
+                                        <p v-if="item.target.asn"><span class="font-bold">ASN:</span> {{ item.target.asn.value }}</p>
+                                        <p v-if="item.target.asn && item.target.asn.organisation"><span class="font-bold">Organization:</span> {{ item.target.asn.organisation }}</p>
+                                        <p v-if="item.target.asn && item.target.asn.isp"><span class="font-bold">ISP:</span> {{ item.target.asn.isp }}</p>
 
                                         <p>
                                             <span class="font-bold">Program:</span> <span class="text-blue-500 hover:underline" @click="setSearchQuery(`target.program.id=${item.target.program.pk}`)">{{ item.target.program.name }}</span>
                                         </p>
                                         <p><span class="font-bold">Scope: </span> {{ item.target.scope }}</p>
                                         <p>
-                                            <small>Updated: {{ item.port.host.date_asn_last_updated || 'Never' }}</small>
+                                            <small>Updated: {{ item.target.date_asn_last_updated || 'Never' }}</small>
                                         </p>
 
                                         <div class="flex flex-wrap gap-2">
@@ -155,7 +174,7 @@ export default {
                                         </div>
 
                                         <div class="flex space-x-4">
-                                            <router-link :to="{ name: 'AttackSurfaceHostDetail', params: { hostId: item.port.host.pk } }" class="text-blue-500 hover:underline" target="_blank">Host Details </router-link>
+                                            <router-link :to="{ name: 'AttackSurfaceTargetDetail', params: { targetId: item.target.pk } }" class="text-blue-500 hover:underline" target="_blank">Target Details </router-link>
                                             <a target="_blank" :href="item.scheme" class="text-blue-500 hover:underline" v-if="item.scheme.startsWith('https://') || item.scheme.startsWith('http://')">Visit site</a>
                                         </div>
                                     </div>

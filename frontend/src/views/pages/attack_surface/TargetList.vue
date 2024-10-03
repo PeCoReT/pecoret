@@ -189,7 +189,7 @@ export default {
                 </Column>
                 <Column header="IP">
                     <template #body="slotProps">
-                        <span v-if="slotProps.data.host">{{ slotProps.data.host.ip_address}}</span>
+                        <span v-if="slotProps.data.resolved_ip">{{ slotProps.data.resolved_ip}}</span>
                         <span v-else>-</span>
                     </template>
                 </Column>

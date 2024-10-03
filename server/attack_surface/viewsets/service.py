@@ -1,4 +1,5 @@
 import base64
+import time
 
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status
@@ -41,6 +42,13 @@ class ServiceViewSet(CreateOrUpdateMixin, ScanningAuthMixin, PeCoReTModelViewSet
             except Exception as e:
                 print(e)
                 return Response({'search': 'Error processing search'}, status=status.HTTP_400_BAD_REQUEST)
+        if request.GET.get('download'):
+            import json
+            serializer = self.get_serializer(qs, many=True)
+            response = Response(json.dumps(serializer.data), content_type='application/json')
+            filename = f'search-results-{int(time.time())}.json'
+            response['Content-Disposition'] = f'attachment; filename="{filename}"'
+            return response
         page = self.paginate_queryset(qs)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
@@ -49,4 +57,5 @@ class ServiceViewSet(CreateOrUpdateMixin, ScanningAuthMixin, PeCoReTModelViewSet
         return Response(serializer.data)
 
     def get_create_or_update_queryset(self, request):
-        return Service.objects.filter_unique(request.data.get('port'), request.data.get('target'))
+        return Service.objects.filter_unique(request.data.get('port_number'), request.data.get('protocol'),
+                                             request.data.get('target'))

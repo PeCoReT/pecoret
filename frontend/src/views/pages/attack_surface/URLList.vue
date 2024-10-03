@@ -58,7 +58,7 @@ export default {
         getTechnologyDisplay(item) {
             let names = [];
             if (item.technologies && item.technologies.length > 0) {
-                item.technologies.forEach((item) => {
+                item.technologies.slice(0,4).forEach((item) => {
                     names.push(item.name);
                 });
             }
@@ -184,7 +184,6 @@ export default {
                     </template>
                 </Column>
                 <Column field="date_updated" header="Updated"></Column>
-
             </GenericDataTable>
         </template>
     </BaseListLayout>

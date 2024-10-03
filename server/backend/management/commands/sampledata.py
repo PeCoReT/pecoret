@@ -7,7 +7,7 @@ from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
 from attack_surface import models as attack_models
-from attack_surface.models.port import Protocol
+from attack_surface.models.service import Protocol
 from attack_surface.models.target import DataTypes
 from backend import models
 from backend.models.membership import Roles
@@ -140,13 +140,6 @@ class Command(BaseCommand):
             program, _created = attack_models.Program.objects.get_or_create(name=data['name'], defaults={
                 'description': data.get('description')
             })
-            for host_data in data.get('hosts', []):
-                host, _created = attack_models.Host.objects.get_or_create(ip_address=host_data['ip'])
-                for port_data in host_data.get('ports', []):
-                    protocol, number = port_data['port'].split("/")
-                    _, _created = attack_models.Port.objects.get_or_create(
-                        host=host, protocol=Protocol[protocol.upper()], number=number,
-                        service_name=port_data['service'], )
             for target_data in data.get('targets', []):
                 defaults = {
                     'description': target_data.get('description')
@@ -156,22 +149,16 @@ class Command(BaseCommand):
                                                                               data_type=data_type,
                                                                               program=program,
                                                                               defaults=defaults)
-                if target_data.get('ip'):
-                    host, _created = attack_models.Host.objects.get_or_create(ip_address=target_data['ip'])
-                    target.host = host
-                    target.save()
                 for service_data in target_data.get('services', []):
                     protocol, number = service_data['port'].split("/")
-                    port = attack_models.Port.objects.get(protocol=Protocol[protocol.upper()], number=number,
-                                                          host__target=target)
                     service = attack_models.Service.objects.get_or_create(
-                        port=port, target=target, banner=service_data['banner']
+                        target=target, banner=service_data['banner'], port_number=number,
+                        protocol=Protocol[protocol.upper()].value
                     )
         for data in self.data['attack-surface'].get('scan_types', []):
             scan_type, _ = attack_models.ScanType.objects.get_or_create(name=data['name'], defaults={
                 'description': data.get('description'), 'allowed_object_type': data['allowed_object_type']
             })
-
 
             """
             def create_attack_surface_data(self):

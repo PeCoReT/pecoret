@@ -11,13 +11,13 @@ class TargetFilter(ProgramFilterMixin, TagTechnologyFilter):
 
     def filter_is_resolved(self, queryset, _name, value):
         if value is True:
-            qs = queryset.filter(host__isnull=False)
+            qs = queryset.filter(resolved_ip__isnull=False)
         else:
-            qs = queryset.filter(host__isnull=True)
+            qs = queryset.exclude(resolved_ip__isnull=False)
         return qs
 
     class Meta:
         model = Target
         fields = [
-            'tags', 'technologies', 'data', 'data_type', 'scope', 'program', 'host'
+            'tags', 'technologies', 'data', 'data_type', 'scope', 'program', 'resolved_ip'
         ]
