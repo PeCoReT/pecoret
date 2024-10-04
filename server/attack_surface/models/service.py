@@ -4,7 +4,7 @@ from django.db import models
 from djangoql.queryset import DjangoQLQuerySet
 
 from attack_surface.utils.djangoql import PortQLSchema
-from pecoret.core.models import TimestampedModel
+from  .base import BaseAssetModel
 
 
 class Protocol(models.IntegerChoices):
@@ -29,7 +29,7 @@ class ServiceQuerySet(DjangoQLQuerySet):
         return self.filter(port_number=port_number, protocol=Protocol[protocol.upper()].value, target=target)
 
 
-class Service(TimestampedModel):
+class Service(BaseAssetModel):
     objects = ServiceQuerySet.as_manager()
     target = models.ForeignKey('attack_surface.Target', on_delete=models.CASCADE)
     port_number = models.PositiveSmallIntegerField(validators=[MaxValueValidator(65535)])

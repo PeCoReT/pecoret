@@ -6,7 +6,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 
 from attack_surface.utils import is_subdomain
-from pecoret.core.models import TimestampedModel
+from .base import BaseAssetModel
+
 
 DOMAIN_REGEX = r'^(?:[a-zA-Z0-9-_]+\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$'
 SUBDOMAIN_REGEX = r'^([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,}$'
@@ -42,7 +43,7 @@ class TargetQuerySet(models.QuerySet):
         return self.filter(resolved_ip=ip)
 
 
-class Target(TimestampedModel):
+class Target(BaseAssetModel):
     objects = TargetQuerySet.as_manager()
     data = models.CharField(max_length=512, db_index=True)
     scope = models.PositiveSmallIntegerField(choices=ScopeChoices.choices, default=ScopeChoices.UNDEFINED)

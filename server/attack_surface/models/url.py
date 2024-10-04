@@ -4,7 +4,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from pecoret.core.models import TimestampedModel
+from .base import BaseAssetModel
 
 
 class URLQuerySet(models.QuerySet):
@@ -15,7 +15,7 @@ class URLQuerySet(models.QuerySet):
         return self.filter(url=url, service=service)
 
 
-class URL(TimestampedModel):
+class URL(BaseAssetModel):
     objects = URLQuerySet.as_manager()
     service = models.ForeignKey('attack_surface.Service', on_delete=models.CASCADE)
     url = models.URLField()
