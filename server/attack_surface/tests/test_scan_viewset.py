@@ -54,8 +54,8 @@ class ScanCreateViewSet(APITestCase, PeCoReTTestCaseMixin):
 class ScanUpdateDeleteView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.scan_type = self.create_instance(ScanType, allowed_object_type='target')
-        self.scan_type2 = self.create_instance(ScanType, allowed_object_type='service')
+        self.scan_type = self.create_instance(ScanType, allowed_object_type='target', can_run_manually=True)
+        self.scan_type2 = self.create_instance(ScanType, allowed_object_type='service', can_run_manually=True)
         self.host = self.create_instance(Target, data='test.example.com')
         self.host2 = self.create_instance(Target, data='example.com')
         self.scan = self.create_instance(Scan, scan_type=self.scan_type)
@@ -77,3 +77,26 @@ class ScanUpdateDeleteView(APITestCase, PeCoReTTestCaseMixin):
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(self.url, self.client.delete, 400)
         self.assertEqual(Scan.objects.filter(pk=self.scan.pk).count(), 1)
+
+
+class ScannerCanRunManually(APITestCase, PeCoReTTestCaseMixin):
+    def setUp(self):
+        self.init_mixin()
+        self.scan_type = self.create_instance(ScanType, allowed_object_type='target', can_run_manually=True)
+        self.scan_type2 = self.create_instance(ScanType, allowed_object_type='service', can_run_manually=False)
+        self.host = self.create_instance(Target, data='test.example.com')
+        self.scan = self.create_instance(Scan, scan_type=self.scan_type)
+        ct = ContentType.objects.get_for_model(self.host)
+        self.scan_object = self.create_instance(ScanObject, scan=self.scan, content_type=ct, object_id=self.host.pk)
+        self.data = {'name': 'test', 'scan_type': self.scan_type.pk,
+                     'scan_objects': [{'content_type': 'target', 'object_id': self.host.pk}]}
+        self.url = self.get_url('attack_surface:scan-list')
+
+    def test_allowed(self):
+        self.client.force_login(self.pentester1)
+        self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
+
+    def test_user_run_manually(self):
+        self.client.force_login(self.pentester1)
+        self.data['scan_type'] = self.scan_type2.pk
+        self.basic_status_code_check(self.url, self.client.post, 400, data=self.data)
