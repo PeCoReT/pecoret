@@ -45,3 +45,10 @@ export default {
         </template>
     </TabMenu>
 </template>
+
+<style>
+/* just another fucking primevue4 workaround, which gives the active bar a wrong width and overlaps items */
+.p-tabmenu-active-bar {
+    width: auto !important;
+}
+</style>
