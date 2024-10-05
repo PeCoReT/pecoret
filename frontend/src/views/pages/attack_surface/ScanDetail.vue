@@ -30,6 +30,21 @@ export default {
         this.getItem();
     },
     methods: {
+        confirmDialogDelete() {
+            this.$confirm.require({
+                message: 'Do you want to delete this scan?',
+                header: 'Delete Confirmation',
+                icon: 'fa fa-trash',
+                acceptClass: 'p-button-danger',
+                accept: () => {
+                    this.service.deleteScan(this.scanId).then(() => {
+                        this.$router.push({
+                            name: 'AttackSurfaceScanList'
+                        });
+                    });
+                }
+            });
+        },
         getItem() {
             this.loading = true;
             this.service
@@ -47,6 +62,11 @@ export default {
 
 <template>
     <BaseLayout :breadcrumbs="breadcrumbs">
+        <template #pre-content-right>
+            <div class="flex justify-end">
+                <Button icon="fa fa-trash" severity="danger" label="Delete" outlined @click="confirmDialogDelete"></Button>
+            </div>
+        </template>
         <div class="col-span-12" v-if="loading === false">
             <div class="card p-8">
                 <!-- Scan Overview Section -->
