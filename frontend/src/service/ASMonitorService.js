@@ -79,9 +79,47 @@ const DataTypeChoices = [
     }
 ];
 
+const FindingProgressStatus = [
+    {
+        name: 'Draft',
+        value: 'Draft'
+    },
+    {
+        name: 'Review Required',
+        value: 'Review Required'
+    },
+    {
+        name: 'Final',
+        value: 'Final'
+    }
+];
+
+const FindingComponentStatus = [
+    {
+        name: 'Vulnerable',
+        value: 'Vulnerable'
+    },
+    {
+        name: 'Fixed',
+        value: 'Fixed'
+    },
+    {
+        name: 'Wont fix',
+        value: 'Wont fix'
+    }
+];
+
 export default class ASMonitorService {
     getStatusChoices() {
         return StatusChoices;
+    }
+
+    getFindingComponentStatus() {
+        return FindingComponentStatus;
+    }
+
+    getFindingProgressChoices() {
+        return FindingProgressStatus;
     }
 
     getInScopeChoices() {
@@ -386,5 +424,66 @@ export default class ASMonitorService {
     saveSearchQuery(data) {
         let url = `/attack-surface/search-queries/`;
         return api.post(url, data);
+    }
+
+    getFinding(id) {
+        let url = `/attack-surface/findings/${id}/`;
+        return api.get(url);
+    }
+
+    downloadFindingPDF(id) {
+        let url = `/attack-surface/findings/${id}/export_pdf/`;
+        let config = {
+            responseType: 'arraybuffer'
+        };
+        return api.get(url, config);
+    }
+
+    patchFinding(id, data) {
+        let url = `/attack-surface/findings/${id}/`;
+        return api.patch(url, data);
+    }
+
+    deleteFinding(id) {
+        let url = `/attack-surface/findings/${id}/`;
+        return api.delete(url);
+    }
+
+    createFinding(data) {
+        let url = `/attack-surface/findings/`;
+        return api.post(url, data);
+    }
+
+    getFindings(params) {
+        let url = `/attack-surface/findings/`;
+        let config = {};
+        if (params) {
+            config['params'] = params;
+        }
+        return api.get(url, config);
+    }
+
+    getFindingComponents(params) {
+        let url = `/attack-surface/finding-components/`;
+        let config = {};
+        if (params) {
+            config['params'] = params;
+        }
+        return api.get(url, config);
+    }
+
+    createFindingComponent(data) {
+        let url = `/attack-surface/finding-components/`;
+        return api.post(url, data);
+    }
+
+    patchFindingComponent(id, data) {
+        let url = `/attack-surface/finding-components/${id}/`;
+        return api.patch(url, data);
+    }
+
+    deleteFindingComponent(id) {
+        let url = `/attack-surface/finding-components/${id}/`;
+        return api.delete(url);
     }
 }

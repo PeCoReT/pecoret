@@ -1,0 +1,22 @@
+<div id="cover">
+  <div class="cover-container">
+    <div class="title">Vulnerability Report</div>
+    <div class="project">{{ finding.title }}</div>
+    <p class="date">{{ now }}</p>
+  </div>
+
+  <table class="footer">
+    <tr>
+      <td>Program:</td>
+      <td>{{ finding.program.name }}</td>
+    </tr>
+      <tr>
+        <td>Finding ID:</td>
+        <td>{{ finding.finding_id }}</td>
+      </tr>
+    <tr>
+      <td>{{ _('Generator') }}:</td>
+      <td><a href="https://pecoret.github.io" rel="noopener nofollow">PeCoReT</a></td>
+    </tr>
+  </table>
+</div>

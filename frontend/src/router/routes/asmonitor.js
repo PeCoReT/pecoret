@@ -35,7 +35,7 @@ const asmonitorRoutes = [
             {
                 path: '/attack-surface/scan-findings/:findingId',
                 name: 'AttackSurfaceScanFindingDetail',
-                component: () => import('@/views/pages/attack_surface/FindingDetail.vue')
+                component: () => import('@/views/pages/attack_surface/ScanFindingDetail.vue')
             },
             {
                 path: '/attack-surface/targets/:targetId',
@@ -61,6 +61,16 @@ const asmonitorRoutes = [
                 path: '/attack-surface/scanning/scans/:scanId',
                 name: 'AttackSurfaceScanDetail',
                 component: () => import('@/views/pages/attack_surface/ScanDetail.vue')
+            },
+            {
+                path: '/attack-surface/findings',
+                name: 'AttackSurfaceFindingList',
+                component: () => import('@/views/pages/attack_surface/FindingList.vue')
+            },
+            {
+                path: '/attack-surface/findings/:findingId',
+                name: 'AttackSurfaceFindingUpdate',
+                component: () => import('@/views/pages/attack_surface/FindingUpdate.vue')
             }
         ]
     }

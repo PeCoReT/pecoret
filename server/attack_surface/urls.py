@@ -14,6 +14,8 @@ router.register('tags', viewsets.TagViewSet, 'tag')
 router.register('services', viewsets.ServiceViewSet, 'service')
 router.register('asns', viewsets.ASNViewSet, 'asn')
 router.register('search-queries', viewsets.UserSearchQueryViewSet, 'search-query')
+router.register('findings', viewsets.FindingViewSet, 'finding')
+router.register('finding-components', viewsets.FindingComponentViewSet, 'finding-component')
 
 scan_router = DefaultRouter()
 scan_router.register('scan-types', viewsets.ScanTypeViewSet, 'scan-type')

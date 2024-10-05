@@ -17,6 +17,12 @@ export default {
                     })
                 },
                 {
+                    label: 'Findings',
+                    route: this.$router.resolve({
+                        name: 'AttackSurfaceFindingList'
+                    })
+                },
+                {
                     label: 'Services',
                     route: this.$router.resolve({
                         name: 'AttackSurfaceServiceList'

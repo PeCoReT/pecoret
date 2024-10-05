@@ -47,6 +47,7 @@ class FindingBarChart(Chart):
 
 
 class ReportTemplate(mixins.SingleFindingMixin, mixins.AdvisoryMixin, mixins.PentestReportMixin,
+                     mixins.AttackSurfaceFindingMixin,
                      GenericReportTemplate):
     css_files = []
     _error_classes = {
@@ -64,6 +65,9 @@ class ReportTemplate(mixins.SingleFindingMixin, mixins.AdvisoryMixin, mixins.Pen
     ]
     advisory_sections = [
         'advisory/cover.html', 'advisory/single.html'
+    ]
+    attack_surface_finding_sections = [
+        'attack_surface/cover.html', 'attack_surface/single.html'
     ]
     project_report_asset_classes = [
         models.Host, models.WebApplication,
