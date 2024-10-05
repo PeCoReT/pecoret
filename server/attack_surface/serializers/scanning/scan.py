@@ -24,6 +24,16 @@ class MinimalScanSerializer(serializers.ModelSerializer):
             raise ValidationError({'scan_objects': 'at least one scan object is required'})
         return value
 
+    def validate_scan_type(self, value):
+        if self.context['request'].user.is_authenticated:
+            # it's a user
+            if value.can_run_manually:
+                return value
+            raise ValidationError({'scan_type': 'This scan type cannot be run manually'})
+        # from scanner
+        return value
+
+
     def create(self, validated_data):
         obj_data = validated_data.pop('scanobject_set')
         # Create the Scan object first
