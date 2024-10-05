@@ -359,6 +359,11 @@ export default class ASMonitorService {
         return api.get(url);
     }
 
+    deleteScan(id) {
+        let url = `/attack-surface/scanning/scans/${id}/`;
+        return api.delete(url);
+    }
+
     createScan(data) {
         let url = `/attack-surface/scanning/scans/`;
         return api.post(url, data);
