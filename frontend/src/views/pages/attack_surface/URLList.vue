@@ -58,7 +58,7 @@ export default {
         getTechnologyDisplay(item) {
             let names = [];
             if (item.technologies && item.technologies.length > 0) {
-                item.technologies.slice(0,4).forEach((item) => {
+                item.technologies.slice(0, 4).forEach((item) => {
                     names.push(item.name);
                 });
             }
@@ -89,10 +89,12 @@ export default {
             });
         },
         onRowClick(row) {
-            this.$router.push({
-                name: 'AttackSurfaceURLDetail',
-                params: { urlId: row.data.pk }
-            });
+            /* workaround primvevue4 bug: https://github.com/primefaces/primevue/issues/6521 */
+            if (row.originalEvent.target.className === 'p-checkbox-input') {
+                return;
+            }
+            let params = { urlId: row.data.pk };
+            this.$router.push({ name: 'AttackSurfaceURLDetail', params });
         },
         bulkDeleteConfirm() {
             this.$confirm.require({
