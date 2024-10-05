@@ -5,6 +5,7 @@ from attack_surface.models import URL, ScanType
 from attack_surface.queue import enqueue_scan
 from attack_surface.serializers.scanning.scan import ScanSerializer
 from attack_surface.utils.technology import get_nested_technologies
+from pecoret.reporting.template_loader import ReportTemplateLoader
 
 
 def sync_implicit_techs_url(url_pk):
@@ -46,3 +47,10 @@ def enqueue_for_scan_seed(app_label, pk):
         if job:
             previous_job = job
         job = enqueue_scan(serializer.data, depends_on=previous_job)
+
+
+def export_finding_pdf(finding, template):
+    loader = ReportTemplateLoader(template)
+    report_template = loader.load()
+    result, _, _ = report_template.export_attack_surface_finding_pdf(finding)
+    return result

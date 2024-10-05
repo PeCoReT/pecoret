@@ -10,3 +10,7 @@ from .scan_type import ScanType
 from .scan import Scan
 from .scan_object import ScanObject
 from .search_query import UserSearchQuery
+
+# findings
+from .finding_component import FindingComponent
+from .finding import Finding

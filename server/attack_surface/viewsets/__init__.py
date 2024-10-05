@@ -6,6 +6,9 @@ from .tag import TagViewSet
 from .service import ServiceViewSet
 from .asn import ASNViewSet
 from .search_query import UserSearchQueryViewSet
+from .finding import FindingViewSet
+from .finding_component import FindingComponentViewSet
+
 
 # scanning
 from .scanning.scan_type import ScanTypeViewSet
