@@ -3,7 +3,7 @@ from django.core.validators import MaxValueValidator, RegexValidator
 from django.db import models
 from djangoql.queryset import DjangoQLQuerySet
 
-from attack_surface.utils.djangoql import PortQLSchema
+from attack_surface.utils.djangoql import PecoQLSchema
 from  .base import BaseAssetModel
 
 
@@ -18,7 +18,7 @@ class PortStatus(models.IntegerChoices):
 
 
 class ServiceQuerySet(DjangoQLQuerySet):
-    djangoql_schema = PortQLSchema
+    djangoql_schema = PecoQLSchema
 
     def is_web(self, value):
         if value is True:

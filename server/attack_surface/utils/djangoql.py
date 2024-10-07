@@ -1,7 +1,7 @@
 from pecoret.core.djangoql.schema import DjangoQLSchema
 
 
-class PortQLSchema(DjangoQLSchema):
+class PecoQLSchema(DjangoQLSchema):
     include = [
         'attack_surface.port',
         'attack_surface.program',

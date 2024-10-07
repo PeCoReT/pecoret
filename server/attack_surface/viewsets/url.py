@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from attack_surface.filters.url import URLFilter
-from attack_surface.mixins import ScanningAuthMixin
+from attack_surface.mixins import ScanningAuthMixin, SearchQLMixin
 from attack_surface.permissions import ScanningPermission
 from attack_surface.serializers.url import URLSerializer, URL
 from pecoret.core import permissions
@@ -16,7 +16,7 @@ from pecoret.core.viewsets import PeCoReTModelViewSet
 @extend_schema_view(
     create_or_update=extend_schema(operation_id='Get or create a url', tags=['Attack Surface'])
 )
-class URLViewSet(ScanningAuthMixin, PeCoReTModelViewSet):
+class URLViewSet(ScanningAuthMixin, SearchQLMixin, PeCoReTModelViewSet):
     queryset = URL.objects.all()
     serializer_class = URLSerializer
     permission_classes = [

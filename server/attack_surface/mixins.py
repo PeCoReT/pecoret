@@ -1,3 +1,7 @@
+import base64
+import json
+import time
+
 from django.conf import settings
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -41,3 +45,37 @@ class ScanFeatureDispatchMixin:
 
 class ScanningAuthMixin:
     authentication_classes = [ScannerAuth, SessionAuthentication, APITokenAuthentication]
+
+
+class SearchQLMixin:
+    """a mixin that offers django QL search with optional download of results"""
+    search_ql_download = True
+
+    def is_search_ql_download(self, request):
+        return self.search_ql_download and request.GET.get('download')
+
+    def get_download_response(self, qs):
+        serializer = self.get_serializer(qs, many=True)
+        response = Response(json.dumps(serializer.data), content_type='application/json')
+        filename = f'search-results-{int(time.time())}.json'
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
+
+    @action(detail=False, methods=['get'])
+    def search(self, request, *args, **kwargs):
+        qs = self.get_queryset()
+        if request.GET.get('search'):
+            try:
+                data = base64.b64decode(request.GET.get('search').encode())
+                qs = qs.djangoql(data.decode())
+            except Exception as e:
+                print(e)
+                return Response({'search': 'Error processing search'}, status=status.HTTP_400_BAD_REQUEST)
+        if self.is_search_ql_download(request):
+            return self.get_download_response(qs)
+        page = self.paginate_queryset(qs)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(qs, many=True)
+        return Response(serializer.data)
