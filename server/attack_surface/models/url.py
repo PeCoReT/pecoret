@@ -1,5 +1,6 @@
 from urllib.parse import urlparse
-
+from djangoql.queryset import DjangoQLQuerySet
+from attack_surface.utils.djangoql import PecoQLSchema
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -7,7 +8,9 @@ from django.db import models
 from .base import BaseAssetModel
 
 
-class URLQuerySet(models.QuerySet):
+class URLQuerySet(DjangoQLQuerySet):
+    djangoql_schema = PecoQLSchema
+
     def for_program(self, program):
         return self.filter(service__target__program=program)
 
