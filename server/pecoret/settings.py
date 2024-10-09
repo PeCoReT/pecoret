@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "extra_settings",
     "djangoql",
     "backend.apps.BackendConfig",
+    'core.storage.apps.StorageConfig',
     "advisories.apps.AdvisoriesConfig",
     "checklists.apps.ChecklistsConfig",
     'attack_surface.apps.AttackSurfaceConfig'

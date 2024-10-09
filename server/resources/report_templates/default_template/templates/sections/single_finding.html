@@ -63,7 +63,7 @@
     <div class="proofs" id="finding-{{ finding.pk }}-proofs">
         {{ helpers.report_errors_for_section('#finding-' + finding.pk|string + '-proofs', report_errors) }}
 
-        {{ report_helpers.bleach_md(finding.report_proof_text, allow_images=True)|safe }}
+        {{ report_helpers.bleach_md(finding.report_proof_text)|safe }}
     </div>
 
     {% if finding.recommendation %}

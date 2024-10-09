@@ -70,7 +70,7 @@
         id="proofs-{{ finding.pk }}"
         class="proofs">
     <h4>Details</h4>
-    {{ report_helpers.bleach_md(finding.exploitation_details, allow_images=True)|safe }}
+    {{ report_helpers.bleach_md(finding.exploitation_details)|safe }}
 
 </section>
 

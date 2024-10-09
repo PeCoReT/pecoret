@@ -69,6 +69,13 @@ export default {
                 }
             });
         },
+        onAttachmentUpload(file, onSuccess) {
+          let data = new FormData();
+          data.append('image', file);
+          this.service.uploadFindingAttachment(data).then((resp) => {
+              onSuccess(resp.data.storage_link)
+          })
+        },
         save() {
             let data = {
                 title: this.model.title,
@@ -122,7 +129,7 @@ export default {
                     <MarkdownEditor v-model="model.description"></MarkdownEditor>
                 </Field>
                 <Field label="Exploitation Details">
-                    <MarkdownEditor v-model="model.exploitation_details"></MarkdownEditor>
+                    <MarkdownEditor v-model="model.exploitation_details" :show-upload-button="true" @upload="onAttachmentUpload"></MarkdownEditor>
                 </Field>
                 <Field label="Recommendation">
                     <MarkdownEditor v-model="model.recommendation"></MarkdownEditor>

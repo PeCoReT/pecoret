@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 from pecoret.core.utils import image64
-from pecoret.core.utils.markdown import bleach_md
+from pecoret.core.utils.markdown import MarkdownHTMLRenderer
 from pecoret.reporting import generators
 from pecoret.reporting.template.mixins import ReportErrorMixin
 
@@ -15,11 +15,12 @@ class BaseReportTemplate:
         self.main_directory = main_directory
         self.templates_directory = Path(self.main_directory, "templates")
         self.kwargs = kwargs
+        self.markdown_renderer = MarkdownHTMLRenderer(limited=False)
 
     def get_context(self, **kwargs):
         kwargs.setdefault('template', self)
         kwargs.setdefault('report_helpers', {
-            'bleach_md': bleach_md,
+            'bleach_md': self.markdown_renderer.render,
             'image64': image64
         })
         kwargs.setdefault('now', datetime.datetime.now().strftime('%B %d, %Y'))

@@ -6,6 +6,7 @@ import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
 import ScanFindingBulkEditDialog from '@/components/dialogs/attack_surface/ScanFindingBulkEditDialog.vue';
 import TagBadgeButton from '@/components/badges/TagBadgeButton.vue';
+import { useListViewComposable } from '@/composables/listViewComposable';
 
 export default {
     name: 'ScanFindingList',
@@ -32,6 +33,7 @@ export default {
             loading: false,
             totalRecords: 0,
             deleteButtonLoading: false,
+            listComposable: useListViewComposable(),
             filters: {
                 status: { value: 'Open' },
                 severity: { value: null }
@@ -39,16 +41,11 @@ export default {
         };
     },
     methods: {
-        getItems() {
+        getItems(params) {
             this.loading = true;
-            let params = {
-                status: this.filters.status.value,
-                page: this.pagination.page,
-                limit: this.pagination.limit,
-                severity: this.filters.severity.value
-            };
+            let data = this.listComposable.buildParams(this.pagination, this.filters, params);
             this.service
-                .getScanFindings(this.$api, params)
+                .getScanFindings(this.$api, data)
                 .then((response) => {
                     this.items = response.data.results;
                     this.totalRecords = response.data.count;
@@ -68,21 +65,7 @@ export default {
             });
         },
         onGlobalSearch(query) {
-            this.loading = true;
-            let params = {
-                search: query,
-                status: this.filters.status.value,
-                severity: this.filters.severity.value
-            };
-            this.service
-                .getScanFindings(this.$api, params)
-                .then((response) => {
-                    this.totalRecords = response.data.count;
-                    this.items = response.data.results;
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
+            this.getItems({ search: query });
         },
         bulkDeleteConfirm() {
             this.$confirm.require({
@@ -117,7 +100,7 @@ export default {
 
 <template>
     <BaseListLayout :breadcrumbs="breadcrumbs">
-        <template #head-left> There are {{ totalRecords }} findings </template>
+        <template #head-left> There are {{ totalRecords }} findings</template>
         <template #create-button>
             <ScanFindingCreateDialog @object-created="getItems"></ScanFindingCreateDialog>
         </template>
@@ -140,6 +123,12 @@ export default {
                 :show-refresh-button="true"
                 @refresh="getItems"
                 @row-click="onRowClick"
+                @sort="
+                    (event) => {
+                        listComposable.sort(event, this.getItems);
+                    }
+                "
+                :removable-sort="true"
             >
                 <template #bulk-edit>
                     <Button v-if="selectedItems.length > 0" icon="fa fa-trash" outlined severity="danger" @click="bulkDeleteConfirm" class="ml-2"></Button>
@@ -170,6 +159,8 @@ export default {
                         <span v-else>-</span>
                     </template>
                 </Column>
+                <Column field="date_created" header="Created" sortable></Column>
+                <Column field="date_updated" header="Updated" sortable></Column>
             </GenericDataTable>
         </template>
     </BaseListLayout>

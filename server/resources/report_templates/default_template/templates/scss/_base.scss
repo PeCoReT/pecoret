@@ -191,3 +191,27 @@ em {
     }
   }
 }
+
+/* captioned figures*/
+
+figure {
+  page-break-inside: avoid;
+  text-align: center;
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+
+  img {
+    max-width: 100%;
+    height: auto;
+    max-height: calc(var(--page-content-height) / 2);
+    margin-bottom: -6px;
+  }
+
+  figcaption {
+    text-align: center;
+    counter-increment: figures;
+    margin-top: 0.5em;
+    font-style: italic;
+  }
+}
