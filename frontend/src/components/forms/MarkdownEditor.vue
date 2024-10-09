@@ -17,16 +17,16 @@ export default {
         maxHeight: {
             default: '400px'
         },
-        highlight: {
+        sanitize: {
             type: Boolean,
             default() {
                 return true;
             }
         },
-        sanitize: {
+        showUploadButton: {
             type: Boolean,
             default() {
-                return true;
+                return false;
             }
         },
         configs: {
@@ -38,15 +38,20 @@ export default {
         showSaveButton: {
             default: false,
             type: Boolean
+        },
+        customPreviewRender: {
+            // Optional custom render function for preview
+            type: Function,
+            default: null
         }
     },
-    emits: ['blur', 'update:modelValue', 'input', 'initialized', 'save'],
+    emits: ['blur', 'update:modelValue', 'input', 'initialized', 'save', 'upload'],
     data() {
         return {
             isValueUpdateFromInner: false,
             loading: false,
             value: this.modelValue,
-            toolbar: ['bold', 'italic', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|', 'link', '|', 'preview']
+            toolbar: ['bold', 'italic', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|', 'link', 'upload-image', '|', 'preview']
         };
     },
     mounted() {
@@ -66,22 +71,33 @@ export default {
                     }
                 });
             }
+            if (!this.showUploadButton) {
+                this.toolbar = this.toolbar.filter((item) => item !== 'upload-image');
+            }
+
             const configs = Object.assign(
                 {
                     element: this.$el.firstElementChild,
                     autoDownloadFontAwesome: false,
                     initialValue: this.value,
                     previewRender: (plaintext, preview) => {
-                        this.$api.post('render-markdown/', { markdown: plaintext }).then((resp) => {
-                            preview.innerHTML = resp.data.html;
-                        });
-                    },
-                    renderingConfig: {
-                        codeSyntaxHighlighting: true
+                        if (this.customPreviewRender) {
+                            preview.innerHTML = this.customPreviewRender(plaintext, preview);
+                        } else {
+                            this.$api.post('render-markdown/', { markdown: plaintext }).then((resp) => {
+                                preview.innerHTML = resp.data.html;
+                            });
+                        }
                     },
                     toolbar: this.toolbar,
                     promptURLs: false,
-                    uploadImage: false,
+                    uploadImage: this.showUploadButton,
+                    imageUploadFunction: (file, onSuccess, onError) => {
+                        const reader = new FileReader();
+                        reader.onload = () => {};
+                        reader.onerror = () => onError('Error loading' + file.name);
+                        this.$emit('upload', file, onSuccess);
+                    },
                     maxHeight: this.maxHeight,
                     autofocus: false
                 },

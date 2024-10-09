@@ -19,7 +19,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
         fields = [
-            'pk', 'date_created', 'date_updated', 'target',
+            'pk', 'date_created', 'date_updated', 'target', 'uses_encryption',
             'banner', 'technologies', 'tags', 'cert_san', 'cert_expiry',
             'cert_subject', 'cert_valid_from', 'cert_expiry', 'cert_fingerprint',
             'cert_public_key_info', 'scheme', 'display_name', 'service_name', 'port_status', 'port_number', 'protocol'

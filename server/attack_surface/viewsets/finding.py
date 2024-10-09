@@ -13,8 +13,8 @@ from pecoret.core.viewsets import PeCoReTModelViewSet
 @extend_viewset_schema(tags=['Attack Surface'], verbose_name='finding')
 class FindingViewSet(PeCoReTModelViewSet):
     queryset = Finding.objects.all()
-    serializer_class = FindingSerializer
     api_scope = 'scope_attack_surface'
+    serializer_class = FindingSerializer
     ordering_fields = ['date_created', 'date_updated', 'severity']
     search_fields = ['title']
     permission_classes = [

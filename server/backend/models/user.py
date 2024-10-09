@@ -60,3 +60,8 @@ class User(AbstractUser):
             if self.is_active is True:
                 raise ValidationError({'is_active': 'Ghost user cannot be activated'})
         return super().clean()
+
+    def is_markdown_limited(self):
+        if self.groups.filter(name__in=['Management', 'Pentester']).exists():
+            return False
+        return True

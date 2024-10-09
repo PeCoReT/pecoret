@@ -78,7 +78,7 @@
         <p>
             {{ helpers.report_errors_for_section('#executive-summary-recommendation', report_errors) }}
 
-            {{ report_helpers.bleach_md(report_document.report.recommendation, allow_images=True)|safe }}
+            {{ report_helpers.bleach_md(report_document.report.recommendation)|safe }}
         </p>
     </section>
 </article>

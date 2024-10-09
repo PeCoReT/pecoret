@@ -160,7 +160,7 @@ class RenderMarkdownToHTML(APIView):
         request=RenderMarkdownSerializer, responses=RenderMarkdownSerializer)
     @method_decorator(csrf_protect)
     def post(self, request, **kwargs):
-        serializer = RenderMarkdownSerializer(data=request.data)
+        serializer = RenderMarkdownSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

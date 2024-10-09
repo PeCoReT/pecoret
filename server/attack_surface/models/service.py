@@ -43,13 +43,12 @@ class Service(BaseAssetModel):
     tags = models.ManyToManyField('attack_surface.Tag', blank=True)
 
     # SSL/TLS certificate details (for TLS/SSL services)
-    cert_issuer = models.CharField(max_length=255, blank=True, null=True)  # Certificate issuer
-    cert_subject = models.CharField(max_length=255, blank=True, null=True)  # Certificate subject (domain)
-    cert_valid_from = models.DateTimeField(null=True, blank=True)  # Certificate valid from
-    cert_expiry = models.DateTimeField(null=True, blank=True)  # Certificate expiration date
-    cert_fingerprint = models.CharField(max_length=64, blank=True, null=True)  # SHA-256 certificate fingerprint
-    cert_public_key_info = models.CharField(max_length=255, blank=True,
-                                            null=True)  # Public key details (e.g., RSA 2048 Public Key)
+    cert_issuer = models.CharField(max_length=255, blank=True, null=True)
+    cert_subject = models.CharField(max_length=255, blank=True, null=True)
+    cert_valid_from = models.DateTimeField(null=True, blank=True)
+    cert_expiry = models.DateTimeField(null=True, blank=True)
+    cert_fingerprint = models.CharField(max_length=64, blank=True, null=True)
+    cert_public_key_info = models.CharField(max_length=255, blank=True, null=True)
     cert_san = models.TextField(blank=True, null=True)
     scan_objects = GenericRelation('attack_surface.ScanObject', related_query_name='services')
 

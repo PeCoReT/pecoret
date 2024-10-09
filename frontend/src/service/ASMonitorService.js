@@ -263,11 +263,6 @@ export default class ASMonitorService {
         return api.get(url);
     }
 
-    patchURL(api, pk, data) {
-        let url = `/attack-surface/urls/${pk}/`;
-        return api.patch(url, data);
-    }
-
     deleteURL(api, id) {
         let url = `/attack-surface/urls/${id}/`;
         return api.delete(url);
@@ -283,16 +278,6 @@ export default class ASMonitorService {
         return api.post(url, data);
     }
 
-    patchPort(id, data) {
-        let url = `/attack-surface/ports/${id}/`;
-        return api.patch(url, data);
-    }
-
-    deletePort(id) {
-        let url = `/attack-surface/ports/${id}/`;
-        return api.delete(url);
-    }
-
     searchServices(params) {
         let url = `/attack-surface/services/search/`;
         let config = {};
@@ -300,11 +285,6 @@ export default class ASMonitorService {
             config['params'] = params;
         }
         return api.get(url, config);
-    }
-
-    patchService(id, data) {
-        let url = `/attack-surface/services/${id}/`;
-        return api.patch(url, data);
     }
 
     createService(data) {
@@ -490,5 +470,10 @@ export default class ASMonitorService {
     deleteFindingComponent(id) {
         let url = `/attack-surface/finding-components/${id}/`;
         return api.delete(url);
+    }
+
+    uploadFindingAttachment(data) {
+        let url = `/attack-surface/finding-images/`;
+        return api.post(url, data);
     }
 }
