@@ -1,12 +1,10 @@
-import {createApp} from 'vue';
+import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
-import {registerPlugins} from '@/plugins';
+import { registerPlugins } from '@/plugins';
 
 import PeCoReTAuraPreset from '@/presets/aura';
-import PrimeVue from 'primevue/config';
-
-/* primevue services */
+import PrimeVue from 'primevue/config'; /* primevue services */
 import ConfirmationService from 'primevue/confirmationservice';
 import ToastService from 'primevue/toastservice';
 import DialogService from 'primevue/dialogservice';
@@ -21,10 +19,11 @@ import Form from '@/components/common/forms/Form.vue';
 import Field from '@/components/common/forms/Field.vue';
 import InlineField from '@/components/common/forms/InlineField.vue';
 import InlineFieldGroup from '@/components/common/forms/InlineFieldGroup.vue';
-import GenericDataTable from "@/components/common/GenericDataTable.vue";
-import ModalDialog from "@/components/common/ModalDialog.vue";
-import BaseLayout from "@/layout/base/BaseLayout.vue";
-import BaseListLayout from "@/layout/base/BaseListLayout.vue";
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
+import ModalDialog from '@/components/common/ModalDialog.vue';
+import BaseLayout from '@/layout/base/BaseLayout.vue';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import Select from 'primevue/select';
 
 const app = createApp(App);
 registerPlugins(app);
@@ -41,6 +40,9 @@ app.use(PrimeVue, {
 app.use(ToastService);
 app.use(ConfirmationService);
 app.use(DialogService);
+
+/* fix primvevue 4 not have working imports */
+app.component('Select', Select);
 
 // COMPONENTS
 app.component('pBreadcrumb', pBreadcrumb);

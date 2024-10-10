@@ -110,24 +110,11 @@ export default class AdvisoryService {
         return api.patch(url, data);
     }
 
-    getImageAttachments(advisoryId, params) {
-        let url = `/advisories/${advisoryId}/attachments/`;
-        let config = {};
-        if (params) {
-            config['params'] = params;
-        }
-        return api.get(url, config);
-    }
-
     attachmentCreate(advisoryId, data) {
         let url = `/advisories/${advisoryId}/attachments/`;
         return api.post(url, data);
     }
 
-    deleteAttachment(advisoryId, id) {
-        let url = `/advisories/${advisoryId}/attachments/${id}/`;
-        return api.delete(url);
-    }
 
     getLabels(params) {
         let url = '/advisory-labels/';

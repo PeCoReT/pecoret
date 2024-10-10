@@ -1,5 +1,8 @@
 import re
 import warnings
+
+from django.contrib.contenttypes.fields import GenericRelation
+from django.contrib.contenttypes.models import ContentType
 from django.core.files.images import ImageFile
 from django.db import models
 from django.dispatch import receiver
@@ -7,7 +10,6 @@ from django.utils import timezone
 from django.conf import settings
 from extra_settings.models import Setting
 
-from advisories.models.attachment import ImageAttachment
 from pecoret.core.models import TimestampedModel
 from pecoret.reporting.utils import get_report_template_choices
 from advisories.models.advisory_timeline import AdvisoryTimeline
@@ -102,13 +104,6 @@ class AdvisoryManager(models.Manager):
             advisory.recommendation = finding.recommendation
         else:
             advisory.recommendation = finding.vulnerability.recommendation
-        for proof in finding.findingimageattachment_set.all():
-            image_file = ImageFile(proof.image, name=proof.name)
-
-            ImageAttachment.objects.create(
-                advisory=advisory,
-                image=image_file
-            )
         return advisory
 
 
@@ -145,6 +140,7 @@ class Advisory(TimestampedModel):
     )
     # overwrites the default "user" display name in the research section of the PDF
     researchers = models.CharField(max_length=512, null=True, blank=True)
+    image_files = GenericRelation(to='storage.ImageFile')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -183,34 +179,6 @@ class Advisory(TimestampedModel):
     @vulnerability_key.setter
     def vulnerability_key(self, value):
         self.vulnerability = VulnerabilityTemplate.objects.get(vulnerability_id=value)
-
-    @property
-    def report_proof_text(self):
-        """
-        to allow captions in the reports, we will inject some HTML,
-        also we replace image with their base64 representation.
-        we inject all these stuff in the markdown - before being rendered.
-        This allows our injected data to be bleached before further used
-        :return:
-        """
-        image_re = (r'(?P<alt>!\[(?P<caption>[^\]]*)\])\((?P<filename>.*/advisories/\d+/attachments'
-                    r'/(?P<attachment>\d+)/preview/+)(?=\"|\))\)')
-
-        def attachment_replace(match):
-            attachment_pk = match.group("attachment")
-            qs = self.imageattachment_set.filter(pk=attachment_pk)
-            if not qs.exists():
-                # not an attachment for our finding! nice try!
-                return match.group()
-            attachment = qs.get()
-            caption = match.group('caption')
-            template = (f"<div class='image-proof'><div class='image-container'>"
-                        f"<img src='{attachment.image_base64}'></div><div class='caption'>"
-                        f"<span class='figure-prefix'>Figure</span><span>{caption}</span></div></div>")
-            return template
-
-        proof_text = re.sub(image_re, attachment_replace, self.proof_text)
-        return proof_text
 
     class Meta:
         ordering = ["-advisory_id", "date_updated"]

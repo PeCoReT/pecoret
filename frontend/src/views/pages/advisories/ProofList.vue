@@ -1,7 +1,6 @@
 <script>
 import AdvisoryService from '@/service/AdvisoryService';
 import AdvisoryTabMenu from '@/components/navigation/AdvisoryTabMenu.vue';
-import AdvisoryAttachmentFileDrop from '@/components/forms/fields/advisories/AdvisoryAttachmentFileDrop.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
@@ -48,12 +47,19 @@ export default {
             this.service.patchAdvisory(this.advisoryId, data).then(() => {
                 this.$toast.add({ severity: 'info', summary: 'Updated', detail: 'Proof was updated!', life: 3000 });
             });
+        },
+        onImageUpload(file, onSuccess) {
+            let data = new FormData();
+            data.append('image', file);
+            this.service.attachmentCreate(this.advisoryId, data).then((resp) => {
+                onSuccess(resp.data.storage_link);
+            });
         }
     },
     mounted() {
         this.getAdvisory();
     },
-    components: { MarkdownEditor, AdvisoryAttachmentFileDrop, AdvisoryTabMenu }
+    components: { MarkdownEditor, AdvisoryTabMenu }
 };
 </script>
 
@@ -78,11 +84,9 @@ export default {
             <div class="card border-noround-top">
                 <Form>
                     <Field label="Text">
-                        <MarkdownEditor v-model="model.proof_text"></MarkdownEditor>
+                        <MarkdownEditor v-model="model.proof_text" :show-upload-button="true" @upload="onImageUpload"></MarkdownEditor>
                     </Field>
-                    <Field label="Attachments">
-                        <AdvisoryAttachmentFileDrop></AdvisoryAttachmentFileDrop>
-                    </Field>
+
                     <Button label="Save" @click="patchAdvisory" class="w-full"></Button>
                 </Form>
             </div>
