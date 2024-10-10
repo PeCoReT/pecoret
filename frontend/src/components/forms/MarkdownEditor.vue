@@ -63,7 +63,7 @@ export default {
                 this.value = '';
             }
             if (this.showSaveButton) {
-                toolbar.push({
+                this.toolbar.push({
                     name: 'Save',
                     className: 'fa fa-save',
                     action: () => {

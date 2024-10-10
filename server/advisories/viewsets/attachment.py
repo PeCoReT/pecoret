@@ -1,19 +1,17 @@
-from django.http import FileResponse
-from rest_framework.decorators import action
+from django.contrib.contenttypes.models import ContentType
 from drf_spectacular.utils import extend_schema, extend_schema_view
+
+from core.storage.models import ImageFile
+from core.storage.viewset import ImageFileViewSet
 from pecoret.core import permissions
-from pecoret.core.viewsets import PeCoReTModelViewSet
 from pecoret.core.utils.schema import extend_viewset_schema
-from advisories.models.attachment import ImageAttachment
-from advisories.serializers.attachment import ImageAttachmentSerializer
 
 
 @extend_schema_view(preview=extend_schema(tags=['Advisories'], operation_id='Image Attachments'))
 @extend_viewset_schema(tags=['Advisories'], verbose_name='image attachment')
-class ImageAttachmentViewSet(PeCoReTModelViewSet):
-    queryset = ImageAttachment.objects.none()
+class ImageAttachmentViewSet(ImageFileViewSet):
     search_fields = ["caption"]
-    serializer_class = ImageAttachmentSerializer
+    image_file_upload_directory = 'advisories'
     permission_classes = [
         permissions.GroupPermission(
             read_only_groups=[],
@@ -22,14 +20,8 @@ class ImageAttachmentViewSet(PeCoReTModelViewSet):
     ]
 
     def get_queryset(self):
-        return ImageAttachment.objects.for_advisory(self.kwargs.get('advisory'))
+        return ImageFile.objects.for_linked_object('advisories', 'advisory', self.kwargs.get('advisory'))
 
     def perform_create(self, serializer):
-        serializer.save(advisory_id=self.kwargs.get('advisory'))
-
-    @action(methods=['get'], detail=True)
-    def preview(self, *args, **kwargs):
-        instance = self.get_object()
-        file_handle = instance.image.open()
-        response = FileResponse(file_handle)
-        return response
+        ct = ContentType.objects.get(app_label='advisories', model='advisory')
+        serializer.save(content_type=ct, object_id=self.kwargs.get('advisory'))
