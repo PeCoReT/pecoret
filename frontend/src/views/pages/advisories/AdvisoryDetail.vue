@@ -72,6 +72,25 @@ export default {
                 this.dataLoaded = true;
             });
         },
+        patch() {
+            let data = {
+                recommendation: this.advisory.recommendation,
+                description: this.advisory.description,
+                proof_text: this.advisory.proof_text
+            };
+            this.service.patchAdvisory(this.advisoryId, data).then((response) => {
+                this.advisory = response.data;
+                if (this.showPreview === true) {
+                    this.getPreviewData();
+                }
+                this.$toast.add({
+                    severity: 'success',
+                    summary: 'Advisory updated!',
+                    life: 3000,
+                    detail: 'Advisory was updated!'
+                });
+            });
+        },
         patchAdvisory(data) {
             this.service.patchAdvisory(this.advisoryId, data).then((response) => {
                 this.advisory = response.data;
@@ -89,18 +108,6 @@ export default {
         patchAdvisoryDisclosureDate() {
             let data = {
                 date_planned_disclosure: this.advisory.date_planned_disclosure.toISOString().split('T')[0]
-            };
-            this.patchAdvisory(data);
-        },
-        patchAdvisoryDescription() {
-            let data = {
-                description: this.advisory.description
-            };
-            this.patchAdvisory(data);
-        },
-        patchRecommendation() {
-            let data = {
-                recommendation: this.advisory.recommendation
             };
             this.patchAdvisory(data);
         },
@@ -129,6 +136,13 @@ export default {
                 .finally(() => {
                     this.downloadPending = false;
                 });
+        },
+        onImageUpload(file, onSuccess) {
+            let data = new FormData();
+            data.append('image', file);
+            this.service.attachmentCreate(this.advisoryId, data).then((resp) => {
+                onSuccess(resp.data.storage_link);
+            });
         },
         confirmDialogDelete() {
             this.$confirm.require({
@@ -243,11 +257,15 @@ export default {
                     <div class="col-span-12">
                         <Form>
                             <Field label="Description">
-                                <MarkdownEditor v-model="advisory.description" @blur="patchAdvisoryDescription"></MarkdownEditor>
+                                <MarkdownEditor v-model="advisory.description"></MarkdownEditor>
+                            </Field>
+                            <Field label="Proof">
+                                <MarkdownEditor v-model="advisory.proof_text" @upload="onImageUpload" :show-upload-button="true"></MarkdownEditor>
                             </Field>
                             <Field label="Recommendation">
-                                <MarkdownEditor v-model="advisory.recommendation" @blur="patchRecommendation"></MarkdownEditor>
+                                <MarkdownEditor v-model="advisory.recommendation"></MarkdownEditor>
                             </Field>
+                            <Button label="Save" class="w-full" @click="patch"></Button>
                         </Form>
                     </div>
                 </div>

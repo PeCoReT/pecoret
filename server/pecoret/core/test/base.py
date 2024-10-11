@@ -1,6 +1,7 @@
 from ddf import G
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse_lazy
 from extra_settings.models import Setting
 
@@ -14,6 +15,7 @@ from backend.models.membership import Roles
 from checklists.models import (
     AssetChecklist
 )
+from core.storage.models import ImageFile
 
 
 class PeCoReTTestCaseMixin:
@@ -136,3 +138,9 @@ class PeCoReTTestCaseMixin:
             print(response.json())
         self.assertEqual(response.status_code, status_code)
         return response
+
+    def create_image_file(self, upload_directory, **kwargs):
+        image_file = ImageFile(image=SimpleUploadedFile('test.jpg', b'test'), **kwargs)
+        image_file.upload_directory = upload_directory
+        image_file.save()
+        return image_file

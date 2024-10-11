@@ -72,7 +72,7 @@
         id="proofs-{{ advisory.pk }}"
         class="proofs">
     <h4>Details</h4>
-    {{ report_helpers.bleach_md(advisory.report_proof_text)|safe }}
+    {{ report_helpers.bleach_md(advisory.proof_text)|safe }}
 
 </section>
 
