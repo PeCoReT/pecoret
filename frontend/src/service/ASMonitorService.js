@@ -476,4 +476,9 @@ export default class ASMonitorService {
         let url = `/attack-surface/finding-images/`;
         return api.post(url, data);
     }
+
+    deleteService(id) {
+        let url = `/attack-surface/services/${id}/`;
+        return api.delete(url);
+    }
 }

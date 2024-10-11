@@ -244,7 +244,7 @@ class Finding(models.Model):
                 return match.group()
             attachment = qs.get()
             caption = match.group('caption')
-            template = f"<div class='image-proof'><div class='image-container'><img src='{attachment.image_base64}'></div><div class='caption'><span class='figure-prefix'>Figure</span><span>{caption}</span></div></div>"
+            template = f"<figure><img src='{attachment.image_base64}'/><figcaption>Figure: {caption}</figcaption></figure>"
             return template
 
         proof_text = re.sub(image_re, attachment_replace, self.proof_text)
