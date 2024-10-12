@@ -19,18 +19,6 @@
       "matchPackagePatterns": [
         "*"
       ]
-    },
-    {
-      "matchUpdateTypes": [
-        "major"
-      ],
-      "automerge": false,
-      "groupName": "major dependencies",
-      "groupSlug": "major-deps",
-      "matchPackageNames": [
-        "*"
-      ],
-      "stabilityDays": 3
     }
   ]
 }
