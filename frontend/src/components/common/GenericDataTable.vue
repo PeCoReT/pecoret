@@ -165,5 +165,8 @@ export default {
             </slot>
         </template>
         <slot></slot>
+        <template #footer>
+            Total {{totalRecords}} items.
+        </template>
     </DataTable>
 </template>
