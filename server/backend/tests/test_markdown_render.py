@@ -17,6 +17,16 @@ class TestExternalAccessImages(PeCoReTTestCaseMixin, APITestCase):
             self.pentester1, self.pentester2, self.read_only1, self.management2, self.management1
         ]
 
+    def test_not_allowed_dir(self):
+        self.image_file = self.create_image_file('projects')
+        name = self.image_file.image.name
+        test_string = f'this is a test string\n![caption](storage:///{name})'
+        self.client.force_login(self.allowed_users[0])
+        data = {'markdown': test_string}
+        response = self.client.post(self.url, data)
+        self.assertNotContains(response, 'data:')
+
+
     def test_render_storage_links_forbidden(self):
         """ test if external users get rendered storage links """
         name = self.image_file.image.name

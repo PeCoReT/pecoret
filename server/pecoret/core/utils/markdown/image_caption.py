@@ -13,19 +13,29 @@ CAPTION_RE = r'\!\[(?=[^\]]*\])'
 # simplified to match our needs more
 # handle regular inline image: ![caption](storage:///uploads/img.jpg)
 class ImageInlineProcessor(LinkInlineProcessor):
+    allowed_dirs = [
+        'uploads/attack_surface',
+        'uploads/advisories'
+    ]
 
     def _src_to_base64(self, src):
         """ map storage:/// urls to base64 rendered images """
-        allowed_dir = settings.BASE_DIR / 'uploads'
         if not src.startswith('storage:///'):
             # not a storage url, do not process src
             return src
         src = src[len('storage:///'):]
         # check path traversal
-        try:
-            Path(allowed_dir).joinpath(src).resolve().relative_to(allowed_dir.resolve())
-        except ValueError:
-            # possible path traversal attempt, return src instead of reading file
+        is_sub_dir = False
+        for allowed_dir in self.allowed_dirs:
+            allowed_dir = settings.BASE_DIR / allowed_dir
+            try:
+                r = Path(BASE_DIR / src).relative_to(allowed_dir)
+                is_sub_dir = True
+                break
+            except ValueError:
+                pass
+        # possible path traversal attempt, return src instead of reading file
+        if not is_sub_dir:
             return src
         path = Path(BASE_DIR / src)
         # file does not exist

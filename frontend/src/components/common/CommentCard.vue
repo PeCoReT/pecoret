@@ -1,5 +1,4 @@
 <script>
-import markdown from '@/utils/markdown';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
@@ -12,9 +11,6 @@ export default {
     },
     emits: ['onDelete', 'onEdit'],
     methods: {
-        render(text) {
-            return markdown.renderMarkdown(text);
-        },
         menuToggle(event) {
             this.$refs.menu.toggle(event);
         },
@@ -65,7 +61,7 @@ export default {
                 edited by <strong class="font-semibold text-white">{{ comment.user_edit.username }}</strong>
             </p>
         </div>
-        <p class="text-gray-400 mt-3 markdown-block" v-html="render(comment.text)" v-if="editMode !== true"></p>
+        <p class="text-gray-400 mt-3 markdown-block" v-html="comment.text_md" v-if="editMode !== true"></p>
         <div v-else>
             <Form>
                 <Field>

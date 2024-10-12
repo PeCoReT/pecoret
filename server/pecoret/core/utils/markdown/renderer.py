@@ -17,7 +17,7 @@ class MarkdownHTMLRenderer:
     def __init__(self, limited=True):
         self.limited = limited
         self.extensions = [
-            'fenced_code', 'footnotes',
+            'fenced_code', 'footnotes', 'tables',
             CodeHiliteExtension(
                 guess_lang=False,
                 linenums=False,
