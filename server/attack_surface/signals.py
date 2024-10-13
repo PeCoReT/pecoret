@@ -18,7 +18,9 @@ def queue_initial_scan(sender, instance, created, **kwargs):
         return
     if not created:
         return
-    # TODO: only scan in-scope items
+    if not instance.is_in_scope():
+        # only scan in-scope items on creation
+        return
     async_task(enqueue_for_scan_seed, instance._meta.label, instance.pk)
 
 

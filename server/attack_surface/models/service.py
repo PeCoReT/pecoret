@@ -73,3 +73,6 @@ class Service(BaseAssetModel):
         if self.service_name in ['http', 'https']:
             return True
         return False
+
+    def is_in_scope(self):
+        return self.target.is_in_scope()

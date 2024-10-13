@@ -11,6 +11,17 @@ const StatusChoices = [
     }
 ];
 
+const ServiceProtocolChoices = [
+    {
+        name: 'TCP',
+        value: 'TCP'
+    },
+    {
+        name: 'UDP',
+        value: 'UDP'
+    }
+]
+
 const SeverityChoices = [
     {
         name: 'Critical',
@@ -132,6 +143,10 @@ export default class ASMonitorService {
 
     getDataTypeChoices() {
         return DataTypeChoices;
+    }
+
+    getServiceProtocolChoices() {
+        return ServiceProtocolChoices
     }
 
     getPrograms(api, params) {

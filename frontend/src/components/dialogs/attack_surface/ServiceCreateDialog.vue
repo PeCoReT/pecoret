@@ -5,16 +5,25 @@ import InlineFieldGroup from '@/components/common/forms/InlineFieldGroup.vue';
 import TargetSelectField from '@/components/forms/fields/TargetSelectField.vue';
 import PortSelectField from '@/components/forms/fields/PortSelectField.vue';
 import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
+import InlineField from '@/components/common/forms/InlineField.vue';
 
 export default {
     name: 'ASServiceCreateDialog',
-    components: { TechnologyMultiSelectField, PortSelectField, TargetSelectField, InlineFieldGroup, ModalDialog },
+    components: {
+        InlineField,
+        TechnologyMultiSelectField,
+        PortSelectField,
+        TargetSelectField,
+        InlineFieldGroup,
+        ModalDialog
+    },
     emits: ['object-created'],
     data() {
         return {
             showDialog: false,
             model: {
-                port: null,
+                port_number: null,
+                protocol: null,
                 target: null,
                 banner: null,
                 technologies: [],
@@ -39,7 +48,9 @@ export default {
         create() {
             this.loading = true;
             let data = {
-                port: this.model.port,
+                port_number: this.model.port_number,
+                protocol: this.model.protocol,
+                service_name: this.model.service_name,
                 technologies: this.model.technologies,
                 banner: this.model.banner,
                 target: this.model.target
@@ -68,9 +79,15 @@ export default {
                     <TargetSelectField v-model="model.target"></TargetSelectField>
                 </InlineField>
                 <InlineField label="Port">
-                    <PortSelectField v-model="model.port" :target="model.target"></PortSelectField>
+                    <InputNumber v-model="model.port_number"></InputNumber>
+                </InlineField>
+                <InlineField label="Protocol">
+                    <Select :options="service.getServiceProtocolChoices()" optionLabel="name" optionValue="value" v-model="model.protocol"></Select>
                 </InlineField>
             </InlineFieldGroup>
+            <Field label="Name">
+                <InputText v-model="model.service_name"></InputText>
+            </Field>
             <Field label="Technologies">
                 <TechnologyMultiSelectField :model-value="model.technologies"></TechnologyMultiSelectField>
             </Field>

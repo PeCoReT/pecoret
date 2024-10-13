@@ -105,3 +105,6 @@ class Target(BaseAssetModel):
             if not re.match(SUBDOMAIN_REGEX, self.data) or not is_subdomain(self.data):
                 raise ValidationError({'data': 'Invalid subdomain'})
         return super().clean()
+
+    def is_in_scope(self):
+        return self.scope == ScopeChoices.IN_SCOPE
