@@ -1,7 +1,6 @@
 import time
 
 from django.apps import apps
-from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 from django.db.models import Min, Q
 from django.utils import timezone
@@ -14,17 +13,38 @@ from attack_surface.serializers.scanning.scan import ScanSerializer
 
 class Command(BaseCommand):
     """ enqueue scans for all enabled scan types, when queue has less than 10 items and scan was not performed in last 6h"""
-    # TODO: also check if scan was performed this day already
-    queue_size = 10
-    timediff = 6  # in hours
+
+    def add_arguments(self, parser):
+        # Adding optional arguments
+        parser.add_argument(
+            '--scan_type_name',
+            type=str,
+            default=None,
+            help='Optional scan type name to filter the scan types.',
+        )
+        parser.add_argument(
+            '--queue_size',
+            type=int,
+            default=10,
+            help=f'Queue size limit (default: 10)',
+        )
+        parser.add_argument(
+            '--timediff',
+            type=int,
+            default=6,
+            help=f'Time difference in hours (default: 6)',
+        )
+
 
     def handle(self, *args, **options):
         scan_types = models.ScanType.objects.enabled()
+        if options.get('scan_type_name'):
+            scan_types = scan_types.filter(name=options['scan_type_name'])
         pending_scans = models.Scan.objects.filter(Q(status=ScanStatus.PENDING) | Q(status=ScanStatus.RUNNING))
 
-        time_ago = timezone.now() - timezone.timedelta(hours=self.timediff)
+        time_ago = timezone.now() - timezone.timedelta(hours=options['timediff'])
 
-        if pending_scans.count() >= 10:
+        if pending_scans.count() >= options['queue_size']:
             print("Queue already full!")
             return
         for scan_type in scan_types:
@@ -35,10 +55,17 @@ class Command(BaseCommand):
             if not objs:
                 continue
             scan_name = f'CS-{scan_type.name}-{str(int(time.time()))}'
-            scan = models.Scan.objects.create(name=scan_name, scan_type=scan_type)
+            data = {'scan_objects': [], 'scan_type': scan_type.pk, 'name': scan_name}
             for obj in objs:
-                ct = ContentType.objects.get_for_model(obj)
-                models.ScanObject.objects.get_or_create(scan=scan, content_type=ct, object_id=obj.pk)
-            serializer = ScanSerializer(instance=scan)
-            print(serializer.data)
+                if not obj.is_in_scope():
+                    # not scan items that are not in scope
+                    continue
+                obj_data = {'content_type': obj._meta.model_name, 'object_id': obj.pk}
+                data['scan_objects'].append(obj_data)
+            if len(data['scan_objects']) < 1:
+                # no scan objects - skipping
+                continue
+            serializer = ScanSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
             enqueue_scan(serializer.data)
