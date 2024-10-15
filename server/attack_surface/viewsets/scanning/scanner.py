@@ -2,11 +2,11 @@ from django.utils import timezone
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from attack_surface.authentication import ScannerAuth
 from attack_surface.mixins import ScanFeatureDispatchMixin, ScanningAuthMixin
 from attack_surface.models.scanner import Scanner
 from attack_surface.permissions import ScanningPermission
-from attack_surface.serializers.scanning.scanner import ScannerSerializer, ScannerLastSeenSerializer, \
-    ScannerCreateSerializer
+from attack_surface.serializers.scanning.scanner import ScannerSerializer, ScannerCreateSerializer
 from pecoret.core import permissions
 from pecoret.core.utils.schema import extend_viewset_schema
 from pecoret.core.viewsets import PeCoReTModelViewSet
@@ -35,7 +35,8 @@ class ScannerViewSet(ScanFeatureDispatchMixin, ScanningAuthMixin, PeCoReTModelVi
             return ScannerCreateSerializer
         return self.serializer_class
 
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['post'], authentication_classes=[ScannerAuth],
+            permission_classes=[ScanningPermission(scanner_read=True, scanner_write=True)])
     def ping(self, request, *args, **kwargs):
         """ used by the scanner to set alive status """
         scanner = request.scanner

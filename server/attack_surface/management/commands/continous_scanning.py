@@ -7,7 +7,6 @@ from django.utils import timezone
 
 from attack_surface import models
 from attack_surface.models.scan import ScanStatus
-from attack_surface.queue import enqueue_scan
 from attack_surface.serializers.scanning.scan import ScanSerializer
 
 
@@ -68,4 +67,3 @@ class Command(BaseCommand):
             serializer = ScanSerializer(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            enqueue_scan(serializer.data)
