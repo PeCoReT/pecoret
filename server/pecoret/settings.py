@@ -303,7 +303,6 @@ REPORT_TEMPLATE_PRESETS = {
 # enable requesting scans in PeCoReT
 # the scans are NOT performed by pecoret, just managed. You must add your own tooling
 AS_ENABLE_SCANNING = False
-AS_QUEUE = {}
 
 # scan item on creation
 AS_ENABLE_SCAN_ON_CREATION = False

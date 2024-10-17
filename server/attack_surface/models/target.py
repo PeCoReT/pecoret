@@ -67,6 +67,8 @@ class Target(BaseAssetModel):
 
     @property
     def hostnames(self):
+        if self.resolved_ip is None:
+            return []
         t = Target.objects.with_ip(self.resolved_ip)
         return list(t.values_list('data', flat=True))
 
@@ -106,5 +108,6 @@ class Target(BaseAssetModel):
                 raise ValidationError({'data': 'Invalid subdomain'})
         return super().clean()
 
+    @property
     def is_in_scope(self):
         return self.scope == ScopeChoices.IN_SCOPE

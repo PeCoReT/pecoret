@@ -19,4 +19,3 @@ REPORT_TEMPLATES = {
 }
 
 AS_ENABLE_SCANNING = True
-AS_QUEUE = {'host': 'localhost', 'port': 6739, 'is_test': True}

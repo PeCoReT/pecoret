@@ -74,5 +74,6 @@ class Service(BaseAssetModel):
             return True
         return False
 
+    @property
     def is_in_scope(self):
-        return self.target.is_in_scope()
+        return self.target.is_in_scope

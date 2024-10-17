@@ -69,5 +69,6 @@ class URL(BaseAssetModel):
             raise ValidationError({'service': 'Service is not a web service'})
         return super().clean()
 
+    @property
     def is_in_scope(self):
-        return self.service.target.is_in_scope()
+        return self.service.target.is_in_scope

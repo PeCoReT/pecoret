@@ -56,7 +56,7 @@ class Command(BaseCommand):
             scan_name = f'CS-{scan_type.name}-{str(int(time.time()))}'
             data = {'scan_objects': [], 'scan_type': scan_type.pk, 'name': scan_name}
             for obj in objs:
-                if not obj.is_in_scope():
+                if not obj.is_in_scope:
                     # not scan items that are not in scope
                     continue
                 obj_data = {'content_type': obj._meta.model_name, 'object_id': obj.pk}

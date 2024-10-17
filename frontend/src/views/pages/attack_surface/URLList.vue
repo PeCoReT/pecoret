@@ -166,6 +166,7 @@ export default {
                         <span v-else>-</span>
                     </template>
                 </Column>
+                <Column field="is_in_scope" header="Is In Scope?"></Column>
                 <Column header="Technologies" field="technologies" :showFilterMatchModes="false">
                     <template #filter="{ filterModel }">
                         <MultiSelect

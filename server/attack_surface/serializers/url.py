@@ -18,7 +18,7 @@ class URLSerializer(serializers.ModelSerializer):
         model = URL
         fields = [
             'pk', 'date_created', 'date_updated', 'status_code', 'service',
-            'request', 'response', 'is_base', 'tags', 'technologies', 'url', 'display_name'
+            'request', 'response', 'is_base', 'tags', 'technologies', 'url', 'display_name', 'is_in_scope'
         ]
 
     def create(self, validated_data):
