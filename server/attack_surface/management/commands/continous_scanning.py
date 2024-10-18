@@ -2,7 +2,7 @@ import time
 
 from django.apps import apps
 from django.core.management.base import BaseCommand
-from django.db.models import Min, Q
+from django.db.models import Max, Q
 from django.utils import timezone
 
 from attack_surface import models
@@ -34,7 +34,6 @@ class Command(BaseCommand):
             help=f'Time difference in hours (default: 6)',
         )
 
-
     def handle(self, *args, **options):
         scan_types = models.ScanType.objects.enabled()
         if options.get('scan_type_name'):
@@ -48,17 +47,20 @@ class Command(BaseCommand):
             return
         for scan_type in scan_types:
             Model = apps.get_model(f'attack_surface.{scan_type.allowed_object_type}')
-            objs = list(Model.objects.annotate(last_scan=Min('scan_objects__scan__date_created')).filter(
-                (Q(scan_objects__scan__scan_type=scan_type) | Q(last_scan__isnull=True)) & (
-                        Q(last_scan__lt=time_ago) | Q(last_scan__isnull=True))).order_by('last_scan').distinct())[:5]
+            never_scanned_qs = Model.objects.in_scope().filter(scan_objects__scan__scan_type=scan_type)
+            if not never_scanned_qs.exists():
+                # there were no instances of this item type scanned with this scan type
+                objs = Model.objects.order_by('date_created')[:5]
+            else:
+                qs = Model.objects.annotate(last_scan=Max('scan_objects__scan__date_created')).in_scope()
+                objs = list(qs.filter(
+                    (Q(scan_objects__scan__scan_type=scan_type) | Q(last_scan__isnull=True)) & (
+                            Q(last_scan__lt=time_ago) | Q(last_scan__isnull=True))).order_by('last_scan').distinct())[:5]
             if not objs:
                 continue
             scan_name = f'CS-{scan_type.name}-{str(int(time.time()))}'
             data = {'scan_objects': [], 'scan_type': scan_type.pk, 'name': scan_name}
             for obj in objs:
-                if not obj.is_in_scope:
-                    # not scan items that are not in scope
-                    continue
                 obj_data = {'content_type': obj._meta.model_name, 'object_id': obj.pk}
                 data['scan_objects'].append(obj_data)
             if len(data['scan_objects']) < 1:

@@ -42,6 +42,9 @@ class TargetQuerySet(models.QuerySet):
     def with_ip(self, ip):
         return self.filter(resolved_ip=ip)
 
+    def in_scope(self):
+        return self.filter(scope=ScopeChoices.IN_SCOPE)
+
 
 class Target(BaseAssetModel):
     objects = TargetQuerySet.as_manager()

@@ -5,6 +5,7 @@ from djangoql.queryset import DjangoQLQuerySet
 
 from attack_surface.utils.djangoql import PecoQLSchema
 from  .base import BaseAssetModel
+from .target import ScopeChoices
 
 
 class Protocol(models.IntegerChoices):
@@ -27,6 +28,9 @@ class ServiceQuerySet(DjangoQLQuerySet):
 
     def filter_unique(self, port_number, protocol, target):
         return self.filter(port_number=port_number, protocol=Protocol[protocol.upper()].value, target=target)
+
+    def in_scope(self):
+        return self.filter(target__scope=ScopeChoices.IN_SCOPE)
 
 
 class Service(BaseAssetModel):

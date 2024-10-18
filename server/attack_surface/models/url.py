@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 
 from .base import BaseAssetModel
+from .target import ScopeChoices
 
 
 class URLQuerySet(DjangoQLQuerySet):
@@ -16,6 +17,9 @@ class URLQuerySet(DjangoQLQuerySet):
 
     def filter_unique(self, url, service):
         return self.filter(url=url, service=service)
+
+    def in_scope(self):
+        return self.filter(service__target__scope=ScopeChoices.IN_SCOPE)
 
 
 class URL(BaseAssetModel):
