@@ -9,7 +9,7 @@
             }
 
             @bottom-center {
-                content: "{% if not advisory.hide_advisory_id_in_report %}{{ advisory.pk }} ({{ advisory.technology.name }} {{ advisory.affected_versions }}){% else %}{{ advisory.technology.name }} {{ advisory.affected_versions }}{% endif %}";
+                content: "{% if not advisory.hide_advisory_id_in_report %}{{ advisory.get_advisory_id_display() }} ({{ advisory.technology.name }}){% else %}{{ advisory.technology.name }}{% endif %}";
                 font-size: 10px;
                 margin-top: -5px;
             }
