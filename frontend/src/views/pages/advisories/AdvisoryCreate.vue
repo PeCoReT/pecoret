@@ -9,6 +9,7 @@ import InlineFieldGroup from '@/components/common/forms/InlineFieldGroup.vue';
 import InlineField from '@/components/common/forms/InlineField.vue';
 import AlertPanel from '@/components/panels/Alert.vue';
 import { warn } from 'vue';
+import ReportTemplateSelectField from '@/components/forms/fields/ReportTemplateSelectField.vue';
 
 export default {
     name: 'AdvisoryCreate',
@@ -49,7 +50,8 @@ export default {
                 fixed_version: null,
                 severity: null,
                 technology: null,
-                researchers: null
+                researchers: null,
+                report_template: null
             },
             descriptionCustomized: false,
             loading: false,
@@ -71,7 +73,7 @@ export default {
                 technology: this.model.technology,
                 researchers: this.model.researchers,
                 proof_text: this.model.proof_text,
-                report_template: 'default_template'
+                report_template: this.model.report_template
             };
             this.service
                 .createAdvisory(data)
@@ -119,6 +121,7 @@ export default {
     },
     mounted() {},
     components: {
+        ReportTemplateSelectField,
         AlertPanel,
         InlineField,
         InlineFieldGroup,
@@ -153,10 +156,16 @@ export default {
                         <InputText id="affected_versions" v-model="model.affected_versions"></InputText>
                     </InlineField>
                 </InlineFieldGroup>
-                <Field label="Researchers">
-                    <InputText id="researchers" v-model="model.researchers"></InputText>
-                    <small id="researchers-help">Overwrites the researchers section in the report (default: your display name).</small>
-                </Field>
+                <InlineFieldGroup>
+                    <InlineField label="Researchers">
+                        <InputText id="researchers" v-model="model.researchers"></InputText>
+                        <small id="researchers-help">Overwrites the researchers section in the report (default: your display name).</small>
+                    </InlineField>
+                    <InlineField label="Report Template">
+                        <ReportTemplateSelectField v-model="model.report_template"></ReportTemplateSelectField>
+                    </InlineField>
+                </InlineFieldGroup>
+
                 <Field label="Description">
                     <MarkdownEditor v-model="model.description"></MarkdownEditor>
                 </Field>
