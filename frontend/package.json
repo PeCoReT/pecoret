@@ -1,6 +1,6 @@
 {
-  "name": "sakai-vue",
-  "version": "4.1.0",
+  "name": "pecoret",
+  "version": "0.0.1",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

@@ -50,8 +50,7 @@ export default {
                         <div class="col-span-12 rounded border border-surface-700 p-1 hover:bg-surface-950 card m-0" @click="onLatestVisit(item.pk)">
                             <div class="flex p-4 gap-4">
                                 <div class="flex justify-start w-full">
-                                    {{ item.vulnerability.name }} / {{ item.internal_name }} in
-                                    {{ item.product }}
+                                    {{ item.title }}
                                 </div>
 
                                 <div class="flex align-center justify-end">

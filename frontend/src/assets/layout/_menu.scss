@@ -1,3 +1,5 @@
+@use './_mixins';
+
 .layout-sidebar {
     position: fixed;
     width: 20rem;
@@ -90,7 +92,7 @@
             }
 
             &:focus {
-                @include focused-inset();
+                @include mixins.focused-inset();
             }
         }
 

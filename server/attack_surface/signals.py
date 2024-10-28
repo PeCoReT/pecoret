@@ -13,7 +13,7 @@ from attack_surface.tasks import enqueue_for_scan_seed
 @receiver(signals.post_save, sender=models.Target)
 @receiver(signals.post_save, sender=models.URL)
 def queue_initial_scan(sender, instance, created, **kwargs):
-    if not settings.AS_ENABLE_SCAN_ON_CREATION or not settings.AS_ENABLE_SCANNING:
+    if not settings.AS_ENABLE_SCANNING or len(settings.AS_ALLOWED_SCAN_TYPES_ON_CREATION) < 1:
         # feature disabled
         return
     if not created:
