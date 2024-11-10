@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import { useListViewComposable } from '@/composables/listViewComposable';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
@@ -22,7 +21,6 @@ export default {
             totalRecords: 0,
             pagination: { page: 1, limit: 20 },
             filters: {},
-            service: new ASMonitorService(),
             deleteButtonLoading: false,
             selectedItems: [],
             listComposable: useListViewComposable()
@@ -43,7 +41,7 @@ export default {
                     this.loading = true;
                     let itemsDeleted = 0;
                     this.selectedItems.forEach((item) => {
-                        this.service.deleteService(item.pk).then(() => {
+                        this.$api.delete(this.$api.e.asServiceDetail, { pk: item.pk }).then(() => {
                             itemsDeleted++;
                             if (itemsDeleted === this.selectedItems.length) {
                                 this.loading = false;
@@ -59,8 +57,8 @@ export default {
         getItems(params) {
             this.loading = true;
             let data = this.listComposable.buildParams(this.pagination, this.filters, params);
-            this.service
-                .getServices(data)
+            this.$api
+                .get(this.$api.e.asServiceList, null, data)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;

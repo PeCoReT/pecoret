@@ -1,11 +1,9 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService';
 
 export default {
     name: 'TopSubmitterDashboard',
     data() {
         return {
-            service: new AdvisoryService(),
             loading: false,
             chartColors: ['--p-emerald-300', '--p-orange-300', '--p-red-300', '--p-lime-300', '--p-teal-300', '--p-green-300'],
             chartHoverColors: ['--p-emerald-200', '--p-orange-200', '--p-red-200', '--p-lime-200', '--p-teal-200', '--p-green-200'],
@@ -49,8 +47,8 @@ export default {
         getData() {
             this.loading = true;
             const documentStyle = getComputedStyle(document.body);
-            this.service
-                .getTopSubmittersStatistic()
+            this.$api
+                .get(this.$api.e.aStatTopSubmitters)
                 .then((response) => {
                     response.data.forEach((item) => {
                         this.chartData.labels.push(item['user__username']);

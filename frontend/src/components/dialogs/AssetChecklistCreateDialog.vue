@@ -1,5 +1,4 @@
 <script>
-import ChecklistService from '@/service/ChecklistService';
 import AssetSelectField from '@/components/forms/fields/AssetSelectField.vue';
 import ModalDialog from '@/components/common/ModalDialog.vue';
 
@@ -16,7 +15,6 @@ export default {
             loading: false,
             projectId: this.$route.params.projectId,
             checklistChoices: [],
-            service: new ChecklistService()
         };
     },
     methods: {
@@ -28,7 +26,7 @@ export default {
                 component: this.model.asset,
                 checklist_id: this.model.checklist
             };
-            this.service.createAssetChecklist(this.$api, this.projectId, data).then((response) => {
+            this.$api.post(this.$api.e.pChecklistList, { projectPk: this.projectId }, data).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Created',
@@ -40,7 +38,7 @@ export default {
             });
         },
         onFocusChecklist() {
-            this.service.getChecklists(this.$api).then((response) => {
+            this.$api.get(this.$api.e.checklistList).then((response) => {
                 this.checklistChoices = response.data.results;
             });
         },
@@ -48,7 +46,7 @@ export default {
             let params = {
                 search: event.value
             };
-            this.service.getChecklists(this.$api, params).then((response) => {
+            this.$api.get(this.$api.e.checklistList, null, params).then((response) => {
                 this.checklistChoices = response.data.results;
             });
         }

@@ -1,5 +1,4 @@
 <script>
-import FindingService from '@/service/FindingService';
 import TechnologySelectField from '@/components/forms/fields/TechnologySelectField.vue';
 import ModalDialog from '@/components/common/ModalDialog.vue';
 
@@ -16,7 +15,6 @@ export default {
                 technology: null,
                 affected_versions: null
             },
-            service: new FindingService()
         };
     },
     methods: {
@@ -29,8 +27,8 @@ export default {
                 technology: this.model.technology,
                 affected_versions: this.model.affected_versions
             };
-            this.service
-                .findingAsAdvisory(this.$api, this.projectId, this.findingId, data)
+            this.$api
+                .post(this.$api.e.pFindingAsAdvisory, { pPk: this.projectId, pk: this.findingId }, data)
                 .then((response) => {
                     this.$toast.add({
                         severity: 'success',

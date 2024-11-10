@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 
 export default {
     name: 'TagSelectField',
@@ -17,7 +16,6 @@ export default {
             loading: false,
             tags: [],
             tagChoices: [],
-            service: new ASMonitorService()
         };
     },
     watch: {
@@ -36,15 +34,12 @@ export default {
     },
     methods: {
         onFilter(event) {
-            let data = {
-                search: event.value
-            };
-            this.service.getTags(this.$api, data).then((response) => {
+            this.$api.get(this.$api.e.asTagList, null, { search: event.value }).then((response) => {
                 this.tagChoices = response.data.results;
             });
         },
         getTags() {
-            this.service.getTags(this.$api).then((response) => {
+            this.$api.get(this.$api.e.asTagList).then((response) => {
                 this.tagChoices = response.data.results;
             });
         },

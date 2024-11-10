@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import ModalDialog from '@/components/common/ModalDialog.vue';
 import ScanTypeMultiSelectField from '@/components/forms/fields/ScanTypeMultiSelectField.vue';
 
@@ -15,7 +14,6 @@ export default {
                 scan_types: null
             },
             loading: false,
-            service: new ASMonitorService()
         };
     },
     methods: {
@@ -27,7 +25,7 @@ export default {
                 name: this.model.name,
                 scan_types: this.model.scan_types
             };
-            this.service.createScanner(data).then((response) => {
+            this.$api.post(this.$api.e.asScannerList, null, data).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Scanner created!',

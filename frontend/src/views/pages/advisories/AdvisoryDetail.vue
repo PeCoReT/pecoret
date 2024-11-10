@@ -1,10 +1,10 @@
 <script>
-import AdvisoryService, { AdvisoryStatusChoices, VulnerabilityStatusChoices } from '@/service/AdvisoryService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import AdvisoryTabMenu from '@/components/navigation/AdvisoryTabMenu.vue';
 import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import { useAuthStore } from '@/store/auth';
+import {vulnerabilityStatusChoices, advisoryStatusChoices} from "@/utils/constants";
 
 export default {
     name: 'AdvisoryDetail',
@@ -13,7 +13,6 @@ export default {
     },
     data() {
         return {
-            service: new AdvisoryService(),
             advisoryId: this.$route.params.advisoryId,
             authStore: useAuthStore(),
             advisory: { vulnerability: {}, technology: {}, user: {} },
@@ -32,8 +31,8 @@ export default {
                     disabled: true
                 }
             ],
-            vulnerabilityStatusChoices: VulnerabilityStatusChoices,
-            statusChoices: AdvisoryStatusChoices,
+            vulnerabilityStatusChoices: vulnerabilityStatusChoices,
+            statusChoices: advisoryStatusChoices,
             severityChoices: [
                 { label: 'Critical', value: 'Critical' },
                 { label: 'High', value: 'High' },
@@ -61,7 +60,7 @@ export default {
             });
         },
         getAdvisory() {
-            this.service.getAdvisory(this.advisoryId).then((response) => {
+            this.$api.get(this.$api.e.advisoryDetail, { pk: this.advisoryId }).then((response) => {
                 this.advisory = response.data;
                 if (this.advisory.recommendation === null) {
                     this.advisory.recommendation = '';
@@ -78,7 +77,7 @@ export default {
                 description: this.advisory.description,
                 proof_text: this.advisory.proof_text
             };
-            this.service.patchAdvisory(this.advisoryId, data).then((response) => {
+            this.$api.patch(this.$api.e.advisoryDetail, { pk: this.advisoryId }, data).then((response) => {
                 this.advisory = response.data;
                 if (this.showPreview === true) {
                     this.getPreviewData();
@@ -92,7 +91,7 @@ export default {
             });
         },
         patchAdvisory(data) {
-            this.service.patchAdvisory(this.advisoryId, data).then((response) => {
+            this.$api.patch(this.$api.e.advisoryDetail, { pk: this.advisoryId }, data).then((response) => {
                 this.advisory = response.data;
                 if (this.showPreview === true) {
                     this.getPreviewData();
@@ -127,8 +126,8 @@ export default {
             if (this.exportTemplate) {
                 params['template'] = this.exportTemplate;
             }
-            this.service
-                .downloadAdvisoryAsPDF(this.advisoryId, params)
+            this.$api
+                .get(this.$api.e.aDownloadPdf, { aPk: this.advisoryId }, params, { responseType: 'arraybuffer' })
                 .then((response) => {
                     this.forceFileDownload(response);
                     this.exportTemplate = null;
@@ -140,7 +139,7 @@ export default {
         onImageUpload(file, onSuccess) {
             let data = new FormData();
             data.append('image', file);
-            this.service.attachmentCreate(this.advisoryId, data).then((resp) => {
+            this.$api.post(this.$api.e.aAttachmentList, { aPk: this.advisoryId }, data).then((resp) => {
                 onSuccess(resp.data.storage_link);
             });
         },
@@ -151,7 +150,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteAdvisory(this.advisoryId).then(() => {
+                    this.$api.delete(this.$api.e.advisoryDetail, { pk: this.advisoryId }).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Confirmed',

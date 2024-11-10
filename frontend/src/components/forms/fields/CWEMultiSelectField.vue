@@ -1,6 +1,4 @@
 <script>
-import VulnerabilityService from "@/service/VulnerabilityService";
-
 
 export default {
     name: 'CWEMultiSelectField',
@@ -15,7 +13,6 @@ export default {
             loading: false,
             items: [],
             choices: [],
-            service: new VulnerabilityService()
         };
     },
     watch: {
@@ -37,12 +34,12 @@ export default {
             let data = {
                 search: event.value
             };
-            this.service.getCWEs(this.$api, data).then((response) => {
+            this.$api.get(this.$api.e.cweList, null, data).then((response) => {
                 this.choices = response.data.results;
             });
         },
         getItems() {
-            this.service.getCWEs(this.$api).then((response) => {
+            this.$api.get(this.$api.e.cweList).then((response) => {
                 this.choices = response.data.results;
             });
         },

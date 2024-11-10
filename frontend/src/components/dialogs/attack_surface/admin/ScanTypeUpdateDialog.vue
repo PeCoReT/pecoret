@@ -1,6 +1,6 @@
 <script>
 import ModalDialog from '@/components/common/ModalDialog.vue';
-import ASMonitorService, { allowedObjectTypeChoices } from '@/service/ASMonitorService';
+import {allowedObjectTypeChoices} from '@/utils/constants';
 
 export default {
     name: 'ScanTypeUpdateDialog',
@@ -16,7 +16,6 @@ export default {
             showDialog: false,
             model: this.scanType,
             loading: false,
-            service: new ASMonitorService()
         };
     },
     methods: {
@@ -36,7 +35,7 @@ export default {
                 priority: this.model.priority,
                 enabled: this.model.enabled
             };
-            this.service.patchScanType(this.scanType.pk, data).then(() => {
+            this.$api.patch(this.$api.e.asScanTypeDetail, { pk: this.scanType.pk }, data).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Scan Type updated!',

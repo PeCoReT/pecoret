@@ -1,5 +1,4 @@
 <script>
-import FindingService from '@/service/FindingService';
 import FindingTabMenu from '@/components/navigation/FindingTabMenu.vue';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
@@ -16,7 +15,6 @@ export default {
     },
     data() {
         return {
-            service: new FindingService(),
             projectId: this.$route.params.projectId,
             findingId: this.$route.params.findingId,
             finding: { component: {} },
@@ -65,7 +63,7 @@ export default {
             return severityChoices;
         },
         getFinding() {
-            this.service.getFinding(this.projectId, this.findingId).then((response) => {
+            this.$api.get(this.$api.e.pFindingDetail, { pPk: this.projectId, pk: this.findingId }).then((response) => {
                 this.finding = response.data;
                 this.breadcrumbs[this.breadcrumbs.length - 1] = {
                     label: this.finding.unique_id,
@@ -74,19 +72,28 @@ export default {
             });
         },
         deleteFinding() {
-            this.service.deleteFinding(this.$api, this.projectId, this.findingId).then(() => {
+            this.$api.delete(this.$api.e.pFindingDetail, { pPk: this.projectId, pk: this.findingId }).then(() => {
                 this.$toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Finding deleted!', life: 3000 });
                 this.$router.push({ name: 'FindingList', params: { projectId: this.projectId } });
             });
         },
         patchFindingData(data) {
-            this.service.patchFinding(this.$api, this.projectId, this.findingId, data).then((response) => {
-                this.finding = response.data;
-                if (this.showPreview === true) {
-                    this.getPreviewData();
-                }
-                this.$toast.add({ severity: 'success', summary: 'Updated', detail: 'Finding updated!', life: 3000 });
-            });
+            this.$api
+                .patch(
+                    this.$api.e.pFindingDetail,
+                    {
+                        pPk: this.projectId,
+                        pk: this.finding.pk
+                    },
+                    data
+                )
+                .then((response) => {
+                    this.finding = response.data;
+                    if (this.showPreview === true) {
+                        this.getPreviewData();
+                    }
+                    this.$toast.add({ severity: 'success', summary: 'Updated', detail: 'Finding updated!', life: 3000 });
+                });
         },
         confirmDialogDelete() {
             this.$confirm.require({
@@ -132,8 +139,16 @@ export default {
         },
         downloadAsPDF() {
             this.downloadPending = true;
-            this.service
-                .downloadAsPDF(this.$api, this.projectId, this.findingId)
+            this.$api
+                .get(
+                    this.$api.e.pFindingExportPdf,
+                    {
+                        pPk: this.projectId,
+                        fPk: this.findingId
+                    },
+                    null,
+                    { responseType: 'arraybuffer' }
+                )
                 .then((response) => {
                     const filename = 'finding-' + this.finding.unique_id.toLowerCase() + '.pdf';
                     this.forceFileDownload(response, filename);

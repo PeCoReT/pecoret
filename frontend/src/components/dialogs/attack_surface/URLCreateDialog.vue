@@ -1,7 +1,5 @@
 <script>
 import ModalDialog from '@/components/common/ModalDialog.vue';
-import TechnologyService from '@/service/TechnologyService';
-import ASMonitorService from '@/service/ASMonitorService';
 import TagSelectField from '@/components/forms/fields/TagSelectField.vue';
 import ServiceSelectField from '@/components/forms/fields/ServiceSelectField.vue';
 
@@ -18,8 +16,6 @@ export default {
                 technologies: null,
                 service: null,
             },
-            service: new ASMonitorService(),
-            techService: new TechnologyService(),
             technologies: [],
             loading: false
         };
@@ -29,7 +25,7 @@ export default {
             this.showDialog = true;
         },
         getTechnologies() {
-            this.techService.getTechnologies(this.$api).then((response) => {
+            this.$api.get(this.$api.e.technologyList).then((response) => {
                 this.technologies = response.data.results;
             });
         },
@@ -37,7 +33,7 @@ export default {
             let data = {
                 search: event.value
             };
-            this.techService.getTechnologies(this.$api, data).then((response) => {
+            this.$api.get(this.$api.e.technologyList, null, data).then((response) => {
                 this.technologies = response.data.results;
             });
         },
@@ -48,7 +44,7 @@ export default {
             if (this.model.technologies === null) {
                 this.model.technologies = [];
             }
-            this.service.createURL(this.$api, this.model).then(() => {
+            this.$api.post(this.$api.e.asUrlList, null, this.model).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'URL created!',

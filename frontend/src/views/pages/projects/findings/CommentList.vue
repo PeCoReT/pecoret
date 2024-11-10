@@ -1,6 +1,5 @@
 <script>
 import markdown from '@/utils/markdown';
-import FindingService from '@/service/FindingService';
 import FindingTabMenu from '@/components/navigation/FindingTabMenu.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 import FindingCommentFormDialog from '@/components/projects/findings/FindingCommentFormDialog.vue';
@@ -18,7 +17,6 @@ export default {
     },
     data() {
         return {
-            service: new FindingService(),
             loading: false,
             model: {
                 comment: ''
@@ -52,8 +50,8 @@ export default {
         },
         getComments() {
             this.loading = true;
-            this.service
-                .getComments(this.projectId, this.findingId)
+            this.$api
+                .get(this.$api.e.pFindingCommentList, { pPk: this.projectId, fPk: this.findingId })
                 .then((response) => {
                     this.items = response.data.results;
                 })
@@ -63,9 +61,19 @@ export default {
         },
         patchComment(pk, comment) {
             let data = { comment: comment };
-            this.service.patchComment(this.$api, this.projectId, this.findingId, pk, data).then(() => {
-                this.getComments();
-            });
+            this.$api
+                .patch(
+                    this.$api.e.pFindingCommentDetail,
+                    {
+                        pPk: this.projectId,
+                        fPk: this.findingId,
+                        pk: pk
+                    },
+                    data
+                )
+                .then(() => {
+                    this.getComments();
+                });
         },
         getUserEditUsername(comment) {
             if (comment.user_edit) {
@@ -75,7 +83,7 @@ export default {
         }
     },
     mounted() {
-        this.service.getFinding(this.projectId, this.findingId).then((response) => {
+        this.$api.get(this.$api.e.pFindingDetail, { pPk: this.projectId, pk: this.findingId }).then((response) => {
             this.breadcrumbs[this.breadcrumbs.length - 2] = {
                 label: response.data.unique_id,
                 to: this.$router.resolve({

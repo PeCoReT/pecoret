@@ -1,5 +1,4 @@
 <script>
-import FindingService from '@/service/FindingService';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
@@ -21,7 +20,6 @@ export default {
             model: {
                 text: null
             },
-            service: new FindingService()
         };
     },
     methods: {
@@ -35,17 +33,26 @@ export default {
             let data = {
                 comment: this.model.text
             };
-            this.service.createComment(this.$api, this.projectId, this.findingId, data).then((response) => {
-                this.$toast.add({
-                    severity: 'success',
-                    summary: 'Created!',
-                    life: 3000,
-                    detail: 'Comment created!'
+            this.$api
+                .post(
+                    this.$api.e.pFindingCommentList,
+                    {
+                        pPk: this.projectId,
+                        fPk: this.findingId
+                    },
+                    data
+                )
+                .then((response) => {
+                    this.$toast.add({
+                        severity: 'success',
+                        summary: 'Created!',
+                        life: 3000,
+                        detail: 'Comment created!'
+                    });
+                    this.$emit('object-created', response.data);
+                    this.visible = false;
+                    this.model.text = null;
                 });
-                this.$emit('object-created', response.data);
-                this.visible = false;
-                this.model.text = null;
-            });
         }
     }
 };

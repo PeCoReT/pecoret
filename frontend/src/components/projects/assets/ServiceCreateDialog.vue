@@ -1,5 +1,4 @@
 <script>
-import AssetService from '@/service/AssetService';
 
 export default {
     name: 'ServiceCreateDialog',
@@ -48,7 +47,6 @@ export default {
                 }
             ],
             hosts: [],
-            service: new AssetService()
         };
     },
     methods: {
@@ -58,8 +56,8 @@ export default {
         create() {
             this.loading = true;
             this.model.host = this.hostId;
-            this.service
-                .createService(this.$api, this.projectId, this.model)
+            this.$api
+                .post(this.$api.e.pServiceList, { projectPk: this.projectId }, this.model)
                 .then((response) => {
                     this.$toast.add({
                         severity: 'success',

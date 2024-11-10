@@ -1,5 +1,4 @@
 <script>
-import CompanyService from '@/service/CompanyService';
 
 export default {
     name: 'ContactCreateDialog',
@@ -7,7 +6,6 @@ export default {
     data() {
         return {
             visible: false,
-            companyService: new CompanyService(),
             companyId: this.$route.params.companyId,
             loading: false,
             model: {
@@ -36,7 +34,7 @@ export default {
                 email: this.model.email,
                 role: this.model.role
             };
-            this.companyService.createContact(this.$api, this.companyId, data).then(() => {
+            this.$api.post(this.$api.e.cContactList, { cPk: this.companyId }, data).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Created!',

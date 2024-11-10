@@ -1,5 +1,4 @@
 <script>
-import ProjectCommandService from '@/service/ProjectCommandService';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
@@ -16,7 +15,6 @@ export default {
                 output: null,
                 date_run: null
             },
-            service: new ProjectCommandService()
         };
     },
     methods: {
@@ -27,7 +25,7 @@ export default {
             this.visible = true;
         },
         create() {
-            this.service.createCommand(this.$api, this.projectId, this.model).then((response) => {
+            this.$api.post(this.$api.e.pCommandList, { projectPk: this.projectId }, this.model).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Created!',

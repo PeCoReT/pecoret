@@ -1,5 +1,4 @@
 <script>
-import AssetService from '@/service/AssetService';
 import AssetEnvironmentSelectField from '@/components/forms/fields/AssetEnvironmentSelectField.vue';
 import AssetAccessibleSelectField from '@/components/forms/fields/AssetAccessibleSelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
@@ -18,7 +17,6 @@ export default {
             visible: false,
             model: this.asset,
             loading: false,
-            service: new AssetService()
         };
     },
     methods: {
@@ -39,10 +37,20 @@ export default {
             if (this.model.technologies.length > 0 && this.model.technologies[0].pk) {
                 delete data.technologies;
             }
-            this.service.patchGenericAsset(this.$api, this.$route.params.projectId, this.asset.pk, data).then(() => {
-                this.$emit('object-updated', this.model);
-                this.visible = false;
-            });
+            let projectId = this.$route.params.projectId;
+            this.$api
+                .patch(
+                    this.$api.e.pGenericAssetDetail,
+                    {
+                        projectPk: projectId,
+                        pk: this.asset.pk
+                    },
+                    data
+                )
+                .then(() => {
+                    this.$emit('object-updated', this.model);
+                    this.visible = false;
+                });
         }
     },
     watch: {
@@ -62,7 +70,7 @@ export default {
     <Button icon="fa fa-pen-to-square" size="small" @click="open" outlined label="Edit"></Button>
 
     <ModalDialog header="Update Generic Asset" v-model="visible" :loading="loading" @onSave="patch">
-                <Form>
+        <Form>
             <Field label="Name">
                 <InputText id="name" type="text" v-model="model.name"></InputText>
             </Field>

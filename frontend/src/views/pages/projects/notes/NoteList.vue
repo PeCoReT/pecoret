@@ -1,6 +1,5 @@
 <script>
 import PBreadcrumb from '@/components/Breadcrumb.vue';
-import ProjectNoteService from '@/service/ProjectNoteService';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import { useAuthStore } from '@/store/auth';
 import RenderedNote from '@/components/projects/notes/RenderedNote.vue';
@@ -14,7 +13,6 @@ export default {
             selectedNote: null,
             notes: [],
             projectId: this.$route.params.projectId,
-            service: new ProjectNoteService(),
             saveLoading: false,
             previousSelected: null,
             authStore: useAuthStore(),
@@ -39,8 +37,8 @@ export default {
     },
     beforeUnmount() {
         if (this.selectedNote) {
-            this.service
-                .unlockNote(this.$api, this.projectId, this.selectedNote.pk)
+            this.$api
+                .delete(this.$api.e.pNoteUnlock, { projectPk: this.projectId, pk: this.selectedNote.pk })
                 .then(() => {})
                 .catch(() => {});
             this.stopTimerUpdate();
@@ -56,7 +54,7 @@ export default {
                 page: this.pagination.page,
                 limit: this.pagination.limit
             };
-            this.service.getNotes(this.$api, this.projectId, params).then((response) => {
+            this.$api.get(this.$api.e.pNoteList, { projectPk: this.projectId }, params).then((response) => {
                 this.notes = response.data.results;
                 this.totalRecords = response.data.count;
             });
@@ -65,8 +63,8 @@ export default {
             this.saveLoading = true;
             let title = 'New Note ' + new Date().getTime();
             let data = { title: title, text: '' };
-            this.service
-                .createNote(this.$api, this.projectId, data)
+            this.$api
+                .post(this.$api.e.pNoteList, { projectPk: this.projectId }, data)
                 .then((response) => {
                     this.selectedNote = response.data;
                     this.getNotes();
@@ -81,8 +79,8 @@ export default {
                 title: this.selectedNote.title,
                 text: this.selectedNote.text
             };
-            this.service
-                .patchNote(this.$api, this.projectId, this.selectedNote.pk, data)
+            this.$api
+                .patch(this.$api.e.pNoteDetail, { projectPk: this.projectId, pk: this.selectedNote.pk }, data)
                 .then(() => {
                     this.$toast.add({
                         severity: 'success',
@@ -103,16 +101,21 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteNote(this.$api, this.projectId, this.selectedNote.pk).then(() => {
-                        this.$toast.add({
-                            severity: 'info',
-                            summary: 'Deleted',
-                            detail: 'Note was deleted!',
-                            life: 3000
+                    this.$api
+                        .delete(this.$api.e.pNoteDetail, {
+                            projectPk: this.projectId,
+                            pk: this.selectedNote.pk
+                        })
+                        .then(() => {
+                            this.$toast.add({
+                                severity: 'info',
+                                summary: 'Deleted',
+                                detail: 'Note was deleted!',
+                                life: 3000
+                            });
+                            this.getNotes();
+                            this.selectedNote = null;
                         });
-                        this.getNotes();
-                        this.selectedNote = null;
-                    });
                 }
             });
         },
@@ -120,19 +123,24 @@ export default {
             let params = {
                 search: event.value
             };
-            this.service.getNotes(this.$api, this.projectId, params).then((response) => {
+            this.$api.get(this.$api.e.pNoteList, { projectPk: this.projectId }, params).then((response) => {
                 this.notes = response.data.results;
             });
         },
         patchLock() {
-            this.service.lockNote(this.$api, this.projectId, this.selectedNote.pk).then((resp) => {
-                this.selectedNote.object_lock = resp.data.object_lock;
-                for (let i = 0; i < this.notes.length; i++) {
-                    if (this.notes[i].pk === this.selectedNote.pk) {
-                        this.notes[i] = this.selectedNote;
+            this.$api
+                .post(this.$api.e.pNoteLock, {
+                    projectPK: this.projectId,
+                    pk: this.selectedNote.pk
+                })
+                .then((resp) => {
+                    this.selectedNote.object_lock = resp.data.object_lock;
+                    for (let i = 0; i < this.notes.length; i++) {
+                        if (this.notes[i].pk === this.selectedNote.pk) {
+                            this.notes[i] = this.selectedNote;
+                        }
                     }
-                }
-            });
+                });
         },
         startTimerUpdate() {
             // reload data every 5s
@@ -149,14 +157,19 @@ export default {
         },
         exitEditMode() {
             this.editMode = false;
-            this.service.unlockNote(this.$api, this.projectId, this.selectedNote.pk).then((resp) => {
-                for (let i = 0; i < this.notes.length; i++) {
-                    if (this.notes[i].pk === this.selectedNote.pk) {
-                        this.notes[i].object_lock = null;
+            this.$api
+                .delete(this.$api.e.pNoteUnlock, {
+                    projectPk: this.projectId,
+                    pk: this.selectedNote.pk
+                })
+                .then(() => {
+                    for (let i = 0; i < this.notes.length; i++) {
+                        if (this.notes[i].pk === this.selectedNote.pk) {
+                            this.notes[i].object_lock = null;
+                        }
                     }
-                }
-                this.selectedNote.object_lock = null;
-            });
+                    this.selectedNote.object_lock = null;
+                });
             this.stopTimerUpdate();
         },
         onNoteSelected(event) {
@@ -175,10 +188,15 @@ export default {
                     break;
                 } else {
                     if (this.notes[i].object_lock !== null && this.notes[i].object_lock.user.username === this.authStore.me.username) {
-                        this.service.unlockNote(this.$api, this.projectId, this.notes[i].pk).then(() => {
-                            this.notes[i].object_lock = null;
-                            this.stopTimerUpdate();
-                        });
+                        this.$api
+                            .delete(this.$api.e.pNoteUnlock, {
+                                projectPk: this.projectId,
+                                pk: this.notes[i].pk
+                            })
+                            .then(() => {
+                                this.notes[i].object_lock = null;
+                                this.stopTimerUpdate();
+                            });
                     }
                 }
             }

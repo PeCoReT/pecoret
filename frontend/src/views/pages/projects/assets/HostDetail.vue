@@ -1,9 +1,8 @@
 <script>
-import AssetService from '@/service/AssetService';
 import HostUpdateDialog from '@/components/projects/assets/HostUpdateDialog.vue';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import markdown from '@/utils/markdown';
-import ServiceList from "@/components/projects/assets/ServiceList.vue";
+import ServiceList from '@/components/projects/assets/ServiceList.vue';
 
 export default {
     name: 'HostDetail',
@@ -15,7 +14,6 @@ export default {
             projectId: this.$route.params.projectId,
             assetId: this.$route.params.assetId,
             model: {},
-            service: new AssetService(),
             breadcrumbs: [
                 {
                     label: 'Hosts',
@@ -35,7 +33,7 @@ export default {
     },
     methods: {
         getItem() {
-            this.service.getHost(this.$api, this.projectId, this.assetId).then((response) => {
+            this.$api.get(this.$api.e.pHostDetail, { projectPk: this.projectId, id: this.assetId }).then((response) => {
                 this.model = response.data;
             });
         },
@@ -46,7 +44,7 @@ export default {
             return markdown.renderMarkdown(text);
         },
         deleteAsset() {
-            this.service.deleteHost(this.$api, this.projectId, this.assetId).then(() => {
+            this.$api.delete(this.$api.e.pHostDetail, { projectPk: this.projectId, pk: this.assetId }).then(() => {
                 this.$toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Asset deleted!', life: 3000 });
                 this.$router.push({ name: 'HostList', params: { projectId: this.projectId } });
             });
@@ -63,7 +61,7 @@ export default {
             });
         }
     },
-    components: {ServiceList, DetailCardWithIcon, HostUpdateDialog }
+    components: { ServiceList, DetailCardWithIcon, HostUpdateDialog }
 };
 </script>
 

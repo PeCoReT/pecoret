@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import ModalDialog from '@/components/common/ModalDialog.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
@@ -17,7 +16,6 @@ export default {
             showDialog: false,
             model: this.program,
             loading: false,
-            service: new ASMonitorService()
         };
     },
     watch: {
@@ -38,7 +36,7 @@ export default {
                 name: this.model.name,
                 description: this.model.description
             };
-            this.service.patchProgram(this.$api, this.program.pk, data).then(() => {
+            this.$api.patch(this.$api.e.asProgramDetail, {pk: this.program.pk}, data).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Program updated!',

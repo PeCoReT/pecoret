@@ -1,6 +1,4 @@
 <script>
-import ProjectService from '@/service/ProjectService';
-import CompanyService from '@/service/CompanyService';
 
 export default {
     name: 'ProjectContactCreateDialog',
@@ -15,13 +13,11 @@ export default {
                 name: null,
                 date_expire: null
             },
-            projectService: new ProjectService(),
-            companyService: new CompanyService(),
             contactChoices: []
         };
     },
     mounted() {
-        this.projectService.getProject(this.projectId).then((response) => {
+        this.$api.get('projectDetail', { pk: this.projectId }).then((response) => {
             this.companyId = response.data.company;
         });
     },
@@ -33,7 +29,7 @@ export default {
             if (this.contactChoices) {
                 return;
             }
-            this.companyService.getContacts(this.companyId).then((response) => {
+            this.$api.get(this.$api.e.cContactList, { cPk: this.companyId }).then((response) => {
                 this.contactChoices = response.data.results;
             });
         },
@@ -41,7 +37,7 @@ export default {
             let params = {
                 search: event.value
             };
-            this.companyService.getContacts(this.companyId, params).then((response) => {
+            this.$api.get(this.$api.e.cContactList, { cPk: this.companyId }, params).then((response) => {
                 this.contactChoices = response.data.results;
             });
         },
@@ -49,7 +45,7 @@ export default {
             let data = {
                 contact: this.model.contact
             };
-            this.projectService.createContact(this.$api, this.projectId, data).then((response) => {
+            this.$api.post(this.$api.e.projectsContactList, { projectPk: this.projectId }, data).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Contact added!',

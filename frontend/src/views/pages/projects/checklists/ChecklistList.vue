@@ -1,5 +1,4 @@
 <script>
-import ChecklistService from '@/service/ChecklistService';
 import markdown from '@/utils/markdown';
 import AssetSelectField from '@/components/forms/fields/AssetSelectField.vue';
 import AssetChecklistCreateDialog from '@/components/dialogs/AssetChecklistCreateDialog.vue';
@@ -15,7 +14,6 @@ export default {
             activeChecklist: null,
             searchChecklist: null,
             searchCategories: null,
-            service: new ChecklistService(),
             asset: null,
             activeItem: null,
             breadcrumbs: [
@@ -41,7 +39,7 @@ export default {
                 checklist: checklist.pk
             };
             this.activeChecklist = checklist;
-            this.service.getAssetCategories(this.$api, this.projectId, params).then((response) => {
+            this.$api.get(this.$api.e.pCheckCategoryList, { projectPk: this.projectId }, params).then((response) => {
                 this.categories = response.data.results;
                 this.categories.forEach((category) => {
                     category.children = category.items;
@@ -64,7 +62,7 @@ export default {
             if (this.asset && this.asset.pk) {
                 params[this.asset.type] = this.asset.pk;
             }
-            this.service.getAssetChecklists(this.$api, this.projectId, params).then((response) => {
+            this.$api.get(this.$api.e.pChecklistList, { projectPk: this.projectId }, params).then((response) => {
                 this.checklistChoices = response.data.results;
             });
         },
@@ -79,7 +77,16 @@ export default {
             let data = {
                 status: status
             };
-            return this.service.patchAssetItem(this.$api, this.projectId, item.pk, data).then(() => {});
+            return this.$api
+                .patch(
+                    this.$api.e.pCheckItemDetail,
+                    {
+                        projectPk: this.projectId,
+                        pk: item.pk
+                    },
+                    data
+                )
+                .then(() => {});
         },
         onGlobalSearch(event) {
             this.loadAssetCategories(event);
@@ -91,18 +98,23 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteAssetChecklist(this.$api, this.projectId, this.activeChecklist.pk).then(() => {
-                        this.activeChecklist = null;
-                        this.asset = null;
-                        this.categories = [];
-                        this.loadAssetChecklists();
-                        this.$router.push({
-                            name: 'ProjectChecklistList',
-                            params: {
-                                projectId: this.projectId
-                            }
+                    this.$api
+                        .delete(this.$api.e.pChecklistDetail, {
+                            projectPk: this.projectId,
+                            pk: this.activeChecklist.pk
+                        })
+                        .then(() => {
+                            this.activeChecklist = null;
+                            this.asset = null;
+                            this.categories = [];
+                            this.loadAssetChecklists();
+                            this.$router.push({
+                                name: 'ProjectChecklistList',
+                                params: {
+                                    projectId: this.projectId
+                                }
+                            });
                         });
-                    });
                 }
             });
         }

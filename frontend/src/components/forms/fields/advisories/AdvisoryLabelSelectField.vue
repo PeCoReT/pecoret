@@ -1,5 +1,4 @@
 <script>
-import AdvisoryService from "@/service/AdvisoryService";
 
 export default {
     name: 'AdvisoryLabelSelectField',
@@ -13,7 +12,7 @@ export default {
             this.$emit('update:modelValue', this.items);
         },
         loadData() {
-            this.service.getLabels().then((response) => {
+            this.$api.get(this.$api.e.aLabelList).then((response) => {
                 this.choices = response.data.results;
                 this.items = [];
                 this.modelValue.forEach((item) => {
@@ -27,7 +26,6 @@ export default {
         return {
             items: this.modelValue,
             choices: [],
-            service: new AdvisoryService()
         };
     }
 };

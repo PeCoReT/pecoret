@@ -1,5 +1,4 @@
 <script>
-import AssetService from '@/service/AssetService';
 import WebApplicationUpdateDialog from '@/components/projects/assets/WebApplicationUpdateDialog.vue';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import markdown from '@/utils/markdown';
@@ -14,7 +13,6 @@ export default {
             projectId: this.$route.params.projectId,
             assetId: this.$route.params.assetId,
             model: {},
-            service: new AssetService(),
             breadcrumbs: [
                 {
                     label: 'Web Applications',
@@ -34,7 +32,7 @@ export default {
     },
     methods: {
         getItem() {
-            this.service.getWebApplication(this.$api, this.projectId, this.assetId).then((response) => {
+            this.$api.get(this.$api.e.pWebAppDetail, { projectPk: this.projectId, pk: this.assetId }).then((response) => {
                 this.model = response.data;
             });
         },
@@ -45,7 +43,7 @@ export default {
             return markdown.renderMarkdown(text);
         },
         deleteAsset() {
-            this.service.deleteWebApplication(this.$api, this.projectId, this.assetId).then(() => {
+            this.$api.delete(this.$api.e.pWebAppDetail, { projectPk: this.projectId, pk: this.assetId }).then(() => {
                 this.$toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Asset deleted!', life: 3000 });
                 this.$router.push({ name: 'WebApplicationList', params: { projectId: this.projectId } });
             });

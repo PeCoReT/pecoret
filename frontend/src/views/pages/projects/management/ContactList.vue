@@ -1,5 +1,4 @@
 <script>
-import ProjectService from '@/service/ProjectService';
 import ProjectContactCreateDialog from '@/components/dialogs/ProjectContactCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
@@ -19,7 +18,6 @@ export default {
             loading: false,
             totalRecords: 0,
             pagination: { page: 1, limit: 20 },
-            projectService: new ProjectService()
         };
     },
     mounted() {
@@ -36,8 +34,9 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.projectService
-                .getContacts(this.$api, this.projectId, params)
+            let url = this.$api.e.projectsContactList;
+            this.$api
+                .get(url, { projectPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -58,7 +57,7 @@ export default {
             });
         },
         deleteContact(contactId) {
-            this.projectService.deleteContact(this.$api, this.projectId, contactId).then(() => {
+            this.$api.delete(this.$api.e.projectsContactDetail, { projectPk: this.projectId, pk: contactId }).then(() => {
                 this.$toast.add({
                     severity: 'info',
                     summary: 'Contact Removed!',
@@ -69,7 +68,7 @@ export default {
             });
         }
     },
-    components: { GenericDataTable, BaseListLayout, ProjectContactCreateDialog}
+    components: { GenericDataTable, BaseListLayout, ProjectContactCreateDialog }
 };
 </script>
 
@@ -81,7 +80,10 @@ export default {
         <template #table>
             <GenericDataTable :total-records="totalRecords" :loading="loading" :pagination="pagination" blank-slate-text="No contacts found!" blank-slate-title="No Contacts!" blank-slate-icon="fa fa-id-card" :model-value="items" @page="onPage">
                 <Column field="name" header="Name">
-                    <template #body="slotProps"> {{ slotProps.data.contact.first_name }} {{ slotProps.data.contact.last_name }} </template>
+                    <template #body="slotProps">
+                        {{ slotProps.data.contact.first_name }}
+                        {{ slotProps.data.contact.last_name }}
+                    </template>
                 </Column>
                 <Column field="contact.email" header="E-Mail"></Column>
                 <Column field="contact.phone" header="Phone"></Column>

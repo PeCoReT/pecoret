@@ -1,5 +1,5 @@
 <script>
-import ASMonitorService, { allowedObjectTypeChoices } from '@/service/ASMonitorService';
+import {allowedObjectTypeChoices} from '@/utils/constants';
 import ModalDialog from '@/components/common/ModalDialog.vue';
 
 export default {
@@ -19,7 +19,6 @@ export default {
                 enabled: true
             },
             loading: false,
-            service: new ASMonitorService()
         };
     },
     methods: {
@@ -39,7 +38,7 @@ export default {
                 priority: this.model.priority,
                 enabled: this.model.enabled
             };
-            this.service.createScanType(data).then(() => {
+            this.$api.post(this.$api.e.asScanTypeList, null, data).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Scan Type created!',

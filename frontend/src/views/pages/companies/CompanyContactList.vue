@@ -1,6 +1,5 @@
 <script>
 import CompanyTabMenu from '@/components/navigation/CompanyTabMenu.vue';
-import CompanyService from '@/service/CompanyService';
 import ContactCreateDialog from '@/components/dialogs/ContactCreateDialog.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 import CompanyContactUpdateDialog from '@/components/dialogs/CompanyContactUpdateDialog.vue';
@@ -33,7 +32,6 @@ export default {
             items: [],
             loading: false,
             totalRecords: 0,
-            companyService: new CompanyService(),
             pagination: { page: 1, limit: 20 },
             companyId: this.$route.params.companyId
         };
@@ -48,8 +46,8 @@ export default {
                 page: this.pagination.page,
                 limit: this.pagination.limit
             };
-            this.companyService
-                .getContacts(this.companyId, data)
+            this.$api
+                .get(this.$api.e.cContactList, { cPk: this.companyId }, data)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -71,7 +69,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.companyService.deleteContact(this.$api, this.companyId, id).then(() => {
+                    this.$api.delete(this.$api.e.cContactDetail, { cPk: this.companyId, pk: id }).then(() => {
                         this.getContacts();
                     });
                 }

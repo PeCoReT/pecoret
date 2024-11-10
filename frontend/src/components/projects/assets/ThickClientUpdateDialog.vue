@@ -1,5 +1,4 @@
 <script>
-import AssetService from '@/service/AssetService';
 import AssetEnvironmentSelectField from '@/components/forms/fields/AssetEnvironmentSelectField.vue';
 import AssetAccessibleSelectField from '@/components/forms/fields/AssetAccessibleSelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
@@ -19,7 +18,7 @@ export default {
             visible: false,
             model: this.asset,
             loading: false,
-            service: new AssetService(),
+            projectId: this.$route.params.projectId,
             osChoices: [
                 {
                     label: 'Unknown',
@@ -72,10 +71,19 @@ export default {
             if (this.model.technologies.length > 0 && this.model.technologies[0].pk) {
                 delete data.technologies;
             }
-            this.service.patchThickClient(this.$api, this.$route.params.projectId, this.asset.pk, data).then(() => {
-                this.$emit('object-updated', this.model);
-                this.visible = false;
-            });
+            this.$api
+                .patch(
+                    this.$api.e.pThickClientDetail,
+                    {
+                        projectPk: this.projectId,
+                        pk: this.asset.pk
+                    },
+                    data
+                )
+                .then(() => {
+                    this.$emit('object-updated', this.model);
+                    this.visible = false;
+                });
         }
     },
     watch: {
@@ -87,7 +95,13 @@ export default {
             }
         }
     },
-    components: { InlineFieldGroup, TechnologyMultiSelectField, AssetEnvironmentSelectField, AssetAccessibleSelectField, MarkdownEditor }
+    components: {
+        InlineFieldGroup,
+        TechnologyMultiSelectField,
+        AssetEnvironmentSelectField,
+        AssetAccessibleSelectField,
+        MarkdownEditor
+    }
 };
 </script>
 

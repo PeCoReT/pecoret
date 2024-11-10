@@ -1,5 +1,4 @@
 <script>
-import AssetService from '@/service/AssetService';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
 import ServiceCreateDialog from '@/components/projects/assets/ServiceCreateDialog.vue';
 import ServiceUpdateDialog from '@/components/projects/assets/ServiceUpdateDialog.vue';
@@ -17,7 +16,6 @@ export default {
     },
     data() {
         return {
-            service: new AssetService(),
             items: [],
             totalRecords: 0,
             loading: false,
@@ -37,8 +35,8 @@ export default {
                 page: this.pagination.page,
                 limit: this.pagination.limit
             };
-            this.service
-                .getServices(this.$api, this.projectId, params)
+            this.$api
+                .get(this.$api.e.pServiceList, { projectPk: this.projectId }, params)
                 .then((resp) => {
                     this.items = resp.data.results;
                     this.totalRecords = resp.data.count;
@@ -62,15 +60,20 @@ export default {
                     this.loading = true;
                     let itemsDeleted = 0;
                     this.selectedItems.forEach((item) => {
-                        this.service.deleteService(this.$api, this.projectId, item.pk).then(() => {
-                            itemsDeleted++;
-                            if (itemsDeleted === this.selectedItems.length) {
-                                this.loading = false;
-                                this.deleteButtonLoading = false;
-                                this.selectedItems = [];
-                                this.getItems();
-                            }
-                        });
+                        this.$api
+                            .delete(this.$api.e.pServiceDetail, {
+                                projectPk: this.projectId,
+                                pk: item.pk
+                            })
+                            .then(() => {
+                                itemsDeleted++;
+                                if (itemsDeleted === this.selectedItems.length) {
+                                    this.loading = false;
+                                    this.deleteButtonLoading = false;
+                                    this.selectedItems = [];
+                                    this.getItems();
+                                }
+                            });
                     });
                 }
             });
@@ -81,8 +84,8 @@ export default {
                 search: query,
                 host: this.hostId
             };
-            this.service
-                .getServices(this.$api, this.projectId, params)
+            this.$api
+                .get(this.$api.e.pServiceList, { projectPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;

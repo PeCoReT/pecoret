@@ -1,5 +1,4 @@
 <script>
-import ReportService from '@/service/ReportService';
 import ReportCreateDialog from '@/components/projects/reporting/ReportCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
@@ -19,7 +18,6 @@ export default {
             loading: false,
             totalRecords: 0,
             pagination: { page: 1, limit: 20 },
-            reportService: new ReportService()
         };
     },
     mounted() {
@@ -36,8 +34,8 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.reportService
-                .getReports(this.$api, this.projectId, params)
+            this.$api
+                .get(this.$api.e.pReportList, { pPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -50,8 +48,8 @@ export default {
             let params = {
                 search: query
             };
-            this.reportService
-                .getReports(this.$api, this.projectId, params)
+            this.$api
+                .get(this.$api.e.pReportList, { pPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -93,12 +91,10 @@ export default {
                 @search="onGlobalSearch"
                 :show-search="true"
             >
-
-                <Column field="name" header="Name"> </Column>
+                <Column field="name" header="Name"></Column>
                 <Column field="template" header="Template"></Column>
                 <Column field="author.username" header="Author"></Column>
             </GenericDataTable>
         </template>
     </BaseListLayout>
-
 </template>

@@ -1,6 +1,4 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService';
-import VulnerabilityTemplateService from '@/service/VulnerabilityTemplateService';
 import SeveritySelectField from '@/components/forms/fields/SeveritySelectField.vue';
 import { useAuthStore } from '@/store/auth';
 import AdvisoryLabelSelectField from '@/components/forms/fields/advisories/AdvisoryLabelSelectField.vue';
@@ -11,8 +9,6 @@ export default {
     name: 'AdvisoryUpdate',
     data() {
         return {
-            service: new AdvisoryService(),
-            templateService: new VulnerabilityTemplateService(),
             advisoryId: this.$route.params.advisoryId,
             authStore: useAuthStore(),
             breadcrumbs: [
@@ -68,8 +64,8 @@ export default {
                 }
                 data['labels'].push(item);
             });
-            this.service
-                .patchAdvisory(this.advisoryId, data)
+            this.$api
+                .patch(this.$api.e.advisoryDetail, { pk: this.advisoryId }, data)
                 .then((response) => {
                     this.$toast.add({
                         severity: 'success',
@@ -89,7 +85,7 @@ export default {
                 });
         },
         onFocusTemplate() {
-            this.templateService.getTemplates(this.$api).then((response) => {
+            this.$api.get(this.$api.e.vulnTemplateList).then((response) => {
                 this.templateChoices = response.data.results;
             });
         },
@@ -97,12 +93,12 @@ export default {
             let params = {
                 search: event.value
             };
-            this.templateService.getTemplates(this.$api, params).then((response) => {
+            this.$api.get(this.$api.e.vulnTemplateList, null, params).then((response) => {
                 this.templateChoices = response.data.results;
             });
         },
         getAdvisory() {
-            this.service.getAdvisory(this.advisoryId).then((response) => {
+            this.$api.get(this.$api.e.advisoryDetail, { pk: this.advisoryId }).then((response) => {
                 this.model = response.data;
                 this.model.template = response.data.vulnerability.vulnerability_id;
                 this.templateChoices.push(response.data.vulnerability);

@@ -1,8 +1,8 @@
 <script>
-import ProjectService from '@/service/ProjectService';
-import CompanyService from '@/service/CompanyService';
 import PentestTypeSelectField from '@/components/forms/fields/PentestTypeSelectField.vue';
 import ModalDialog from '@/components/common/ModalDialog.vue';
+import {projectVisibilityChoices} from "@/utils/constants";
+
 
 export default {
     name: 'ProjectCreateDialog',
@@ -35,14 +35,15 @@ export default {
             ],
             companyChoices: null,
             languageChoices: null,
-            service: new ProjectService(),
-            companyService: new CompanyService()
         };
     },
     mounted() {
         this.model.visibility = 'Members Only';
     },
     methods: {
+        projectVisibilityChoices() {
+            return projectVisibilityChoices
+        },
         open() {
             this.showDialog = true;
         },
@@ -50,7 +51,7 @@ export default {
             if (this.companyChoices) {
                 return;
             }
-            this.companyService.getCompanies().then((response) => {
+            this.$api.get(this.$api.e.companyList).then((response) => {
                 this.companyChoices = response.data.results;
             });
         },
@@ -61,7 +62,7 @@ export default {
             let params = {
                 search: event.value
             };
-            this.companyService.getCompanies(params).then((response) => {
+            this.$api.get(this.$api.e.companyList, null, params).then((response) => {
                 this.companyChoices = response.data.results;
             });
         },
@@ -69,7 +70,7 @@ export default {
             if (this.languageChoices) {
                 return;
             }
-            this.service.getLanguages(this.$api).then((response) => {
+            this.$api.get(this.$api.e.projectsAvailableLanguages).then((response) => {
                 this.languageChoices = response.data;
             });
         },
@@ -88,8 +89,8 @@ export default {
                 company: this.model.company,
                 visibility: this.model.visibility
             };
-            this.service
-                .createProject(this.$api, data)
+            this.$api
+                .post(this.$api.e.projectList, null, data)
                 .then((response) => {
                     this.$toast.add({
                         severity: 'success',
@@ -141,7 +142,7 @@ export default {
                     <Select :options="companyChoices" @filter="onFilterCompany" @focus="onFocusCompany" filter optionLabel="name" optionValue="pk" v-model="model.company"></Select>
                 </InlineField>
                 <InlineField label="Visibility">
-                    <Select :options="service.getVisibilityChoices()" optionLabel="label" optionValue="value" v-model="model.visibility"></Select>
+                    <Select :options="projectVisibilityChoices()" optionLabel="label" optionValue="value" v-model="model.visibility"></Select>
                 </InlineField>
             </InlineFieldGroup>
             <Field label="Require CVSS Score">

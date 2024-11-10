@@ -1,5 +1,4 @@
 <script>
-import AssetService from '@/service/AssetService';
 import GenericAssetCreateDialog from '@/components/projects/assets/GenericAssetCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
@@ -8,7 +7,6 @@ export default {
     name: 'HostList',
     data() {
         return {
-            service: new AssetService(),
             projectId: this.$route.params.projectId,
             breadcrumbs: [
                 {
@@ -28,8 +26,9 @@ export default {
             let params = {
                 search: query
             };
-            this.service
-                .getGenericAssets(this.$api, this.projectId, params)
+
+            this.$api
+                .get(this.$api.e.pGenericAssetList, { projectPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -44,8 +43,8 @@ export default {
                 page: this.pagination.page,
                 limit: this.pagination.limit
             };
-            this.service
-                .getGenericAssets(this.$api, this.projectId, params)
+            this.$api
+                .get(this.$api.e.pGenericAssetList, { projectPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -65,11 +64,11 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.assetService.deleteGenericAsset(this.$api, this.projectId, id).then(() => {
+                    this.$api.delete(this.$api.e.pGenericAssetDetail, { projectPk: this.projectId, pk: id }).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',
-                            detail: 'Host was deleted!',
+                            detail: 'Asset was deleted!',
                             life: 3000
                         });
                         this.getItems();

@@ -1,5 +1,4 @@
 <script>
-import AuthService from '@/service/AuthService';
 import { useAuthStore } from '@/store/auth';
 import AuthLayout from '@/layout/AuthLayout.vue';
 
@@ -7,7 +6,10 @@ export default {
     name: 'Login',
     components: { AuthLayout },
     mounted() {
-        this.service.checkAuth(this.$api);
+        this.$api.get(this.$api.e.authCheck).then((response) => {
+            this.authStore.setAuthData(response.data);
+        });
+
         if (this.authStore.me) {
             if (this.authStore.groups.isVendor === true) {
                 this.$router.push({ name: 'AdvisoryList' });
@@ -22,7 +24,6 @@ export default {
     },
     data() {
         return {
-            service: new AuthService(),
             authStore: useAuthStore(),
             username: null,
             password: null,
@@ -32,8 +33,9 @@ export default {
     methods: {
         login() {
             this.loading = true;
-            this.service
-                .login(this.$api, this.username, this.password)
+            this.authStore.unsetMe();
+            this.$api
+                .post(this.$api.e.authLogin, null, { username: this.username, password: this.password })
                 .then((response) => {
                     this.authStore.setAuthData(response.data);
                     if (this.authStore.groups.isVendor === true) {

@@ -1,5 +1,4 @@
 <script>
-import TechnologyService from '@/service/TechnologyService';
 
 export default {
     name: 'TechnologySelectField',
@@ -15,7 +14,6 @@ export default {
             choices: [],
             loading: false,
             loaded: false,
-            service: new TechnologyService()
         };
     },
     methods: {
@@ -35,8 +33,8 @@ export default {
         },
         loadData() {
             this.loading = true;
-            this.service
-                .getTechnologies(this.$api)
+            this.$api
+                .get(this.$api.e.technologyList)
                 .then((response) => {
                     this.choices = response.data.results;
                     this.loaded = true;
@@ -49,7 +47,7 @@ export default {
             let params = {
                 search: event.value
             };
-            this.service.getTechnologies(this.$api, params).then((response) => {
+            this.$api.get(this.$api.e.technologyList, null, params).then((response) => {
                 this.choices = response.data.results;
             });
         }

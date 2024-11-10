@@ -1,10 +1,9 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import TargetCreateDialog from '@/components/dialogs/attack_surface/TargetCreateDialog.vue';
 import TargetUpdateDialog from '@/components/dialogs/attack_surface/TargetUpdateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
-import TechnologyService from '@/service/TechnologyService';
+import {DataTypeChoices, InScopeChoices} from "@/utils/constants";
 
 export default {
     name: 'TargetList',
@@ -22,8 +21,6 @@ export default {
                     disabled: true
                 }
             ],
-            service: new ASMonitorService(),
-            techService: new TechnologyService(),
             items: [],
             pagination: { page: 1, limit: 20 },
             loading: false,
@@ -45,6 +42,12 @@ export default {
         };
     },
     methods: {
+        InScopeChoices() {
+            return InScopeChoices
+        },
+        DataTypeChoices() {
+            return DataTypeChoices
+        },
         bulkDeleteConfirm() {
             this.$confirm.require({
                 message: 'Do you want to delete all selected items?',
@@ -56,7 +59,7 @@ export default {
                     this.loading = true;
                     let itemsDeleted = 0;
                     this.selectedItems.forEach((item) => {
-                        this.service.deleteTarget(this.$api, item.pk).then(() => {
+                        this.$api.delete(this.$api.e.asTargetDetail, {pk: item.pk}).then(() => {
                             itemsDeleted++;
                             if (itemsDeleted === this.selectedItems.length) {
                                 this.loading = false;
@@ -77,8 +80,8 @@ export default {
             if (event.sortOrder === -1) {
                 params['ordering'] = `-${event.sortField}`;
             }
-            this.service
-                .getTargets(params)
+            this.$api
+                .get(this.$api.e.asTargetList, null, params)
                 .then((response) => {
                     this.items = response.data.results;
                     this.totalRecords = response.data.count;
@@ -95,8 +98,8 @@ export default {
                 data_type: this.filters.data_type.value,
                 scope: this.filters.scope.value
             };
-            this.service
-                .getTargets(data)
+            this.$api
+                .get(this.$api.e.asTargetList, null, data)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -114,8 +117,8 @@ export default {
             let params = {
                 search: query
             };
-            this.service
-                .getTargets(params)
+            this.$api
+                .get(this.$api.e.asTargetList, null, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -131,7 +134,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteTarget(this.$api, id).then(() => {
+                    this.$api.delete(this.$api.e.asTargetDetail, {pk: id}).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',
@@ -184,19 +187,19 @@ export default {
                 <Column field="data" header="Data"></Column>
                 <Column field="data_type" header="Data Type" :showFilterMatchModes="false">
                     <template #filter="{ filterModel }">
-                        <Dropdown v-model="filterModel.value" :options="service.getDataTypeChoices()" :showClear="true" optionLabel="name" optionValue="value"></Dropdown>
+                        <Dropdown v-model="filterModel.value" :options="DataTypeChoices()" :showClear="true" optionLabel="name" optionValue="value"></Dropdown>
                     </template>
                 </Column>
                 <Column header="IP">
                     <template #body="slotProps">
-                        <span v-if="slotProps.data.resolved_ip">{{ slotProps.data.resolved_ip}}</span>
+                        <span v-if="slotProps.data.resolved_ip">{{ slotProps.data.resolved_ip }}</span>
                         <span v-else>-</span>
                     </template>
                 </Column>
                 <Column field="date_updated" header="Updated" sortable></Column>
                 <Column field="scope" header="Scope" :show-filter-match-modes="false">
                     <template #filter="{ filterModel }">
-                        <Dropdown v-model="filterModel.value" :options="service.getInScopeChoices()" optionValue="value" optionLabel="name"></Dropdown>
+                        <Dropdown v-model="filterModel.value" :options="InScopeChoices()" optionValue="value" optionLabel="name"></Dropdown>
                     </template>
                 </Column>
                 <Column header="Actions">

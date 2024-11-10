@@ -35,8 +35,8 @@ export default {
                 page: this.pagination.page,
                 limit: this.pagination.limit
             };
-            this.service
-                .getProjectTypes(this.$api, params)
+            this.$api
+                .get(this.$api.e.pentestTypeList, null, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -52,7 +52,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteProjectType(this.$api, id).then(() => {
+                    this.$api.delete(this.$api.e.pentestTypeDetail, { pk: id }).then(() => {
                         this.$toast.add({
                             severity: 'success',
                             summary: 'Deleted',

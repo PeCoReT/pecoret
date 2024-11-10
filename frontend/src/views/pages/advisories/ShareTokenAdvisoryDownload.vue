@@ -1,7 +1,6 @@
 <script>
 import AuthLayout from '@/layout/AuthLayout.vue';
-import forceFileDownload from "@/utils/file";
-import AdvisoryService from "@/service/AdvisoryService";
+import forceFileDownload from '@/utils/file';
 
 export default {
     name: 'ShareTokenAdvisoryDownload',
@@ -11,17 +10,27 @@ export default {
             loading: false,
             advisoryId: this.$route.params.advisoryId,
             token: this.$route.params.token,
-            service: new AdvisoryService()
-        }
+        };
     },
     methods: {
         download() {
-            this.loading = true
-            this.service.downloadAdvisoryWithShareToken(this.advisoryId, this.token).then((resp) => {
-                forceFileDownload(resp)
-            }).finally(() => {
-                this.loading = false
-            })
+            this.loading = true;
+            this.$api
+                .get(
+                    this.$api.e.aDownloadWithToken,
+                    {
+                        aPk: this.advisoryId,
+                        token: this.token
+                    },
+                    null,
+                    { responseType: 'arraybuffer' }
+                )
+                .then((resp) => {
+                    forceFileDownload(resp);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         }
     }
 };

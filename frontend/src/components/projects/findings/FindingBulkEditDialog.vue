@@ -1,5 +1,4 @@
 <script>
-import FindingService, { statusChoices } from '@/service/FindingService';
 import { findingStatusChoices, severityChoices } from '@/utils/constants';
 
 export default {
@@ -18,7 +17,6 @@ export default {
                 status: null
             },
             loading: false,
-            service: new FindingService(),
             projectId: this.$route.params.projectId
         };
     },
@@ -28,9 +26,6 @@ export default {
         },
         severityChoices() {
             return severityChoices;
-        },
-        statusChoices() {
-            return statusChoices;
         },
         close() {
             this.visible = false;
@@ -47,7 +42,7 @@ export default {
             }
             this.loading = true;
             for (let i = 0; i < this.findings.length; i++) {
-                await this.service.patchFinding(this.$api, this.projectId, this.findings[i].pk, data).then(() => {});
+                await this.$api.patch(this.$api.e.pFindingDetail, { pPk: this.projectId, pk: this.finding.pk }, data).then(() => {});
             }
             this.loading = false;
             this.fields.severity = null;

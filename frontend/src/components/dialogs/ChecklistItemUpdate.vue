@@ -1,5 +1,4 @@
 <script>
-import ChecklistService from "@/service/ChecklistService";
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
@@ -14,7 +13,6 @@ export default {
         return {
             visible: false,
             model: this.command,
-            service: new ChecklistService(),
             loading: false
         };
     },
@@ -31,7 +29,7 @@ export default {
                 name: this.model.name,
                 item_id: this.model.item_id
             };
-            this.service.patchItem(this.$api, this.item.pk, data).then(() => {
+            this.$api.patch(this.$api.e.checkItemDetail, { pk: this.item.pk }, data).then(() => {
                 this.$emit('object-updated', this.model);
                 this.visible = false;
             });
@@ -46,7 +44,7 @@ export default {
             }
         }
     },
-    components: {MarkdownEditor}
+    components: { MarkdownEditor }
 };
 </script>
 
@@ -57,14 +55,12 @@ export default {
         <Form>
             <Field label="Item ID">
                 <InputText id="id" type="text" v-model="model.item_id"></InputText>
-
             </Field>
             <Field label="Name">
                 <InputText id="name" type="text" v-model="model.name"></InputText>
             </Field>
             <Field label="Description">
-                                <MarkdownEditor v-model="model.description"></MarkdownEditor>
-
+                <MarkdownEditor v-model="model.description"></MarkdownEditor>
             </Field>
         </Form>
     </ModalDialog>

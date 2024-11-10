@@ -1,5 +1,4 @@
 <script>
-import AssetService from '@/service/AssetService';
 import MobileApplicationCreateDialog from '@/components/projects/assets/MobileApplicationCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
@@ -8,7 +7,6 @@ export default {
     name: 'MobileApplicationList',
     data() {
         return {
-            assetService: new AssetService(),
             projectId: this.$route.params.projectId,
             breadcrumbs: [
                 {
@@ -28,8 +26,8 @@ export default {
             let params = {
                 search: query
             };
-            this.assetService
-                .getMobileApplications(this.$api, this.projectId, params)
+            this.$api
+                .get(this.$api.e.pMobileAppList, { projectPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -44,8 +42,8 @@ export default {
                 page: this.pagination.page,
                 limit: this.pagination.limit
             };
-            this.assetService
-                .getMobileApplications(this.$api, this.projectId, params)
+            this.$api
+                .get(this.$api.e.pMobileAppList, { projectPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -74,7 +72,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.assetService.deleteMobileApplication(this.$api, this.projectId, id).then(() => {
+                    this.$api.delete(this.$api.e.pMobileAppDetail, { projectPk: this.projectId, pk: id }).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',

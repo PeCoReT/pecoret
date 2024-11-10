@@ -1,10 +1,8 @@
 <script>
-import FindingService from '@/service/FindingService';
 import ProjectVulnerabilityAutocompleteField from '@/components/forms/fields/ProjectVulnerabilityAutocompleteField.vue';
 import ModalDialog from '@/components/common/ModalDialog.vue';
 import SeveritySelectField from '@/components/forms/fields/SeveritySelectField.vue';
 import AssetSelectField from '@/components/forms/fields/AssetSelectField.vue';
-import UserAccountService from '@/service/UserAccountService';
 
 export default {
     name: 'FindingCreateDialog',
@@ -27,9 +25,7 @@ export default {
                 name: null
             },
             loading: false,
-            service: new FindingService(),
-            userAccountChoices: [],
-            accountService: new UserAccountService()
+            userAccountChoices: []
         };
     },
     methods: {
@@ -43,7 +39,7 @@ export default {
             if (this.userAccountChoices.length) {
                 return;
             }
-            this.accountService.getAccounts(this.$api, this.projectId).then((response) => {
+            this.$api.get(this.$api.e.pAccountList, { projectPk: this.projectId }).then((response) => {
                 this.userAccountChoices = response.data.results;
             });
         },
@@ -62,7 +58,7 @@ export default {
             if (this.model.severity && this.model.severity.value) {
                 data['severity'] = this.model.severity.value;
             }
-            this.service.createFinding(this.$api, this.projectId, data).then((response) => {
+            this.$api.post(this.$api.e.pFindingList, { pPk: this.projectId }, data).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Finding created!',

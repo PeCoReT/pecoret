@@ -1,8 +1,8 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
 import { useListViewComposable } from '@/composables/listViewComposable';
 import ASFindingComponentCreateDialog from '@/components/dialogs/attack_surface/FindingComponentCreateDialog.vue';
+import {findingComponentStatus} from "@/utils/constants";
 
 export default {
     name: 'AffectedComponentFindingCard',
@@ -11,7 +11,6 @@ export default {
         return {
             findingId: this.$route.params.findingId,
             items: [],
-            service: new ASMonitorService(),
             loading: false,
             totalRecords: 0,
             pagination: { page: 1, limit: 50 },
@@ -23,6 +22,9 @@ export default {
         this.getItems();
     },
     methods: {
+        findingComponentStatus() {
+            return findingComponentStatus
+        },
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
@@ -34,8 +36,8 @@ export default {
             this.loading = true;
             let data = this.listComposable.buildParams(this.pagination, this.filters, params);
             data['finding'] = this.findingId;
-            this.service
-                .getFindingComponents(data)
+            this.$api
+                .get(this.$api.e.asFindingComponentList, null, data)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -45,14 +47,14 @@ export default {
                 });
         },
         patchComponent(data) {
-          this.service.patchFindingComponent(data.pk, {status: data.status}).then(() => {
-              this.$toast.add({
-                  severity: 'success',
-                  life: 3000,
-                  summary: 'Component updated!',
-                  detail: 'Component updated successfully!'
-              })
-          })
+            this.$api.patch(this.$api.e.asFindingComponentDetail, { pk: data.pk }, { status: data.status }).then(() => {
+                this.$toast.add({
+                    severity: 'success',
+                    life: 3000,
+                    summary: 'Component updated!',
+                    detail: 'Component updated successfully!'
+                });
+            });
         },
         bulkDeleteConfirm() {
             this.$confirm.require({
@@ -64,7 +66,7 @@ export default {
                     this.loading = true;
                     let itemsDeleted = 0;
                     this.selectedItems.forEach((item) => {
-                        this.service.deleteFindingComponent(item.pk).then(() => {
+                        this.$api.delete(this.$api.e.asFindingComponentDetail, { pk: item.pk }).then(() => {
                             itemsDeleted++;
                             if (itemsDeleted === this.selectedItems.length) {
                                 this.loading = false;
@@ -110,7 +112,7 @@ export default {
             <Column field="component.scheme" header="Affected Service"></Column>
             <Column field="status" header="Status">
                 <template #body="slotProps">
-                    <Select :options="this.service.getFindingComponentStatus()" optionLabel="name" optionValue="value" v-model="slotProps.data.status" @update:modelValue="patchComponent(slotProps.data)"></Select>
+                    <Select :options="findingComponentStatus()" optionLabel="name" optionValue="value" v-model="slotProps.data.status" @update:modelValue="patchComponent(slotProps.data)"></Select>
                 </template>
             </Column>
         </GenericDataTable>

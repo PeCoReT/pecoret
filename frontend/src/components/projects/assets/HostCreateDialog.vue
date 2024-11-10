@@ -1,5 +1,4 @@
 <script>
-import AssetService from '@/service/AssetService';
 import AssetEnvironmentSelectField from '@/components/forms/fields/AssetEnvironmentSelectField.vue';
 import AssetAccessibleSelectField from '@/components/forms/fields/AssetAccessibleSelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
@@ -21,7 +20,6 @@ export default {
                 accessible: 'Unknown',
                 technologies: []
             },
-            assetService: new AssetService()
         };
     },
     methods: {
@@ -29,7 +27,7 @@ export default {
             this.showDialog = true;
         },
         create() {
-            this.assetService.createHost(this.$api, this.projectId, this.model).then((response) => {
+            this.$api.post(this.$api.e.pHostList, { projectPk: this.projectId }, this.model).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Created!',

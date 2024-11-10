@@ -1,5 +1,4 @@
 <script>
-import FindingService from '@/service/FindingService';
 
 export default {
     name: 'LatestFindingsDashboard',
@@ -11,7 +10,6 @@ export default {
     data() {
         return {
             findings: null,
-            service: new FindingService()
         };
     },
     mounted() {
@@ -24,7 +22,7 @@ export default {
                 page: 1,
                 ordering: '-date_created'
             };
-            this.service.getFindings(this.$api, this.projectId, params).then((response) => {
+            this.$api.get(this.$api.e.pFindingList, {pPk: this.projectId}, params).then((response) => {
                 this.findings = response.data.results;
             });
         },

@@ -1,5 +1,4 @@
 <script>
-import AssetService from '@/service/AssetService';
 import AssetEnvironmentSelectField from '@/components/forms/fields/AssetEnvironmentSelectField.vue';
 import AssetAccessibleSelectField from '@/components/forms/fields/AssetAccessibleSelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
@@ -54,7 +53,6 @@ export default {
                     value: 'Linux'
                 }
             ],
-            service: new AssetService()
         };
     },
     methods: {
@@ -63,8 +61,8 @@ export default {
         },
         save() {
             this.loading = true;
-            this.service
-                .createThickClient(this.$api, this.projectId, this.model)
+            this.$api
+                .post(this.$api.e.pGenericAssetList, { projectPk: this.projectId }, this.model)
                 .then((response) => {
                     this.$toast.add({
                         severity: 'success',

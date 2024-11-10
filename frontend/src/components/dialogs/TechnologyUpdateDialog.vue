@@ -1,7 +1,6 @@
 <script>
 import ModalDialog from '@/components/common/ModalDialog.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
-import TechnologyService from '@/service/TechnologyService';
 import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
 
 export default {
@@ -18,7 +17,6 @@ export default {
             showDialog: false,
             model: this.technology,
             loading: false,
-            service: new TechnologyService()
         };
     },
     watch: {
@@ -47,7 +45,7 @@ export default {
             if (this.model.implicit_technologies.length > 0 && this.model.implicit_technologies[0].pk) {
                 delete data.implicit_technologies;
             }
-            this.service.patchTechnology(this.$api, this.technology.pk, data).then(() => {
+            this.$api.patch(this.$api.e.technologyDetail, { pk: this.technology.pk }, data).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Technology updated!',

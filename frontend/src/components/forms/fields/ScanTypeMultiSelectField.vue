@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 
 export default {
     name: 'ScanTypeMultiSelectField',
@@ -14,7 +13,6 @@ export default {
             loading: false,
             items: [],
             choices: [],
-            service: new ASMonitorService()
         };
     },
     watch: {
@@ -36,12 +34,12 @@ export default {
             let data = {
                 search: event.value
             };
-            this.service.getScanTypes(data).then((response) => {
+            this.$api.get(this.$api.e.asScanTypeList, null, data).then((response) => {
                 this.choices = response.data.results;
             });
         },
         getItems() {
-            this.service.getScanTypes().then((response) => {
+            this.$api.get(this.$api.e.asScanTypeList).then((response) => {
                 this.choices = response.data.results;
             });
         },

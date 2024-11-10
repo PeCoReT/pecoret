@@ -1,6 +1,5 @@
 <script>
 import BaseLayout from '@/layout/base/BaseLayout.vue';
-import ASMonitorService from '@/service/ASMonitorService';
 import CountryFlag from '@/components/icons/CountryFlag.vue';
 
 export default {
@@ -8,7 +7,6 @@ export default {
     components: { CountryFlag, BaseLayout },
     data() {
         return {
-            service: new ASMonitorService(),
             targetId: this.$route.params.targetId,
             target: {},
             loading: false,
@@ -30,8 +28,7 @@ export default {
     methods: {
         getItem() {
             this.loading = true;
-            this.service
-                .getTarget(this.targetId)
+            this.$api.get(this.$api.e.asTargetDetail, {pk: this.targetId})
                 .then((resp) => {
                     this.target = resp.data;
                 })

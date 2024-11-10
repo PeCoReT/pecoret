@@ -1,5 +1,4 @@
 <script>
-import FindingService from '@/service/FindingService';
 import ModalDialog from '@/components/common/ModalDialog.vue';
 
 export default {
@@ -19,7 +18,6 @@ export default {
             model: {
                 name: null
             },
-            service: new FindingService()
         };
     },
     methods: {
@@ -30,7 +28,7 @@ export default {
             let data = {
                 name: this.model.name
             };
-            this.service.copyFinding(this.$api, this.projectId, this.finding, data).then((response) => {
+            this.$api.post(this.$api.e.pFindingCopy, { pPk: this.projectId, pk: this.finding }, data).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Finding copied!',

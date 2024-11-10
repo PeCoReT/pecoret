@@ -1,9 +1,7 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
 import URLCreateDialog from '@/components/dialogs/attack_surface/URLCreateDialog.vue';
-import TechnologyService from '@/service/TechnologyService';
 
 export default {
     name: 'URLList',
@@ -14,13 +12,11 @@ export default {
     },
     data() {
         return {
-            service: new ASMonitorService(),
             items: [],
             loading: false,
             pagination: { limit: 25, page: 1 },
             totalRecords: 0,
             techChoices: [],
-            techService: new TechnologyService(),
             selectedItems: [],
             deleteButtonLoading: false,
             filters: {
@@ -45,8 +41,8 @@ export default {
                 limit: this.pagination.limit,
                 technologies: this.filters.technologies.value
             };
-            this.service
-                .getURLs(params)
+            this.$api
+                .get(this.$api.e.asUrlList, null, params)
                 .then((resp) => {
                     this.items = resp.data.results;
                     this.totalRecords = resp.data.count;
@@ -75,7 +71,7 @@ export default {
             let params = {
                 search: event
             };
-            this.service.getURLs(params).then((resp) => {
+            this.$api.get(this.$api.e.asUrlList, null, params).then((resp) => {
                 this.items = resp.data.results;
                 this.totalRecords = resp.data.count;
             });
@@ -84,7 +80,7 @@ export default {
             let params = {
                 search: event.value
             };
-            this.techService.getTechnologies(this.$api, params).then((response) => {
+            this.$api.get(this.$api.e.technologyList, null, params).then((response) => {
                 this.techChoices = response.data.results;
             });
         },
@@ -107,7 +103,7 @@ export default {
                     this.loading = true;
                     let itemsDeleted = 0;
                     this.selectedItems.forEach((item) => {
-                        this.service.deleteURL(this.$api, item.pk).then(() => {
+                        this.$api.delete(this.$api.e.asUrlDetail, { pk: item.pk }).then(() => {
                             itemsDeleted++;
                             if (itemsDeleted === this.selectedItems.length) {
                                 this.loading = false;

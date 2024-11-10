@@ -1,5 +1,4 @@
 <script>
-import CompanyService from '@/service/CompanyService';
 
 export default {
     name: 'CompanySelectField',
@@ -14,7 +13,6 @@ export default {
     emits: ['update:modelValue'],
     data() {
         return {
-            service: new CompanyService(),
             items: [],
             model: null
         };
@@ -26,7 +24,7 @@ export default {
             }
         },
         getItems(params) {
-            this.service.getCompanies(params).then((response) => {
+            this.$api.get(this.$api.e.companyList, null, params).then((response) => {
                 this.items = response.data.results;
             });
         },

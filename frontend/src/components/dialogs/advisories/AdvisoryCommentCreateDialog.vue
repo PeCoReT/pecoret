@@ -1,7 +1,6 @@
 <script>
 import ModalDialog from '@/components/common/ModalDialog.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
-import AdvisoryService from '@/service/AdvisoryService';
 
 export default {
     name: 'AdvisoryCommentCreateDialog',
@@ -19,7 +18,6 @@ export default {
                 comment: null
             },
             loading: false,
-            service: new AdvisoryService()
         };
     },
     methods: {
@@ -30,7 +28,7 @@ export default {
             let data = {
                 comment: this.model.comment
             };
-            this.service.createComment(this.advisoryId, data).then(() => {
+            this.$api.post(this.$api.e.aCommentList, { aPk: this.advisoryId }, data).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Comment created!',

@@ -1,5 +1,4 @@
 <script>
-import AssetService from '@/service/AssetService';
 import AssetEnvironmentSelectField from '@/components/forms/fields/AssetEnvironmentSelectField.vue';
 import AssetAccessibleSelectField from '@/components/forms/fields/AssetAccessibleSelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
@@ -21,7 +20,6 @@ export default {
                 accessible: 'Unknown',
                 technologies: []
             },
-            service: new AssetService()
         };
     },
     methods: {
@@ -32,7 +30,7 @@ export default {
             this.visible = true;
         },
         create() {
-            this.service.createGenericAsset(this.$api, this.projectId, this.model).then((response) => {
+            this.$api.post(this.$api.e.pGenericAssetList, { projectPk: this.projectId }, this.model).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Created!',

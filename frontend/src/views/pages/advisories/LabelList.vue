@@ -1,6 +1,5 @@
 <script>
 import { defineComponent } from 'vue';
-import AdvisoryService from '@/service/AdvisoryService';
 import LabelCreateDialog from '@/components/dialogs/advisories/LabelCreateDialog.vue';
 import AdvisoryLabelBadge from '@/components/badges/AdvisoryLabelBadge.vue';
 import LabelUpdateDialog from '@/components/dialogs/advisories/LabelUpdateDialog.vue';
@@ -18,7 +17,6 @@ export default defineComponent({
     },
     data() {
         return {
-            service: new AdvisoryService(),
             loading: false,
             breadcrumbs: [
                 {
@@ -44,7 +42,7 @@ export default defineComponent({
             let params = {
                 search: query
             };
-            this.service.getLabels(params).then((response) => {
+            this.$api.get(this.$api.e.aLabelList, null, params).then((response) => {
                 this.items = response.data.results;
                 this.totalRecords = response.data.count;
             });
@@ -56,7 +54,7 @@ export default defineComponent({
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteLabel(id).then(() => {
+                    this.$api.delete(this.$api.e.aLabelDetail, { pk: id }).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',
@@ -74,8 +72,8 @@ export default defineComponent({
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.service
-                .getLabels(params)
+            this.$api
+                .get(this.$api.e.aLabelList, null, params)
                 .then((response) => {
                     this.items = response.data.results;
                     this.totalRecords = response.data.count;

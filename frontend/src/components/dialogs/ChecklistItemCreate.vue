@@ -1,5 +1,4 @@
 <script>
-import ChecklistService from '@/service/ChecklistService';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
@@ -16,7 +15,6 @@ export default {
                 category: this.$route.params.categoryId
             },
             loading: false,
-            service: new ChecklistService()
         };
     },
     methods: {
@@ -27,7 +25,7 @@ export default {
             this.visible = true;
         },
         create() {
-            this.service.createItem(this.$api, this.model).then((response) => {
+            this.$api.post(this.$api.e.checkItemList, null, this.model).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Created!',

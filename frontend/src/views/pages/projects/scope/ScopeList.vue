@@ -1,5 +1,4 @@
 <script>
-import ProjectScopeService from '@/service/ProjectScopeService';
 import ProjectScopeCreateDialog from '@/components/dialogs/ProjectScopeCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
@@ -17,7 +16,6 @@ export default {
             loading: false,
             totalRecords: 0,
             pagination: { page: 1, limit: 20 },
-            service: new ProjectScopeService()
         };
     },
     methods: {
@@ -42,8 +40,8 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.service
-                .getScopes(this.$api, this.projectId, params)
+            this.$api
+                .get(this.$api.e.pScopeList, { projectPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -53,7 +51,7 @@ export default {
                 });
         },
         deleteScope(id) {
-            this.service.deleteScope(this.$api, this.projectId, id).then(() => {
+            this.$api.delete(this.$api.e.pScopeDetail, { projectPk: this.projectId, pk: id }).then(() => {
                 this.$toast.add({
                     severity: 'info',
                     summary: 'Deleted',
@@ -68,8 +66,8 @@ export default {
             let params = {
                 search: query
             };
-            this.service
-                .getScopes(this.$api, this.projectId, params)
+            this.$api
+                .get(this.$api.e.pScopeList, { projectPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;

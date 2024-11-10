@@ -1,5 +1,4 @@
 <script>
-import ReportService from '@/service/ReportService';
 import ReportTabMenu from '@/components/projects/reporting/ReportTabMenu.vue';
 import VersionHistoryCreateDialog from '@/components/dialogs/VersionHistoryCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
@@ -40,7 +39,6 @@ export default {
             loading: false,
             totalRecords: 0,
             pagination: { page: 1, limit: 20 },
-            reportService: new ReportService()
         };
     },
     mounted() {
@@ -57,8 +55,8 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.reportService
-                .getVersionHistoryItems(this.$api, this.projectId, this.reportId, params)
+            this.$api
+                .get(this.$api.e.pReportVersionHistoryList, { pPk: this.projectId, rPk: this.reportId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -79,15 +77,21 @@ export default {
             });
         },
         deleteChangeHistoryItem(versionId) {
-            this.reportService.deleteChangeHistoryItem(this.$api, this.projectId, this.reportId, versionId).then(() => {
-                this.$toast.add({
-                    severity: 'info',
-                    summary: 'Deleted',
-                    detail: 'Change was deleted!',
-                    life: 3000
+            this.$api
+                .delete(this.$api.e.pReportVersionHistoryDetail, {
+                    pPk: this.projectId,
+                    rPk: this.reportId,
+                    pk: versionId
+                })
+                .then(() => {
+                    this.$toast.add({
+                        severity: 'info',
+                        summary: 'Deleted',
+                        detail: 'Change was deleted!',
+                        life: 3000
+                    });
+                    this.getItems();
                 });
-                this.getItems();
-            });
         }
     },
     components: { GenericDataTable, BaseListLayout, ReportTabMenu, VersionHistoryCreateDialog }

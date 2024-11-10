@@ -1,16 +1,13 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService';
 import AdvisoryTabMenu from '@/components/navigation/AdvisoryTabMenu.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 import AdvisoryCommentCreateDialog from '@/components/dialogs/advisories/AdvisoryCommentCreateDialog.vue';
 import CommentCard from '@/components/cards/CommentCard.vue';
 
-
 export default {
     name: 'CommentList',
     data() {
         return {
-            service: new AdvisoryService(),
             comment: '',
             breadcrumbs: [
                 {
@@ -42,13 +39,13 @@ export default {
     },
     methods: {
         getItems() {
-            this.service.getComments(this.advisoryId).then((response) => {
+            this.$api.get(this.$api.e.aCommentList, { aPk: this.advisoryId }).then((response) => {
                 this.items = response.data.results;
             });
         },
         patchComment(pk, comment) {
             let data = { comment: comment };
-            this.service.patchComment(this.advisoryId, pk, data).then(() => {
+            this.$api.patch(this.$api.e.aCommentDetail, { aPk: this.advisoryId, pk: pk }, data).then(() => {
                 this.getItems();
             });
         },

@@ -1,5 +1,4 @@
 <script>
-import CompanyService from '@/service/CompanyService';
 import ReportTemplateSelectField from '@/components/forms/fields/ReportTemplateSelectField.vue';
 import { useAuthStore } from '@/store/auth';
 
@@ -15,7 +14,6 @@ export default {
         return {
             visible: false,
             model: this.company,
-            companyService: new CompanyService(),
             authStore: useAuthStore(),
             loading: false
         };
@@ -38,9 +36,11 @@ export default {
             if (this.authStore.groups.isCustomer === false) {
                 data['report_template'] = this.model.report_template;
             }
-            this.companyService.patchCompany(this.$api, this.company.pk, data).then(() => {
+            this.$api.patch(this.$api.e.companyDetail, { pk: this.company.pk }, data).then(() => {
                 if (this.model.logo) {
-                    this.companyService.uploadCompanyLogo(this.$api, this.company.pk, this.model.logo).then(() => {});
+                    let formData = new FormData();
+                    data.append('logo', this.model.logo);
+                    this.$api.patch(this.$api.e.companyList, { pk: this.company.pk }, formData).then(() => {});
                 }
                 this.$emit('object-updated', this.model);
                 this.visible = false;

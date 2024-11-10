@@ -1,10 +1,9 @@
 <script>
-import ProjectCommandService from '@/service/ProjectCommandService';
 import ProjectCommandCreate from '@/components/dialogs/ProjectCommandCreate.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 import CommandUpdate from '@/components/dialogs/CommandUpdate.vue';
-import BaseListLayout from "@/layout/base/BaseListLayout.vue";
-import GenericDataTable from "@/components/common/GenericDataTable.vue";
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
+import GenericDataTable from '@/components/common/GenericDataTable.vue';
 
 export default {
     name: 'CommandList',
@@ -20,7 +19,6 @@ export default {
                 }
             ],
             projectId: this.$route.params.projectId,
-            service: new ProjectCommandService(),
             items: [],
             selectedItems: [],
             deleteButtonLoading: false,
@@ -36,8 +34,8 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.service
-                .getCommands(this.$api, this.projectId, params)
+            this.$api
+                .get(this.$api.e.pCommandList, { projectPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -57,7 +55,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteCommand(this.$api, this.projectId, id).then(() => {
+                    this.$api.delete(this.$api.e.pCommandDetail, { projectPk: this.projectId, pk: id }).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',
@@ -74,8 +72,8 @@ export default {
             let params = {
                 search: search
             };
-            this.service
-                .getCommands(this.$api, this.projectId, params)
+            this.$api
+                .get(this.$api.e.pCommandList, { projectPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -85,15 +83,14 @@ export default {
                 });
         }
     },
-    components: {GenericDataTable, BaseListLayout, CommandUpdate, BlankSlate, ProjectCommandCreate }
+    components: { GenericDataTable, BaseListLayout, CommandUpdate, BlankSlate, ProjectCommandCreate }
 };
 </script>
 
 <template>
     <BaseListLayout :breadcrumbs="breadcrumbs">
         <template #create-button>
-                            <ProjectCommandCreate @object-created="getItems"></ProjectCommandCreate>
-
+            <ProjectCommandCreate @object-created="getItems"></ProjectCommandCreate>
         </template>
         <template #table>
             <GenericDataTable
@@ -107,15 +104,15 @@ export default {
                 :show-search="true"
                 @search="onGlobalSearch"
             >
-                 <Column field="command" header="Command"></Column>
-                    <Column field="user.username" header="User"></Column>
-                    <Column field="date_run" header="Date Run"></Column>
-                    <Column header="Actions">
-                        <template #body="slotProps">
-                            <CommandUpdate :command="slotProps.data" @object-updated="getItems"></CommandUpdate>
-                            <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="onDeleteConfirmDialog(slotProps.data.pk)"> </Button>
-                        </template>
-                    </Column>
+                <Column field="command" header="Command"></Column>
+                <Column field="user.username" header="User"></Column>
+                <Column field="date_run" header="Date Run"></Column>
+                <Column header="Actions">
+                    <template #body="slotProps">
+                        <CommandUpdate :command="slotProps.data" @object-updated="getItems"></CommandUpdate>
+                        <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="onDeleteConfirmDialog(slotProps.data.pk)"></Button>
+                    </template>
+                </Column>
             </GenericDataTable>
         </template>
     </BaseListLayout>

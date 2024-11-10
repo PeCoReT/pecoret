@@ -4,7 +4,7 @@ import router from './router';
 import { registerPlugins } from '@/plugins';
 
 import PeCoReTAuraPreset from '@/presets/aura';
-import PrimeVue from 'primevue/config'; /* primevue services */
+import PrimeVue from 'primevue/config';
 import ConfirmationService from 'primevue/confirmationservice';
 import ToastService from 'primevue/toastservice';
 import DialogService from 'primevue/dialogservice';
@@ -15,6 +15,7 @@ import pTabMenu from '@/components/common/TabMenu.vue';
 import '@/assets/styles.scss';
 import '@/assets/tailwind.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+
 import Form from '@/components/common/forms/Form.vue';
 import Field from '@/components/common/forms/Field.vue';
 import InlineField from '@/components/common/forms/InlineField.vue';

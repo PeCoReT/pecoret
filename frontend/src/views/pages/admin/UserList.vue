@@ -36,8 +36,8 @@ export default {
                 page: this.pagination.page,
                 limit: this.pagination.limit
             };
-            this.service
-                .getUsers(this.$api, params)
+            this.$api
+                .get(this.$api.e.userList, null, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -51,8 +51,8 @@ export default {
             let params = {
                 search: query
             };
-            this.service
-                .getUsers(this.$api, params)
+            this.$api
+                .get(this.$api.e.userList, null, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -68,7 +68,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteUser(this.$api, userId).then(() => {
+                    this.$api.delete(this.$api.e.userDetail, {pk: userId}).then(() => {
                         this.$toast.add({
                             severity: 'success',
                             summary: 'Deleted',

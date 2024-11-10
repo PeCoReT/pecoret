@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 
 export default {
     name: 'PortSelectField',
@@ -15,7 +14,6 @@ export default {
             choices: [],
             loading: false,
             loaded: false,
-            service: new ASMonitorService()
         };
     },
     methods: {

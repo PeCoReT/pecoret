@@ -3,7 +3,6 @@ import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import ASFindingCreateDialog from '@/components/dialogs/attack_surface/FindingCreateDialog.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
 import { useListViewComposable } from '@/composables/listViewComposable';
-import ASMonitorService from '@/service/ASMonitorService';
 
 export default {
     name: 'FindingList',
@@ -18,7 +17,6 @@ export default {
             items: [],
             totalRecords: 0,
             loading: false,
-            service: new ASMonitorService(),
             pagination: { page: 1, limit: 20 },
             filters: {},
             selectedItems: [],
@@ -42,7 +40,7 @@ export default {
                     this.loading = true;
                     let itemsDeleted = 0;
                     this.selectedItems.forEach((item) => {
-                        this.service.deleteFinding(item.pk).then(() => {
+                        this.$api.delete(this.$api.e.asFindingDetail, { pk: item.pk }).then(() => {
                             itemsDeleted++;
                             if (itemsDeleted === this.selectedItems.length) {
                                 this.loading = false;
@@ -58,8 +56,8 @@ export default {
         getItems(params) {
             this.loading = true;
             let data = this.listComposable.buildParams(this.pagination, this.filters, params);
-            this.service
-                .getFindings(data)
+            this.$api
+                .get(this.$api.e.asFindingList, null, data)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -120,8 +118,7 @@ export default {
                         <span v-else>-</span>
                     </template>
                 </Column>
-                <Column header="Date Updated?" field="date_updated">
-                </Column>
+                <Column header="Date Updated?" field="date_updated"> </Column>
             </GenericDataTable>
         </template>
     </BaseListLayout>

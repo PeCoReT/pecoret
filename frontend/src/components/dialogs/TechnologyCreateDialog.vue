@@ -1,7 +1,6 @@
 <script>
 import ModalDialog from '@/components/common/ModalDialog.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
-import TechnologyService from '@/service/TechnologyService';
 import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
 
 export default {
@@ -21,7 +20,6 @@ export default {
                 implicit_technologies: null
             },
             loading: false,
-            service: new TechnologyService()
         };
     },
     methods: {
@@ -32,7 +30,7 @@ export default {
             if (this.model.implicit_technologies === null) {
                 this.model.implicit_technologies = [];
             }
-            this.service.createTechnology(this.$api, this.model).then(() => {
+            this.$api.post(this.$api.e.technologyList, null, this.model).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Technology created!',

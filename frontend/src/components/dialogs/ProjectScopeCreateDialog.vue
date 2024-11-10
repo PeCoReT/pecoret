@@ -1,5 +1,4 @@
 <script>
-import ProjectScopeService from '@/service/ProjectScopeService';
 
 export default {
     name: 'ProjectScopeCreateDialog',
@@ -13,7 +12,6 @@ export default {
                 permission: null
             },
             loading: false,
-            service: new ProjectScopeService(),
             permissionChoices: [
                 {
                     label: 'Allowed',
@@ -38,7 +36,7 @@ export default {
                 details: this.model.details,
                 permission: this.model.permission
             };
-            this.service.createScope(this.$api, this.projectId, data).then((response) => {
+            this.$api.post(this.$api.e.pScopeList, { projectPk: this.projectId }, data).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Scope Created!',
@@ -65,6 +63,5 @@ export default {
                 <Select option-label="label" option-value="value" v-model="model.permission" :options="permissionChoices"></Select>
             </Field>
         </Form>
-
     </ModalDialog>
 </template>

@@ -1,5 +1,4 @@
 <script>
-import ReportService from '@/service/ReportService';
 import ReportTabMenu from '@/components/projects/reporting/ReportTabMenu.vue';
 import ReportDocumentCreateDialog from '@/components/dialogs/ReportDocumentCreateDialog.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
@@ -12,7 +11,6 @@ export default {
             loading: false,
             projectId: this.$route.params.projectId,
             reportId: this.$route.params.reportId,
-            reportService: new ReportService(),
             pagination: { page: 1, limit: 20 },
             totalRecords: 0,
             timer: '',
@@ -88,16 +86,21 @@ export default {
             return true;
         },
         getPreviewReportDocument() {
-            this.reportService.getPreviewReportDocument(this.$api, this.projectId, this.reportId).then((response) => {
-                this.previewDocument = response.data;
-                if (this.previewDocumentInProgress() === true) {
-                    if (this.timerPreviewDocument === '') {
-                        this.startAutoUpdatePreviewDocument();
+            this.$api
+                .get(this.$api.e.pReportPreviewDocument, {
+                    pPk: this.projectId,
+                    rPk: this.reportId
+                })
+                .then((response) => {
+                    this.previewDocument = response.data;
+                    if (this.previewDocumentInProgress() === true) {
+                        if (this.timerPreviewDocument === '') {
+                            this.startAutoUpdatePreviewDocument();
+                        }
+                    } else {
+                        this.cancelAutpUpdatePreviewDocument();
                     }
-                } else {
-                    this.cancelAutpUpdatePreviewDocument();
-                }
-            });
+                });
         },
         previewDocumentInProgress() {
             // check if previewDocument is currently created
@@ -115,8 +118,8 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.reportService
-                .getReportDocuments(this.$api, this.projectId, this.reportId, params)
+            this.$api
+                .get(this.$api.e.pReportDocumentList, { pPk: this.projectId, rPk: this.reportId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -190,20 +193,35 @@ export default {
         },
         createPreviewDocument() {
             let data = { name: 'Preview', release_type: 'Preview' };
-            this.reportService.createReportDocument(this.$api, this.projectId, this.reportId, data).then(() => {
-                this.getPreviewReportDocument();
-            });
+            this.$api
+                .post(
+                    this.$api.e.pReportDocumentList,
+                    {
+                        pPk: this.projectId,
+                        rPk: this.reportId
+                    },
+                    data
+                )
+                .then(() => {
+                    this.getPreviewReportDocument();
+                });
         },
         deleteDocument(documentId) {
-            this.reportService.deleteReportDocument(this.$api, this.projectId, this.reportId, documentId).then(() => {
-                this.$toast.add({
-                    severity: 'info',
-                    summary: 'Deleted',
-                    detail: 'Document was deleted!',
-                    life: 3000
+            this.$api
+                .delete(this.$api.e.pReportDocumentDetail, {
+                    pPk: this.projectId,
+                    rPk: this.reportId,
+                    pk: documentId
+                })
+                .then(() => {
+                    this.$toast.add({
+                        severity: 'info',
+                        summary: 'Deleted',
+                        detail: 'Document was deleted!',
+                        life: 3000
+                    });
+                    this.getItems();
                 });
-                this.getItems();
-            });
         }
     },
     components: { GenericDataTable, ReportTabMenu, ReportDocumentCreateDialog, BlankSlate }

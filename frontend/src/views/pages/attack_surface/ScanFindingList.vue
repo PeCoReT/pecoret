@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import ScanFindingCreateDialog from '@/components/dialogs/attack_surface/ScanFindingCreateDialog.vue';
 import SeverityBadge from '@/components/badges/SeverityBadge.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
@@ -7,6 +6,7 @@ import GenericDataTable from '@/components/common/GenericDataTable.vue';
 import ScanFindingBulkEditDialog from '@/components/dialogs/attack_surface/ScanFindingBulkEditDialog.vue';
 import TagBadgeButton from '@/components/badges/TagBadgeButton.vue';
 import { useListViewComposable } from '@/composables/listViewComposable';
+import {asFindingStatusChoices, severityChoices} from "@/utils/constants";
 
 export default {
     name: 'ScanFindingList',
@@ -26,7 +26,6 @@ export default {
                     disabled: true
                 }
             ],
-            service: new ASMonitorService(),
             items: [],
             selectedItems: [],
             pagination: { page: 1, limit: 20 },
@@ -41,11 +40,17 @@ export default {
         };
     },
     methods: {
+        asFindingStatusChoices() {
+            return asFindingStatusChoices
+        },
+        severityChoices() {
+            return severityChoices
+        },
         getItems(params) {
             this.loading = true;
             let data = this.listComposable.buildParams(this.pagination, this.filters, params);
-            this.service
-                .getScanFindings(this.$api, data)
+            this.$api
+                .get(this.$api.e.asScanFindingList, null, data)
                 .then((response) => {
                     this.items = response.data.results;
                     this.totalRecords = response.data.count;
@@ -78,7 +83,7 @@ export default {
                     this.loading = true;
                     let itemsDeleted = 0;
                     this.selectedItems.forEach((item) => {
-                        this.service.deleteScanFinding(this.$api, item.pk).then(() => {
+                        this.$api.delete(this.$api.e.asScanFindingDetail, { pk: item.pk }).then(() => {
                             itemsDeleted++;
                             if (itemsDeleted === this.selectedItems.length) {
                                 this.loading = false;
@@ -141,14 +146,14 @@ export default {
                         <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
                     </template>
                     <template #filter="{ filterModel }">
-                        <Dropdown v-model="filterModel.value" :options="service.getSeverityChoices()" class="p-column-filter" showClear optionLabel="name" optionValue="value"></Dropdown>
+                        <Dropdown v-model="filterModel.value" :options="severityChoices()" class="p-column-filter" showClear optionLabel="name" optionValue="value"></Dropdown>
                     </template>
                 </Column>
                 <Column field="affected_component" header="Component"></Column>
                 <Column field="program.name" header="Program"></Column>
                 <Column field="status" header="Status" :showFilterMatchModes="false">
                     <template #filter="{ filterModel }">
-                        <Dropdown v-model="filterModel.value" :options="service.getStatusChoices()" class="p-column-filter" showClear optionLabel="name" optionValue="value"></Dropdown>
+                        <Dropdown v-model="filterModel.value" :options="asFindingStatusChoices()" class="p-column-filter" showClear optionLabel="name" optionValue="value"></Dropdown>
                     </template>
                 </Column>
                 <Column field="tags" header="Tags" :showFilterMatchModes="false">

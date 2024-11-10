@@ -1,5 +1,4 @@
 <script>
-import UserAccountService from '@/service/UserAccountService';
 
 export default {
     name: 'UserAccountCreateDialog',
@@ -16,7 +15,6 @@ export default {
                 compromised: false,
                 description: ''
             },
-            accountService: new UserAccountService()
         };
     },
     methods: {
@@ -35,8 +33,8 @@ export default {
                 compromised: this.model.compromised,
                 description: this.model.description
             };
-            this.accountService
-                .createAccount(this.$api, this.projectId, data)
+            this.$api
+                .post(this.$api.e.pAccountList, { projectPk: this.projectId }, data)
                 .then((response) => {
                     this.$toast.add({
                         severity: 'success',

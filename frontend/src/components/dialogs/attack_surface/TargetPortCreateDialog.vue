@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import ModalDialog from '@/components/common/ModalDialog.vue';
 import InlineFieldGroup from '@/components/common/forms/InlineFieldGroup.vue';
 import InlineField from '@/components/common/forms/InlineField.vue';
@@ -20,7 +19,6 @@ export default {
             showDialog: false,
             model: { protocol: 'TCP' },
             loading: false,
-            service: new ASMonitorService()
         };
     },
     watch: {

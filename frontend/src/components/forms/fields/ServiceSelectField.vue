@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 
 export default {
     name: 'ServiceSelectField',
@@ -15,7 +14,6 @@ export default {
             choices: [],
             loading: false,
             loaded: false,
-            service: new ASMonitorService()
         };
     },
     methods: {
@@ -35,8 +33,8 @@ export default {
         },
         loadData() {
             this.loading = true;
-            this.service
-                .getServices({ is_web: true })
+            this.$api
+                .get(this.$api.e.asServiceList, null, { is_web: true })
                 .then((response) => {
                     this.choices = response.data.results;
                     this.loaded = true;
@@ -50,7 +48,7 @@ export default {
                 search: event.value,
                 is_web: true
             };
-            this.service.getServices(params).then((response) => {
+            this.$api.get(this.$api.e.asServiceList, null, params).then((response) => {
                 this.choices = response.data.results;
             });
         }

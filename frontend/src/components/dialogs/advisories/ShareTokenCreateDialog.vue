@@ -1,6 +1,5 @@
 <script>
 import ModalDialog from '@/components/common/ModalDialog.vue';
-import AdvisoryService from "@/service/AdvisoryService";
 
 export default {
     name: 'ShareTokenCreateDialog',
@@ -14,16 +13,15 @@ export default {
                 date_expire: null
             },
             loading: false,
-            service: new AdvisoryService(),
             advisoryId: this.$route.params.advisoryId
-        }
+        };
     },
     methods: {
         open() {
             this.showDialog = true;
         },
         create() {
-            this.service.createShareToken(this.advisoryId, this.model).then(() => {
+            this.$api.post(this.$api.e.aShareTokenList, { aPk: this.advisoryId }, this.model).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Token created!',
@@ -32,7 +30,7 @@ export default {
                 });
                 this.$emit('object-created');
                 this.showDialog = false;
-            })
+            });
         }
     }
 };

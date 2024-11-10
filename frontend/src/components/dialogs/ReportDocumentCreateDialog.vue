@@ -1,5 +1,4 @@
 <script>
-import ReportService from '@/service/ReportService';
 
 export default {
     name: 'ReportDocumentCreateDialog',
@@ -18,7 +17,6 @@ export default {
                 { title: 'Draft', value: 'Draft' },
                 { title: 'Final', value: 'Final' }
             ],
-            reportService: new ReportService()
         };
     },
     methods: {
@@ -33,7 +31,7 @@ export default {
                 name: this.model.name,
                 release_type: this.model.release_type
             };
-            this.reportService.createReportDocument(this.$api, this.projectId, this.reportId, data).then((response) => {
+            this.$api.post(this.$api.e.pReportDocumentList, {pPk: this.projectId, rPk: this.reportId}, data).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Document created!',

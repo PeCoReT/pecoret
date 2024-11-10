@@ -1,5 +1,4 @@
 <script>
-import AssetService from '@/service/AssetService';
 import AssetEnvironmentSelectField from '@/components/forms/fields/AssetEnvironmentSelectField.vue';
 import AssetAccessibleSelectField from '@/components/forms/fields/AssetAccessibleSelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
@@ -18,8 +17,8 @@ export default {
         return {
             showDialog: false,
             model: this.asset,
-            service: new AssetService(),
-            loading: false
+            loading: false,
+            projectId: this.$route.params.projectId
         };
     },
     methods: {
@@ -39,8 +38,8 @@ export default {
             if (this.model.technologies.length > 0 && this.model.technologies[0].pk) {
                 delete data.technologies;
             }
-            this.service
-                .patchWebApplication(this.$api, this.$route.params.projectId, this.asset.pk, data)
+            this.$api
+                .patch(this.$api.e.pWebAppDetail, { projectPk: this.projectId, pk: this.asset.pk })
                 .then(() => {
                     this.$emit('object-updated', this.model);
                     this.showDialog = false;
