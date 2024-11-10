@@ -1,5 +1,4 @@
 <script>
-import TechnologyService from '@/service/TechnologyService';
 import TechnologyCreateDialog from '@/components/dialogs/TechnologyCreateDialog.vue';
 import TechnologyUpdateDialog from '@/components/dialogs/TechnologyUpdateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
@@ -11,7 +10,6 @@ export default {
     components: { GenericDataTable, BaseListLayout, TechnologyUpdateDialog, TechnologyCreateDialog },
     data() {
         return {
-            service: new TechnologyService(),
             listComposable: useListViewComposable(),
             loading: false,
             breadcrumbs: [
@@ -41,8 +39,8 @@ export default {
             this.loading = true;
 
             let data = this.listComposable.buildParams(this.pagination, this.filters, params);
-            this.service
-                .getTechnologies(this.$api, data)
+            this.$api
+                .get(this.$api.e.technologyList, null, data)
                 .then((response) => {
                     this.items = response.data.results;
                     this.totalRecords = response.data.count;
@@ -58,7 +56,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteTechnology(this.$api, id).then(() => {
+                    this.$api.delete(this.$api.e.technologyDetail, {pk: id}).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',
@@ -93,7 +91,11 @@ export default {
                 :model-value="items"
                 @page="onPage"
                 :show-search="true"
-                @search="(query) => { this.getItems({search: query})}"
+                @search="
+                    (query) => {
+                        this.getItems({ search: query });
+                    }
+                "
                 @filter="getItems"
                 v-model:filters="filters"
             >

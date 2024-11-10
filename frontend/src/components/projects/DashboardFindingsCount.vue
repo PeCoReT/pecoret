@@ -1,6 +1,5 @@
 <script>
 import { defineComponent } from 'vue';
-import FindingService from '@/service/FindingService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 
 export default defineComponent({
@@ -8,7 +7,6 @@ export default defineComponent({
     components: { DetailCardWithIcon },
     data() {
         return {
-            service: new FindingService(),
             model: {},
             projectId: this.$route.params.projectId,
             loading: false
@@ -20,8 +18,8 @@ export default defineComponent({
     methods: {
         getData() {
             this.loading = true;
-            this.service
-                .getFindings(this.$api, this.projectId)
+            this.$api
+                .get(this.$api.e.pFindingList, { projectPk: this.projectId })
                 .then((response) => {
                     this.model.count = response.data.count;
                 })

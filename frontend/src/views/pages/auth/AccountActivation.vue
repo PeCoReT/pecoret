@@ -1,5 +1,4 @@
 <script>
-import AuthService from '@/service/AuthService';
 import AuthLayout from '@/layout/AuthLayout.vue';
 
 export default {
@@ -11,7 +10,6 @@ export default {
                 password: null,
                 password1: null
             },
-            service: new AuthService(),
             loading: false
         };
     },
@@ -23,8 +21,8 @@ export default {
                 token: this.$route.params.token,
                 new_password: this.model.password
             };
-            this.service
-                .activateAccount(this.$api, data)
+            this.$api
+                .post('authActivation', null, data)
                 .then(() => {
                     this.$toast.add({
                         severity: 'success',

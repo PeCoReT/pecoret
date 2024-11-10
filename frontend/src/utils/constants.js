@@ -22,3 +22,126 @@ export const serviceProtocolChoices = [
         value: 'UDP'
     }
 ];
+
+export const vulnerabilityStatusChoices = [
+    {
+        label: 'Unfixed',
+        value: 'Unfixed'
+    },
+    {
+        label: 'Fixed',
+        value: 'Fixed'
+    },
+    {
+        label: "Won't fix",
+        value: "Won't fix"
+    }
+];
+
+export const advisoryStatusChoices = [
+    {
+        label: 'Disclosed',
+        value: 'Disclosed'
+    },
+    {
+        label: 'Not Disclosed',
+        value: 'Not Disclosed'
+    }
+];
+
+export const projectVisibilityChoices = [
+    {
+        label: 'Membery Only',
+        value: 'Members Only'
+    },
+    {
+        label: 'Pentesters',
+        value: 'Pentesters'
+    }
+];
+
+export const allowedObjectTypeChoices = [
+    {
+        label: 'Service',
+        value: 'service'
+    },
+    {
+        label: 'URL',
+        value: 'url'
+    },
+    {
+        label: 'Target',
+        value: 'target'
+    }
+];
+
+export const InScopeChoices = [
+    {
+        name: 'In Scope',
+        value: 'In Scope'
+    },
+    {
+        name: 'Undefined',
+        value: 'Undefined'
+    },
+    {
+        name: 'Out of Scope',
+        value: 'Out of Scope'
+    }
+];
+
+export const DataTypeChoices = [
+    {
+        name: 'IP',
+        value: 'IP'
+    },
+    {
+        name: 'Domain',
+        value: 'Domain'
+    },
+    {
+        name: 'Subdomain',
+        value: 'Subdomain'
+    }
+];
+
+export const asFindingProgressStatus = [
+    {
+        name: 'Draft',
+        value: 'Draft'
+    },
+    {
+        name: 'Review Required',
+        value: 'Review Required'
+    },
+    {
+        name: 'Final',
+        value: 'Final'
+    }
+];
+
+export const findingComponentStatus = [
+    {
+        name: 'Vulnerable',
+        value: 'Vulnerable'
+    },
+    {
+        name: 'Fixed',
+        value: 'Fixed'
+    },
+    {
+        name: 'Wont fix',
+        value: 'Wont fix'
+    }
+];
+
+export const asFindingStatusChoices = [
+    {
+        name: 'Open',
+        value: 'Open'
+    },
+    {
+        name: 'Closed',
+        value: 'Closed'
+    }
+];

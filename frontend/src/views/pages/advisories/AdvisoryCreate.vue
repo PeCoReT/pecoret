@@ -1,6 +1,4 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService';
-import VulnerabilityTemplateService from '@/service/VulnerabilityTemplateService';
 import SeveritySelectField from '@/components/forms/fields/SeveritySelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import TechnologySelectField from '@/components/forms/fields/TechnologySelectField.vue';
@@ -15,8 +13,6 @@ export default {
     name: 'AdvisoryCreate',
     data() {
         return {
-            service: new AdvisoryService(),
-            templateService: new VulnerabilityTemplateService(),
             advisoryId: null,
             breadcrumbs: [
                 {
@@ -75,8 +71,8 @@ export default {
                 proof_text: this.model.proof_text,
                 report_template: this.model.report_template
             };
-            this.service
-                .createAdvisory(data)
+            this.$api
+                .post(this.$api.e.advisoryList, null, data)
                 .then((response) => {
                     this.$router.push({
                         name: 'AdvisoryDetail',
@@ -106,7 +102,7 @@ export default {
             }
         },
         onFocusTemplate() {
-            this.templateService.getTemplates(this.$api).then((response) => {
+            this.$api.get(this.$api.e.vulnTemplateList).then((response) => {
                 this.templateChoices = response.data.results;
             });
         },
@@ -114,7 +110,7 @@ export default {
             let params = {
                 search: event.value
             };
-            this.templateService.getTemplates(this.$api, params).then((response) => {
+            this.$api.get(this.$api.e.vulnTemplateList, null, params).then((response) => {
                 this.templateChoices = response.data.results;
             });
         }

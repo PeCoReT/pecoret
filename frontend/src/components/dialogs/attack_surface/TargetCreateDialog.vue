@@ -1,9 +1,8 @@
 <script>
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import ModalDialog from '@/components/common/ModalDialog.vue';
-import ASMonitorService from '@/service/ASMonitorService';
-import TechnologyService from '@/service/TechnologyService';
 import ProgramSelectField from '@/components/forms/fields/ProgramSelectField.vue';
+import {DataTypeChoices, InScopeChoices} from "@/utils/constants";
 
 export default {
     name: 'TargetCreateDialog',
@@ -19,17 +18,21 @@ export default {
                 description: null
             },
             loading: false,
-            service: new ASMonitorService(),
-            techService: new TechnologyService(),
             technologies: []
         };
     },
     methods: {
+        InScopeChoices() {
+            return InScopeChoices
+        },
+        DataTypeChoices() {
+            return DataTypeChoices
+        },
         open() {
             this.showDialog = true;
         },
         create() {
-            this.service.createTarget(this.$api, this.model).then(() => {
+            this.$api.post(this.$api.e.asTargetList, null, this.model).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Target created!',
@@ -52,13 +55,13 @@ export default {
                 <InputText v-model="model.data" id="data"></InputText>
             </Field>
             <Field label="Data Type">
-                <Select :options="service.getDataTypeChoices()" optionLabel="name" optionValue="value" v-model="model.data_type"></Select>
+                <Select :options="DataTypeChoices()" optionLabel="name" optionValue="value" v-model="model.data_type"></Select>
             </Field>
             <Field label="Program">
                 <ProgramSelectField v-model="model.program"></ProgramSelectField>
             </Field>
             <Field label="Scope">
-                <Select :options="service.getInScopeChoices()" optionLabel="name" optionValue="value" v-model="model.scope"></Select>
+                <Select :options="InScopeChoices()" optionLabel="name" optionValue="value" v-model="model.scope"></Select>
             </Field>
             <Field label="Description">
                 <MarkdownEditor v-model="model.description" id="description"></MarkdownEditor>

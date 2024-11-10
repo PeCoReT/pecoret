@@ -2,35 +2,22 @@
     font-family: lato;
     font-style: normal;
     font-weight: 400;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-Regular.woff) format('woff')
-}
-
-@font-face {
-    font-family: lato;
-    font-style: normal;
-    font-weight: 400;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-Regular.woff) format('woff')
+    src: local('Lato'), url(/fonts/lato/Lato-Regular.woff) format('woff')
 }
 
 @font-face {
     font-family: lato;
     font-style: italic;
     font-weight: 400;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-Italic.woff) format('woff')
+    src: local('Lato'), url(/fonts/lato/Lato-Italic.woff) format('woff')
 }
 
-@font-face {
-    font-family: lato;
-    font-style: italic;
-    font-weight: 400;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-Italic.woff) format('woff')
-}
 
 @font-face {
     font-family: lato;
     font-style: normal;
     font-weight: 250;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-Thin.woff) format('woff')
+    src: local('Lato'), url(/fonts/lato/Lato-Thin.woff) format('woff')
 }
 
 @font-face {
@@ -68,102 +55,77 @@
     src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-ExtraLightItalic.woff) format('woff')
 }
 
-@font-face {
-    font-family: lato;
-    font-style: normal;
-    font-weight: 300;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-Light.woff) format('woff')
-}
 
 @font-face {
     font-family: lato;
     font-style: normal;
     font-weight: 300;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-Light.woff) format('woff')
+    src: local('Lato'), url(/fonts/lato/Lato-Light.woff) format('woff')
 }
 
 @font-face {
     font-family: lato;
     font-style: italic;
     font-weight: 300;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-LightItalic.woff) format('woff')
-}
-
-@font-face {
-    font-family: lato;
-    font-style: italic;
-    font-weight: 300;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-LightItalic.woff) format('woff')
+    src: local('Lato'), url(/fonts/lato/Lato-LightItalic.woff) format('woff')
 }
 
 @font-face {
     font-family: lato;
     font-style: normal;
     font-weight: 500;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-Medium.woff) format('woff')
+    src: local('Lato'), url(/fonts/lato/Lato-Medium.woff) format('woff')
 }
 
 @font-face {
     font-family: lato;
     font-style: italic;
     font-weight: 500;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-MediumItalic.woff) format('woff')
+    src: local('Lato'), url(/fonts/lato/Lato-MediumItalic.woff) format('woff')
 }
 
 @font-face {
     font-family: lato;
     font-style: normal;
     font-weight: 600;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-SemiBold.woff) format('woff')
+    src: local('Lato'), url(/fonts/lato/Lato-SemiBold.woff) format('woff')
 }
 
 @font-face {
     font-family: lato;
     font-style: italic;
     font-weight: 600;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-SemiBoldItalic.woff) format('woff')
+    src: local('Lato'), url(/fonts/lato/Lato-SemiBoldItalic.woff) format('woff')
 }
+
 
 @font-face {
     font-family: lato;
     font-style: normal;
     font-weight: 700;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-Bold.woff) format('woff')
-}
-
-@font-face {
-    font-family: lato;
-    font-style: normal;
-    font-weight: 700;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-Bold.woff) format('woff')
+    src: local('Lato'), url(/fonts/lato/Lato-Bold.woff) format('woff')
 }
 
 @font-face {
     font-family: lato;
     font-style: italic;
     font-weight: 700;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-BoldItalic.woff) format('woff')
+    src: local('Lato'), url(/fonts/lato/Lato-BoldItalic.woff) format('woff')
 }
 
-@font-face {
-    font-family: lato;
-    font-style: italic;
-    font-weight: 700;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-BoldItalic.woff) format('woff')
-}
 
 @font-face {
     font-family: lato;
     font-style: normal;
     font-weight: 800;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-ExtraBold.woff) format('woff')
+    src: local('Lato'), url(/fonts/lato/Lato-ExtraBold.woff) format('woff')
 }
 
 @font-face {
     font-family: lato;
     font-style: italic;
     font-weight: 800;
-    src: local('Lato'), url(https://fonts.cdnfonts.com/s/14882/Lato-ExtraBoldItalic.woff) format('woff')
+    src: local('Lato'), url(/fonts/lato/Lato-ExtraBoldItalic.woff) format('woff')
 }
 
 @font-face {

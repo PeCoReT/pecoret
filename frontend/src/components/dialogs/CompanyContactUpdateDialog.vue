@@ -1,5 +1,4 @@
 <script>
-import CompanyService from '@/service/CompanyService';
 
 export default {
     name: 'CompanyContactUpdateDialog',
@@ -15,7 +14,6 @@ export default {
             model: this.company,
             loading: false,
             companyId: this.$route.params.companyId,
-            service: new CompanyService()
         };
     },
     methods: {
@@ -31,7 +29,7 @@ export default {
                 email: this.model.email,
                 role: this.model.role
             };
-            this.service.patchContact(this.$api, this.companyId, this.company.pk, data).then(() => {
+            this.$api.patch(this.$api.e.cContactDetail, { cPk: this.companyId, pk: this.company.pk }, data).then(() => {
                 this.$emit('object-updated', this.model);
                 this.visible = false;
             });

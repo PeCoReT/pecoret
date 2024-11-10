@@ -1,5 +1,4 @@
 <script>
-import ChecklistService from '@/service/ChecklistService';
 import ChecklistCategoryCreate from '@/components/dialogs/ChecklistCategoryCreate.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
@@ -22,7 +21,6 @@ export default {
                 }
             ],
             loading: false,
-            service: new ChecklistService(),
             totalRecords: 0,
             pagination: { page: 1, limit: 20 },
             items: []
@@ -41,7 +39,7 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.service.getCategories(this.$api, params).then((response) => {
+            this.$api.get(this.$api.e.checkCategoryList, null, params).then((response) => {
                 this.items = response.data.results;
                 this.totalRecords = response.data.count;
             });
@@ -53,7 +51,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteCategory(this.$api, id).then(() => {
+                    this.$api.delete(this.$api.e.checkCategoryDetail, {pk: id}).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',

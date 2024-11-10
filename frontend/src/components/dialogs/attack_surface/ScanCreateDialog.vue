@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import ModalDialog from '@/components/common/ModalDialog.vue';
 import ScanTypeSelectField from '@/components/forms/fields/ScanTypeSelectField.vue';
 
@@ -18,7 +17,6 @@ export default {
             asset_type: null,
             scanObjectChoices: [],
             loading: false,
-            service: new ASMonitorService()
         };
     },
     methods: {
@@ -35,20 +33,17 @@ export default {
                 data['search'] = query;
             }
             let method;
-            if (this.asset_type === 'host') {
-                method = this.service.getHosts;
-            } else if (this.asset_type === 'service') {
-                method = this.service.getServices;
+            if (this.asset_type === 'service') {
+                method = this.$api.e.asServiceList;
             } else if (this.asset_type === 'target') {
-                method = this.service.getTargets;
-            } else if (this.asset_type === 'port') {
-                method = this.service.getPorts;
+                method = this.$api.e.asTargetList;
             } else if (this.asset_type === 'url') {
-                method = this.service.getURLs;
+                method = this.$api.e.asUrlList;
             } else {
                 return null;
             }
-            method(data)
+            this.$api
+                .get(method, null, data)
                 .then((response) => {
                     this.scanObjectChoices = response.data.results;
                 })
@@ -67,8 +62,8 @@ export default {
                 let obj = this.model.scan_objects[i];
                 data['scan_objects'].push({ content_type: this.asset_type.toLowerCase(), object_id: obj });
             }
-            this.service
-                .createScan(data)
+            this.$api
+                .post(this.$api.e.asScanList, null, data)
                 .then(() => {
                     this.$toast.add({
                         severity: 'success',

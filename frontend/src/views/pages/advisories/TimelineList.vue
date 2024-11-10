@@ -1,5 +1,4 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService';
 import AdvisoryTabMenu from '@/components/navigation/AdvisoryTabMenu.vue';
 import AdvisoryTimelineCreateDialog from '@/components/dialogs/advisories/AdvisoryTimelineCreateDialog.vue';
 
@@ -7,7 +6,6 @@ export default {
     name: 'TimelineList',
     data() {
         return {
-            service: new AdvisoryService(),
             breadcrumbs: [
                 {
                     label: 'Advisories',
@@ -38,7 +36,7 @@ export default {
     },
     methods: {
         getItems() {
-            this.service.getTimeline(this.advisoryId).then((response) => {
+            this.$api.get(this.$api.e.aTimelineList, { aPk: this.advisoryId }).then((response) => {
                 this.items = response.data.results;
             });
         },
@@ -49,7 +47,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteTimeline(this.$api, this.advisoryId, id).then(() => {
+                    this.$api.delete(this.$api.e.aTimelineDetail, { aPk: this.advisoryId, pk: id }).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',

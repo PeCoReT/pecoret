@@ -1,5 +1,4 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService';
 
 export default {
     name: 'LabelCreateDialog',
@@ -13,7 +12,6 @@ export default {
                 color: null
             },
             loading: false,
-            service: new AdvisoryService()
         };
     },
     methods: {
@@ -29,7 +27,7 @@ export default {
                 description: this.model.description,
                 color: '#' + this.model.color
             };
-            this.service.createLabel(data).then((response) => {
+            this.$api.post(this.$api.e.aLabelList, null, data).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Label created!',
@@ -59,5 +57,4 @@ export default {
             </Field>
         </Form>
     </ModalDialog>
-
 </template>

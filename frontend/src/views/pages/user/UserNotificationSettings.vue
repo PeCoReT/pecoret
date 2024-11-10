@@ -11,14 +11,12 @@ export default {
     },
     methods: {
         getItem() {
-            let url = '/users/user-settings/';
-            this.$api.get(url).then((response) => {
+            this.$api.get(this.$api.e.userUserSettings).then((response) => {
                 this.model = response.data;
             });
         },
         patch(data) {
-            let url = '/users/user-settings/';
-            this.$api.patch(url, data).then((response) => {
+            this.$api.patch(this.$api.e.userUserSettings, data).then((response) => {
                 this.model = response.data;
                 this.$toast.add({
                     severity: 'success',

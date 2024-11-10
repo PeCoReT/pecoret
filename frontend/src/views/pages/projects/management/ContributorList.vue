@@ -1,5 +1,4 @@
 <script>
-import ContributorService from '@/service/ContributorService';
 import ContributorCreateDialog from '@/components/dialogs/ContributorCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
@@ -19,7 +18,6 @@ export default {
             loading: false,
             totalRecords: 0,
             pagination: { page: 1, limit: 20 },
-            contributorService: new ContributorService()
         };
     },
     mounted() {
@@ -31,7 +29,7 @@ export default {
             this.getItems();
         },
         onSearch(search) {
-          this.getItems({search: search})
+            this.getItems({ search: search });
         },
         getItems(params) {
             this.loading = true;
@@ -43,8 +41,8 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.contributorService
-                .getContributors(this.$api, this.projectId, params)
+            this.$api
+                .get(this.$api.e.pMembershipList, { projectPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -65,7 +63,7 @@ export default {
             });
         },
         deleteContributor(contribId) {
-            this.contributorService.deleteContributor(this.$api, this.projectId, contribId).then(() => {
+            this.$api.delete(this.$api.e.pMembershipDetail, { projectPk: this.projectId, pk: contribId }).then(() => {
                 this.$toast.add({
                     severity: 'info',
                     summary: 'Deleted',

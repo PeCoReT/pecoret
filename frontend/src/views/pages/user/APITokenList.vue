@@ -1,5 +1,4 @@
 <script>
-import UserService from '@/service/UserService';
 import APITokenCreate from '@/components/dialogs/APITokenCreate.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
@@ -16,7 +15,6 @@ export default {
                 }
             ],
             tokenKey: null,
-            service: new UserService(),
             items: [],
             loading: false,
             totalRecords: 0,
@@ -33,7 +31,7 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.service.getAPITokens(this.$api, params).then((response) => {
+            this.$api.get(this.$api.e.apiTokenList, null, params).then((response) => {
                 this.items = response.data.results;
                 this.totalRecords = response.data.count;
             });
@@ -56,8 +54,7 @@ export default {
             let params = {
                 search: query
             };
-            this.service
-                .getAPITokens(this.$api, params)
+            this.$api.get(this.$api.e.apiTokenList, null, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -73,7 +70,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteAPIToken(this.$api, id).then(() => {
+                    this.$api.delete('apiTokenDetail', {pk: id}).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',

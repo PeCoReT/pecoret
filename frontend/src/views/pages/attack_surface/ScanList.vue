@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import { useListViewComposable } from '@/composables/listViewComposable';
 import ScanStatusBadge from '@/components/dialogs/attack_surface/ScanStatusBadge.vue';
@@ -11,7 +10,6 @@ export default {
     components: { ScanCreateDialog, BlankSlate, ScanStatusBadge, BaseListLayout },
     data() {
         return {
-            service: new ASMonitorService(),
             breadcrumbs: [
                 {
                     label: 'Scans',
@@ -35,8 +33,8 @@ export default {
         getItems(params) {
             this.loading = true;
             let data = this.listComposable.buildParams(this.pagination, this.filters, params);
-            this.service
-                .getScans(data)
+            this.$api
+                .get(this.$api.e.asScanList, null, data)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;

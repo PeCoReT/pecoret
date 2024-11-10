@@ -1,12 +1,11 @@
 <script>
 import { useAuthStore } from '@/store/auth';
-import ProjectService from '@/service/ProjectService';
 
 export default {
     name: 'ProjectTabMenu',
     mounted() {
         if (!this.authStore.activeProject.name) {
-            this.projectService.getProject(this.$route.params.projectId).then((response) => {
+            this.$api.get(this.$api.e.projectDetail, { pk: this.$route.params.projectId }).then((response) => {
                 this.authStore.activateProject(response.data);
             });
         }
@@ -14,7 +13,6 @@ export default {
     data() {
         return {
             authStore: useAuthStore(),
-            projectService: new ProjectService(),
             items: [
                 {
                     label: 'Dashboard',
@@ -195,13 +193,13 @@ export default {
     <Menubar :model="items" class="w-screen">
         <template #item="{ label, item, props, root, hasSubmenu }">
             <router-link v-if="item.route" :to="item.route" v-bind="props.action">
-                    <span v-bind="props.icon" />
-                    <span v-bind="props.label">{{ label }}</span>
+                <span v-bind="props.icon" />
+                <span v-bind="props.label">{{ label }}</span>
             </router-link>
             <a v-else :href="item.url" :target="item.target" v-bind="props.action">
                 <span v-bind="props.icon" />
                 <span v-bind="props.label">{{ label }}</span>
-                <span :class="[hasSubmenu && (root ? 'pi pi-fw pi-angle-down' : 'pi pi-fw pi-angle-right')]" v-bind="props.submenuicon" />
+                <span :class="[hasSubmenu && (root ? 'fa fa-chevron-down' : 'fa fa-chevron-down')]" v-bind="props.submenuicon" />
             </a>
         </template>
     </Menubar>

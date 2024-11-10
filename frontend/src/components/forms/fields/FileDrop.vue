@@ -1,5 +1,4 @@
 <script>
-import FindingService from '@/service/FindingService';
 
 export default {
     name: 'FileDrop',
@@ -9,7 +8,6 @@ export default {
             attachments: [],
             totalSize: 0,
             totalSizePercent: 0,
-            service: new FindingService(),
             projectId: this.$route.params.projectId,
             findingId: this.$route.params.findingId,
             attachmentsLoading: false,
@@ -22,8 +20,8 @@ export default {
     methods: {
         getAttachments() {
             this.attachmentsLoading = true;
-            this.service
-                .findingImageAttachmentList(this.$api, this.projectId, this.findingId)
+            this.$api
+                .get(this.$api.e.pFindingAttachmentList, { pPk: this.projectId, fPk: this.findingId })
                 .then((response) => {
                     this.attachments = response.data.results;
                 })
@@ -35,8 +33,16 @@ export default {
             this.uploadFileLoading = true;
             let data = new FormData();
             data.append('image', event.files[event.files.length - 1]);
-            this.service
-                .findingImageAttachmentCreate(this.$api, this.projectId, this.findingId, data)
+            this.$api
+                .post(
+                    this.$api.e.pFindingAttachmentList,
+                    {
+                        pPk: this.projectId,
+                        fPk: this.findingId
+                    },
+                    data,
+                    { 'Content-Type': 'multipart/form-data' }
+                )
                 .then((response) => {
                     this.attachments.push(response.data);
                 })
@@ -45,9 +51,15 @@ export default {
                 });
         },
         deleteAttachment(file) {
-            this.service.findingImageAttachmentDelete(this.$api, this.projectId, this.findingId, file.pk).then(() => {
-                this.getAttachments();
-            });
+            this.$api
+                .delete(this.$api.e.pFindingAttachmentDetail, {
+                    pPk: this.projectId,
+                    fPk: this.findingId,
+                    pk: file.pk
+                })
+                .then(() => {
+                    this.getAttachments();
+                });
         },
         onTemplatedUpload() {
             this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
@@ -80,7 +92,7 @@ export default {
                 <div class="flex flex-wrap gap-3">
                     <div v-for="file in attachments" :key="file.pk" class="card flex flex-col justify-center align-center gap-3 h-full ml-3 mr-3 border rounded-xl">
                         <div @click="copyLinkToClipboard(file)" class="flex justify-center align-center">
-                            <img role="presentation" :alt="file.name.substring(0, 32)" :src="file.image" width="50" height="50" class=" shadow-2" />
+                            <img role="presentation" :alt="file.name.substring(0, 32)" :src="file.image" width="50" height="50" class="shadow-2" />
                         </div>
                         <span class="font-semibold">{{ file.name.substring(0, 32) }}</span>
                         <Button @click="deleteAttachment(file)" label="Delete Attachment" class="p-0 m-0" link severity="danger"></Button>

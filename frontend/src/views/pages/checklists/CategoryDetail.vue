@@ -1,5 +1,4 @@
 <script>
-import ChecklistService from '@/service/ChecklistService';
 import ChecklistItemUpdate from '@/components/dialogs/ChecklistItemUpdate.vue';
 import ChecklistItemCreate from '@/components/dialogs/ChecklistItemCreate.vue';
 import markdown from '@/utils/markdown';
@@ -10,7 +9,6 @@ export default {
     data() {
         return {
             categoryId: this.$route.params.categoryId,
-            service: new ChecklistService(),
             loading: false,
             model: {},
             breadcrumbs: [
@@ -39,8 +37,8 @@ export default {
     methods: {
         getCategory() {
             this.loading = true;
-            this.service
-                .getCategory(this.$api, this.categoryId)
+            this.$api
+                .get(this.$api.e.checkCategoryDetail, { pk: this.categoryId })
                 .then((response) => {
                     this.model = response.data;
                 })
@@ -58,7 +56,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteCategory(this.$api, this.categoryId).then(() => {
+                    this.$api.delete(this.$api.e.checkCategoryDetail, { pk: this.categoryId }).then(() => {
                         this.$router.push({ name: 'ChecklistCategoryList' });
                     });
                 }
@@ -71,7 +69,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteItem(this.$api, itemId).then(() => {
+                    this.$api.delete(this.$api.e.checkItemDetail, { pk: itemId }).then(() => {
                         this.getCategory();
                     });
                 }

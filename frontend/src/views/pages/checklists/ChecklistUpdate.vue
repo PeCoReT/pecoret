@@ -1,5 +1,4 @@
 <script>
-import ChecklistService from '@/service/ChecklistService';
 
 export default {
     name: 'ChecklistUpdate',
@@ -9,7 +8,6 @@ export default {
                 categories: null
             },
             categoryChoices: [],
-            service: new ChecklistService(),
             checklistId: this.$route.params.checklistId,
             searchAvailable: null,
             breadcrumbs: [
@@ -27,9 +25,9 @@ export default {
         };
     },
     mounted() {
-        this.service.getCategories(this.$api).then((response) => {
+        this.$api.get(this.$api.e.checkCategoryList).then((response) => {
             this.categoryChoices = [response.data.results, []];
-            this.service.getChecklist(this.$api, this.checklistId).then((response) => {
+            this.$api.get(this.$api.e.checklistDetail, { pk: this.checklistId }).then((response) => {
                 this.categoryChoices[1] = response.data.categories;
                 this.model.name = response.data.name;
                 this.model.checklist_id = response.data.checklist_id;
@@ -48,7 +46,7 @@ export default {
             let data = {
                 search: this.searchAvailable
             };
-            this.service.getCategories(this.$api, data).then((response) => {
+            this.$api.get(this.$api.e.checkCategoryList, null, data).then((response) => {
                 this.categoryChoices = [response.data.results, []];
             });
         },
@@ -63,7 +61,7 @@ export default {
                     data.categories.push(item.pk);
                 });
             }
-            this.service.patchChecklist(this.$api, this.checklistId, data).then(() => {
+            this.$api.patch(this.$api.e.checklistDetail, { pk: this.checklistId }, data).then(() => {
                 this.$router.push({
                     name: 'ChecklistList'
                 });

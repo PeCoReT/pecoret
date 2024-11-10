@@ -1,5 +1,4 @@
 <script>
-import ContributorService from '@/service/ContributorService';
 
 export default {
     name: 'ContributorCreateDialog',
@@ -16,7 +15,6 @@ export default {
             loading: false,
             userChoices: [],
             roleChoices: [{ label: 'Project Leader' }, { label: 'Owner' }, { label: 'Read Only' }, { label: 'Contributor' }],
-            contributorService: new ContributorService()
         };
     },
     methods: {
@@ -47,7 +45,7 @@ export default {
                 active_until: this.model.active_until,
                 user: this.model.user
             };
-            this.contributorService.createContributor(this.$api, this.projectId, data).then((response) => {
+            this.$api.post(this.$api.e.pMembershipList, {projectPk: this.projectId}, data).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'User added!',

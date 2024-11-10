@@ -27,9 +27,8 @@ export default defineComponent({
     methods: {
         getChartData() {
             this.loading = true;
-            let url = '/projects/' + this.projectId + '/stats_finding_dashboard/';
             this.$api
-                .get(url)
+                .get(this.$api.e.projectsStatusFindingDashboard, { pk: this.projectId })
                 .then((response) => {
                     this.chartData.datasets[0].data = [response.data.Critical, response.data.High, response.data.Medium, response.data.Low, response.data.Informational];
                 })

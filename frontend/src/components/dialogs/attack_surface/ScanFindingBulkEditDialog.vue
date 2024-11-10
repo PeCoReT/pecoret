@@ -1,6 +1,6 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import ModalDialog from '@/components/common/ModalDialog.vue';
+import {asFindingStatusChoices, severityChoices} from "@/utils/constants";
 
 export default {
     name: 'ScanFindingBulkEditDialog',
@@ -9,7 +9,7 @@ export default {
     props: {
         findings: {
             required: true
-        },
+        }
     },
     data() {
         return {
@@ -19,10 +19,15 @@ export default {
                 status: null
             },
             loading: false,
-            service: new ASMonitorService()
         };
     },
     methods: {
+        asFindingStatusChoices() {
+            return asFindingStatusChoices
+        },
+        severityChoices() {
+            return severityChoices
+        },
         async onSave() {
             let data = {};
             for (let [key, value] of Object.entries(this.fields)) {
@@ -32,7 +37,7 @@ export default {
             }
             this.loading = true;
             for (let i = 0; i < this.findings.length; i++) {
-                await this.service.patchScanFinding(this.$api, this.findings[i].pk, data).then(() => {});
+                await this.$api.patch(this.$api.e.asScanFindingDetail, { pk: this.findings[i].pk }, data).then(() => {});
             }
             this.loading = false;
             this.fields.status = null;
@@ -54,11 +59,11 @@ export default {
         <div class="p-fluid grid formgrid">
             <div class="field col-12">
                 <label>Severity</label>
-                <Dropdown show-clear v-model="fields.severity" :options="service.getSeverityChoices()" optionValue="value" optionLabel="name" class="w-full"></Dropdown>
+                <Dropdown show-clear v-model="fields.severity" :options="severityChoices()" optionValue="value" optionLabel="name" class="w-full"></Dropdown>
             </div>
             <div class="field col-12">
                 <label>Status</label>
-                <Dropdown show-clear v-model="fields.status" :options="service.getStatusChoices()" optionValue="value" optionLabel="name"></Dropdown>
+                <Dropdown show-clear v-model="fields.status" :options="asFindingStatusChoices()" optionValue="value" optionLabel="name"></Dropdown>
             </div>
         </div>
     </ModalDialog>

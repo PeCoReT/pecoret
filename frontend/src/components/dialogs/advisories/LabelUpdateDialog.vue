@@ -1,5 +1,4 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService';
 
 export default {
     name: 'LabelUpdateDialog',
@@ -18,7 +17,6 @@ export default {
                 description: this.label.description,
                 color: this.label.color
             },
-            service: new AdvisoryService()
         };
     },
     methods: {
@@ -35,7 +33,7 @@ export default {
                 color: this.model.color
             };
 
-            this.service.patchLabel(this.label.pk, data).then((response) => {
+            this.$api.patch(this.$api.e.aLabelDetail, {pk: this.label.pk}, data).then((response) => {
                 this.$emit('object-updated', response.data);
                 this.visible = false;
             });

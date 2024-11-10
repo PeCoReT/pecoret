@@ -1,5 +1,4 @@
 <script>
-import ProjectService from '@/service/ProjectService';
 import ProjectFileCreateDialog from '@/components/dialogs/ProjectFileCreateDialog.vue';
 import forceFileDownload from '@/utils/file';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
@@ -21,7 +20,6 @@ export default {
             loading: false,
             totalRecords: 0,
             pagination: { page: 1, limit: 20 },
-            service: new ProjectService()
         };
     },
     mounted() {
@@ -38,8 +36,8 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.service
-                .getProjectFiles(this.$api, this.projectId, params)
+            this.$api
+                .get(this.$api.e.pFileList, { pPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -49,9 +47,19 @@ export default {
                 });
         },
         downloadFile(file_id) {
-            this.service.downloadProjectFile(this.$api, this.projectId, file_id).then((response) => {
-                forceFileDownload(response);
-            });
+            this.$api
+                .get(
+                    this.$api.e.pFileDownload,
+                    {
+                        pPk: this.projectId,
+                        pk: file_id
+                    },
+                    null,
+                    { responseType: 'arraybuffer' }
+                )
+                .then((response) => {
+                    forceFileDownload(response);
+                });
         },
         confirmDialogDelete(id) {
             this.$confirm.require({
@@ -60,7 +68,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteProjectFile(this.$api, this.projectId, id).then(() => {
+                    this.$api.delete(this.$api.e.pFileDetail, { pPk: this.projectId, pk: id }).then(() => {
                         this.getItems();
                     });
                 }

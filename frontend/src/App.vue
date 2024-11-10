@@ -1,10 +1,9 @@
 <script>
-import AuthService from '@/service/AuthService';
-
 export default {
     created() {
-        const authService = new AuthService();
-        authService.checkAuth(this.$api);
+        this.$api.get(this.$api.e.authCheck).then((response) => {
+            this.$api.updateCSRFToken(response.data);
+        });
     }
 };
 </script>

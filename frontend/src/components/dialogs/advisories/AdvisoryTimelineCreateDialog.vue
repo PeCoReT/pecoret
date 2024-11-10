@@ -1,5 +1,4 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService';
 import ModalDialog from '@/components/common/ModalDialog.vue';
 
 export default {
@@ -15,7 +14,6 @@ export default {
                 date: null
             },
             loading: false,
-            service: new AdvisoryService()
         };
     },
     methods: {
@@ -30,8 +28,8 @@ export default {
             if (this.model.date) {
                 data['date'] = this.model.date.toISOString().split('T')[0];
             }
-            this.service
-                .createTimeline(this.advisoryId, data)
+            this.$api
+                .post(this.$api.e.aTimelineList, { aPk: this.advisoryId }, data)
                 .then((response) => {
                     this.$toast.add({
                         severity: 'success',

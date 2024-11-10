@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import BaseLayout from '@/layout/base/BaseLayout.vue';
 import { useListViewComposable } from '@/composables/listViewComposable';
 import CountryFlag from '@/components/icons/CountryFlag.vue';
@@ -12,7 +11,6 @@ export default {
     components: { TagBadgeButton, BlankSlate, CountryFlag, BaseLayout },
     data() {
         return {
-            service: new ASMonitorService(),
             items: [],
             listComposable: useListViewComposable(),
             loading: false,
@@ -67,8 +65,8 @@ export default {
                 params['search'] = btoa(this.searchQuery);
             }
             let data = this.listComposable.buildParams(this.pagination, this.filters, params);
-            this.service
-                .searchServices(data)
+            this.$api
+                .get(this.$api.e.asServiceSearch, null, data)
                 .then((response) => {
                     forceFileDownload(response);
                 })
@@ -85,8 +83,8 @@ export default {
                 params['search'] = btoa(this.searchQuery);
             }
             let data = this.listComposable.buildParams(this.pagination, this.filters, params);
-            this.service
-                .searchServices(data)
+            this.$api
+                .get(this.$api.e.asServiceSearch, null, data)
                 .then((resp) => {
                     this.totalRecords = resp.data.count;
                     this.items = resp.data.results;

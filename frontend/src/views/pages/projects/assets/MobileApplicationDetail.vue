@@ -1,5 +1,4 @@
 <script>
-import AssetService from '@/service/AssetService';
 import MobileApplicationUpdateDialog from '@/components/projects/assets/MobileApplicationUpdateDialog.vue';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import markdown from '@/utils/markdown';
@@ -14,7 +13,6 @@ export default {
             projectId: this.$route.params.projectId,
             assetId: this.$route.params.assetId,
             model: {},
-            service: new AssetService(),
             breadcrumbs: [
                 {
                     label: 'Mobile Applications',
@@ -34,9 +32,14 @@ export default {
     },
     methods: {
         getItem() {
-            this.service.getMobileApplication(this.$api, this.projectId, this.assetId).then((response) => {
-                this.model = response.data;
-            });
+            this.$api
+                .get(this.$api.e.pMobileAppDetail, {
+                    projectPk: this.projectId,
+                    pk: this.assetId
+                })
+                .then((response) => {
+                    this.model = response.data;
+                });
         },
         renderMarkdown(text) {
             if (text === null || text === undefined) {
@@ -45,7 +48,7 @@ export default {
             return markdown.renderMarkdown(text);
         },
         deleteAsset() {
-            this.service.deleteMobileApplication(this.$api, this.projectId, this.assetId).then(() => {
+            this.$api.delete(this.$api.e.pMobileAppDetail, { projectPk: this.projectId, pk: this.assetId }).then(() => {
                 this.$toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Asset deleted!', life: 3000 });
                 this.$router.push({ name: 'MobileApplicationList', params: { projectId: this.projectId } });
             });

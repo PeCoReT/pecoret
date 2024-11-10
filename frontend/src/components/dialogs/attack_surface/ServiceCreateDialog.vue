@@ -1,11 +1,11 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import ModalDialog from '@/components/common/ModalDialog.vue';
 import InlineFieldGroup from '@/components/common/forms/InlineFieldGroup.vue';
 import TargetSelectField from '@/components/forms/fields/TargetSelectField.vue';
 import PortSelectField from '@/components/forms/fields/PortSelectField.vue';
 import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
 import InlineField from '@/components/common/forms/InlineField.vue';
+import {serviceProtocolChoices} from "@/utils/constants";
 
 export default {
     name: 'ASServiceCreateDialog',
@@ -38,10 +38,12 @@ export default {
             portChoices: [],
             target_choiceS: [],
             loading: false,
-            service: new ASMonitorService()
         };
     },
     methods: {
+        serviceProtocolChoices() {
+            return serviceProtocolChoices
+        },
         open() {
             this.showDialog = true;
         },
@@ -55,7 +57,7 @@ export default {
                 banner: this.model.banner,
                 target: this.model.target
             };
-            this.service.createService(data).then(() => {
+            this.$api.post(this.$api.e.asServiceList, null, data).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Service created!',
@@ -82,7 +84,7 @@ export default {
                     <InputNumber v-model="model.port_number"></InputNumber>
                 </InlineField>
                 <InlineField label="Protocol">
-                    <Select :options="service.getServiceProtocolChoices()" optionLabel="name" optionValue="value" v-model="model.protocol"></Select>
+                    <Select :options="serviceProtocolChoices()" optionLabel="name" optionValue="value" v-model="model.protocol"></Select>
                 </InlineField>
             </InlineFieldGroup>
             <Field label="Name">

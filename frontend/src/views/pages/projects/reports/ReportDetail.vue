@@ -1,6 +1,4 @@
 <script>
-import ReportService from '@/service/ReportService';
-import ProjectService from '@/service/ProjectService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import ReportTabMenu from '@/components/projects/reporting/ReportTabMenu.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
@@ -30,21 +28,19 @@ export default {
             project: {},
             projectId: this.$route.params.projectId,
             reportId: this.$route.params.reportId,
-            reportService: new ReportService(),
-            projectService: new ProjectService(),
             authorChoices: [],
             saveLoading: false
         };
     },
     mounted() {
         this.getItem();
-        this.projectService.getProject(this.projectId).then((response) => {
+        this.$api.get('projectDetail', { pk: this.projectId }).then((response) => {
             this.project = response.data;
         });
     },
     methods: {
         getItem() {
-            this.reportService.getReport(this.$api, this.projectId, this.reportId).then((response) => {
+            this.$api.get(this.$api.e.pReportDetail, { pPk: this.projectId, pk: this.reportId }).then((response) => {
                 this.report = response.data;
                 this.authorChoices.push(this.report.author);
             });
@@ -58,8 +54,8 @@ export default {
                 evaluation: this.report.evaluation,
                 template: this.report.template
             };
-            this.reportService
-                .updateReport(this.$api, this.projectId, this.reportId, data)
+            this.$api
+                .patch(this.$api.e.pReportDetail, { pPk: this.projectId, pk: this.reportId }, data)
                 .then(() => {
                     this.$toast.add({
                         severity: 'success',
@@ -80,7 +76,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.reportService.deleteReport(this.$api, this.projectId, this.reportId).then(() => {
+                    this.$api.delete(this.$api.e.pReportDetail, { pPk: this.projectId, pk: this.reportId }).then(() => {
                         this.$router.push({ name: 'ReportList', params: { projectId: this.projectId } });
                     });
                 }

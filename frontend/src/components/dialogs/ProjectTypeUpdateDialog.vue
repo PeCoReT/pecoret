@@ -32,8 +32,8 @@ export default {
                 name: this.model.name,
                 description: this.model.description
             };
-            this.service
-                .patchProjectType(this.$api, this.pentestType.pk, data)
+            this.$api
+                .patch(this.$api.e.pentestTypeDetail, { pk: this.pentestType.pk }, data)
                 .then(() => {
                     this.$emit('object-updated', this.model);
                     this.visible = false;

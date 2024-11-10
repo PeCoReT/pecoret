@@ -1,6 +1,5 @@
 <script>
 import BaseLayout from '@/layout/base/BaseLayout.vue';
-import ASMonitorService from '@/service/ASMonitorService';
 import ScanStatusBadge from '@/components/dialogs/attack_surface/ScanStatusBadge.vue';
 
 export default {
@@ -8,7 +7,6 @@ export default {
     components: { ScanStatusBadge, BaseLayout },
     data() {
         return {
-            service: new ASMonitorService(),
             loading: false,
             scanId: this.$route.params.scanId,
             scan: { scan_type: {}, scan_types: [] },
@@ -37,7 +35,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteScan(this.scanId).then(() => {
+                    this.$api.delete(this.$api.e.asScanDetail, { pk: this.scanId }).then(() => {
                         this.$router.push({
                             name: 'AttackSurfaceScanList'
                         });
@@ -47,8 +45,8 @@ export default {
         },
         getItem() {
             this.loading = true;
-            this.service
-                .getScan(this.scanId)
+            this.$api
+                .get(this.$api.e.asScanDetail, { pk: this.scanId })
                 .then((response) => {
                     this.scan = response.data;
                 })
@@ -112,7 +110,6 @@ export default {
                         <pre>{{ scan.output }}</pre>
                     </div>
                 </div>
-
             </div>
         </div>
         <div class="col-span-12" v-else>

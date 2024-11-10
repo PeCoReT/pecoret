@@ -9,7 +9,7 @@ export default {
                 token: this.$route.params.token
             };
             this.$api
-                .post('/users/change_email_confirm/', data)
+                .post(this.$api.e.userChangeEmailConfirm, data)
                 .then(() => {})
                 .finally(() => {
                     this.$router.push({

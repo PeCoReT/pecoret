@@ -1,5 +1,4 @@
 <script>
-import AssetService from '@/service/AssetService';
 import AssetEnvironmentSelectField from '@/components/forms/fields/AssetEnvironmentSelectField.vue';
 import AssetAccessibleSelectField from '@/components/forms/fields/AssetAccessibleSelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
@@ -17,7 +16,7 @@ export default {
         return {
             visible: false,
             model: this.asset,
-            service: new AssetService()
+            projectId: this.$route.params.projectId
         };
     },
     methods: {
@@ -40,7 +39,7 @@ export default {
             if (this.model.technologies.length > 0 && this.model.technologies[0].pk) {
                 delete data.technologies;
             }
-            this.service.patchHost(this.$api, this.$route.params.projectId, this.asset.pk, data).then(() => {
+            this.$api.patch(this.$api.e.pHostDetail, { projectPk: this.projectId }, data).then(() => {
                 this.$emit('object-updated', this.model);
                 this.visible = false;
             });

@@ -1,5 +1,4 @@
 <script>
-import CompanyService from '@/service/CompanyService';
 import CompanyCreateDialog from '@/components/dialogs/CompanyCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
@@ -8,7 +7,6 @@ export default {
     name: 'CompanyList',
     data() {
         return {
-            service: new CompanyService(),
             breadcrumbs: [{ label: 'Companies', disabled: true }],
             items: [],
             loading: false,
@@ -24,8 +22,8 @@ export default {
             let params = {
                 search: query
             };
-            this.service
-                .getCompanies(params)
+            this.$api
+                .get(this.$api.e.companyList, null, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -38,8 +36,8 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.service
-                .getCompanies(data)
+            this.$api
+                .get(this.$api.e.companyList, null, data)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;

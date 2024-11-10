@@ -1,13 +1,10 @@
 <script>
 import ModalDialog from '@/components/common/ModalDialog.vue';
-import ASMonitorService from '@/service/ASMonitorService';
-import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
-import ProgramSelectField from "@/components/forms/fields/ProgramSelectField.vue";
-import ServiceSelectField from "@/components/forms/fields/ServiceSelectField.vue";
+import ServiceSelectField from '@/components/forms/fields/ServiceSelectField.vue';
 
 export default {
     name: 'ASFindingComponentCreateDialog',
-    components: {ModalDialog, ServiceSelectField },
+    components: { ModalDialog, ServiceSelectField },
     emits: ['object-created'],
     data() {
         return {
@@ -17,7 +14,6 @@ export default {
                 component: null
             },
             loading: false,
-            service: new ASMonitorService()
         };
     },
     methods: {
@@ -25,7 +21,7 @@ export default {
             this.showDialog = true;
         },
         create() {
-            this.service.createFindingComponent(this.model).then(() => {
+            this.$api.post(this.$api.e.asFindingComponentList, null, this.model).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Component created!',

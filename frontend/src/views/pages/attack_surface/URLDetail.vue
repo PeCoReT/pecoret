@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
 import TagSelectField from '@/components/forms/fields/TagSelectField.vue';
 import TechnologyBadge from '@/components/badges/TechnologyBadge.vue';
@@ -11,7 +10,6 @@ export default {
     data() {
         return {
             item: {},
-            service: new ASMonitorService(),
             urlId: this.$route.params.urlId,
             breadcrumbs: [
                 {
@@ -38,7 +36,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteURL(this.$api, this.urlId).then(() => {
+                    this.$api.delete(this.$api.e.asUrlDetail, {pk: this.urlId}).then(() => {
                         this.$router.push({
                             name: 'AttackSurfaceURLList'
                         });
@@ -47,7 +45,7 @@ export default {
             });
         },
         getFinding() {
-            this.service.getURL(this.$api, this.urlId).then((response) => {
+            this.$api.get(this.$api.e.asUrlDetail, {pk: this.urlId}).then((response) => {
                 this.item = response.data;
             });
         }

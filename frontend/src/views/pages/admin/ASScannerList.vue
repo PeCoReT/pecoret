@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
 import { useListViewComposable } from '@/composables/listViewComposable';
@@ -11,7 +10,6 @@ export default {
     components: { ScannerUpdateDialog, ScannerCreateDialog, GenericDataTable, BaseListLayout },
     data() {
         return {
-            service: new ASMonitorService(),
             breadcrumbs: [
                 {
                     label: 'Scanners',
@@ -34,8 +32,8 @@ export default {
         getItems(params) {
             this.loading = true;
             let data = this.listComposable.buildParams(this.pagination, this.filters, params);
-            this.service
-                .getScanners(data)
+            this.$api
+                .get(this.$api.e.asScannerList, null, data)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -74,7 +72,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteScanner(id).then(() => {
+                    this.$api.delete(this.$api.e.asScannerDetail, { pk: id }).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',

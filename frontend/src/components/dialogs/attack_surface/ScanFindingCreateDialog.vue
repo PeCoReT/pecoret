@@ -1,6 +1,5 @@
 <script>
 import ModalDialog from '@/components/common/ModalDialog.vue';
-import ASMonitorService from '@/service/ASMonitorService';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import SeveritySelectField from '@/components/forms/fields/SeveritySelectField.vue';
 import TagSelectField from '@/components/forms/fields/TagSelectField.vue';
@@ -27,7 +26,6 @@ export default {
             targetChoices: null,
             cweChoices: null,
             loading: false,
-            service: new ASMonitorService()
         };
     },
     methods: {
@@ -38,7 +36,7 @@ export default {
             if (this.model.tags === null) {
                 this.model.tags = [];
             }
-            this.service.createScanFinding(this.$api, this.model).then(() => {
+            this.$api.post(this.$api.e.asScanFindingList, null, this.model).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Finding created!',

@@ -1,12 +1,10 @@
 <script>
 import ModalDialog from '@/components/common/ModalDialog.vue';
-import ASMonitorService from '@/service/ASMonitorService';
-import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
-import ProgramSelectField from "@/components/forms/fields/ProgramSelectField.vue";
+import ProgramSelectField from '@/components/forms/fields/ProgramSelectField.vue';
 
 export default {
     name: 'ASFindingCreateDialog',
-    components: {ProgramSelectField, ModalDialog },
+    components: { ProgramSelectField, ModalDialog },
     emits: ['object-created'],
     data() {
         return {
@@ -16,7 +14,6 @@ export default {
                 program: null
             },
             loading: false,
-            service: new ASMonitorService()
         };
     },
     methods: {
@@ -24,7 +21,7 @@ export default {
             this.showDialog = true;
         },
         create() {
-            this.service.createFinding(this.model).then(() => {
+            this.$api.post(this.$api.e.asFindingList, null, this.model).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Finding created!',

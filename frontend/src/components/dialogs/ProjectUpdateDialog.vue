@@ -1,12 +1,11 @@
 <script>
 import PentestTypeSelectField from '@/components/forms/fields/PentestTypeSelectField.vue';
-import CompanyService from '@/service/CompanyService';
-import ProjectService from '@/service/ProjectService';
 import { useAuthStore } from '@/store/auth';
 import CompanySelectField from '@/components/forms/fields/CompanySelectField.vue';
 import ModalDialog from '@/components/common/ModalDialog.vue';
 import InlineFieldGroup from '@/components/common/forms/InlineFieldGroup.vue';
 import InlineField from '@/components/common/forms/InlineField.vue';
+import {projectVisibilityChoices} from "@/utils/constants";
 
 export default {
     name: 'ProjectUpdateDialog',
@@ -23,8 +22,6 @@ export default {
             authStore: useAuthStore(),
             model: this.project,
             projectId: this.$route.params.projectId,
-            companyService: new CompanyService(),
-            service: new ProjectService(),
             availableLanguages: [],
             companyChoices: null,
             testMethodChoices: [
@@ -43,12 +40,14 @@ export default {
         this.getLanguages();
     },
     methods: {
+        projectVisibilityChoices() {
+            return projectVisibilityChoices
+        },
         open() {
             this.showDialog = true;
         },
         getLanguages() {
-            let url = '/projects/available-languages/';
-            this.$api.get(url).then((response) => {
+            this.$api.get(this.$api.e.projectsAvailableLanguages).then((response) => {
                 this.availableLanguages = response.data;
             });
         },
@@ -79,8 +78,8 @@ export default {
             if (this.model.company && this.model.company.pk) {
                 data['company'] = this.model.company.pk;
             }
-            this.service
-                .patchProject(this.$api, this.projectId, data)
+            this.$api
+                .patch(this.$api.e.projectDetail, { pk: this.projectId }, data)
                 .then(() => {
                     this.authStore.activateProject(this.model);
                     this.$emit('object-updated', this.model);
@@ -139,7 +138,7 @@ export default {
                     <CompanySelectField v-model="model.company" :clear="false"></CompanySelectField>
                 </InlineField>
                 <InlineField label="Visibility">
-                    <Select :options="service.getVisibilityChoices()" optionLabel="label" optionValue="value" v-model="model.visibility"></Select>
+                    <Select :options="projectVisibilityChoices()" optionLabel="label" optionValue="value" v-model="model.visibility"></Select>
                 </InlineField>
             </InlineFieldGroup>
             <Field label="Require CVSS Score">

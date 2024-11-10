@@ -1,5 +1,4 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import TopSubmitterDashboard from '@/components/cards/dashboards/advisories/TopSubmitterDashboard.vue';
 import TopVulnerabilitiesDashboard from '@/components/cards/dashboards/advisories/TopVulnerabilitiesDashboard.vue';
@@ -28,7 +27,6 @@ export default {
                 }
             ],
             statistics: {},
-            service: new AdvisoryService()
         };
     },
     mounted() {
@@ -36,7 +34,7 @@ export default {
     },
     methods: {
         getStatistics() {
-            this.service.getBaseInformationStatistics(this.$api).then((response) => {
+            this.$api.get(this.$api.e.aStatBaseInfo).then((response) => {
                 this.statistics = response.data;
             });
         }
@@ -46,7 +44,6 @@ export default {
 
 <template>
     <BaseLayout :breadcrumbs="breadcrumbs">
-
         <div class="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-3 mt-3">
             <DetailCardWithIcon title="Inbox" :text="statistics.inbox_count" icon="fa fa-inbox"></DetailCardWithIcon>
         </div>

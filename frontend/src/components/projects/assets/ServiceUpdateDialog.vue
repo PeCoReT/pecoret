@@ -1,5 +1,4 @@
 <script>
-import AssetService from '@/service/AssetService';
 
 export default {
     name: 'ServiceUpdateDialog',
@@ -12,9 +11,9 @@ export default {
     data() {
         return {
             showDialog: false,
+            projectId: this.$route.params.projectId,
             loading: false,
             model: this.asset,
-            service: new AssetService(),
             protocolChoices: [
                 {
                     label: 'TCP',
@@ -53,7 +52,7 @@ export default {
                 product: this.model.product,
                 state: this.model.state
             };
-            this.service.patchService(this.$api, this.$route.params.projectId, this.asset.pk, data).then(() => {
+            this.$api.patch(this.$api.e.pServiceDetail, { projectPk: this.projectId, pk: this.asset.pk }, data).then(() => {
                 this.$emit('object-updated', this.model);
                 this.showDialog = false;
             });

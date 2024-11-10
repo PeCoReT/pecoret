@@ -55,7 +55,7 @@ export default {
                 password: this.model.password,
                 company: this.model.company
             };
-            this.service.createUser(this.$api, data).then((response) => {
+            this.$api.post(this.$api.e.userList, null, data).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'User Created!',
@@ -68,7 +68,7 @@ export default {
             });
         },
         getGroups() {
-            this.service.getGroups(this.$api).then((response) => {
+            this.$api.get(this.$api.e.groupList).then((response) => {
                 this.groupChoices = response.data.results;
                 this.groupChoices.forEach((group) => {
                     if (group.name === 'Customer') {
@@ -111,6 +111,5 @@ export default {
                 <small>You can leave the password empty to send an activation mail to the user! Users where the password was set are inactive by default. Enable them using the update dialog!</small>
             </Field>
         </Form>
-
     </ModalDialog>
 </template>

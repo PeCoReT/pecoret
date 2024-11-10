@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import TagCreateDialog from '@/components/dialogs/attack_surface/TagCreateDialog.vue';
 import AdvisoryLabelBadge from '@/components/badges/AdvisoryLabelBadge.vue';
 import TagUpdateDialog from '@/components/dialogs/attack_surface/TagUpdateDialog.vue';
@@ -20,7 +19,6 @@ export default {
             pagination: { page: 1, limit: 20 },
             loading: false,
             totalRecords: 0,
-            service: new ASMonitorService(),
             items: []
         };
     },
@@ -34,8 +32,8 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.service
-                .getTags(this.$api, params)
+            this.$api
+                .get(this.$api.e.asTagList, null, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -53,8 +51,8 @@ export default {
             let params = {
                 search: query
             };
-            this.service
-                .getTags(this.$api, params)
+            this.$api
+                .get(this.$api.e.asTagList, null, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -70,7 +68,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteTag(this.$api, id).then(() => {
+                    this.$api.delete(this.$api.e.asTagDetail, {pk:id}).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',

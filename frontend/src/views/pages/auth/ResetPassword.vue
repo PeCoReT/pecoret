@@ -1,5 +1,4 @@
 <script>
-import AuthService from '@/service/AuthService';
 import { useAuthStore } from '@/store/auth';
 import AuthLayout from '@/layout/AuthLayout.vue';
 
@@ -11,7 +10,6 @@ export default {
         return {
             email: null,
             loading: false,
-            service: new AuthService(),
             authStore: useAuthStore()
         };
     },
@@ -21,8 +19,8 @@ export default {
             let data = {
                 email: this.model.email
             };
-            this.service
-                .resetPassword(this.$api, data)
+            this.$api
+                .post('authResetPassword', null, data)
                 .then(() => {
                     this.authStore.unsetMe();
                     this.$toast.add({

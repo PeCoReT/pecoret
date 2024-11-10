@@ -1,5 +1,4 @@
 <script>
-import FindingService from '@/service/FindingService';
 import FindingTabMenu from '@/components/navigation/FindingTabMenu.vue';
 import CVSS4CalculatorForm from '@/components/forms/CVSS4CalculatorForm.vue';
 import { useAuthStore } from '@/store/auth';
@@ -14,7 +13,7 @@ export default {
     },
     methods: {
         getFinding() {
-            this.service.getFinding(this.projectId, this.findingId).then((response) => {
+            this.$api.get(this.$api.e.pFindingDetail, { pPk: this.projectId, pk: this.findingId }).then((response) => {
                 this.cvss4.vector = response.data.cvss_score_40;
                 this.cvss31.vector = response.data.cvss_score_31;
             });
@@ -33,7 +32,6 @@ export default {
             authStore: useAuthStore(),
             projectId: this.$route.params.projectId,
             findingId: this.$route.params.findingId,
-            service: new FindingService(),
             breadcrumbs: [
                 {
                     label: 'Findings',

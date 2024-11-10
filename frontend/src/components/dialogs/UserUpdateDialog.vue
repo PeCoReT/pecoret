@@ -54,13 +54,13 @@ export default {
             if (this.isCustomerSelected === true) {
                 data['company'] = this.model.company;
             }
-            this.service.patchUser(this.$api, this.user.pk, data).then(() => {
+            this.$api.patch(this.$api.e.userDetail, { pk: this.user.pk }, data).then(() => {
                 this.$emit('object-updated', this.model);
                 this.visible = false;
             });
         },
         getGroups() {
-            this.service.getGroups(this.$api).then((response) => {
+            this.$api.get(this.$api.e.groupList).then((response) => {
                 this.groupChoices = response.data.results;
                 this.groupChoices.forEach((group) => {
                     if (group.name === 'Customer') {

@@ -1,6 +1,5 @@
 <script>
-import ReportService from '@/service/ReportService';
-import ReportTemplateSelectField from "@/components/forms/fields/ReportTemplateSelectField.vue";
+import ReportTemplateSelectField from '@/components/forms/fields/ReportTemplateSelectField.vue';
 
 export default {
     name: 'ReportCreateDialog',
@@ -17,7 +16,6 @@ export default {
             templateChoices: null,
             authorChoices: null,
             loading: false,
-            service: new ReportService()
         };
     },
     methods: {
@@ -34,8 +32,8 @@ export default {
                 template: this.model.template,
                 author: null
             };
-            this.service
-                .createReport(this.$api, this.projectId, data)
+            this.$api
+                .post(this.$api.e.pReportList, { pPk: this.projectId }, data)
                 .then((response) => {
                     this.$toast.add({
                         severity: 'success',
@@ -49,9 +47,9 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
-        },
+        }
     },
-    components: {ReportTemplateSelectField}
+    components: { ReportTemplateSelectField }
 };
 </script>
 

@@ -1,5 +1,4 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService';
 
 export default {
     name: 'LatestSubmissionsDashboard',
@@ -7,7 +6,6 @@ export default {
         return {
             items: [],
             loading: false,
-            service: new AdvisoryService()
         };
     },
     mounted() {
@@ -17,10 +15,11 @@ export default {
         getItems() {
             this.loading = true;
             let params = {
-                ordering: '-date_created', limit: 5
+                ordering: '-date_created',
+                limit: 5
             };
-            this.service
-                .getAdvisories(params)
+            this.$api
+                .get(this.$api.e.advisoryList, null, params)
                 .then((response) => {
                     this.items = response.data.results.slice(0, 5);
                 })

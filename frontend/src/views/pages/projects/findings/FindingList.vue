@@ -1,5 +1,4 @@
 <script>
-import FindingService from '@/service/FindingService';
 import SeverityBadge from '@/components/badges/SeverityBadge.vue';
 import FindingCopyDialog from '@/components/dialogs/FindingCopyDialog.vue';
 import AssetSelectField from '@/components/forms/fields/AssetSelectField.vue';
@@ -27,7 +26,6 @@ export default {
             },
             filterAsset: null,
             projectId: this.$route.params.projectId,
-            findingService: new FindingService(),
             findings: [],
             selectedItems: [],
             deleteButtonLoading: false,
@@ -43,12 +41,12 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.findingService
-                .getFindings(this.$api, this.projectId, params)
+            this.$api
+                .get(this.$api.e.pFindingList, { pPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.findings = response.data.results;
-                    this.selectedItems = []
+                    this.selectedItems = [];
                 })
                 .finally(() => {
                     this.loading = false;
@@ -63,8 +61,8 @@ export default {
             if (event.filters.component.value !== null) {
                 params[event.filters.component.value.type] = event.filters.component.value.pk;
             }
-            this.findingService
-                .getFindings(this.$api, this.projectId, params)
+            this.$api
+                .get(this.$api.e.pFindingList, { pPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.findings = response.data.results;
@@ -88,15 +86,20 @@ export default {
                     this.loading = true;
                     let itemsDeleted = 0;
                     this.selectedItems.forEach((item) => {
-                        this.findingService.deleteFinding(this.$api, this.projectId, item.pk).then(() => {
-                            itemsDeleted++;
-                            if (itemsDeleted === this.selectedItems.length) {
-                                this.loading = false;
-                                this.deleteButtonLoading = false;
-                                this.selectedItems = [];
-                                this.getFindings();
-                            }
-                        });
+                        this.$api
+                            .delete(this.$api.e.pFindingDetail, {
+                                pPk: this.projectId,
+                                pk: this.findingId
+                            })
+                            .then(() => {
+                                itemsDeleted++;
+                                if (itemsDeleted === this.selectedItems.length) {
+                                    this.loading = false;
+                                    this.deleteButtonLoading = false;
+                                    this.selectedItems = [];
+                                    this.getFindings();
+                                }
+                            });
                     });
                 }
             });
@@ -106,8 +109,8 @@ export default {
             let params = {
                 search: search
             };
-            this.findingService
-                .getFindings(this.$api, this.projectId, params)
+            this.$api
+                .get(this.$api.e.pFindingList, { pPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.findings = response.data.results;

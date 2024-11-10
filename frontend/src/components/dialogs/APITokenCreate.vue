@@ -1,5 +1,4 @@
 <script>
-import UserService from '@/service/UserService';
 
 export default {
     name: 'APITokenCreate',
@@ -19,7 +18,6 @@ export default {
                 scope_knowledgebase: 'No Access'
             },
             loading: false,
-            service: new UserService(),
             accessChoices: [
                 {
                     label: 'No Access',
@@ -44,7 +42,7 @@ export default {
             this.visible = true;
         },
         create() {
-            this.service.createAPIToken(this.$api, this.model).then((response) => {
+            this.$api.post('apiTokenList', null, this.model).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Created!',

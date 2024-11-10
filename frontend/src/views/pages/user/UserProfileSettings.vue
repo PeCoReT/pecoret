@@ -44,14 +44,12 @@ export default {
     },
     methods: {
         getItem() {
-            let url = '/auth/check/';
-            this.$api.get(url).then((response) => {
+            this.$api.get(this.$api.e.authCheck).then((response) => {
                 this.model = response.data.user;
             });
         },
         patch() {
-            let url = '/users/update_profile/';
-            this.$api.patch(url, this.model).then((response) => {
+            this.$api.patch(this.$api.e.userUpdateProfile, this.model).then((response) => {
                 this.model = response.data;
                 this.$toast.add({
                     severity: 'success',
@@ -62,12 +60,11 @@ export default {
             });
         },
         changePassword() {
-            let url = '/users/change_password/';
             let data = {
                 old_password: this.change_password.old_password,
                 new_password: this.change_password.new_password
             };
-            this.$api.post(url, data).then((response) => {
+            this.$api.post(this.$api.e.userChangePassword, data).then((response) => {
                 this.change_password.old_password = null;
                 this.change_password.new_password = null;
                 this.change_password.new_password_confirm = null;
@@ -80,12 +77,11 @@ export default {
             });
         },
         changeEmail() {
-            let url = '/users/change_email/';
             let data = {
                 password: this.new_email.password,
                 email: this.new_email.mail
             };
-            this.$api.post(url, data).then((response) => {
+            this.$api.post(this.$api.e.userChangeEmail, data).then((response) => {
                 this.new_email.password = null;
                 this.new_email.mail = null;
                 this.$toast.add({
@@ -119,7 +115,7 @@ export default {
         <p class="font-bold text-lg mb-3">Change E-Mail</p>
         <Form>
             <Field label="Password">
-                <Password v-model="new_email.password" :feedback="false" :pt="{ pcInput: { root: 'grow' } }"></Password>
+                <Password v-model="new_email.password" :fluid="true" :feedback="false" :pt="{ pcInput: { root: 'grow' } }"></Password>
             </Field>
             <Field label="New Email">
                 <InputText v-model="new_email.mail" id="new_user-help"></InputText>
@@ -132,13 +128,13 @@ export default {
         <p class="font-bold text-lg mb-3">Change Password</p>
         <Form>
             <Field label="Current Password">
-                <Password v-model="change_password.old_password" :feedback="false" :pt="{ pcInput: { root: 'grow' } }"></Password>
+                <Password v-model="change_password.old_password" :fluid="true" :feedback="false" :pt="{ pcInput: { root: 'grow' } }"></Password>
             </Field>
             <Field label="New Password">
-                <Password v-model="change_password.new_password" :feedback="false" :pt="{ pcInput: { root: 'grow' } }"></Password>
+                <Password v-model="change_password.new_password" :fluid="true" :feedback="false" :pt="{ pcInput: { root: 'grow' } }"></Password>
             </Field>
             <Field label="New Password (confirm)">
-                <Password v-model="change_password.new_password_confirm" :feedback="false" :pt="{ pcInput: { root: 'grow' } }"></Password>
+                <Password v-model="change_password.new_password_confirm" :fluid="true" :feedback="false" :pt="{ pcInput: { root: 'grow' } }"></Password>
             </Field>
             <Button class="w-full" @click="changePassword" label="Save" :disabled="change_password.new_password === null || change_password.new_password !== change_password.new_password_confirm"></Button>
         </Form>

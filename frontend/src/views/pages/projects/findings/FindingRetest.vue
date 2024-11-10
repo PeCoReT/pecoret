@@ -1,5 +1,5 @@
 <script>
-import FindingService, { statusChoices } from '@/service/FindingService';
+import {findingStatusChoices} from '@/utils/constants';
 import FindingTabMenu from '@/components/navigation/FindingTabMenu.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
@@ -19,7 +19,7 @@ export default {
     },
     methods: {
         getData() {
-            this.service.getFinding(this.projectId, this.findingId).then((response) => {
+            this.$api.get(this.$api.e.pFindingDetail, { pPk: this.projectId, pk: this.findingId }).then((response) => {
                 this.finding = response.data;
                 this.model.status = response.data.status;
                 this.model.retest_results = response.data.retest_results;
@@ -28,8 +28,8 @@ export default {
         },
         patchFinding() {
             this.loading = true;
-            this.service
-                .patchFinding(this.$api, this.projectId, this.findingId, this.model)
+            this.$api
+                .patch(this.$api.e.pFindingDetail, { pPk: this.projectId, pk: this.finding.pk }, this.model)
                 .then(() => {
                     this.$toast.add({
                         severity: 'success',
@@ -45,7 +45,6 @@ export default {
     },
     data() {
         return {
-            service: new FindingService(),
             loading: false,
             finding: { component: {} },
             model: {
@@ -53,7 +52,7 @@ export default {
                 date_retested: null,
                 status: null
             },
-            statusChoices: statusChoices,
+            statusChoices: findingStatusChoices,
             breadcrumbs: [
                 {
                     label: 'Findings',

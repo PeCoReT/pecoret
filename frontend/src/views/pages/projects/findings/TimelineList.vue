@@ -1,5 +1,4 @@
 <script>
-import FindingService from '@/service/FindingService';
 import FindingTabMenu from '@/components/navigation/FindingTabMenu.vue';
 
 export default {
@@ -8,7 +7,6 @@ export default {
         return {
             projectId: this.$route.params.projectId,
             findingId: this.$route.params.findingId,
-            findingService: new FindingService(),
             items: [],
             breadcrumbs: [
                 {
@@ -34,9 +32,14 @@ export default {
     },
     methods: {
         getTimeline() {
-            this.findingService.getTimeline(this.projectId, this.findingId).then((response) => {
-                this.items = response.data.results;
-            });
+            this.$api
+                .get(this.$api.e.pFindingTimelineList, {
+                    pPk: this.projectId,
+                    fPk: this.findingId
+                })
+                .then((response) => {
+                    this.items = response.data.results;
+                });
         }
     },
     mounted() {

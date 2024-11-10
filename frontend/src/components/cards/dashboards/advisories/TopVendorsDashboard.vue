@@ -1,11 +1,9 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService';
 
 export default {
     name: 'TopVendorsDashboard',
     data() {
         return {
-            service: new AdvisoryService(),
             loading: false,
             chartColors: ['--p-emerald-300', '--p-orange-300', '--p-red-300', '--p-lime-300', '--p-teal-300', '--p-green-300'],
             chartHoverColors: ['--p-emerald-200', '--p-orange-200', '--p-red-200', '--p-lime-200', '--p-teal-200', '--p-green-200'],
@@ -46,8 +44,8 @@ export default {
     methods: {
         getData() {
             this.loading = true;
-            this.service
-                .getTopVendorsStatistics()
+            this.$api
+                .get(this.$api.e.aStatTopVendors)
                 .then((response) => {
                     response.data.forEach((item) => {
                         this.chartData.labels.push(item['technology__vendor']);

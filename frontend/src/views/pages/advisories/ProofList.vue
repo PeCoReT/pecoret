@@ -1,5 +1,4 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService';
 import AdvisoryTabMenu from '@/components/navigation/AdvisoryTabMenu.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
@@ -7,7 +6,6 @@ export default {
     name: 'ProofList',
     data() {
         return {
-            service: new AdvisoryService(),
             loading: false,
             breadcrumbs: [
                 {
@@ -36,7 +34,7 @@ export default {
     },
     methods: {
         getAdvisory() {
-            this.service.getAdvisory(this.advisoryId).then((response) => {
+            this.$api.get(this.$api.e.advisoryDetail, { pk: this.advisoryId }).then((response) => {
                 this.model = response.data;
             });
         },
@@ -44,14 +42,14 @@ export default {
             let data = {
                 proof_text: this.model.proof_text
             };
-            this.service.patchAdvisory(this.advisoryId, data).then(() => {
+            this.$api.patch(this.$api.e.advisoryDetail, { pk: this.advisoryId }, data).then(() => {
                 this.$toast.add({ severity: 'info', summary: 'Updated', detail: 'Proof was updated!', life: 3000 });
             });
         },
         onImageUpload(file, onSuccess) {
             let data = new FormData();
             data.append('image', file);
-            this.service.attachmentCreate(this.advisoryId, data).then((resp) => {
+            this.$api.post(this.$api.e.aAttachmentList, { aPk: this.advisoryId }, data).then((resp) => {
                 onSuccess(resp.data.storage_link);
             });
         }

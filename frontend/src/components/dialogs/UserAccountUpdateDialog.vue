@@ -1,5 +1,4 @@
 <script>
-import UserAccountService from '@/service/UserAccountService';
 
 export default {
     name: 'UserAccountUpdateDialog',
@@ -14,7 +13,6 @@ export default {
             visible: false,
             loading: false,
             model: this.account,
-            service: new UserAccountService()
         };
     },
     methods: {
@@ -33,8 +31,15 @@ export default {
                 compromised: this.model.compromised,
                 description: this.model.description
             };
-            this.service
-                .patchAccount(this.$api, this.$route.params.projectId, this.account.pk, data)
+            this.$api
+                .patch(
+                    this.$api.e.pAccountDetail,
+                    {
+                        projectPk: this.$route.params.projectId,
+                        pk: this.account.pk
+                    },
+                    data
+                )
                 .then(() => {
                     this.$emit('object-updated', this.model);
                     this.visible = false;
@@ -65,8 +70,7 @@ export default {
                 <InputText id="username" v-model="model.username"></InputText>
             </Field>
             <Field label="Password">
-                <Password v-model="model.password" :feedback="false" toggleMask
-                          :pt="{ pcInput: { root: 'grow' } }"></Password>
+                <Password v-model="model.password" :feedback="false" toggleMask :pt="{ pcInput: { root: 'grow' } }"></Password>
             </Field>
             <Field label="Role">
                 <InputText id="role" v-model="model.role"></InputText>

@@ -1,5 +1,4 @@
 <script>
-import CompanyService from '@/service/CompanyService';
 import ReportTemplateSelectField from '@/components/forms/fields/ReportTemplateSelectField.vue';
 import ModalDialog from '@/components/common/ModalDialog.vue';
 
@@ -11,7 +10,6 @@ export default {
             showDialog: false,
             loading: false,
             model: {},
-            service: new CompanyService()
         };
     },
     methods: {
@@ -28,8 +26,8 @@ export default {
                 country: this.model.country,
                 report_template: this.model.report_template
             };
-            this.service
-                .createCompany(this.$api, data)
+            this.$api
+                .post(this.$api.e.companyList, null, data)
                 .then(() => {
                     this.$emit('object-created', this.model);
                     this.showDialog = false;

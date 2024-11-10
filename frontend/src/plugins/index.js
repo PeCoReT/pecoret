@@ -5,10 +5,12 @@
  */
 
 // Plugins
-import pinia from "../store";
-import { loadApi } from "@/plugins/axios";
+import pinia from '../store';
+import {loadApi} from '@/plugins/axios';
+import api from '@/plugins/api';
 
 export function registerPlugins(app) {
     app.use(pinia);
-    loadApi(app);
+
+    app.use(api);
 }

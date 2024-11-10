@@ -1,5 +1,4 @@
 <script>
-import ProjectService from '@/service/ProjectService';
 
 export default {
     name: 'ProjectFileCreateDialog',
@@ -13,7 +12,6 @@ export default {
                 name: null
             },
             loading: false,
-            service: new ProjectService()
         };
     },
     methods: {
@@ -24,11 +22,10 @@ export default {
             this.model.file = event.files[0];
         },
         create() {
-            let data = {
-                name: this.model.name,
-                file: this.model.file
-            };
-            this.service.createProjectFile(this.$api, this.projectId, data).then((response) => {
+            let formData = new FormData();
+            formData.append('name', this.model.name);
+            formData.append('file', this.model.file);
+            this.$api.post(this.$api.e.pFileList, { pPk: this.projectId }, formData).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'File added!',

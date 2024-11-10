@@ -1,5 +1,4 @@
 <script>
-import UserAccountService from '@/service/UserAccountService';
 import UserAccountCreateDialog from '@/components/dialogs/UserAccountCreateDialog.vue';
 import UserAccountUpdateDialog from '@/components/dialogs/UserAccountUpdateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
@@ -19,8 +18,7 @@ export default {
             items: [],
             loading: false,
             totalRecords: 0,
-            pagination: { page: 1, limit: 20 },
-            service: new UserAccountService()
+            pagination: { page: 1, limit: 20 }
         };
     },
     mounted() {
@@ -37,8 +35,10 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            this.service
-                .getAccounts(this.$api, this.projectId, params)
+            console.log('111');
+            console.log(this.projectId);
+            this.$api
+                .get(this.$api.e.pAccountList, { projectPk: this.projectId }, params)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -59,7 +59,7 @@ export default {
             });
         },
         deleteAccount(id) {
-            this.service.deleteAccount(this.$api, this.projectId, id).then(() => {
+            this.$api.delete(this.$api.e.pAccountDetail, { projectPk: this.projectId, pk: id }).then(() => {
                 this.$toast.add({
                     severity: 'info',
                     summary: 'Deleted',

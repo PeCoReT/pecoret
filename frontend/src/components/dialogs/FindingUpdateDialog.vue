@@ -1,7 +1,5 @@
 <script>
-import FindingService from '@/service/FindingService';
 import ModalDialog from '@/components/common/ModalDialog.vue';
-import UserAccountService from '@/service/UserAccountService';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
@@ -21,9 +19,7 @@ export default {
             showDialog: false,
             model: this.finding,
             loading: false,
-            service: new FindingService(),
-            userAccountChoices: [],
-            accountService: new UserAccountService()
+            userAccountChoices: []
         };
     },
     methods: {
@@ -34,7 +30,7 @@ export default {
             if (this.userAccountChoices.length) {
                 return;
             }
-            this.accountService.getAccounts(this.$api, this.projectId).then((response) => {
+            this.$api.get(this.$api.e.pAccountList, { projectPk: this.projectId }).then((response) => {
                 this.userAccountChoices = response.data.results;
             });
         },
@@ -50,8 +46,8 @@ export default {
             } else {
                 data['user_account'] = null;
             }
-            this.service
-                .patchFinding(this.$api, this.projectId, this.finding.pk, data)
+            this.$api
+                .patch(this.$api.e.pFindingDetail, { pPk: this.projectId, pk: this.finding.pk }, data)
                 .then((response) => {
                     this.$toast.add({
                         severity: 'success',

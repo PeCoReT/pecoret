@@ -30,8 +30,8 @@ export default {
                 name: this.model.name,
                 description: this.model.description
             };
-            this.service
-                .createProjectType(this.$api, data)
+            this.$api
+                .post(this.$api.e.pentestTypeList, null, data)
                 .then((response) => {
                     this.$toast.add({
                         severity: 'success',
@@ -46,11 +46,6 @@ export default {
                     this.loading = false;
                 });
         },
-        getGroups() {
-            this.service.getGroups(this.$api).then((response) => {
-                this.groupChoices = response.data.results;
-            });
-        }
     }
 };
 </script>

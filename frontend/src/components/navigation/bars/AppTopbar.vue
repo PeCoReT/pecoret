@@ -1,7 +1,6 @@
 <script>
 import { useAuthStore } from '@/store/auth';
 import ProjectTabMenu from '@/components/navigation/ProjectTabMenu.vue';
-import AuthService from '@/service/AuthService';
 import AttackSurfaceTabMenu from '@/components/navigation/AttackSurfaceTabMenu.vue';
 
 export default {
@@ -175,8 +174,9 @@ export default {
             return this.showLinks[name].some((attr) => this.authStore.groups[attr] === true);
         },
         onLogout() {
-            const authService = new AuthService();
-            authService.logout(this.$api).then(() => {
+            this.$api.post('authLogout').then(() => {
+                this.authStore.unsetMe();
+
                 this.$router.push({ name: 'Login' });
             });
         },

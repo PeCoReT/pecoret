@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import ProgramCreateDialog from '@/components/dialogs/attack_surface/ProgramCreateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
@@ -22,7 +21,6 @@ export default {
             totalRecords: 0,
             pagination: { page: 1, limit: 20 },
             filters: {},
-            service: new ASMonitorService(),
             listComposable: useListViewComposable()
         };
     },
@@ -33,8 +31,8 @@ export default {
         getItems(params) {
             this.loading = true;
             let data = this.listComposable.buildParams(this.pagination, this.filters, params);
-            this.service
-                .getPrograms(this.$api, data)
+            this.$api
+                .get(this.$api.e.asProgramList, null, data)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.items = response.data.results;
@@ -57,7 +55,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteProgram(this.$api, id).then(() => {
+                    this.$api.delete(this.$api.e.asProgramDetail, {pk: id}).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',

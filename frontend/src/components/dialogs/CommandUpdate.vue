@@ -1,5 +1,4 @@
 <script>
-import ProjectCommandService from '@/service/ProjectCommandService';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
@@ -14,8 +13,8 @@ export default {
         return {
             visible: false,
             model: this.command,
-            service: new ProjectCommandService(),
-            loading: false
+            loading: false,
+            projectId: this.$route.params.projectId
         };
     },
     methods: {
@@ -31,10 +30,19 @@ export default {
                 output: this.model.output,
                 date_run: this.model.date_run
             };
-            this.service.patchCommand(this.$api, this.$route.params.projectId, this.command.pk, data).then(() => {
-                this.$emit('object-updated', this.model);
-                this.visible = false;
-            });
+            this.$api
+                .patch(
+                    this.$api.e.pCommandDetail,
+                    {
+                        projectPk: this.projectId,
+                        pk: this.command.pk
+                    },
+                    data
+                )
+                .then(() => {
+                    this.$emit('object-updated', this.model);
+                    this.visible = false;
+                });
         }
     },
     watch: {

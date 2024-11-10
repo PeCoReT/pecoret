@@ -1,6 +1,4 @@
 <script>
-import ReportService from '@/service/ReportService';
-import ProjectService from '@/service/ProjectService';
 
 export default {
     name: 'VersionHistoryCreateDialog',
@@ -18,8 +16,6 @@ export default {
             },
             loading: false,
             userChoices: [],
-            reportService: new ReportService(),
-            projectService: new ProjectService()
         };
     },
     methods: {
@@ -33,12 +29,12 @@ export default {
             let params = {
                 search: event.value
             };
-            this.projectService.getProjectMemberships(this.$api, this.projectId, params).then((response) => {
+            this.$api.get(this.$api.e.pMembershipList, { projectPk: this.projectId }, params).then((response) => {
                 this.userChoices = response.data.results;
             });
         },
         onFocusUser() {
-            this.projectService.getProjectMemberships(this.$api, this.projectId).then((response) => {
+            this.$api.get(this.$api.e.pMembershipList, { projectPk: this.projectId }).then((response) => {
                 this.userChoices = response.data.results;
             });
         },
@@ -49,16 +45,25 @@ export default {
                 date: this.model.date.toISOString().split('T')[0],
                 version: this.model.version
             };
-            this.reportService.createVersionHistory(this.$api, this.projectId, this.reportId, data).then((response) => {
-                this.$toast.add({
-                    severity: 'success',
-                    summary: 'Version added!',
-                    life: 3000,
-                    detail: 'Version added to report!'
+            this.$api
+                .post(
+                    this.$api.e.pReportVersionHistoryList,
+                    {
+                        pPk: this.projectId,
+                        rPk: this.reportId
+                    },
+                    data
+                )
+                .then((response) => {
+                    this.$toast.add({
+                        severity: 'success',
+                        summary: 'Version added!',
+                        life: 3000,
+                        detail: 'Version added to report!'
+                    });
+                    this.$emit('object-created', response.data);
+                    this.visible = false;
                 });
-                this.$emit('object-created', response.data);
-                this.visible = false;
-            });
         }
     }
 };

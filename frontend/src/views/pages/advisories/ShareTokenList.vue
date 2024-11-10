@@ -1,5 +1,4 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService';
 import { useListViewComposable } from '@/composables/listViewComposable';
 import PBreadcrumb from '@/components/Breadcrumb.vue';
 import AdvisoryTabMenu from '@/components/navigation/AdvisoryTabMenu.vue';
@@ -15,7 +14,6 @@ export default {
     },
     data() {
         return {
-            service: new AdvisoryService(),
             loading: false,
             items: [],
             advisoryId: this.$route.params.advisoryId,
@@ -60,8 +58,8 @@ export default {
         getItems(params) {
             this.loading = true;
             params = this.buildParams(this.pagination, this.filters, params);
-            this.service
-                .getShareTokens(this.advisoryId, params)
+            this.$api
+                .get(this.$api.e.aShareTokenList, { aPk: this.advisoryId }, params)
                 .then((resp) => {
                     this.items = resp.data.results;
                     this.totalRecords = resp.data.count;
@@ -77,7 +75,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteShareToken(this.advisoryId, id).then(() => {
+                    this.$api.delete(this.$api.e.aShareTokenDetail, { aPk: this.advisoryId, pk: id }).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',

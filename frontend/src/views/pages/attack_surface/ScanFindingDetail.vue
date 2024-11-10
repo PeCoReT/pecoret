@@ -1,8 +1,7 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
-import { severityChoices } from '@/utils/constants';
+import {asFindingStatusChoices, severityChoices} from '@/utils/constants';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
@@ -11,7 +10,6 @@ export default {
     data() {
         return {
             finding: {},
-            service: new ASMonitorService(),
             findingId: this.$route.params.findingId,
             breadcrumbs: [
                 {
@@ -32,7 +30,7 @@ export default {
     },
     computed: {
         statusChoices() {
-            return this.service.getStatusChoices();
+            return asFindingStatusChoices;
         }
     },
     methods: {
@@ -43,7 +41,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteScanFinding(this.$api, this.findingId).then(() => {
+                    this.$api.delete(this.$api.e.asScanFindingDetail, { pk: this.findingId }).then(() => {
                         this.$router.push({
                             name: 'AttackSurfaceScanFindingList'
                         });
@@ -55,12 +53,12 @@ export default {
             return severityChoices;
         },
         getFinding() {
-            this.service.getScanFinding(this.$api, this.findingId).then((response) => {
+            this.$api.get(this.$api.e.asScanFindingDetail, { pk: this.findingId }).then((response) => {
                 this.finding = response.data;
             });
         },
         patchFindingData(data) {
-            this.service.patchScanFinding(this.$api, this.findingId, data).then((response) => {
+            this.$api.patch(this.$api.e.asScanFindingDetail, { pk: this.findingId }, data).then((response) => {
                 this.finding = response.data;
                 this.$toast.add({ severity: 'success', summary: 'Updated', detail: 'Finding updated!', life: 3000 });
             });

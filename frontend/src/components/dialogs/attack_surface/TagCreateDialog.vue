@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import ModalDialog from '@/components/common/ModalDialog.vue';
 
 export default {
@@ -15,7 +14,6 @@ export default {
                 color: null
             },
             loading: false,
-            service: new ASMonitorService()
         };
     },
     methods: {
@@ -28,7 +26,7 @@ export default {
                 description: this.model.description,
                 color: `#${this.model.color}`
             };
-            this.service.createTag(this.$api, data).then(() => {
+            this.$api.post(this.$api.e.asTagList, null, data).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Tag created!',

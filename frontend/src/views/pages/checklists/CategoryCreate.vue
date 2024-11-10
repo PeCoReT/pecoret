@@ -1,5 +1,4 @@
 <script>
-import ChecklistService from '@/service/ChecklistService';
 
 export default {
     name: 'ChecklistCategoryCreate',
@@ -9,7 +8,6 @@ export default {
                 categories: null
             },
             categoryChoices: [],
-            service: new ChecklistService(),
             searchAvailable: null,
             breadcrumbs: [
                 {
@@ -26,7 +24,7 @@ export default {
         };
     },
     mounted() {
-        this.service.getCategories(this.$api).then((response) => {
+        this.$api.get(this.$api.e.checkCategoryList).then((response) => {
             this.categoryChoices = [response.data.results, []];
         });
     },
@@ -35,7 +33,7 @@ export default {
             let data = {
                 search: this.searchAvailable
             };
-            this.service.getCategories(this.$api, data).then((response) => {
+            this.$api.get(this.$api.e.checkCategoryList, null, data).then((response) => {
                 this.categoryChoices = [response.data.results, []];
             });
         },
@@ -50,7 +48,7 @@ export default {
                     data.categories.push(item.pk);
                 });
             }
-            this.service.createChecklist(this.$api, data).then(() => {
+            this.$api.get(this.$api.e.checklistList, null, data).then(() => {
                 this.$router.push({
                     name: 'ChecklistList'
                 });

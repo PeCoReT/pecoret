@@ -1,18 +1,16 @@
 <script>
-import AdvisoryService from '@/service/AdvisoryService';
 import SeverityBadge from '@/components/badges/SeverityBadge.vue';
 import { useAuthStore } from '@/store/auth';
 import AdvisoryLabelBadge from '@/components/badges/AdvisoryLabelBadge.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
-import {useListViewComposable} from '@/composables/listViewComposable';
-
+import { useListViewComposable } from '@/composables/listViewComposable';
+import { advisoryStatusChoices } from '@/utils/constants';
 
 export default {
     name: 'AdvisoryList',
     data() {
         return {
-            service: new AdvisoryService(),
             loading: false,
             authStore: useAuthStore(),
             breadcrumbs: [
@@ -31,18 +29,18 @@ export default {
         };
     },
     setup() {
-        const { sort, buildParams } = useListViewComposable()
-        return {sort, buildParams };
+        const { sort, buildParams } = useListViewComposable();
+        return { sort, buildParams };
     },
     mounted() {
         this.getItems();
     },
     computed: {
         statusChoices() {
-            return this.service.getStatusChoices();
+            return advisoryStatusChoices;
         },
         vulnerabilityStatusChoices() {
-            return this.service.getVulnerabilityStatusChoices();
+            return this.vulnerabilityStatusChoices();
         },
         showCreateButton() {
             return this.authStore.groups.isVendor !== true;
@@ -54,7 +52,7 @@ export default {
             this.getItems();
         },
         onGlobalSearch(query) {
-            this.getItems({search: query});
+            this.getItems({ search: query });
         },
         onRowClick(row) {
             this.$router.push({
@@ -67,7 +65,8 @@ export default {
         getItems(params) {
             this.loading = true;
             let data = this.buildParams(this.pagination, this.filters, params);
-            this.service.getAdvisories(data)
+            this.$api
+                .get(this.$api.e.advisoryList, null, data)
                 .then((response) => {
                     this.items = response.data.results;
                     this.totalRecords = response.data.count;

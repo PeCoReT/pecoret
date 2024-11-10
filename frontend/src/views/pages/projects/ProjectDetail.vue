@@ -1,5 +1,4 @@
 <script>
-import ProjectService from '@/service/ProjectService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
 import ProjectUpdateDialog from '@/components/dialogs/ProjectUpdateDialog.vue';
@@ -14,7 +13,6 @@ export default {
         return {
             projectId: this.$route.params.projectId,
             project: { company: {} },
-            service: new ProjectService(),
             role: {},
             updatedSuccessToastTitle: 'Project updated!',
             updatedSuccessToastText: 'Project was updated successfully!',
@@ -33,7 +31,7 @@ export default {
     },
     methods: {
         getProject() {
-            this.service.getProject(this.projectId).then((response) => {
+            this.$api.get(this.$api.e.projectDetail, { pk: this.projectId }).then((response) => {
                 this.project = response.data;
                 this.getMembership();
                 this.breadcrumbs[this.breadcrumbs.length - 1] = {
@@ -53,7 +51,7 @@ export default {
                 this.role = { role: 'Public Pentester' };
                 return;
             }
-            this.service.getProjectMembershipMe(this.projectId).then((response) => {
+            this.$api.get(this.$api.e.projectMembershipsMe, { pk: this.projectId }).then((response) => {
                 this.role = response.data;
             });
         },
@@ -68,7 +66,7 @@ export default {
             return pentestTypeNames.join(', ');
         },
         patchProject(data) {
-            this.service.patchProject(this.$api, this.projectId, data).then((response) => {
+            this.$api.patch(this.$api.e.projectDetail, { pk: this.projectId }, data).then((response) => {
                 this.project = response.data;
                 this.$toast.add({
                     severity: 'success',
@@ -79,7 +77,13 @@ export default {
             });
         },
         pinProject() {
-            this.service.pinProject(this.$api, this.projectId, this.project.pinned).then(() => {
+            let resp;
+            if (this.project.pinned === true) {
+                resp = this.$api.post(this.$api.e.projectsPinProject, { pk: this.projectId });
+            } else {
+                resp = this.$api.delete(this.$api.e.projectsUnpinProject, { pk: this.projectId });
+            }
+            resp.then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: this.updatedSuccessToastTitle,
@@ -173,7 +177,7 @@ export default {
             <Card class="card">
                 <template #title>Description</template>
                 <template #content>
-                    <div v-html="renderMarkdown(project.description)"></div>
+                    <div v-html="renderMarkdown(project.description)" class="markdown-block"></div>
                 </template>
             </Card>
         </div>

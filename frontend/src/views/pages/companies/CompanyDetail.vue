@@ -1,5 +1,4 @@
 <script>
-import CompanyService from '@/service/CompanyService';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import CompanyUpdateDialog from '@/components/dialogs/CompanyUpdateDialog.vue';
 import CompanyTabMenu from '@/components/navigation/CompanyTabMenu.vue';
@@ -13,7 +12,6 @@ export default {
     name: 'CompanyDetail',
     data() {
         return {
-            companyService: new CompanyService(),
             companyId: this.$route.params.companyId,
             breadcrumbs: [
                 { label: 'Companies', to: this.$router.resolve({ name: 'CompanyList' }) },
@@ -30,12 +28,12 @@ export default {
             return markdown.renderMarkdown(text);
         },
         getCompany() {
-            this.companyService.getCompany(this.companyId).then((response) => {
+            this.$api.get(this.$api.e.companyDetail, { pk: this.companyId }).then((response) => {
                 this.company = response.data;
             });
         },
         createCompanyInformation() {
-            this.companyService.createCompanyInformation(this.$api, this.companyId, { text: this.newInformationText }).then((resp) => {
+            this.$api.post(this.$api.e.cInfoList, { cPk: this.companyId }, { text: this.newInformationText }).then(() => {
                 this.newInformationText = null;
                 this.getCompanyInformation();
             });
@@ -48,7 +46,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.companyService.deleteCompanyInformation(this.$api, this.companyId, id).then(() => {
+                    this.$api.delete(this.$api.e.cInfoDetail, { cPk: this.companyId, pk: id }).then(() => {
                         this.getCompanyInformation();
                     });
                 }
@@ -61,20 +59,20 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.companyService.deleteCompany(this.$api, this.companyId).then(() => {
+                    this.$api.delete(this.$api.e.companyDetail, { pk: this.companyId }).then(() => {
                         this.$router.push({ name: 'CompanyList' });
                     });
                 }
             });
         },
         getCompanyInformation() {
-            this.companyService.getCompanyInformation(this.companyId).then((response) => {
+            this.$api.get(this.$api.e.cInfoList, { cPk: this.companyId }).then((response) => {
                 this.companyInformation = response.data.results;
             });
         },
         companyInformationUpdated(information) {
             let data = { text: information.text };
-            this.companyService.patchCompanyInformation(this.$api, this.companyId, information.pk, data).then((reps) => {
+            this.$api.patch(this.$api.e.cInfoDetail, { cPk: this.companyId, pk: information.pk }, data).then(() => {
                 this.getCompanyInformation();
             });
         }

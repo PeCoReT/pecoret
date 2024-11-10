@@ -1,5 +1,4 @@
 <script>
-import ASMonitorService from '@/service/ASMonitorService';
 import ModalDialog from '@/components/common/ModalDialog.vue';
 
 export default {
@@ -16,7 +15,6 @@ export default {
             showDialog: false,
             model: this.tag,
             loading: false,
-            service: new ASMonitorService()
         };
     },
     methods: {
@@ -32,7 +30,7 @@ export default {
             if (this.model.color.substring(0, 1) !== '#') {
                 data = `#${this.model.color}`;
             }
-            this.service.patchTag(this.$api, this.tag.pk, data).then(() => {
+            this.$api.patch(this.$api.e.asTagDetail, {pk: this.tag.pk}, data).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Tag updated!',

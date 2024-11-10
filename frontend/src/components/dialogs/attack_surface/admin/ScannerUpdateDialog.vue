@@ -1,6 +1,5 @@
 <script>
 import ModalDialog from '@/components/common/ModalDialog.vue';
-import ASMonitorService from '@/service/ASMonitorService';
 import ScanTypeMultiSelectField from '@/components/forms/fields/ScanTypeMultiSelectField.vue';
 
 export default {
@@ -17,7 +16,6 @@ export default {
             showDialog: false,
             model: this.scanner,
             loading: false,
-            service: new ASMonitorService()
         };
     },
     methods: {
@@ -32,7 +30,7 @@ export default {
             if (this.model.scan_types.length > 0 && this.model.scan_types[0].pk) {
                 delete data.scan_types;
             }
-            this.service.patchScanner(this.scanner.pk, data).then(() => {
+            this.$api.patch(this.$api.e.asScannerDetail, { pk: this.scanner.pk }, data).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Scanner updated!',

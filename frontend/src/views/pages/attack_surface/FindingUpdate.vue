@@ -1,17 +1,25 @@
 <script>
 import BaseLayout from '@/layout/base/BaseLayout.vue';
-import ASMonitorService from '@/service/ASMonitorService';
 import InlineField from '@/components/common/forms/InlineField.vue';
 import InlineFieldGroup from '@/components/common/forms/InlineFieldGroup.vue';
 import SeveritySelectField from '@/components/forms/fields/SeveritySelectField.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import CWEMultiSelectField from '@/components/forms/fields/CWEMultiSelectField.vue';
 import forceFileDownload from '@/utils/file';
-import AffectedComponentFindingCard from "@/components/cards/attack_surface/AffectedComponentFindingCard.vue";
+import AffectedComponentFindingCard from '@/components/cards/attack_surface/AffectedComponentFindingCard.vue';
+import {asFindingProgressStatus} from "@/utils/constants";
 
 export default {
     name: 'FindingUpdate',
-    components: {AffectedComponentFindingCard, CWEMultiSelectField, MarkdownEditor, SeveritySelectField, InlineFieldGroup, InlineField, BaseLayout },
+    components: {
+        AffectedComponentFindingCard,
+        CWEMultiSelectField,
+        MarkdownEditor,
+        SeveritySelectField,
+        InlineFieldGroup,
+        InlineField,
+        BaseLayout
+    },
     data() {
         return {
             breadcrumbs: [
@@ -26,7 +34,6 @@ export default {
                     disabled: true
                 }
             ],
-            service: new ASMonitorService(),
             model: {},
             findingId: this.$route.params.findingId,
             loaded: false,
@@ -38,18 +45,18 @@ export default {
     },
     methods: {
         findingProgressStatus() {
-            return this.service.getFindingProgressChoices();
+            return asFindingProgressStatus;
         },
         getItem() {
-            this.service.getFinding(this.findingId).then((response) => {
+            this.$api.get(this.$api.e.asFindingDetail, { pk: this.findingId }).then((response) => {
                 this.model = response.data;
                 this.loaded = true;
             });
         },
         downloadPDF() {
             this.downloadLoading = true;
-            this.service
-                .downloadFindingPDF(this.findingId)
+            this.$api
+                .get(this.$api.e.asFindingPdf, { pk: this.findingId })
                 .then((response) => {
                     forceFileDownload(response);
                 })
@@ -64,17 +71,17 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.service.deleteFinding(this.findingId);
+                    this.$api.delete(this.$api.e.asFindingDetail, { pk: this.findingId });
                     this.$router.push({ name: 'AttackSurfaceFindingList' });
                 }
             });
         },
         onAttachmentUpload(file, onSuccess) {
-          let data = new FormData();
-          data.append('image', file);
-          this.service.uploadFindingAttachment(data).then((resp) => {
-              onSuccess(resp.data.storage_link)
-          })
+            let data = new FormData();
+            data.append('image', file);
+            this.$api.post(this.$api.e.pFindingAttachmentList, null, data).then((resp) => {
+                onSuccess(resp.data.storage_link);
+            });
         },
         save() {
             let data = {
@@ -88,7 +95,7 @@ export default {
                 exploitation_details: this.model.exploitation_details,
                 status: this.model.status
             };
-            this.service.patchFinding(this.findingId, data).then(() => {
+            this.$api.patch(this.$api.e.asFindingDetail, { pk: this.findingId }, data).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Finding updated!',

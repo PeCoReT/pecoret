@@ -1,6 +1,5 @@
 <script>
 import ModalDialog from '@/components/common/ModalDialog.vue';
-import ASMonitorService from '@/service/ASMonitorService';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
@@ -15,7 +14,6 @@ export default {
                 description: null
             },
             loading: false,
-            service: new ASMonitorService()
         };
     },
     methods: {
@@ -23,7 +21,7 @@ export default {
             this.showDialog = true;
         },
         create() {
-            this.service.createProgram(this.$api, this.model).then(() => {
+            this.$api.post(this.$api.e.asProgramList, null, this.model).then(() => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Program created!',
