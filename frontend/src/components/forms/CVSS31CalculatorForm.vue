@@ -22,7 +22,7 @@ export default {
                     let data = {
                         vector: this.vectorString
                     };
-                    this.$api.post('/cvss-calculator/3.1/', data).then((response) => {
+                    this.$api.post(this.$api.e.cvss3Calc, null, data).then((response) => {
                         this.severity = response.data.severity;
                         this.score = response.data.score;
                         this.$emit('update:score', {
@@ -153,7 +153,7 @@ export default {
             let data = {
                 vector: this.vectorString
             };
-            this.$api.post('/cvss-calculator/3.1/', data).then((response) => {
+            this.$api.post(this.$api.e.cvss3Calc, null, data).then((response) => {
                 this.severity = response.data.severity;
                 this.score = response.data.score;
                 this.$emit('update:modelValue', {

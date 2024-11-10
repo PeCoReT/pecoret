@@ -35,8 +35,6 @@ export default {
                 limit: this.pagination.limit,
                 page: this.pagination.page
             };
-            console.log('111');
-            console.log(this.projectId);
             this.$api
                 .get(this.$api.e.pAccountList, { projectPk: this.projectId }, params)
                 .then((response) => {

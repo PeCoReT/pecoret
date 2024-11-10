@@ -70,7 +70,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.$api.delete('apiTokenDetail', {pk: id}).then(() => {
+                    this.$api.delete(this.$api.e.apiTokenDetail, {pk: id}).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',

@@ -16,7 +16,6 @@ class ApiService {
         this.client.interceptors.request.use((request) => {
                     const authStore = useAuthStore();
 
-            console.log(authStore.csrfToken);
             request.headers['X-CSRFToken'] = authStore.csrfToken;
             return request;
         });
@@ -120,7 +119,6 @@ class ApiService {
     }
 
     get(endpoint, urlArgs, params, config) {
-        console.log(endpoint);
         let url = this._format(endpoint, urlArgs);
         if (!config) {
             config = {};

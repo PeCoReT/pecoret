@@ -150,6 +150,7 @@ const endpoints = {
     aTimelineDetail: '/advisories/{aPk}/timelines/{pk}/',
     aDownloadWithToken: '/advisories/{aPk}/download/{token}/',
     aDownloadPdf: '/advisories/{aPk}/export_pdf/',
+    aPreview: '/advisories/{pk}/preview/',
 
     asProgramList: '/attack-surface/programs/',
     asProgramDetail: '/attack-surface/programs/{pk}/',
@@ -176,6 +177,11 @@ const endpoints = {
     asScannerDetail: '/attack-surface/scanning/scanners/{pk}/',
     asScanTypeList: '/attack-surface/scanning/scan-types/',
     asScanTypeDetail: '/attack-surface/scanning/scan-types/{pk}/',
+
+    // utils
+    renderMarkdown: '/render-markdown/',
+    cvss4Calc: '/cvss-calculator/4.0/',
+    cvss3Calc: '/cvss-calculator/3.1/',
 };
 
 export default endpoints;

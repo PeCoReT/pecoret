@@ -55,7 +55,7 @@ export default {
             let config = {
                 responseType: 'arraybuffer'
             };
-            this.$api.get('/advisories/' + this.advisoryId + '/preview/', config).then((response) => {
+            this.$api.get(this.$api.e.aPreview, config).then((response) => {
                 this.previewData = response.data;
             });
         },

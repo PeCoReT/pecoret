@@ -42,7 +42,7 @@ export default {
             this.visible = true;
         },
         create() {
-            this.$api.post('apiTokenList', null, this.model).then((response) => {
+            this.$api.post(this.$api.e.advisoryList, null, this.model).then((response) => {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Created!',

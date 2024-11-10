@@ -17,7 +17,7 @@ export default {
         };
     },
     mounted() {
-        this.$api.get('projectDetail', { pk: this.projectId }).then((response) => {
+        this.$api.get(this.$api.e.projectDetail, { pk: this.projectId }).then((response) => {
             this.companyId = response.data.company;
         });
     },

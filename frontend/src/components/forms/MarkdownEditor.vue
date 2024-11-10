@@ -84,7 +84,7 @@ export default {
                         if (this.customPreviewRender) {
                             preview.innerHTML = this.customPreviewRender(plaintext, preview);
                         } else {
-                            this.$api.post('render-markdown/', { markdown: plaintext }).then((resp) => {
+                            this.$api.post(this.$api.e.renderMarkdown, null, { markdown: plaintext }).then((resp) => {
                                 preview.innerHTML = resp.data.html;
                             });
                         }
