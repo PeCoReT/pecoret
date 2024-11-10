@@ -1,5 +1,4 @@
 <script>
-import AdminService from '@/service/AdminService';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 
 export default {
@@ -14,7 +13,6 @@ export default {
                 description: null
             },
             loading: false,
-            service: new AdminService()
         };
     },
     methods: {

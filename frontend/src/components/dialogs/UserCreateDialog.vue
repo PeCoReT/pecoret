@@ -1,5 +1,4 @@
 <script>
-import AdminService from '@/service/AdminService';
 import CompanySelectField from '@/components/forms/fields/CompanySelectField.vue';
 
 export default {
@@ -20,7 +19,6 @@ export default {
                 is_active: false
             },
             loading: false,
-            service: new AdminService(),
             groupChoices: [],
             customerGroupId: null
         };

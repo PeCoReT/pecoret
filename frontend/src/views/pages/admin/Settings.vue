@@ -19,7 +19,7 @@ export default {
                 {
                     label: 'Advisories',
                     command: () => {
-                        this.getItems('/settings/advisories/');
+                        this.getItems(this.$api.e.admSettingsAdvisories);
                     }
                 }
             ],
@@ -33,13 +33,13 @@ export default {
             });
         },
         getGeneralItems() {
-            this.getItems('/settings/general/');
+            this.getItems(this.$api.e.admSettingsGeneral)
         },
         saveSettings(item) {
             let data = {
                 setting_value: item.value
             };
-            this.$api.patch(`/settings/${item.pk}/`, data).then(() => {
+            this.$api.patch(this.$api.e.admSettingsDetail, {pk: item.pk}, data).then(() => {
                 this.$toast.add({
                     severity: 'info',
                     summary: 'Updated',

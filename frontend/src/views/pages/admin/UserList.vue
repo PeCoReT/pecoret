@@ -1,5 +1,4 @@
 <script>
-import AdminService from '@/service/AdminService';
 import UserCreateDialog from '@/components/dialogs/UserCreateDialog.vue';
 import UserUpdateDialog from '@/components/dialogs/UserUpdateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
@@ -15,7 +14,6 @@ export default {
                     disabled: true
                 }
             ],
-            service: new AdminService(),
             loading: false,
             pagination: { page: 1, limit: 20 },
             totalRecords: 0,

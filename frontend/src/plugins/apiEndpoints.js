@@ -182,6 +182,11 @@ const endpoints = {
     renderMarkdown: '/render-markdown/',
     cvss4Calc: '/cvss-calculator/4.0/',
     cvss3Calc: '/cvss-calculator/3.1/',
+
+    // admin
+    admSettingsGeneral: '/settings/general/',
+    admSettingsDetail: '/settings/{pk}/',
+    admSettingsAdvisories: '/settings/advisories/'
 };
 
 export default endpoints;

@@ -1,5 +1,4 @@
 <script>
-import AdminService from '@/service/AdminService';
 import ProjectTypeUpdateDialog from '@/components/dialogs/ProjectTypeUpdateDialog.vue';
 import ProjectTypeCreateDialog from '@/components/dialogs/ProjectTypeCreateDialog.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
@@ -14,7 +13,6 @@ export default {
                     disabled: true
                 }
             ],
-            service: new AdminService(),
             loading: false,
             pagination: { page: 1, limit: 20 },
             totalRecords: 0,
