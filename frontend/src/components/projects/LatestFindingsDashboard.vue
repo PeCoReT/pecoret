@@ -22,7 +22,7 @@ export default {
                 page: 1,
                 ordering: '-date_created'
             };
-            this.$api.get(this.$api.e.pFindingList, {projectPk: this.projectId}, params).then((response) => {
+            this.$api.get(this.$api.e.pFindingList, {pPk: this.projectId}, params).then((response) => {
                 this.findings = response.data.results;
             });
         },

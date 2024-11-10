@@ -19,7 +19,7 @@ export default defineComponent({
         getData() {
             this.loading = true;
             this.$api
-                .get(this.$api.e.pFindingList, { projectPk: this.projectId })
+                .get(this.$api.e.pFindingList, { pPk: this.projectId })
                 .then((response) => {
                     this.model.count = response.data.count;
                 })

@@ -3,6 +3,7 @@ import { useAuthStore } from '@/store/auth';
 import ProjectCreateDialog from '@/components/dialogs/ProjectCreateDialog.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
 import { useListViewComposable } from '@/composables/listViewComposable';
+import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 
 export default {
     name: 'ProjectList',
@@ -100,38 +101,28 @@ export default {
             });
         }
     },
-    components: { GenericDataTable, ProjectCreateDialog }
+    components: { BaseListLayout, GenericDataTable, ProjectCreateDialog }
 };
 </script>
 
 <template>
-    <div class="grid grid-cols-1 mt-3">
-        <pBreadcrumb v-model="breadcrumbs" />
-    </div>
-
-    <div class="grid mt-3">
-        <div class="col-6"></div>
-        <div class="col-6">
-            <div class="flex justify-end">
-                <ProjectCreateDialog @object-created="getProjects"></ProjectCreateDialog>
+    <BaseListLayout :breadcrumbs="breadcrumbs">
+        <template #create-button>
+            <ProjectCreateDialog @object-created="getProjects"></ProjectCreateDialog>
+        </template>
+        <template #default>
+            <div class="mb-3 mt-3 grid sm:grid-cols-2 md:grid-cols-6 gap-4" v-if="pinnedProjects.length > 0">
+                <div class="" v-for="project in pinnedProjects" v-bind:key="project.pk">
+                    <div class="card">
+                        <router-link class="text-color underline" :to="{ name: 'ProjectDetail', params: { projectId: project.pk } }">
+                            {{ project.name }}
+                        </router-link>
+                        <br />
+                        <small>{{ project.status }} / {{ project.company.name }}</small>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
-    <div class="mb-3 mt-3 grid sm:grid-cols-2 md:grid-cols-6 gap-4" v-if="pinnedProjects.length > 0">
-        <div class="" v-for="project in pinnedProjects" v-bind:key="project.pk">
-            <div class="card">
-                <router-link class="text-color underline" :to="{ name: 'ProjectDetail', params: { projectId: project.pk } }">
-                    {{ project.name }}
-                </router-link>
-                <br />
-                <small>{{ project.status }} / {{ project.company.name }}</small>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-12">
             <div class="card">
                 <GenericDataTable
                     :total-records="totalRecords"
@@ -178,6 +169,6 @@ export default {
                     </Column>
                 </GenericDataTable>
             </div>
-        </div>
-    </div>
+        </template>
+    </BaseListLayout>
 </template>
