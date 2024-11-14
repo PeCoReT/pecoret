@@ -130,7 +130,7 @@ export default {
         patchLock() {
             this.$api
                 .post(this.$api.e.pNoteLock, {
-                    projectPK: this.projectId,
+                    projectPk: this.projectId,
                     pk: this.selectedNote.pk
                 })
                 .then((resp) => {

@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
+from rest_framework.exceptions import ValidationError
+
 from pecoret.core.models import TimestampedModel
 from pecoret.core.models.locked_model import LockedModel
 from backend.models.object_lock import ObjectLock
@@ -23,3 +25,8 @@ class ProjectNote(TimestampedModel, LockedModel):
         unique_together = [
             ('project', 'title')
         ]
+
+    def delete(self, using=None, keep_parents=False):
+        if self.object_lock.exists():
+            raise ValidationError({'object_lock': 'cannot delete locked note'})
+        return super().delete(using, keep_parents)

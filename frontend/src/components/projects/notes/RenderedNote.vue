@@ -13,7 +13,7 @@ export default {
     },
     methods: {
         renderMarkdown() {
-            this.$api.post("/render-markdown/", { markdown: this.note.text}).then((res) => {
+            this.$api.post(this.$api.e.renderMarkdown, null, { markdown: this.note.text}).then((res) => {
                 this.markdown = res.data.html
             })
         }
