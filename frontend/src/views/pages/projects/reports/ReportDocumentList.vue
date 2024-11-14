@@ -3,6 +3,7 @@ import ReportTabMenu from '@/components/projects/reporting/ReportTabMenu.vue';
 import ReportDocumentCreateDialog from '@/components/dialogs/ReportDocumentCreateDialog.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
+import forceFileDownload from "@/utils/file";
 
 export default {
     name: 'ReportDocumentList',
@@ -144,14 +145,6 @@ export default {
                     this.loading = false;
                 });
         },
-        forceFileDownload(response, title) {
-            const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', title);
-            document.body.appendChild(link);
-            link.click();
-        },
         downloadDocument(documentId, isPreview) {
             if (isPreview === true) {
                 this.previewDownloadLoading = true;
@@ -171,8 +164,7 @@ export default {
                     config
                 )
                 .then((response) => {
-                    let filename = response.headers['content-disposition'].split('filename=')[1].split(';')[0];
-                    this.forceFileDownload(response, filename);
+                    forceFileDownload(response);
                 })
                 .finally(() => {
                     this.previewDownloadLoading = false;

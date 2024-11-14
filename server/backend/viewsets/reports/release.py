@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.utils.text import slugify
 from django_q.tasks import async_task
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework.decorators import action
@@ -54,6 +55,7 @@ class ReportReleaseViewSet(PeCoReTNoUpdateViewSet):
             release_type = document.report.get_current_version()
         filename = (f'{self.request.project.company.name}-{self.request.project.name}-'
                     f'{self.request.project.year}-{release_type}.{document.file_extension}')
+        filename = slugify(filename)
         response["Content-Disposition"] = f'attachment; filename="{filename}"'
         return response
 
