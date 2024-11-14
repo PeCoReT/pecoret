@@ -1,4 +1,6 @@
 from rest_framework.test import APITestCase
+
+from backend.models import ObjectLock
 from pecoret.core.test import PeCoReTTestCaseMixin
 from backend.models.project_note import ProjectNote
 
@@ -58,4 +60,14 @@ class ProjectNoteUpdateView(APITestCase, PeCoReTTestCaseMixin):
 
 
 class ProjectNoteDeleteView(APITestCase, PeCoReTTestCaseMixin):
-    pass
+    def setUp(self):
+        self.init_mixin()
+        self.note = self.create_instance(ProjectNote, project=self.project1)
+        self.lock = ObjectLock.objects.create(locked_object=self.note, object_id=self.note.pk, user=self.pentester1)
+        self.url = self.get_url('backend:note-detail', project=self.project1.pk, pk=self.note.pk)
+
+    def test_locked(self):
+        self.client.force_login(self.pentester1)
+        self.basic_status_code_check(self.url, self.client.delete, 400)
+        self.lock.delete()
+        self.basic_status_code_check(self.url, self.client.delete, 204)
