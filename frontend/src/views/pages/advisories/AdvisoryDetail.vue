@@ -4,7 +4,7 @@ import AdvisoryTabMenu from '@/components/navigation/AdvisoryTabMenu.vue';
 import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import { useAuthStore } from '@/store/auth';
-import {vulnerabilityStatusChoices, advisoryStatusChoices} from "@/utils/constants";
+import { advisoryStatusChoices, vulnerabilityStatusChoices } from '@/utils/constants';
 
 export default {
     name: 'AdvisoryDetail',
@@ -55,7 +55,7 @@ export default {
             let config = {
                 responseType: 'arraybuffer'
             };
-            this.$api.get(this.$api.e.aPreview, config).then((response) => {
+            this.$api.get(this.$api.e.aPreview, { pk: this.advisoryId }, null, config).then((response) => {
                 this.previewData = response.data;
             });
         },

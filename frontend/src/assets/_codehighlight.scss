@@ -23,6 +23,27 @@
   .codehilite .linenos {
     padding-right: 20px;
   }
+
+  table {
+    @apply border-collapse w-full table-auto;
+
+    thead {
+      tr {
+        th {
+          @apply border border-slate-500;
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        td {
+          @apply border border-slate-500;
+        }
+      }
+    }
+  }
+
 }
 
 
