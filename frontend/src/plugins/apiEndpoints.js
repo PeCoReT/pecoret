@@ -60,6 +60,7 @@ const endpoints = {
     pReportDetail: '/projects/{pPk}/reports/{pk}/',
     pReportVersionHistoryList: '/projects/{pPk}/reports/{rPk}/change-histories/',
     pReportVersionHistoryDetail: '/projects/{pPk}/reports/{rPk}/change-histories/{pk}/',
+    pReportDocumentPdf: '/projects/{pPk}/reports/{rPk}/report-releases/{pk}/download/',
 
     pAccountList: '/projects/{projectPk}/accounts/',
     pAccountDetail: '/projects/{projectPk}/accounts/{pk}/',

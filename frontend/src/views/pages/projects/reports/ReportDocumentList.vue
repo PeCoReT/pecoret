@@ -156,11 +156,20 @@ export default {
             if (isPreview === true) {
                 this.previewDownloadLoading = true;
             }
-            let url = '/projects/' + this.projectId + '/reports/' + this.reportId + '/report-releases/' + documentId + '/download/';
-            let config = {};
-            config.responseType = 'arraybuffer';
+            let config = {
+                responseType: 'arraybuffer'
+            };
             this.$api
-                .get(url, config)
+                .get(
+                    this.$api.e.pReportDocumentPdf,
+                    {
+                        pPk: this.projectId,
+                        rPk: this.reportId,
+                        pk: documentId
+                    },
+                    null,
+                    config
+                )
                 .then((response) => {
                     let filename = response.headers['content-disposition'].split('filename=')[1].split(';')[0];
                     this.forceFileDownload(response, filename);
