@@ -139,7 +139,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "pecoret.core.pagination.PeCoReTPageNumberPagination",
     "PAGE_SIZE": 100,
     "PAGE_SIZE_QUERY_PARAM": "limit",
-    "MAX_PAGINATE_BY": 200,
+    "MAX_PAGINATE_BY": 500,
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_THROTTLE_RATES": {"auth_flow_throttle": "7/hour"},
     "EXCEPTION_HANDLER": "pecoret.core.exceptions.handle",
@@ -303,9 +303,6 @@ REPORT_TEMPLATE_PRESETS = {
 # enable requesting scans in PeCoReT
 # the scans are NOT performed by pecoret, just managed. You must add your own tooling
 AS_ENABLE_SCANNING = False
-
-# scan item on creation
-AS_ENABLE_SCAN_ON_CREATION = False
 
 # fill the names with scan types that can be triggered on item creation
 AS_ALLOWED_SCAN_TYPES_ON_CREATION = []
