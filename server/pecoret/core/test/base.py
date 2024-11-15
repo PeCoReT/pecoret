@@ -3,7 +3,6 @@ from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse_lazy
-from extra_settings.models import Setting
 
 from advisories.models import advisory
 from backend.models import (
@@ -22,7 +21,6 @@ class PeCoReTTestCaseMixin:
     api_access_choices = AccessChoices
 
     def init_mixin(self):
-        Setting.set_defaults_from_settings()
         self.pentester1 = self.create_user("pentester1", "changeme", group="Pentester")
         self.project1 = self.create_project()
         self.assign_project_role(self.pentester1, Roles.CONTRIBUTOR, self.project1)

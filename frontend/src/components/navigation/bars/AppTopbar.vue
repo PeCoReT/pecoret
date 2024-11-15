@@ -136,12 +136,6 @@ export default {
                             })
                         },
                         {
-                            label: 'Settings',
-                            route: this.$router.resolve({
-                                name: 'AdminSettings'
-                            })
-                        },
-                        {
                             label: 'Attack Surface',
                             items: [
                                 {

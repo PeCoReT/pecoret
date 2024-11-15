@@ -24,7 +24,6 @@ router.register("groups", viewsets.GroupViewSet, "group")
 
 router.register("pentest-types", viewsets.PentestTypeViewSet, "pentest-type")
 router.register("api-tokens", viewsets.APITokenViewSet, "api-token")
-router.register('settings', viewsets.SettingViewSet, 'setting')
 
 # company routes
 company_router = DefaultRouter()

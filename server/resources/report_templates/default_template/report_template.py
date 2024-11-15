@@ -4,7 +4,7 @@ import matplotlib as mpl
 import matplotlib.font_manager as font_manager
 import matplotlib.pyplot as plt
 from django.utils.translation import gettext as _
-from extra_settings.models import Setting
+from django.conf import settings
 from matplotlib.ticker import MaxNLocator
 
 from backend import models
@@ -100,7 +100,9 @@ class ReportTemplate(mixins.SingleFindingMixin, mixins.AdvisoryMixin, mixins.Pen
         context['vulnerabilities'] = vulnerabilities
         context['findings'] = findings
         context['settings'] = {
-            'GENERAL_COMPANY_NAME': Setting.get('GENERAL_COMPANY_NAME')
+            'SITE_NAME': settings.SITE_NAME,
+            # legacy. TODO: deprecate
+            'GENERAL_COMPANY_NAME': settings.SITE_NAME,
         }
         context['scopes'] = models.ProjectScope.objects.for_project(project)
         context['members'] = models.Membership.objects.for_project(project).for_report()

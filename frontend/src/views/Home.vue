@@ -10,7 +10,7 @@ export default {
         } else {
             if (authStore.groups.isAdmin === true) {
                 this.$router.push({
-                    name: 'AdminSettings'
+                    name: 'UserList'
                 });
             } else {
                 this.$router.push({ name: 'ProjectList' });

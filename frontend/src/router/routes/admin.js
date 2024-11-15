@@ -13,11 +13,6 @@ const adminRoutes = [
                 component: () => import('@/views/pages/admin/ProjectTypeList.vue')
             },
             {
-                path: '/admins/settings',
-                name: 'AdminSettings',
-                component: () => import('@/views/pages/admin/Settings.vue')
-            },
-            {
                 path: '/admin/attack-surface/scanners',
                 name: 'AdminAttackSurfaceScannerList',
                 component: () => import('@/views/pages/admin/ASScannerList.vue')

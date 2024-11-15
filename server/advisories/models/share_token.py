@@ -3,7 +3,6 @@ import secrets
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-from extra_settings.models import Setting
 
 from pecoret.core.models import TimestampedModel
 
@@ -35,7 +34,7 @@ class ShareToken(TimestampedModel):
 
     @property
     def url(self):
-        base_url = Setting.get('GENERAL_SITE_URL')
+        base_url = settings.SITE_URL
         path = settings.SITE_URLS.get("ADVISORY_SHARE_TOKEN_DOWNLOAD").format(advisoryId=self.advisory.pk,
                                                                               token=self.token)
         return f'{base_url}{path}'
