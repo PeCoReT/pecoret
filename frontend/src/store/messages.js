@@ -10,12 +10,6 @@ export const useMessageStore = defineStore('messageStore', {
             if (index === -1) {
                 this.messages.push({ message: message, type: alertType });
             }
-        },
-        deleteMessage(message) {
-            let index = this.messages.findIndex((a) => a.message === message.message);
-            if (index > -1) {
-                this.messages.splice(index, 1);
-            }
         }
     }
 });
