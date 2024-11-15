@@ -80,6 +80,7 @@ const endpoints = {
     pFindingCommentList: '/projects/{pPk}/findings/{fPk}/comments/',
     pFindingCommentDetail: '/projects/{pPk}/findings/{fPk}/comments/{pk}/',
     pFindingExportPdf: '/projects/{pPk}/findings/{pk}/export_pdf/',
+    pFindingPreview: '/projects/{pPk}/findings/{pk}/preview/',
 
     pFileList: '/projects/{pPk}/files/',
     pFileDetail: '/projects/{pPk}/files/{pk}/',
@@ -171,8 +172,8 @@ const endpoints = {
     asFindingDetail: '/attack-surface/findings/{pk}/',
     asFindingPdf: '/attack-surface/findings/{pk}/export_pdf/',
     asFindingImageList: '/attack-surface/finding-images/',
-    asFindingComponentList: '/attack-surface/findings-components/',
-    asFindingComponentDetail: '/attack-surface/findings-components/{pk}/',
+    asFindingComponentList: '/attack-surface/finding-components/',
+    asFindingComponentDetail: '/attack-surface/finding-components/{pk}/',
     asScanList: '/attack-surface/scanning/scans/',
     asScanDetail: '/attack-surface/scanning/scans/{pk}/',
     asScannerList: '/attack-surface/scanning/scanners/',
@@ -185,10 +186,6 @@ const endpoints = {
     cvss4Calc: '/cvss-calculator/4.0/',
     cvss3Calc: '/cvss-calculator/3.1/',
 
-    // admin
-    admSettingsGeneral: '/settings/general/',
-    admSettingsDetail: '/settings/{pk}/',
-    admSettingsAdvisories: '/settings/advisories/'
 };
 
 export default endpoints;

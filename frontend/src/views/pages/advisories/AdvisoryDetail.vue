@@ -203,11 +203,13 @@ export default {
         </div>
         <div class="col-span-6">
             <div class="flex justify-end">
-                <Button icon="fa fa-eye" outlined label="Preview" @click="togglePreview"></Button>
+                <ButtonGroup>
+                    <Button icon="fa fa-eye" outlined label="Preview" @click="togglePreview"></Button>
 
-                <Button label="Download" icon="fa fa-download" outlined :loading="downloadPending" :disabled="downloadPending" @click="downloadAsPDF"></Button>
-                <Button label="Edit" icon="fa fa-pen-to-square" outlined @click="this.$router.push({ name: 'AdvisoryUpdate', params: { advisoryId: this.advisoryId } })"></Button>
-                <Button label="Delete" severity="danger" @click="confirmDialogDelete" icon="fa fa-trash" outlined></Button>
+                    <Button label="Download" icon="fa fa-download" outlined :loading="downloadPending" :disabled="downloadPending" @click="downloadAsPDF"></Button>
+                    <Button label="Edit" icon="fa fa-pen-to-square" outlined @click="this.$router.push({ name: 'AdvisoryUpdate', params: { advisoryId: this.advisoryId } })"></Button>
+                    <Button label="Delete" severity="danger" @click="confirmDialogDelete" icon="fa fa-trash" outlined></Button>
+                </ButtonGroup>
             </div>
         </div>
     </div>
