@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from advisories.models.advisory_comment import AdvisoryComment
-from backend.serializers.user import MinimalUserSerializer
+from backend.api.serializers.user import MinimalUserSerializer
 
 
 class AdvisoryCommentSerializer(serializers.ModelSerializer):

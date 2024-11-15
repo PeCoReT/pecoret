@@ -8,7 +8,7 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class ProjectListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:project-list")
+        self.url = self.get_url("api:backend:project-list")
 
     def test_status_code(self):
         self.client.force_login(self.pentester1)
@@ -58,7 +58,7 @@ class ProjectListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
 class ProjectDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:project-detail", pk=self.project1.pk)
+        self.url = self.get_url("api:backend:project-detail", pk=self.project1.pk)
 
     def test_allowed(self):
         users = [
@@ -81,7 +81,7 @@ class ProjectDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 class ProjectDetailViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:project-detail", pk=self.project1.pk)
+        self.url = self.get_url("api:backend:project-detail", pk=self.project1.pk)
 
     def test_allowed(self):
         users = [
@@ -104,7 +104,7 @@ class ProjectDetailViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 class ProjectCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:project-list")
+        self.url = self.get_url("api:backend:project-list")
         self.pentest_types = [
             PentestType.objects.create(name="Web").pk,
             PentestType.objects.create(name="Network").pk,
@@ -148,7 +148,7 @@ class ProjectCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 class PinProjectViewSet(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:project-pin-project", pk=self.project1.pk)
+        self.url = self.get_url("api:backend:project-pin-project", pk=self.project1.pk)
 
     def test_forbidden(self):
         users = [
@@ -170,7 +170,7 @@ class PinProjectViewSet(APITestCase, PeCoReTTestCaseMixin):
 class UnpinProjectViewSet(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:project-delete-pinned-project", pk=self.project1.pk)
+        self.url = self.get_url("api:backend:project-delete-pinned-project", pk=self.project1.pk)
 
     def test_forbidden(self):
         users = [

@@ -9,7 +9,7 @@ class ProjectContactListView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.contact1 = self.create_instance(ProjectContact, project=self.project1)
         self.contact2 = self.create_instance(ProjectContact, project=self.project2)
-        self.url = self.get_url("backend:contact-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:contact-list", project=self.project1.pk)
 
     def test_allowed(self):
         users = [
@@ -35,7 +35,7 @@ class ProjectContactCreateView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.company_contact1 = self.create_instance(CompanyContact, company=self.project1.company)
         self.company_contact2 = self.create_instance(CompanyContact, company=self.project2.company)
-        self.url = self.get_url("backend:contact-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:contact-list", project=self.project1.pk)
         self.data = {"contact": self.company_contact1.pk}
 
     def test_pentester1(self):
@@ -64,7 +64,7 @@ class ProjectContactDestroyView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.contact1 = self.create_instance(ProjectContact, project=self.project1)
-        self.url = self.get_url("backend:contact-detail", project=self.project1.pk, pk=self.contact1.pk)
+        self.url = self.get_url("api:backend:contact-detail", project=self.project1.pk, pk=self.contact1.pk)
 
     def test_pentester1(self):
         self.client.force_login(self.pentester1)
@@ -90,7 +90,7 @@ class ProjectContactUpdateView(APITestCase, PeCoReTTestCaseMixin):
         self.company_contact2 = self.create_instance(CompanyContact, company=self.project2.company)
         self.contact1 = self.create_instance(ProjectContact, project=self.project1, contact=self.company_contact1)
         self.contact2 = self.create_instance(ProjectContact, project=self.project2, contact=self.company_contact2)
-        self.url = self.get_url("backend:contact-detail", project=self.project1.pk, pk=self.contact1.pk)
+        self.url = self.get_url("api:backend:contact-detail", project=self.project1.pk, pk=self.contact1.pk)
         self.data = {"contact": self.company_contact1.pk}
 
     def test_allowed(self):

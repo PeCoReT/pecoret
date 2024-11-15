@@ -25,7 +25,7 @@ class ImageAttachmentListView(APITestCase, PeCoReTTestCaseMixin):
         self.proof1 = self.create_instance(FindingImageAttachment, finding=self.finding1)
         self.proof2 = self.create_instance(FindingImageAttachment, finding=self.finding2)
         self.url = self.get_url(
-            "backend:findings:attachment-list",
+            "api:backend:findings:attachment-list",
             project=self.project1.pk,
             finding=self.finding1.pk,
         )
@@ -57,13 +57,13 @@ class ImageAttachmentListView(APITestCase, PeCoReTTestCaseMixin):
     def test_idor(self):
         self.client.force_login(self.pentester1)
         url = self.get_url(
-            "backend:findings:attachment-list",
+            "api:backend:findings:attachment-list",
             project=self.project2.pk,
             finding=self.finding1.pk,
         )
         self.basic_status_code_check(url, self.client.get, 403)
         url = self.get_url(
-            "backend:findings:attachment-list",
+            "api:backend:findings:attachment-list",
             project=self.project1.pk,
             finding=self.finding2.pk,
         )
@@ -87,7 +87,7 @@ class AttachmentCreateView(APITestCase, PeCoReTTestCaseMixin):
             vulnerability__project=self.project2,
         )
         self.url = self.get_url(
-            "backend:findings:attachment-list",
+            "api:backend:findings:attachment-list",
             project=self.project1.pk,
             finding=self.finding1.pk,
         )
@@ -138,7 +138,7 @@ class ProofDestroyViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.proof1 = self.create_instance(FindingImageAttachment, finding=self.finding1)
         self.proof2 = self.create_instance(FindingImageAttachment, finding=self.finding2)
         self.url = self.get_url(
-            "backend:findings:attachment-detail",
+            "api:backend:findings:attachment-detail",
             project=self.project1.pk,
             pk=self.proof1.pk,
             finding=self.finding1.pk,

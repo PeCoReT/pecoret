@@ -8,7 +8,7 @@ class AdvisoryTimelineCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url(
-            "advisories:timeline-list", advisory=self.advisory1.pk
+            "api:advisories:timeline-list", advisory=self.advisory1.pk
         )
         self.data = {"text": "test", "date": "2022-01-01"}
         self.users_allowed = [self.pentester2, self.pentester1, self.read_only1]
@@ -44,7 +44,7 @@ class AdvisoryTimelineDestroyView(APITestCase, PeCoReTTestCaseMixin):
         self.timeline1 = self.create_instance(AdvisoryTimeline, advisory=self.advisory1)
         self.timeline2 = self.create_instance(AdvisoryTimeline, advisory=self.advisory2)
         self.url = self.get_url(
-            "advisories:timeline-detail",
+            "api:advisories:timeline-detail",
             advisory=self.advisory1.pk,
             pk=self.timeline1.pk,
         )
@@ -66,7 +66,7 @@ class AdvisoryTimelineUpdateView(APITestCase, PeCoReTTestCaseMixin):
         self.timeline1 = self.create_instance(AdvisoryTimeline, advisory=self.advisory1)
         self.timeline2 = self.create_instance(AdvisoryTimeline, advisory=self.advisory2)
         self.url = self.get_url(
-            "advisories:timeline-detail",
+            "api:advisories:timeline-detail",
             advisory=self.advisory1.pk,
             pk=self.timeline1.pk,
         )
@@ -95,7 +95,7 @@ class AdvisoryTimelineListView(APITestCase, PeCoReTTestCaseMixin):
         self.timeline1 = self.create_instance(AdvisoryTimeline, advisory=self.advisory1)
         self.timeline2 = self.create_instance(AdvisoryTimeline, advisory=self.advisory2)
         self.url = self.get_url(
-            "advisories:timeline-list", advisory=self.advisory1.pk
+            "api:advisories:timeline-list", advisory=self.advisory1.pk
         )
         self.allowed_users = [self.pentester1, self.pentester2, self.read_only1]
         self.forbidden_users = [self.management2, self.management1, self.user1, self.vendor2, self.vendor1]

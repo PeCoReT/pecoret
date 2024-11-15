@@ -2,8 +2,6 @@ import re
 
 from django.db import migrations
 
-from backend.urls import app_name
-
 
 def migrate_attachment_to_image_file(apps, schema_editor):
     ImageFile = apps.get_model('storage', 'ImageFile')

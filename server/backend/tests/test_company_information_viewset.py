@@ -6,7 +6,7 @@ from backend.models import CompanyInformation
 class CompanyInformationCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:companies:information-list", company=self.project1.company.pk)
+        self.url = self.get_url("api:backend:companies:information-list", company=self.project1.company.pk)
         self.data = {"text": "test123"}
         self.users_allowed = [
             self.pentester1, self.management1, self.read_only1, self.management2, self.customer1,
@@ -40,7 +40,7 @@ class CompanyInformationDestroyView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.company_information = self.create_instance(CompanyInformation, company=self.project1.company)
         self.company_information2 = self.create_instance(CompanyInformation, company=self.project2.company)
-        self.url = self.get_url("backend:companies:information-detail",
+        self.url = self.get_url("api:backend:companies:information-detail",
                                 company=self.project1.company.pk,
                                 pk=self.company_information.pk)
 
@@ -61,7 +61,7 @@ class CompanyInformationDestroyView(APITestCase, PeCoReTTestCaseMixin):
         self.basic_status_code_check(self.url, self.client.delete, 204)
 
     def test_idor(self):
-        self.url = self.get_url("backend:companies:information-detail",
+        self.url = self.get_url("api:backend:companies:information-detail",
                                 company=self.project1.company.pk, pk=self.company_information2.pk)
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(self.url, self.client.delete, 404)
@@ -77,7 +77,7 @@ class CompanyInformationDestroyView(APITestCase, PeCoReTTestCaseMixin):
 class CompanyInformationListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:companies:information-list", company=self.project1.company.pk)
+        self.url = self.get_url("api:backend:companies:information-list", company=self.project1.company.pk)
         self.users_allowed = [
             self.pentester1, self.read_only1, self.management2, self.management1, self.customer1, self.pentester2
         ]

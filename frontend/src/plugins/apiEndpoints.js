@@ -4,6 +4,7 @@ const endpoints = {
     authLogin: '/auth/login/',
     authLogout: '/auth/logout/',
     authResetPassword: '/users/reset_password/',
+    authResetPasswordConfirm: '/users/reset_password_confirm/',
     authActivation: '/users/activation',
 
     projectList: '/projects/',

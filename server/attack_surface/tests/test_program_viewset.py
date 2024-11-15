@@ -6,7 +6,7 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class TestProgramListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url('attack_surface:program-list')
+        self.url = self.get_url('api:attack_surface:program-list')
 
     def test_allowed(self):
         users = [
@@ -42,7 +42,7 @@ class TestProgramListView(APITestCase, PeCoReTTestCaseMixin):
 class ProgramCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url('attack_surface:program-list')
+        self.url = self.get_url('api:attack_surface:program-list')
         self.data = {
             'name': 'Test Program'
         }

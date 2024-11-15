@@ -7,6 +7,9 @@ export default {
         },
         displayInline: {
             default: false
+        },
+        hideLabels: {
+            default: false
         }
     },
     emits: ['update:modelValue'],
@@ -72,20 +75,20 @@ export default {
     computed: {
         assetObject() {
             return { pk: this.asset.pk, type: this.assetType.value };
-        }
+        },
     }
 };
 </script>
 
 <template>
-    <InlineField v-if="displayInline === true" label="Asset Type">
+    <InlineField v-if="displayInline === true">
         <Select :options="choices" v-model="assetType" placeholder="Asset Type" optionLabel="label" @change="loadAssets"></Select>
     </InlineField>
-    <InlineField v-if="displayInline === true" label="Asset">
+    <InlineField v-if="displayInline === true">
         <Select :options="assetChoices" v-model="asset" placeholder="Asset" :disabled="!this.assetType" optionLabel="display_name" filter @filter="onFilter" @update:modelValue="this.$emit('update:modelValue', this.assetObject)"></Select>
     </InlineField>
 
-    <Field v-if="displayInline !== true" label="Asset Type">
+    <Field v-if="displayInline !== true" :label="assetTypeLabel">
         <Select :options="choices" v-model="assetType" id="asset_type" optionLabel="label" @change="loadAssets"></Select>
     </Field>
     <Field v-if="displayInline !== true" label="Asset">

@@ -7,7 +7,7 @@ from backend.models.project_file import ProjectFile
 class ProjectFileCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:file-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:file-list", project=self.project1.pk)
         self.data = {}
 
     def test_allowed(self):
@@ -44,7 +44,7 @@ class ProjectFileDestroyView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.file1 = self.create_instance(ProjectFile, project=self.project1)
         self.file2 = self.create_instance(ProjectFile, project=self.project2)
-        self.url = self.get_url("backend:file-detail", project=self.project1.pk, pk=self.file1.pk)
+        self.url = self.get_url("api:backend:file-detail", project=self.project1.pk, pk=self.file1.pk)
 
     def test_management1(self):
         self.client.force_login(self.management1)
@@ -64,7 +64,7 @@ class ProjectFileDestroyView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_idor(self):
         self.client.force_login(self.pentester1)
-        self.url = self.get_url("backend:file-detail", project=self.project1.pk, pk=self.file2.pk)
+        self.url = self.get_url("api:backend:file-detail", project=self.project1.pk, pk=self.file2.pk)
         self.basic_status_code_check(self.url, self.client.delete, 404)
 
 

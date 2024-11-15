@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import AppLayout from '@/layout/AppLayout.vue';
 import baseRoutes from '@/router/routes/base';
 import projectRoutes from '@/router/routes/projects';
@@ -12,7 +12,7 @@ import companyRoutes from '@/router/routes/companies';
 import userRoutes from '@/router/routes/user';
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes: [
         {
             path: '/',

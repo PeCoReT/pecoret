@@ -1,0 +1,20 @@
+{% load django_vite %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="app-dark">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PeCoReT</title>
+    <link rel="stylesheet" href="{% static 'fonts/lato/lato.css' %}"/>
+
+    {% vite_hmr_client %}
+</head>
+<!-- set default dark background color because primevue4 makes it hard to extract css which worked in primevue3. otherwise there are white pages between reloads -->
+<body style="background-color: #020617">
+<div id="app"></div>
+{% vite_asset 'src/main.js' %}
+
+</body>
+</html>

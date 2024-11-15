@@ -17,10 +17,10 @@ export default {
         resetPassword() {
             this.loading = true;
             let data = {
-                email: this.model.email
+                email: this.email
             };
             this.$api
-                .post('authResetPassword', null, data)
+                .post(this.$api.e.authResetPassword, null, data)
                 .then(() => {
                     this.authStore.unsetMe();
                     this.$toast.add({
@@ -46,7 +46,7 @@ export default {
             <div class="flex items-center">
                 <label for="rememberme1"></label>
             </div>
-            <a @click="this.$router.push({ name: 'Login' })" class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</a>
+            <a @click="this.$router.push({ name: 'Login' })" class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Back to Login</a>
         </div>
         <Button :loading="loading" label="Sign In" class="w-full" @click="resetPassword"></Button>
     </AuthLayout>

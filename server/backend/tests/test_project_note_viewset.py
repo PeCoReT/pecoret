@@ -9,7 +9,7 @@ class ProjectNoteListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
         self.note = self.create_instance(ProjectNote, project=self.project1)
-        self.url = self.get_url('backend:note-list', project=self.project1.pk)
+        self.url = self.get_url('api:backend:note-list', project=self.project1.pk)
 
     def test_allowed(self):
         users = [
@@ -31,7 +31,7 @@ class ProjectNoteListView(APITestCase, PeCoReTTestCaseMixin):
 class ProjectNoteCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url('backend:note-list', project=self.project1.pk)
+        self.url = self.get_url('api:backend:note-list', project=self.project1.pk)
         self.data = {
             'title': 'Test'
         }
@@ -64,7 +64,7 @@ class ProjectNoteDeleteView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.note = self.create_instance(ProjectNote, project=self.project1)
         self.lock = ObjectLock.objects.create(locked_object=self.note, object_id=self.note.pk, user=self.pentester1)
-        self.url = self.get_url('backend:note-detail', project=self.project1.pk, pk=self.note.pk)
+        self.url = self.get_url('api:backend:note-detail', project=self.project1.pk, pk=self.note.pk)
 
     def test_locked(self):
         self.client.force_login(self.pentester1)

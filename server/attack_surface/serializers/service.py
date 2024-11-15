@@ -4,7 +4,7 @@ from rest_framework import serializers
 from attack_surface import tasks
 from attack_surface.serializers.target import MinimalTargetSerializer
 from attack_surface.models.service import Service, PortStatus, Protocol
-from backend.serializers.technology import FlatTechnologySerializer
+from backend.api.serializers.technology import FlatTechnologySerializer
 from pecoret.core.serializers import PrimaryKeyRelatedField, ValuedChoiceField
 from .tag import TagSerializer
 

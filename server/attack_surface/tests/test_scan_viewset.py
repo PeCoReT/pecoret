@@ -9,7 +9,7 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class ScanCreateViewSet(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url('attack_surface:scan-list')
+        self.url = self.get_url('api:attack_surface:scan-list')
         self.scan_type = self.create_instance(ScanType, allowed_object_type='target')
         self.scan_type2 = self.create_instance(ScanType, allowed_object_type='service')
         self.host = self.create_instance(Target, data='example.com')
@@ -62,7 +62,7 @@ class ScanUpdateDeleteView(APITestCase, PeCoReTTestCaseMixin):
         ct = ContentType.objects.get_for_model(self.host)
         self.scan_object = self.create_instance(ScanObject, scan=self.scan, content_type=ct, object_id=self.host.pk)
         self.data = {}
-        self.url = self.get_url('attack_surface:scan-detail', pk=self.scan.pk)
+        self.url = self.get_url('api:attack_surface:scan-detail', pk=self.scan.pk)
 
     def test_cannot_change_scan_objects(self):
         self.data['scan_type'] = self.scan_type2.pk
@@ -90,7 +90,7 @@ class ScannerCanRunManually(APITestCase, PeCoReTTestCaseMixin):
         self.scan_object = self.create_instance(ScanObject, scan=self.scan, content_type=ct, object_id=self.host.pk)
         self.data = {'name': 'test', 'scan_type': self.scan_type.pk,
                      'scan_objects': [{'content_type': 'target', 'object_id': self.host.pk}]}
-        self.url = self.get_url('attack_surface:scan-list')
+        self.url = self.get_url('api:attack_surface:scan-list')
 
     def test_allowed(self):
         self.client.force_login(self.pentester1)

@@ -7,7 +7,7 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class TargetListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url('attack_surface:target-list')
+        self.url = self.get_url('api:attack_surface:target-list')
         self.users_forbidden = [
             self.customer2, self.customer1, self.management1, self.management2, self.vendor2, self.vendor1, self.user1
         ]
@@ -44,7 +44,7 @@ class TargetCreateView(APITestCase, PeCoReTTestCaseMixin):
             'scope': ScopeChoices.IN_SCOPE.label,
             'data_type': DataTypes.SUBDOMAIN.label
         }
-        self.url = self.get_url('attack_surface:target-list')
+        self.url = self.get_url('api:attack_surface:target-list')
         self.allowed_users = [
             self.pentester1, self.pentester2, self.read_only1
         ]

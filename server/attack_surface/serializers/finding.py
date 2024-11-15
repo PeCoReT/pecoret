@@ -2,8 +2,8 @@ from rest_framework import serializers
 
 from attack_surface.models.finding import Finding, ProgressStatus, Severity
 from attack_surface.serializers.program import ProgramSerializer
-from backend.serializers.cwe import CWEMinimalSerializer
-from backend.serializers.user import MinimalUserSerializer
+from backend.api.serializers.cwe import CWEMinimalSerializer
+from backend.api.serializers.user import MinimalUserSerializer
 from pecoret.core.serializers import PrimaryKeyRelatedField, ValuedChoiceField
 
 

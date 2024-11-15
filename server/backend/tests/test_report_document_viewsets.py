@@ -13,7 +13,7 @@ class ReportDocumentListTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.document1 = self.create_instance(ReportRelease, report=self.report1)
         self.document2 = self.create_instance(ReportRelease, report=self.report2)
         self.url = self.get_url(
-            "backend:report-release-list",
+            "api:backend:report-release-list",
             project=self.project1.pk,
             report=self.report1.pk,
         )
@@ -50,7 +50,7 @@ class ReportDocumentUpdateTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.document1 = self.create_instance(ReportRelease, report=self.report1)
         self.document2 = self.create_instance(ReportRelease, report=self.report2)
         self.url = self.get_url(
-            "backend:report-release-detail",
+            "api:backend:report-release-detail",
             project=self.project1.pk,
             report=self.report1.pk,
             pk=self.document1.pk,
@@ -69,7 +69,7 @@ class ReportDocumentCreateTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.report1 = self.create_instance(Report, project=self.project1, template=self.report_template)
         self.report2 = self.create_instance(Report, project=self.project2, template=self.report_template)
         self.url = self.get_url(
-            "backend:report-release-list",
+            "api:backend:report-release-list",
             project=self.project1.pk,
             report=self.report1.pk,
         )
@@ -119,7 +119,7 @@ class ReportDocumentDownloadTestCase(APITestCase, PeCoReTTestCaseMixin):
             ReportRelease, report=self.report2, compiled_source=b"document2"
         )
         self.url = self.get_url(
-            "backend:report-release-download",
+            "api:backend:report-release-download",
             project=self.project1.pk,
             report=self.report1.pk,
             pk=self.document1.pk,
@@ -137,7 +137,7 @@ class ReportDocumentDownloadTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_uri_tempering(self):
         url = self.get_url(
-            "backend:report-release-download",
+            "api:backend:report-release-download",
             project=self.project1.pk,
             report=self.report2.pk,
             pk=self.document1.pk,
@@ -145,7 +145,7 @@ class ReportDocumentDownloadTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(url, self.client.get, 403)
         url = self.get_url(
-            "backend:report-release-download",
+            "api:backend:report-release-download",
             project=self.project1.pk,
             report=self.report1.pk,
             pk=self.document2.pk,
@@ -157,7 +157,7 @@ class ReportPreviewDocument(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.report1 = self.create_instance(Report, project=self.project1, template='default_template')
-        self.url = self.get_url("backend:report-release-list", project=self.project1.pk, report=self.report1.pk)
+        self.url = self.get_url("api:backend:report-release-list", project=self.project1.pk, report=self.report1.pk)
         self.data = {"release_type": "Preview", "name": "Preview"}
 
     def test_unique_preview_document(self):

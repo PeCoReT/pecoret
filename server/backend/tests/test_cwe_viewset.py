@@ -7,7 +7,7 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class CWEListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:cwe-list")
+        self.url = self.get_url("api:backend:cwe-list")
         self.users_allowed = [
             self.pentester1, self.pentester2, self.management1, self.management2, self.read_only1
         ]
@@ -35,7 +35,7 @@ class CWEListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 class CWECreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:cwe-list")
+        self.url = self.get_url("api:backend:cwe-list")
 
     def test_not_implemented(self):
         self.client.force_login(self.management2)
@@ -47,7 +47,7 @@ class CWERetrieveViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.entry = self.create_instance(CWE)
-        self.url = self.get_url("backend:cwe-detail", pk=self.entry.pk)
+        self.url = self.get_url("api:backend:cwe-detail", pk=self.entry.pk)
 
     def test_allowed(self):
         users = [
@@ -63,7 +63,7 @@ class CWEDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.entry = self.create_instance(CWE)
-        self.url = self.get_url("backend:cwe-detail", pk=self.entry.pk)
+        self.url = self.get_url("api:backend:cwe-detail", pk=self.entry.pk)
 
     def test_not_implemented(self):
         users = [

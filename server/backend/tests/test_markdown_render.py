@@ -9,7 +9,7 @@ class TestExternalAccessImages(PeCoReTTestCaseMixin, APITestCase):
     def setUp(self):
         self.init_mixin()
         self.image_file = self.create_image_file('attack_surface')
-        self.url = self.get_url('backend:render-markdown')
+        self.url = self.get_url('api:backend:render-markdown')
         self.forbidden_users = [
             self.customer1, self.customer2, self.user1, self.vendor2, self.vendor1
         ]

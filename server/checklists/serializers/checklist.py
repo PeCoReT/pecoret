@@ -4,12 +4,12 @@ from rest_framework import serializers
 from pecoret.core.serializers import AssetGenericRelatedField, PrimaryKeyRelatedField
 from checklists.models import Checklist, AssetChecklist
 from checklists.serializers.category import CategorySerializer
-from backend.serializers.assets.web_application import WebApplicationSerializer
-from backend.serializers.assets.host import HostSerializer
-from backend.serializers.assets.service import MinimalServiceSerializer
-from backend.serializers.assets.mobile_application import MobileApplicationSerializer
-from backend.serializers.assets.thick_client import ThickClientSerializer
-from backend.serializers.assets.generic import GenericAssetSerializer
+from backend.api.serializers.assets.web_application import WebApplicationSerializer
+from backend.api.serializers.assets.host import HostSerializer
+from backend.api.serializers.assets.service import MinimalServiceSerializer
+from backend.api.serializers.assets.mobile_application import MobileApplicationSerializer
+from backend.api.serializers.assets.thick_client import ThickClientSerializer
+from backend.api.serializers.assets.generic import GenericAssetSerializer
 from backend.models import Host, Service, MobileApplication, WebApplication, ThickClient, GenericAsset
 
 

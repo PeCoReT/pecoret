@@ -10,7 +10,7 @@ class AssetChecklistListView(APITestCase, PeCoReTTestCaseMixin):
                                                       component=self.asset1)
         self.checklist2 = self.create_asset_checklist(project=self.project2,
                                                       component=self.asset2)
-        self.url = self.get_url("checklists:projects:checklist-list", project=self.project1.pk)
+        self.url = self.get_url("api:checklists:projects:checklist-list", project=self.project1.pk)
 
     def test_allowed(self):
         users = [
@@ -49,7 +49,7 @@ class AssetChecklistCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
         self.checklist = self.create_instance(Checklist)
-        self.url = self.get_url("checklists:projects:checklist-list", project=self.project1.pk)
+        self.url = self.get_url("api:checklists:projects:checklist-list", project=self.project1.pk)
         self.data = {
             "checklist_id": self.checklist.checklist_id,
             "component": {"type": self.asset1.asset_type, "pk": self.asset1.pk}

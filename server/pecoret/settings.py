@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     "generic_relations",
     "extra_settings",
     "djangoql",
+    "django_vite",
+    # my apps
     "backend.apps.BackendConfig",
     'core.storage.apps.StorageConfig',
     "advisories.apps.AdvisoriesConfig",
@@ -120,7 +122,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "static"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -227,13 +232,13 @@ Q_CLUSTER = {
 }
 
 SITE_URLS = {
-    "PASSWORD_RESET": "/reset-password/{uid}/{token}",
-    "ACTIVATION": "/account-activation/{uid}/{token}",
-    "ADVISORY_DETAIL": "/advisories/{advisoryId}",
-    "FINDING_DETAIL": "/projects/{projectId}/findings/{findingId}",
-    "CHANGE_EMAIL": "/user/change-email/{uid}/{token}",
-    'FINDING_SCORES': '/projects/{projectId}/findings/{findingId}/scores',
-    "ADVISORY_SHARE_TOKEN_DOWNLOAD": '/advisories/{advisoryId}/download/{token}'
+    "PASSWORD_RESET": "/#/reset-password/{uid}/{token}",
+    "ACTIVATION": "/#/account-activation/{uid}/{token}",
+    "ADVISORY_DETAIL": "/#/advisories/{advisoryId}",
+    "FINDING_DETAIL": "/#/projects/{projectId}/findings/{findingId}",
+    "CHANGE_EMAIL": "/#/user/change-email/{uid}/{token}",
+    'FINDING_SCORES': '/#/projects/{projectId}/findings/{findingId}/scores',
+    "ADVISORY_SHARE_TOKEN_DOWNLOAD": '/#/advisories/{advisoryId}/download/{token}'
 }
 
 PASSWORD_HASHERS = [
@@ -258,7 +263,7 @@ EXTRA_SETTINGS_DEFAULTS = [
     {
         'name': 'GENERAL_SITE_URL',
         'type': 'url',
-        'value': 'http://localhost:3000',
+        'value': 'http://localhost:8000',
         'description': 'URL to this application. Mainly used to generate links in mails.'
     },
     {

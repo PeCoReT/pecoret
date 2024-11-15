@@ -6,7 +6,7 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class GroupListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:group-list")
+        self.url = self.get_url("api:backend:group-list")
 
     def test_status_forbidden(self):
         users = [self.pentester2, self.pentester1, self.user1, self.read_only1, self.management2, self.management1]
@@ -24,7 +24,7 @@ class GroupRetrieveTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.group = Group.objects.get(name="Management")
-        self.url = self.get_url("backend:group-detail", pk=self.group.pk)
+        self.url = self.get_url("api:backend:group-detail", pk=self.group.pk)
 
     def test_status_forbidden(self):
         users = [self.pentester2, self.pentester1, self.user1, self.read_only1, self.management2, self.management1]
@@ -42,7 +42,7 @@ class GroupDestroyTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.group = Group.objects.get(name="Management")
-        self.url = self.get_url("backend:group-detail", pk=self.group.pk)
+        self.url = self.get_url("api:backend:group-detail", pk=self.group.pk)
 
     def test_status_not_implemented(self):
         self.client.force_login(self.superuser)
@@ -53,7 +53,7 @@ class GroupDestroyTestCase(APITestCase, PeCoReTTestCaseMixin):
 class GroupCreateTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:group-list")
+        self.url = self.get_url("api:backend:group-list")
 
     def test_status_not_implemented(self):
         self.client.force_login(self.superuser)

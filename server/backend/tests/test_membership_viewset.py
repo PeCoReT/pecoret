@@ -7,7 +7,7 @@ from backend.models.membership import Membership, Roles
 class MembershipListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:membership-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:membership-list", project=self.project1.pk)
         self.users_allowed = [
             self.management1, self.pentester1, self.read_only1
         ]
@@ -33,7 +33,7 @@ class MembershipListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 class MembershipCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:membership-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:membership-list", project=self.project1.pk)
         self.data = {"user": self.pentester2.pk, "role": Roles.CONTRIBUTOR.label,
                      "active_until": timezone.now() + timezone.timedelta(days=3)}
 
@@ -60,7 +60,7 @@ class MembershipUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.membership = Membership.objects.create(role=Roles.CONTRIBUTOR, project=self.project1,
                                                     user=self.pentester2,
                                                     active_until=timezone.now() + timezone.timedelta(days=3))
-        self.url = self.get_url("backend:membership-detail", project=self.project1.pk, pk=self.membership.pk)
+        self.url = self.get_url("api:backend:membership-detail", project=self.project1.pk, pk=self.membership.pk)
         self.data = {"active_until": timezone.now() + timezone.timedelta(days=300)}
 
     def test_status_code_allowed(self):
@@ -89,7 +89,7 @@ class MembershipDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.membership = Membership.objects.create(role=Roles.CONTRIBUTOR, project=self.project1,
                                                     user=self.pentester2,
                                                     active_until=timezone.now() + timezone.timedelta(days=3))
-        self.url = self.get_url("backend:membership-detail", project=self.project1.pk, pk=self.membership.pk)
+        self.url = self.get_url("api:backend:membership-detail", project=self.project1.pk, pk=self.membership.pk)
 
     def test_status_code_allowed(self):
         for user in [self.management1]:
@@ -108,6 +108,6 @@ class MembershipDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def test_last_owner_delete(self):
         self.client.force_login(self.management1)
         membership = Membership.objects.get(project=self.project1, user=self.management1)
-        url = self.get_url("backend:membership-detail", project=self.project1.pk, pk=membership.pk)
+        url = self.get_url("api:backend:membership-detail", project=self.project1.pk, pk=membership.pk)
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 400)

@@ -4,9 +4,9 @@ from advisories.models.advisory import (
     Advisory, Severity, AdvisoryStatusChoices, VulnerabilityStatusChoices
 )
 from advisories import fields
-from backend.serializers.user import MinimalUserSerializer
-from backend.serializers.vulnerability import VulnerabilityTemplateSerializer
-from backend.serializers.technology import TechnologySerializer
+from backend.api.serializers.user import MinimalUserSerializer
+from backend.api.serializers.vulnerability import VulnerabilityTemplateSerializer
+from backend.api.serializers.technology import TechnologySerializer
 from pecoret.core.serializers import (
     ValuedChoiceField, VulnerabilityTemplateIdField,
     PrimaryKeyRelatedField

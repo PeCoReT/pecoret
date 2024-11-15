@@ -7,7 +7,7 @@ class TechnologyListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
         self.tech1 = self.create_instance(Technology)
-        self.url = self.get_url('backend:technology-list')
+        self.url = self.get_url('api:backend:technology-list')
 
     def test_allowed(self):
         users = [
@@ -30,7 +30,7 @@ class TechnologyListView(APITestCase, PeCoReTTestCaseMixin):
 class TechnologyCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url('backend:technology-list')
+        self.url = self.get_url('api:backend:technology-list')
         self.data = {
             'name': 'technology 1'
         }

@@ -12,7 +12,7 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class UserListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:user-list")
+        self.url = self.get_url("api:backend:user-list")
 
     def test_allowed_status(self):
         for user in [self.management1]:
@@ -29,7 +29,7 @@ class UserDeleteViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.test_user = self.create_user("test_user123", "changeme1234")
-        self.url = self.get_url("backend:user-detail", pk=self.test_user.pk)
+        self.url = self.get_url("api:backend:user-detail", pk=self.test_user.pk)
 
     def test_delete_not_allowed(self):
         self.client.force_login(self.management1)
@@ -41,7 +41,7 @@ class UserUpdateViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.test_user = self.create_user("test_user123", "changeme1234")
-        self.url = self.get_url("backend:user-detail", pk=self.test_user.pk)
+        self.url = self.get_url("api:backend:user-detail", pk=self.test_user.pk)
         self.data = {'is_active': False}
 
     def test_update_not_allowed(self):
@@ -72,7 +72,7 @@ class UserUpdateViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
 class UserCreateViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:user-list")
+        self.url = self.get_url("api:backend:user-list")
         self.data = {"first_name": "Test", "last_name": "Last", "username": "tlast", "email": "test@eexample.ccom",
                      "groups": [Group.objects.get(name="Pentester").pk]}
 
@@ -107,7 +107,7 @@ class AccountActivationView(APITestCase, PeCoReTTestCaseMixin):
         self.activation_user = self.create_user("testactivation", None, is_active=False)
         self.uid = force_str(urlsafe_base64_encode(force_bytes(self.activation_user.pk)))
         self.token = default_token_generator.make_token(self.activation_user)
-        self.url = self.get_url("backend:user-activation")
+        self.url = self.get_url("api:backend:user-activation")
         self.data = {"uid": self.uid, "token": self.token, "new_password": "mysupersecurepassword1234!"}
 
     def test_activation(self):
@@ -119,7 +119,7 @@ class AccountActivationView(APITestCase, PeCoReTTestCaseMixin):
         self.assertEqual(user.has_usable_password(), True)
 
         # test login
-        login_url = self.get_url("backend:login")
+        login_url = self.get_url("api:backend:login")
         data = {"username": "testactivation", "password": "mysupersecurepassword1234!"}
         response = self.client.post(login_url, data)
         self.assertIn("csrf_token", response.json())
@@ -137,7 +137,7 @@ class ChangePasswordView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.pentester1.set_password('test123')
         self.pentester1.save()
-        self.url = self.get_url('backend:user-change-password')
+        self.url = self.get_url('api:backend:user-change-password')
         self.data = {
             'old_password': 'test123',
             'new_password': 'test1234!Changemevvvv!?'
@@ -170,7 +170,7 @@ class ChangePasswordView(APITestCase, PeCoReTTestCaseMixin):
 class UserProfileUpdateViewTest(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url('backend:user-update-profile')
+        self.url = self.get_url('api:backend:user-update-profile')
         self.data = {'first_name': 'TestUser'}
 
     def test_allowed(self):

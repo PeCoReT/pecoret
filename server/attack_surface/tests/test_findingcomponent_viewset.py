@@ -7,7 +7,7 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class FindingComponentListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url('attack_surface:finding-component-list')
+        self.url = self.get_url('api:attack_surface:finding-component-list')
         self.allowed_users = [
             self.pentester2, self.pentester1, self.read_only1
         ]
@@ -38,7 +38,7 @@ class FindingComponentListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 class FindingComponentCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url('attack_surface:finding-component-list')
+        self.url = self.get_url('api:attack_surface:finding-component-list')
         self.target = self.create_instance(Target, data='example.com')
         self.service = self.create_instance(Service, target=self.target)
         self.data = {

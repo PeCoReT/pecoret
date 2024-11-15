@@ -6,7 +6,7 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class AccountListViewSet(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:account-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:account-list", project=self.project1.pk)
         self.users_allowed = [
             self.read_only1, self.pentester1, self.management1
         ]
@@ -36,7 +36,7 @@ class AccountListViewSet(APITestCase, PeCoReTTestCaseMixin):
 class AccountCreateViewSet(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:account-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:account-list", project=self.project1.pk)
         self.data = {
             "role": "Admin",
             "username": "TestAdmin",

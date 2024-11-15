@@ -9,7 +9,7 @@ class AdvisoryCommentCreateView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.data = {"comment": "test"}
         self.url = self.get_url(
-            "advisories:comment-list", advisory=self.advisory1.pk
+            "api:advisories:comment-list", advisory=self.advisory1.pk
         )
         self.allowed_users = [self.pentester1, self.pentester2, self.read_only1]
         self.forbidden_users = [self.management1, self.management2, self.vendor2, self.user1]
@@ -49,12 +49,12 @@ class AdvisoryCommentUpdateView(APITestCase, PeCoReTTestCaseMixin):
             AdvisoryComment, advisory=self.advisory2, user=self.pentester2
         )
         self.url = self.get_url(
-            "advisories:comment-detail",
+            "api:advisories:comment-detail",
             advisory=self.advisory1.pk,
             pk=self.comment1.pk,
         )
         self.url2 = self.get_url(
-            'advisories:comment-detail', advisory=self.advisory2.pk, pk=self.comment1.pk
+            'api:advisories:comment-detail', advisory=self.advisory2.pk, pk=self.comment1.pk
         )
         self.data = {"comment": "new123"}
         self.forbidden_users = [self.vendor2, self.management1, self.management2, self.user1, self.customer2,
@@ -101,7 +101,7 @@ class AdvisoryCommentRetrieveView(APITestCase, PeCoReTTestCaseMixin):
             AdvisoryComment, advisory=self.advisory1, user=self.pentester1
         )
         self.url = self.get_url(
-            "advisories:comment-detail",
+            "api:advisories:comment-detail",
             advisory=self.advisory1.pk,
             pk=self.comment1.pk,
         )

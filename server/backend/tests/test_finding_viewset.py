@@ -26,7 +26,7 @@ class FindingListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             component=self.asset2,
             user=self.pentester2,
         )
-        self.url = self.get_url("backend:finding-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:finding-list", project=self.project1.pk)
         self.user_allowed = [
             self.read_only1, self.pentester1, self.management1
         ]
@@ -75,7 +75,7 @@ class FindingListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 class FindingCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:finding-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:finding-list", project=self.project1.pk)
         self.create_instance(VulnerabilityTemplate, vulnerability_id="path-traversal")
         self.data = {
             "name": "testfinding",
@@ -140,7 +140,7 @@ class FindingUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             user=self.pentester2,
         )
         self.url = self.get_url(
-            "backend:finding-detail", project=self.project1.pk, pk=self.finding1.pk
+            "api:backend:finding-detail", project=self.project1.pk, pk=self.finding1.pk
         )
         self.data = {"name": "finding_updated"}
 
@@ -162,7 +162,7 @@ class FindingUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_foreign_finding(self):
         url = self.get_url(
-            "backend:finding-detail", project=self.project1.pk, pk=self.finding2.pk
+            "api:backend:finding-detail", project=self.project1.pk, pk=self.finding2.pk
         )
         self.client.force_login(self.pentester1)
         response = self.client.patch(url, self.data, format="json")
@@ -170,7 +170,7 @@ class FindingUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_foreign_project(self):
         url = self.get_url(
-            "backend:finding-detail", project=self.project1.pk, pk=self.finding2.pk
+            "api:backend:finding-detail", project=self.project1.pk, pk=self.finding2.pk
         )
         self.client.force_login(self.pentester1)
         response = self.client.patch(url, self.data, format="json")
@@ -187,7 +187,7 @@ class FindingDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             user=self.pentester1,
         )
         self.url = self.get_url(
-            "backend:finding-detail", project=self.project1.pk, pk=self.finding1.pk
+            "api:backend:finding-detail", project=self.project1.pk, pk=self.finding1.pk
         )
 
     def test_status_allowed(self):
@@ -221,7 +221,7 @@ class FindingAsAdvisoryView(APITestCase, PeCoReTTestCaseMixin):
             vulnerability=self.project_vulnerability,
         )
         self.url = self.get_url(
-            "backend:finding-as-advisory", project=self.project1.pk, pk=self.finding1.pk
+            "api:backend:finding-as-advisory", project=self.project1.pk, pk=self.finding1.pk
         )
         self.tech = self.create_instance(Technology)
         self.data = {
@@ -273,7 +273,7 @@ class FindingPDFExportView(APITestCase, PeCoReTTestCaseMixin):
             vulnerability=self.project_vulnerability,
         )
         self.url = self.get_url(
-            "backend:finding-export-pdf", project=self.project1.pk, pk=self.finding1.pk
+            "api:backend:finding-export-pdf", project=self.project1.pk, pk=self.finding1.pk
         )
 
     def test_allowed(self):

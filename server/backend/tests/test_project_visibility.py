@@ -16,7 +16,7 @@ class ProjectListVisibility(APITestCase, PeCoReTTestCaseMixin):
         self.non_public_users = [
             self.customer2
         ]
-        self.url = self.get_url('backend:project-list')
+        self.url = self.get_url('api:backend:project-list')
         self.assign_project_role(self.customer1, Roles.OWNER, self.public_project)
 
     def test_allowed(self):
@@ -47,7 +47,7 @@ class ProjectDetailVisibility(APITestCase, PeCoReTTestCaseMixin):
         self.non_public_users = [
             self.customer2
         ]
-        self.url = self.get_url('backend:project-detail', pk=self.public_project.pk)
+        self.url = self.get_url('api:backend:project-detail', pk=self.public_project.pk)
         self.assign_project_role(self.customer1, Roles.OWNER, self.public_project)
 
     def test_allowed(self):
@@ -76,7 +76,7 @@ class ProjectUpdateVisibility(APITestCase, PeCoReTTestCaseMixin):
         self.not_allowed = [
             self.pentester1, self.pentester2, self.read_only1,
         ]
-        self.url = self.get_url('backend:project-detail', pk=self.public_project.pk)
+        self.url = self.get_url('api:backend:project-detail', pk=self.public_project.pk)
         self.data = {
             'visibility': Visibility.MEMBERS_ONLY.label
         }

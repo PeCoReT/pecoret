@@ -7,7 +7,7 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class FindingListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url('attack_surface:finding-list')
+        self.url = self.get_url('api:attack_surface:finding-list')
         self.allowed_users = [
             self.pentester2, self.pentester1, self.read_only1
         ]
@@ -38,7 +38,7 @@ class FindingListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 class FindingCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url('attack_surface:finding-list')
+        self.url = self.get_url('api:attack_surface:finding-list')
         self.program = self.create_instance(Program)
         self.data = {
             'title': 'SQL Injection on example.com',

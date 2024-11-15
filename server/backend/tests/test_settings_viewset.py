@@ -7,7 +7,7 @@ class SettingsPatchView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
         setting = Setting.objects.get(name='GENERAL_COMPANY_NAME')
-        self.url = self.get_url('backend:setting-detail', pk=setting.pk)
+        self.url = self.get_url('api:backend:setting-detail', pk=setting.pk)
         self.data = {'setting_value': 'test1231234'}
 
     def test_allowed(self):
@@ -29,7 +29,7 @@ class SettingsPatchView(APITestCase, PeCoReTTestCaseMixin):
 class SettingsListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url('backend:setting-list')
+        self.url = self.get_url('api:backend:setting-list')
 
     def test_allowed(self):
         self.client.force_login(self.superuser)

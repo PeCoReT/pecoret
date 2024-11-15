@@ -6,7 +6,7 @@ from checklists.models import Category, Item
 class ItemListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url('checklists:item-list')
+        self.url = self.get_url('api:checklists:item-list')
         self.users_allowed = [
             self.pentester2, self.pentester1, self.management1, self.management2, self.read_only1
         ]
@@ -37,7 +37,7 @@ class ItemListView(APITestCase, PeCoReTTestCaseMixin):
 class ItemCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url('checklists:item-list')
+        self.url = self.get_url('api:checklists:item-list')
         category = self.create_instance(Category)
         self.data = {
             'item_id': 'test',

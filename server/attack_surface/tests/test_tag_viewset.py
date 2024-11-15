@@ -6,7 +6,7 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class TagListViewSet(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url("attack_surface:tag-list")
+        self.url = self.get_url("api:attack_surface:tag-list")
         self.users_allowed = [
             self.pentester2, self.pentester1, self.read_only1
         ]
@@ -36,7 +36,7 @@ class TagListViewSet(APITestCase, PeCoReTTestCaseMixin):
 class TagCreateViewSet(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url("attack_surface:tag-list")
+        self.url = self.get_url("api:attack_surface:tag-list")
         self.data = {
             'name': 'testtag',
             'description': 'lorem',

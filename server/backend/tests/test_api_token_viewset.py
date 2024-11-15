@@ -5,7 +5,7 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class APITokenCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:api-token-list")
+        self.url = self.get_url("api:backend:api-token-list")
         self.data = {
             "name": "test token",
             "scope_companies": "No Access",

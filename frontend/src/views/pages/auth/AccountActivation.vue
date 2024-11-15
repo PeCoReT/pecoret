@@ -22,7 +22,7 @@ export default {
                 new_password: this.model.password
             };
             this.$api
-                .post('authActivation', null, data)
+                .post(this.$api.e.authActivation, null, data)
                 .then(() => {
                     this.$toast.add({
                         severity: 'success',

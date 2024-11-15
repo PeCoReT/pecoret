@@ -6,7 +6,7 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class ScanTypeCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url('attack_surface:scan-type-list')
+        self.url = self.get_url('api:attack_surface:scan-type-list')
         self.data = {'name': 'Test Port Scan', 'allowed_object_type': 'target', 'conditions': '', 'description': ''}
         self.allowed_users = [self.superuser]
         self.forbidden_users = [self.vendor2, self.vendor1, self.user1, self.customer1, self.customer2,
@@ -27,7 +27,7 @@ class ScanTypeCreateView(APITestCase, PeCoReTTestCaseMixin):
 class ScanTypeListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url('attack_surface:scan-type-list')
+        self.url = self.get_url('api:attack_surface:scan-type-list')
         self.allowed_users = [self.superuser, self.pentester1, self.pentester2, self.read_only1]
         self.forbidden_users = [self.vendor2, self.vendor1, self.user1, self.customer1, self.customer2,
                                 self.management1, self.management2]
