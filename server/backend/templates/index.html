@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="{% static 'fonts/lato/lato.css' %}"/>
 
     {% vite_hmr_client %}
+    <script>
+        window.API_BASE_URL = '/api';
+    </script>
 </head>
 <!-- set default dark background color because primevue4 makes it hard to extract css which worked in primevue3. otherwise there are white pages between reloads -->
 <body style="background-color: #020617">

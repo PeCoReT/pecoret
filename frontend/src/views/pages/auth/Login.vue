@@ -13,10 +13,6 @@ export default {
         if (this.authStore.me) {
             if (this.authStore.groups.isVendor === true) {
                 this.$router.push({ name: 'AdvisoryList' });
-            } else if (this.authStore.groups.isAdmin === true) {
-                this.$router.push({
-                    name: 'UserList'
-                });
             } else {
                 this.$router.push({ name: 'ProjectList' });
             }
@@ -40,10 +36,6 @@ export default {
                     this.authStore.setAuthData(response.data);
                     if (this.authStore.groups.isVendor === true) {
                         this.$router.push({ name: 'AdvisoryList' });
-                    } else if (this.authStore.groups.isAdmin === true) {
-                        this.$router.push({
-                            name: 'AdminSettings'
-                        });
                     } else {
                         this.$router.push({ name: 'ProjectList' });
                     }

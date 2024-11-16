@@ -34,3 +34,6 @@ class ScanType(models.Model):
 
     class Meta:
         ordering = ['-priority', 'name']
+
+    def __str__(self):
+        return self.name

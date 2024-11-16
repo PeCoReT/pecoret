@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { apiURL } from '@/app.config';
 import { useAuthStore } from '@/store/auth';
 import router from '@/router';
 import { useMessageStore } from '@/store/messages';
@@ -7,7 +6,7 @@ import endpoints from '@/plugins/apiEndpoints';
 
 class ApiService {
     constructor(app) {
-        this.client = axios.create({ baseURL: apiURL, withCredentials: true });
+        this.client = axios.create({ baseURL: window.API_BASE_URL, withCredentials: true });
 
         this.e = endpoints;
         this.authStore = useAuthStore();

@@ -6,7 +6,6 @@
 
 // Plugins
 import pinia from '../store';
-import {loadApi} from '@/plugins/axios';
 import api from '@/plugins/api';
 
 export function registerPlugins(app) {

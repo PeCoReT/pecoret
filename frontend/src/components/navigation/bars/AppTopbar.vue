@@ -122,37 +122,9 @@ export default {
             if (this.authStore.groups.isAdmin === true) {
                 items.push({
                     label: 'Admin Panel',
-                    items: [
-                        {
-                            label: 'Users',
-                            route: this.$router.resolve({
-                                name: 'UserList'
-                            })
-                        },
-                        {
-                            label: 'Project Types',
-                            route: this.$router.resolve({
-                                name: 'ProjectTypeList'
-                            })
-                        },
-                        {
-                            label: 'Attack Surface',
-                            items: [
-                                {
-                                    label: 'Scanners',
-                                    route: this.$router.resolve({
-                                        name: 'AdminAttackSurfaceScannerList'
-                                    })
-                                },
-                                {
-                                    label: 'Scan Types',
-                                    route: this.$router.resolve({
-                                        name: 'AdminAttackSurfaceScanTypeList'
-                                    })
-                                }
-                            ]
-                        }
-                    ]
+                    command: () => {
+                        window.open('/admin/', '_blank');
+                    }
                 });
             }
             if (this.authStore.isAuthenticated) {

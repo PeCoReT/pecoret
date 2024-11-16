@@ -8,13 +8,7 @@ export default {
         if (authStore.isAuthenticated !== true) {
             this.$router.push({ name: 'Login' });
         } else {
-            if (authStore.groups.isAdmin === true) {
-                this.$router.push({
-                    name: 'UserList'
-                });
-            } else {
-                this.$router.push({ name: 'ProjectList' });
-            }
+            this.$router.push({ name: 'ProjectList' });
         }
     }
 };
