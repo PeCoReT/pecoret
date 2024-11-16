@@ -248,6 +248,16 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 LDAP_SYNC_GROUP_MAPPING = {}
 
+### Django Vite
+DJANGO_VITE = {
+    "default": {
+        "dev_mode": DEBUG,
+        'dev_server_port': '3000',
+        'static_url_prefix': 'dist'
+    }
+}
+
+
 ###################
 # Report Templates
 ###################
