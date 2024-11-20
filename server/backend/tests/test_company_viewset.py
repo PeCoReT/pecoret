@@ -12,7 +12,7 @@ class CompanyListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.management2, self.management1, self.read_only1, self.pentester2, self.pentester1,
             self.customer1, self.customer2
         ]
-        self.user_forbidden = [self.user1, self.vendor1, self.vendor2]
+        self.user_forbidden = [self.user1]
 
     def test_status_allowed(self):
         for user in self.user_allowed:
@@ -49,7 +49,7 @@ class CompanyUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.pentester2
         ]
         self.users_forbidden = [
-            self.user1, self.vendor2, self.vendor1,
+            self.user1
         ]
 
     def test_status_allowed(self):
@@ -95,7 +95,7 @@ class CompanyCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.management2, self.management1
         ]
         self.users_forbidden = [
-            self.user1, self.pentester2, self.pentester1, self.read_only1, self.vendor2, self.vendor1,
+            self.user1, self.pentester2, self.pentester1, self.read_only1,
             self.customer2, self.customer1
         ]
 
@@ -123,8 +123,7 @@ class CompanyDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.customer2, self.customer1,
-            self.vendor1, self.vendor2, self.read_only1,
+            self.customer2, self.customer1, self.read_only1,
             self.pentester1, self.pentester2
         ]
         for user in users:
@@ -141,7 +140,7 @@ class CompanyRetrieveViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.customer1
         ]
         self.users_forbidden = [
-            self.user1, self.vendor2, self.vendor1
+            self.user1
         ]
 
     def test_status_allowed(self):

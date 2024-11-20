@@ -19,7 +19,7 @@ class TechnologyListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.user1, self.vendor2, self.vendor1, self.customer1, self.customer2,
+            self.user1, self.customer1, self.customer2,
             self.management2, self.management1
         ]
         for user in users:
@@ -46,7 +46,7 @@ class TechnologyCreateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.user1, self.vendor2, self.vendor1, self.customer1, self.customer2,
+            self.user1, self.customer1, self.customer2,
             self.management2, self.management1
         ]
         for user in users:

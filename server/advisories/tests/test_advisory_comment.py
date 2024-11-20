@@ -12,7 +12,7 @@ class AdvisoryCommentCreateView(APITestCase, PeCoReTTestCaseMixin):
             "api:advisories:comment-list", advisory=self.advisory1.pk
         )
         self.allowed_users = [self.pentester1, self.pentester2, self.read_only1]
-        self.forbidden_users = [self.management1, self.management2, self.vendor2, self.user1]
+        self.forbidden_users = [self.management1, self.management2, self.user1]
 
     def test_allowed(self):
         for user in self.allowed_users:
@@ -57,8 +57,7 @@ class AdvisoryCommentUpdateView(APITestCase, PeCoReTTestCaseMixin):
             'api:advisories:comment-detail', advisory=self.advisory2.pk, pk=self.comment1.pk
         )
         self.data = {"comment": "new123"}
-        self.forbidden_users = [self.vendor2, self.management1, self.management2, self.user1, self.customer2,
-                                self.customer1]
+        self.forbidden_users = [self.management1, self.management2, self.user1, self.customer2, self.customer1]
 
     def test_allowed(self):
         self.client.force_login(self.pentester1)
@@ -106,8 +105,7 @@ class AdvisoryCommentRetrieveView(APITestCase, PeCoReTTestCaseMixin):
             pk=self.comment1.pk,
         )
         self.allowed_users = [self.pentester1, self.pentester2, self.read_only1]
-        self.forbidden_users = [self.customer2, self.customer1, self.management2, self.management1,
-                                self.vendor2, self.user1, self.vendor1]
+        self.forbidden_users = [self.customer2, self.customer1, self.management2, self.management1, self.user1]
 
     def test_api_token_allowed(self):
         for user in self.allowed_users:

@@ -28,7 +28,7 @@ class APITokenCreateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.vendor1, self.vendor2, self.customer1, self.customer2, self.user1
+            self.customer1, self.customer2, self.user1
         ]
         for user in users:
             self.client.force_login(user)

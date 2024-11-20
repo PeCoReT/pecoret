@@ -7,7 +7,6 @@ from .token.base import TokenPermissionMixin
 class Groups(object):
     GROUP_PENTESTER = 'Pentester'
     GROUP_MANAGEMENT = 'Management'
-    VENDOR = 'Vendor'
     CUSTOMER = 'Customer'
 
 

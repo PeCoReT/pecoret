@@ -18,8 +18,7 @@ class ScanCreateViewSet(APITestCase, PeCoReTTestCaseMixin):
             'scan_objects': [{'content_type': 'target', 'object_id': self.host.pk}]
         }
         self.allowed_users = [self.pentester2, self.pentester1, self.read_only1]
-        self.forbidden_users = [self.management1, self.management2, self.customer1, self.customer2, self.vendor1,
-                                self.vendor2, self.user1]
+        self.forbidden_users = [self.management1, self.management2, self.customer1, self.customer2, self.user1]
 
     def test_allowed(self):
         for user in self.allowed_users:

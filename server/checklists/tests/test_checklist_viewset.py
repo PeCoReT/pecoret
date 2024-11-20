@@ -13,9 +13,7 @@ class ChecklistListView(APITestCase, PeCoReTTestCaseMixin):
             self.pentester1, self.pentester2, self.read_only1,
             self.management1, self.management2
         ]
-        self.users_forbidden = [self.user1, self.vendor1, self.vendor2,
-            self.customer1, self.customer2
-        ]
+        self.users_forbidden = [self.user1, self.customer1, self.customer2]
 
     def test_allowed(self):
         for user in self.users_allowed:
@@ -48,8 +46,7 @@ class ChecklistCreateView(APITestCase, PeCoReTTestCaseMixin):
             self.pentester1, self.pentester2
         ]
         self.users_forbidden = [
-            self.management2, self.management1, self.user1,
-            self.vendor1, self.vendor2, self.customer2, self.customer1
+            self.management2, self.management1, self.user1, self.customer2, self.customer1
         ]
 
     def test_allowed(self):

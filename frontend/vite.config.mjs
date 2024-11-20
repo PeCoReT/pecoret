@@ -17,6 +17,7 @@ export default defineConfig({
     build: {
         manifest: 'manifest.json',
         outDir: '../server/static/dist',
+        emptyOutDir: true,
         rollupOptions: {
             input: {
                 full: 'src/main.js'

@@ -58,8 +58,6 @@ class PeCoReTTestCaseMixin:
         self.client.defaults["HTTP_AUTHORIZATION"] = "Bearer " + token
 
     def init_advisory_users(self):
-        self.vendor1 = self.create_user("testvendor1", "changeme1234", group="Vendor")
-        self.vendor2 = self.create_user("testvendor2", "changeme1234", group="Vendor")
         self.advisory1 = self.create_instance(advisory.Advisory, report_template='default_template',
                                               user=self.pentester1)
         self.advisory2 = self.create_instance(advisory.Advisory, report_template='default_template',

@@ -42,9 +42,6 @@ export default {
         vulnerabilityStatusChoices() {
             return this.vulnerabilityStatusChoices();
         },
-        showCreateButton() {
-            return this.authStore.groups.isVendor !== true;
-        }
     },
     methods: {
         onPage(event) {
@@ -82,7 +79,7 @@ export default {
 <template>
     <BaseListLayout :breadcrumbs="breadcrumbs">
         <template #create-button>
-            <Button outlined icon="fa fa-plus" label="Advisory" v-if="showCreateButton === true" @click="this.$router.push({ name: 'AdvisoryCreate' })"></Button>
+            <Button outlined icon="fa fa-plus" label="Advisory" @click="this.$router.push({ name: 'AdvisoryCreate' })"></Button>
         </template>
         <template #table>
             <GenericDataTable

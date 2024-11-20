@@ -16,7 +16,6 @@ For detailed information and usage instructions, please refer to the [documentat
 * **Beautiful and Customizable Reports:**
 
    Create visually appealing and customized reports that meet your specific requirements.  
-   PeCoReT supports various export formats, ensuring flexibility in presenting findings and recommendations.
 
 * **Multi-Language Vulnerabilities and Reports:**
 

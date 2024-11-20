@@ -45,9 +45,6 @@ class VulnerabilityStatusChoices(models.IntegerChoices):
 
 class AdvisoryQuerySet(models.QuerySet):
     def for_user(self, user):
-        if user.is_vendor:
-            # TODO: only return vendor advisories
-            return self.none()
         return self.all()
 
     def for_share_token(self, token):

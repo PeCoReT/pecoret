@@ -11,7 +11,7 @@ class TestExternalAccessImages(PeCoReTTestCaseMixin, APITestCase):
         self.image_file = self.create_image_file('attack_surface')
         self.url = self.get_url('api:backend:render-markdown')
         self.forbidden_users = [
-            self.customer1, self.customer2, self.user1, self.vendor2, self.vendor1
+            self.customer1, self.customer2, self.user1
         ]
         self.allowed_users = [
             self.pentester1, self.pentester2, self.read_only1, self.management2, self.management1

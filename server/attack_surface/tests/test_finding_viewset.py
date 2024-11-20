@@ -12,8 +12,7 @@ class FindingListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.pentester2, self.pentester1, self.read_only1
         ]
         self.forbidden_users = [
-            self.management1, self.management2, self.customer2, self.customer1, self.vendor1,
-            self.vendor2, self.user1
+            self.management1, self.management2, self.customer2, self.customer1, self.user1
         ]
 
     def test_allowed(self):
@@ -48,8 +47,7 @@ class FindingCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.pentester2, self.pentester1, self.read_only1
         ]
         self.forbidden_users = [
-            self.management1, self.management2, self.customer2, self.customer1, self.vendor1,
-            self.vendor2, self.user1
+            self.management1, self.management2, self.customer2, self.customer1, self.user1
         ]
 
     def test_allowed(self):

@@ -60,8 +60,7 @@ class UserUpdateViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.management1, self.management2, self.vendor1,
-            self.vendor2, self.user1, self.pentester1, self.pentester2, self.customer2,
+            self.management1, self.management2, self.user1, self.pentester1, self.pentester2, self.customer2,
             self.customer1
         ]
         for user in users:
@@ -175,7 +174,7 @@ class UserProfileUpdateViewTest(APITestCase, PeCoReTTestCaseMixin):
 
     def test_allowed(self):
         users = [
-            self.management1, self.management2, self.vendor1, self.vendor2, self.pentester1, self.pentester2,
+            self.management1, self.management2, self.pentester1, self.pentester2,
             self.customer1, self.customer2
         ]
         for user in users:
@@ -185,7 +184,7 @@ class UserProfileUpdateViewTest(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden_fields(self):
         users = [
-            self.management1, self.management2, self.vendor1, self.vendor2,
+            self.management1, self.management2,
             self.read_only1, self.pentester1, self.pentester2,
             self.customer2, self.customer1
         ]

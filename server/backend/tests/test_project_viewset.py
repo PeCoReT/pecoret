@@ -70,7 +70,7 @@ class ProjectDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.customer2, self.customer1, self.vendor1, self.vendor2, self.pentester2, self.pentester1, self.user1,
+            self.customer2, self.customer1, self.pentester2, self.pentester1, self.user1,
             self.read_only1
         ]
         for user in users:
@@ -93,7 +93,7 @@ class ProjectDetailViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.customer2, self.customer1, self.vendor1, self.vendor2,
+            self.customer2, self.customer1,
             self.pentester2, self.user1, self.management2
         ]
         for user in users:

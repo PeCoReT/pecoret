@@ -3,7 +3,7 @@ from django.db import migrations
 
 def initialize_default_groups(apps, schema_editor):
     Group = apps.get_model('auth', 'Group')
-    groups = ["Management", "Pentester", "Customer", "Vendor", "Advisory Management"]
+    groups = ["Management", "Pentester", "Customer"]
     for group in groups:
         Group.objects.get_or_create(name=group)
 

@@ -13,8 +13,7 @@ class AdvisoryListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.url = self.get_url("api:advisories:advisory-list")
         self.allowed_users = [self.pentester1, self.pentester2, self.read_only1]
-        self.forbidden_users = [self.management1, self.management2, self.customer1, self.customer2, self.user1,
-                                self.vendor1, self.vendor2]
+        self.forbidden_users = [self.management1, self.management2, self.customer1, self.customer2, self.user1]
 
     def test_status_allowed(self):
         for user in self.allowed_users:
@@ -56,7 +55,7 @@ class AdvisoryCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             "labels": []
         }
         self.users_forbidden = [
-            self.user1, self.vendor1, self.vendor2, self.customer1, self.customer2, self.management2, self.management1
+            self.user1, self.customer1, self.customer2, self.management2, self.management1
         ]
         self.users_allowed = [self.pentester1, self.read_only1, self.pentester2]
 
@@ -91,8 +90,7 @@ class AdvisoryUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.template = self.create_instance(VulnerabilityTemplate, vulnerability_id='new-test-vulnerability')
         self.data = {"product": "new product", "vulnerability_id": self.template.vulnerability_id}
         self.allowed_users = [self.pentester1, self.pentester2, self.read_only1]
-        self.forbidden_users = [self.customer1, self.customer2, self.management1, self.management2, self.vendor1,
-                                self.vendor2, self.user1]
+        self.forbidden_users = [self.customer1, self.customer2, self.management1, self.management2, self.user1]
 
     def test_status_allowed(self):
         for user in self.allowed_users:
@@ -115,13 +113,6 @@ class AdvisoryUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.basic_status_code_check(self.url, self.client.patch, 200, data=self.data)
         self.assertEqual(Advisory.objects.filter(pk=self.advisory1.pk, labels__in=[label.pk]).count(), 1)
 
-    def test_label_forbidden(self):
-        self.client.force_login(self.vendor1)
-        label = self.create_instance(Label, color="#111111")
-        self.data["labels"] = [label.pk]
-        self.basic_status_code_check(self.url, self.client.patch, 403, data=self.data)
-        self.assertEqual(Advisory.objects.filter(pk=self.advisory1.pk, labels__in=[label.pk]).count(), 0)
-
 
 class AdvisoryDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
@@ -129,8 +120,7 @@ class AdvisoryDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.url = self.get_url("api:advisories:advisory-detail", pk=self.advisory1.pk)
         self.url2 = self.get_url("api:advisories:advisory-detail", pk=self.advisory2.pk)
         self.user_forbidden = [
-            self.management2, self.management1, self.user1, self.vendor1, self.vendor2,
-        ]
+            self.management2, self.management1, self.user1]
 
     def test_pentester1(self):
         self.client.force_login(self.pentester1)

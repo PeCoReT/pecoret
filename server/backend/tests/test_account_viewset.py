@@ -11,7 +11,7 @@ class AccountListViewSet(APITestCase, PeCoReTTestCaseMixin):
             self.read_only1, self.pentester1, self.management1
         ]
         self.users_forbidden = [
-            self.pentester2, self.management2, self.user1, self.customer1, self.customer2, self.vendor1, self.vendor2,
+            self.pentester2, self.management2, self.user1, self.customer1, self.customer2,
         ]
 
     def test_allowed_status(self):
@@ -49,8 +49,7 @@ class AccountCreateViewSet(APITestCase, PeCoReTTestCaseMixin):
             self.pentester1, self.management1
         ]
         self.users_forbidden = [
-            self.read_only1, self.user1, self.pentester2, self.management2, self.customer1, self.customer2,
-            self.vendor1, self.vendor2, self.user1
+            self.read_only1, self.user1, self.pentester2, self.management2, self.customer1, self.customer2, self.user1
         ]
 
     def test_allowed_status(self):

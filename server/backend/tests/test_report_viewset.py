@@ -20,8 +20,7 @@ class ReportListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.pentester2, self.user1, self.management2, self.customer1, self.customer2,
-            self.vendor2, self.vendor1,
+            self.pentester2, self.user1, self.management2, self.customer1, self.customer2
         ]
         for user in users:
             self.client.force_login(user)
@@ -58,8 +57,7 @@ class ReportCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.pentester2, self.read_only1, self.user1, self.customer1, self.customer2, self.management2,
-            self.vendor2, self.vendor1
+            self.pentester2, self.read_only1, self.user1, self.customer1, self.customer2, self.management2
         ]
         for user in users:
             self.client.force_login(user)
@@ -97,8 +95,7 @@ class ReportUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def test_forbidden(self):
         users = [
             self.pentester2, self.management2, self.read_only1,
-            self.customer1, self.customer2, self.vendor1,
-            self.vendor2, self.user1
+            self.customer1, self.customer2, self.user1
         ]
         for user in users:
             self.client.force_login(user)
