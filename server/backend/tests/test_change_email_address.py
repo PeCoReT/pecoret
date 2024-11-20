@@ -10,7 +10,7 @@ from backend.utils.change_email_token_generator import change_email_token_genera
 class ChangeEmailViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:user-change-email")
+        self.url = self.get_url("api:backend:user-change-email")
         self.data = {"password": "changeme", "email": "mynewemail@example.com"}
 
     def test_valid(self):
@@ -35,7 +35,7 @@ class ChangeEmailConfirmView(APITestCase, PeCoReTTestCaseMixin):
         self.pentester2.save()
         self.uid = force_str(urlsafe_base64_encode(force_bytes(self.pentester1.pk)))
         self.token = change_email_token_generator.make_token(self.pentester1)
-        self.url = self.get_url("backend:user-change-email-confirm")
+        self.url = self.get_url("api:backend:user-change-email-confirm")
         self.data = {"uid": self.uid, "token": self.token}
 
     def test_valid(self):

@@ -6,7 +6,7 @@ from backend.models import Service, Host
 class ServiceCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:service-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:service-list", project=self.project1.pk)
         self.host1 = self.create_instance(Host, project=self.project1)
         self.host2 = self.create_instance(Host, project=self.project2)
         self.data = {
@@ -42,7 +42,7 @@ class ServiceListView(APITestCase, PeCoReTTestCaseMixin):
         self.host2 = self.create_instance(Host, project=self.project2)
         self.service1 = self.create_instance(Service, host=self.host1)
         self.service2 = self.create_instance(Service, host=self.host2)
-        self.url = self.get_url("backend:service-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:service-list", project=self.project1.pk)
 
     def test_allowed(self):
         users = [
@@ -80,7 +80,7 @@ class ServiceUpdateView(APITestCase, PeCoReTTestCaseMixin):
         self.host2 = self.create_instance(Host, project=self.project2)
         self.service1 = self.create_instance(Service, host=self.host1)
         self.service2 = self.create_instance(Service, host=self.host2)
-        self.url = self.get_url("backend:service-detail", project=self.project1.pk, pk=self.service1.pk)
+        self.url = self.get_url("api:backend:service-detail", project=self.project1.pk, pk=self.service1.pk)
         self.data = {"name": "https"}
 
     def test_allowed(self):
@@ -106,7 +106,7 @@ class ServiceUpdateView(APITestCase, PeCoReTTestCaseMixin):
         self.basic_status_code_check(self.url, self.client.patch, 400, data=self.data)
 
     def test_invalid_service(self):
-        self.url = self.get_url("backend:service-detail", project=self.project1.pk, pk=self.service2.pk)
+        self.url = self.get_url("api:backend:service-detail", project=self.project1.pk, pk=self.service2.pk)
         self.data["port"] = "80"
         self.data["protocol"] = "TCP"
         self.data["state"] = "Open"
@@ -121,7 +121,7 @@ class ServiceDestroyView(APITestCase, PeCoReTTestCaseMixin):
         self.host2 = self.create_instance(Host, project=self.project2)
         self.service1 = self.create_instance(Service, host=self.host1)
         self.service2 = self.create_instance(Service, host=self.host2)
-        self.url = self.get_url("backend:service-detail", project=self.project1.pk, pk=self.service1.pk)
+        self.url = self.get_url("api:backend:service-detail", project=self.project1.pk, pk=self.service1.pk)
 
     def test_pentester1(self):
         self.client.force_login(self.pentester1)

@@ -7,13 +7,13 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class ScannerCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url('attack_surface:scanner-list')
+        self.url = self.get_url('api:attack_surface:scanner-list')
         self.scan_type = self.create_instance(ScanType, allowed_object_type='host')
         self.data = {
             'name': 'Test Scanner', 'scan_types': [self.scan_type.pk],
         }
         self.allowed_users = [self.superuser]
-        self.forbidden_users = [self.vendor2, self.vendor1, self.user1, self.customer1, self.customer2,
+        self.forbidden_users = [self.user1, self.customer1, self.customer2,
                                 self.management1, self.management2]
 
     def test_allowed(self):
@@ -31,9 +31,9 @@ class ScannerCreateView(APITestCase, PeCoReTTestCaseMixin):
 class ScannerListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url('attack_surface:scanner-list')
+        self.url = self.get_url('api:attack_surface:scanner-list')
         self.allowed_users = [self.superuser, self.pentester1, self.pentester2, self.read_only1]
-        self.forbidden_users = [self.vendor2, self.vendor1, self.user1, self.customer1, self.customer2,
+        self.forbidden_users = [self.user1, self.customer1, self.customer2,
                                 self.management1, self.management2]
 
     def test_allowed(self):
@@ -53,9 +53,9 @@ class ScannerLastSeen(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
         self.scanner = self.create_instance(Scanner)
-        self.url = self.get_url('attack_surface:scanner-ping')
+        self.url = self.get_url('api:attack_surface:scanner-ping')
         self.allowed_users = []
-        self.forbidden_users = [self.vendor2, self.vendor1, self.user1, self.customer1, self.customer2,
+        self.forbidden_users = [self.user1, self.customer1, self.customer2,
                                 self.pentester1, self.pentester2, self.read_only1, self.management2, self.management1]
 
     def test_forbidden(self):

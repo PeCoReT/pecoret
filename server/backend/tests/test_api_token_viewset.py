@@ -5,7 +5,7 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class APITokenCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:api-token-list")
+        self.url = self.get_url("api:backend:api-token-list")
         self.data = {
             "name": "test token",
             "scope_companies": "No Access",
@@ -28,7 +28,7 @@ class APITokenCreateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.vendor1, self.vendor2, self.customer1, self.customer2, self.user1
+            self.customer1, self.customer2, self.user1
         ]
         for user in users:
             self.client.force_login(user)

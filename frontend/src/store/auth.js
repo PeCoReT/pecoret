@@ -9,7 +9,6 @@ export const useAuthStore = defineStore('authStore', {
         groups: {
             isAdmin: false,
             isManagement: false,
-            isVendor: false,
             isCustomer: false,
             isPentester: false
         },
@@ -40,9 +39,6 @@ export const useAuthStore = defineStore('authStore', {
             data.groups.forEach((item) => {
                 if (item.name === 'Management') {
                     this.groups.isManagement = true;
-                }
-                if (item.name === 'Vendor') {
-                    this.groups.isVendor = true;
                 }
                 if (item.name === 'Customer') {
                     this.groups.isCustomer = true;

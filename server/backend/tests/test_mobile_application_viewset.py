@@ -7,7 +7,7 @@ from backend.models.assets.mobile_application import MobileApplication, Operatin
 class MobileApplicationCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:mobile-application-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:mobile-application-list", project=self.project1.pk)
         self.data = {"accessible": AssetAccessibility.UNKNOWN.label,
                      "environment": Environment.UNKNOWN.label, "name": "testapp", "version": "1.0",
                      "certificate_pinning": True,
@@ -33,7 +33,7 @@ class MobileApplicationDestroyView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.app1 = self.create_instance(MobileApplication, project=self.project1)
         self.app2 = self.create_instance(MobileApplication, project=self.project2)
-        self.url = self.get_url("backend:mobile-application-detail", project=self.project1.pk, pk=self.app1.pk)
+        self.url = self.get_url("api:backend:mobile-application-detail", project=self.project1.pk, pk=self.app1.pk)
 
     def test_forbidden(self):
         users = [
@@ -52,7 +52,7 @@ class MobileApplicationDestroyView(APITestCase, PeCoReTTestCaseMixin):
         self.basic_status_code_check(self.url, self.client.delete, 204)
 
     def test_broken_access(self):
-        url = self.get_url("backend:mobile-application-detail", project=self.project1.pk, pk=self.app2.pk)
+        url = self.get_url("api:backend:mobile-application-detail", project=self.project1.pk, pk=self.app2.pk)
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(url, self.client.delete, 404)
 
@@ -60,7 +60,7 @@ class MobileApplicationDestroyView(APITestCase, PeCoReTTestCaseMixin):
 class MobileApplicationListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:mobile-application-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:mobile-application-list", project=self.project1.pk)
 
     def test_forbidden(self):
         users = [

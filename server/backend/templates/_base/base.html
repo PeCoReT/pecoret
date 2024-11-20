@@ -1,0 +1,15 @@
+{% load django_vite %}
+<!DOCTYPE html>
+<html lang="en" class="app-dark">
+<head>
+    {% include '_base/head.html' %}
+    <title>{% block title %}{% endblock title %}PeCoReT</title>
+</head>
+
+<!-- set default dark background color because primevue4 makes it hard to extract css which worked in primevue3. otherwise there are white pages between reloads -->
+<body style="background-color: #020617">
+{% block body %}
+
+{% endblock body %}
+</body>
+</html>

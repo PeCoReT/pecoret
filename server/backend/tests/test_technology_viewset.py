@@ -7,7 +7,7 @@ class TechnologyListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
         self.tech1 = self.create_instance(Technology)
-        self.url = self.get_url('backend:technology-list')
+        self.url = self.get_url('api:backend:technology-list')
 
     def test_allowed(self):
         users = [
@@ -19,7 +19,7 @@ class TechnologyListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.user1, self.vendor2, self.vendor1, self.customer1, self.customer2,
+            self.user1, self.customer1, self.customer2,
             self.management2, self.management1
         ]
         for user in users:
@@ -30,7 +30,7 @@ class TechnologyListView(APITestCase, PeCoReTTestCaseMixin):
 class TechnologyCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url('backend:technology-list')
+        self.url = self.get_url('api:backend:technology-list')
         self.data = {
             'name': 'technology 1'
         }
@@ -46,7 +46,7 @@ class TechnologyCreateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.user1, self.vendor2, self.vendor1, self.customer1, self.customer2,
+            self.user1, self.customer1, self.customer2,
             self.management2, self.management1
         ]
         for user in users:

@@ -25,7 +25,7 @@ class FindingTimelineListView(APITestCase, PeCoReTTestCaseMixin):
             finding__project=self.project2,
         )
         self.url = self.get_url(
-            "backend:findings:timeline-list",
+            "api:backend:findings:timeline-list",
             project=self.project1.pk,
             finding=self.timeline1.finding.pk,
         )
@@ -54,7 +54,7 @@ class FindingTimelineListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_broken_access(self):
         self.url = self.get_url(
-            "backend:findings:timeline-list",
+            "api:backend:findings:timeline-list",
             project=self.project1.pk,
             finding=self.timeline2.finding.pk,
         )

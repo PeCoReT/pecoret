@@ -7,7 +7,7 @@ from backend.models.assets.thick_client import ThickClient, OperatingSystem
 class ThickClientCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:thick-client-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:thick-client-list", project=self.project1.pk)
         self.data = {"accessible": AssetAccessibility.UNKNOWN.label,
                      "environment": Environment.UNKNOWN.label, "name": "testapp", "version": "1.0",
                      "programming_language": "Unknown",
@@ -36,7 +36,7 @@ class ThickClientDestroyView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.app1 = self.create_instance(ThickClient, project=self.project1)
         self.app2 = self.create_instance(ThickClient, project=self.project2)
-        self.url = self.get_url("backend:thick-client-detail", project=self.project1.pk, pk=self.app1.pk)
+        self.url = self.get_url("api:backend:thick-client-detail", project=self.project1.pk, pk=self.app1.pk)
 
     def test_forbidden(self):
         users = [
@@ -55,7 +55,7 @@ class ThickClientDestroyView(APITestCase, PeCoReTTestCaseMixin):
         self.basic_status_code_check(self.url, self.client.delete, 204)
 
     def test_broken_access(self):
-        url = self.get_url("backend:thick-client-detail", project=self.project1.pk, pk=self.app2.pk)
+        url = self.get_url("api:backend:thick-client-detail", project=self.project1.pk, pk=self.app2.pk)
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(url, self.client.delete, 404)
 
@@ -63,7 +63,7 @@ class ThickClientDestroyView(APITestCase, PeCoReTTestCaseMixin):
 class ThickClientListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:thick-client-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:thick-client-list", project=self.project1.pk)
 
     def test_forbidden(self):
         users = [

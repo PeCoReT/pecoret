@@ -1,9 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import AppLayout from '@/layout/AppLayout.vue';
 import baseRoutes from '@/router/routes/base';
 import projectRoutes from '@/router/routes/projects';
 import advisoryRoutes from '@/router/routes/advisories';
-import adminRoutes from '@/router/routes/admin';
 import checklistRoutes from '@/router/routes/checklists';
 import vulnerabilityTemplateRoutes from '@/router/routes/vulnerabilityTemplates';
 import technologyRoutes from '@/router/routes/technologies';
@@ -12,7 +11,7 @@ import companyRoutes from '@/router/routes/companies';
 import userRoutes from '@/router/routes/user';
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes: [
         {
             path: '/',
@@ -24,7 +23,6 @@ const router = createRouter({
                     component: () => import('@/views/Home.vue')
                 },
                 ...projectRoutes,
-                ...adminRoutes,
                 ...advisoryRoutes,
                 ...vulnerabilityTemplateRoutes,
                 ...checklistRoutes,

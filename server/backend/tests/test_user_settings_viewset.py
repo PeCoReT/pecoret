@@ -5,7 +5,7 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class UserSettingsRetrieveViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url("backend:user-settings-detail")
+        self.url = self.get_url("api:backend:user-settings-detail")
 
     def test_unauthorized(self):
         self.basic_status_code_check(self.url, self.client.get, 403)
@@ -27,7 +27,7 @@ class UserSettingsRetrieveViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 class UserSettingsUpdateTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url("backend:user-settings-detail")
+        self.url = self.get_url("api:backend:user-settings-detail")
         self.data = {"show_real_name_in_report": True}
 
     def test_unauthorized(self):

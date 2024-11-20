@@ -1,5 +1,5 @@
 from urllib.parse import urljoin
-from extra_settings.models import Setting
+from django.conf import settings
 
 
 class ReportError:
@@ -23,5 +23,5 @@ class BaseErrorCheck:
 
     @staticmethod
     def _build_url(path):
-        url = Setting.get('GENERAL_SITE_URL')
+        url = settings.SITE_URL
         return urljoin(url, path)

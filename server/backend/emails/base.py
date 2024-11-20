@@ -4,7 +4,6 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.context import make_context
 from django.template.loader import get_template
 from django.template.loader_tags import BlockNode, ExtendsNode
-from extra_settings.models import Setting
 
 
 class ContextMixin:
@@ -46,8 +45,8 @@ class TemplatedBaseMail(EmailMultiAlternatives, ContextMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(**self.context)
-        context["site_url"] = Setting.get('GENERAL_SITE_URL')
-        context["site_name"] = Setting.get('GENERAL_SITE_NAME')
+        context["site_url"] = settings.SITE_URL
+        context["site_name"] = settings.SITE_NAME
         return context
 
     def render(self):

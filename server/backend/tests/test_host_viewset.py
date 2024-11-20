@@ -7,7 +7,7 @@ from backend.models.assets.host import Host
 class HostCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:host-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:host-list", project=self.project1.pk)
         self.data = {"ip": "10.10.10.10", "dns": "intern.test.,com", "environment": Environment.UNKNOWN.label,
                      "accessible": AssetAccessibility.UNKNOWN.label}
         self.users_allowed = [
@@ -51,7 +51,7 @@ class HostDestroyView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.host1 = self.create_instance(Host, project=self.project1)
         self.host2 = self.create_instance(Host, project=self.project2)
-        self.url = self.get_url("backend:host-detail", project=self.project1.pk, pk=self.host1.pk)
+        self.url = self.get_url("api:backend:host-detail", project=self.project1.pk, pk=self.host1.pk)
 
     def test_forbidden(self):
         users = [
@@ -70,7 +70,7 @@ class HostDestroyView(APITestCase, PeCoReTTestCaseMixin):
         self.basic_status_code_check(self.url, self.client.delete, 204)
 
     def test_broken_access(self):
-        url = self.get_url("backend:host-detail", project=self.project1.pk, pk=self.host2.pk)
+        url = self.get_url("api:backend:host-detail", project=self.project1.pk, pk=self.host2.pk)
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(url, self.client.delete, 404)
 
@@ -80,7 +80,7 @@ class HostListView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.host1 = self.create_instance(Host, project=self.project1)
         self.host2 = self.create_instance(Host, project=self.project2)
-        self.url = self.get_url("backend:host-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:host-list", project=self.project1.pk)
 
     def test_allowed(self):
         users = [

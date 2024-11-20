@@ -129,7 +129,7 @@ export default {
                 responseType: 'arraybuffer'
             };
             this.$api
-                .get(`/projects/${this.projectId}/findings/${this.findingId}/preview/`, config)
+                .get(this.$api.e.pFindingPreview, { pPk: this.projectId, pk: this.findingId }, null, config)
                 .then((response) => {
                     this.previewData = response.data;
                 })
@@ -189,11 +189,13 @@ export default {
         </div>
         <div class="col-span-6 h-full">
             <div class="flex justify-end">
-                <Button icon="fa fa-eye" outlined label="Preview" @click="togglePreview"></Button>
-                <Button label="Download" outlined icon="fa fa-download" :loading="downloadPending" :disabled="downloadPending" @click="downloadAsPDF"></Button>
-                <FindingAsAdvisoryDialog></FindingAsAdvisoryDialog>
-                <FindingUpdateDialog :finding="finding" :project-id="projectId" @object-updated="getFinding"></FindingUpdateDialog>
-                <Button label="Delete" severity="danger" outlined icon="fa fa-trash" @click="confirmDialogDelete"></Button>
+                <ButtonGroup>
+                    <Button icon="fa fa-eye" outlined label="Preview" @click="togglePreview"></Button>
+                    <Button label="Download" outlined icon="fa fa-download" :loading="downloadPending" :disabled="downloadPending" @click="downloadAsPDF"></Button>
+                    <FindingAsAdvisoryDialog></FindingAsAdvisoryDialog>
+                    <FindingUpdateDialog :finding="finding" :project-id="projectId" @object-updated="getFinding"></FindingUpdateDialog>
+                    <Button label="Delete" severity="danger" outlined icon="fa fa-trash" @click="confirmDialogDelete"></Button>
+                </ButtonGroup>
             </div>
         </div>
     </div>

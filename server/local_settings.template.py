@@ -23,11 +23,9 @@ from pecoret.settings import *
 # SESSION_COOKIE_AGE = 15 * 60
 
 # SITE_NAME: used in various settings and templates mostly in emails.
-# DOMAIN: Domain name of the site, used to generate links, especially for emails.
-# PROTOCOL: The protocol (http or https) used for generating URLs.
+# SITE_URL: URL of the site, used to generate links, especially for emails.
 # SITE_NAME = "pecoret.example.com"
-# DOMAIN = "pecoret.example.com"
-# PROTOCOL = "https"
+# SITE_URL = 'http://localhost:8000
 
 # SECURE_PROXY_SSL_HEADER: Required when using a reverse proxy for SSL termination.
 # This tells Django to trust a specified header to detect HTTPS requests.

@@ -8,3 +8,6 @@ class Scanner(TimestampedModel):
     scan_types = models.ManyToManyField('attack_surface.ScanType')
     last_seen = models.DateTimeField(null=True, blank=True)
     token = models.CharField(max_length=255, default=secrets.token_urlsafe, editable=False)
+
+    def __str__(self):
+        return self.name

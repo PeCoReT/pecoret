@@ -11,15 +11,7 @@ export default {
         });
 
         if (this.authStore.me) {
-            if (this.authStore.groups.isVendor === true) {
-                this.$router.push({ name: 'AdvisoryList' });
-            } else if (this.authStore.groups.isAdmin === true) {
-                this.$router.push({
-                    name: 'AdminSettings'
-                });
-            } else {
-                this.$router.push({ name: 'ProjectList' });
-            }
+            this.$router.push({ name: 'ProjectList' });
         }
     },
     data() {
@@ -38,15 +30,7 @@ export default {
                 .post(this.$api.e.authLogin, null, { username: this.username, password: this.password })
                 .then((response) => {
                     this.authStore.setAuthData(response.data);
-                    if (this.authStore.groups.isVendor === true) {
-                        this.$router.push({ name: 'AdvisoryList' });
-                    } else if (this.authStore.groups.isAdmin === true) {
-                        this.$router.push({
-                            name: 'AdminSettings'
-                        });
-                    } else {
-                        this.$router.push({ name: 'ProjectList' });
-                    }
+                    this.$router.push({ name: 'ProjectList' });
                 })
                 .finally(() => {
                     this.loading = false;

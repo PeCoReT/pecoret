@@ -9,7 +9,7 @@ class ProjectNoteListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
         self.note = self.create_instance(ProjectNote, project=self.project1)
-        self.url = self.get_url('backend:note-list', project=self.project1.pk)
+        self.url = self.get_url('api:backend:note-list', project=self.project1.pk)
 
     def test_allowed(self):
         users = [
@@ -21,7 +21,7 @@ class ProjectNoteListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.vendor1, self.vendor2, self.management2, self.pentester2, self.user1
+            self.management2, self.pentester2, self.user1
         ]
         for user in users:
             self.client.force_login(user)
@@ -31,7 +31,7 @@ class ProjectNoteListView(APITestCase, PeCoReTTestCaseMixin):
 class ProjectNoteCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self):
         self.init_mixin()
-        self.url = self.get_url('backend:note-list', project=self.project1.pk)
+        self.url = self.get_url('api:backend:note-list', project=self.project1.pk)
         self.data = {
             'title': 'Test'
         }
@@ -47,7 +47,7 @@ class ProjectNoteCreateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.read_only1, self.vendor2, self.vendor1, self.management2,
+            self.read_only1, self.management2,
             self.pentester2, self.user1
         ]
         for user in users:
@@ -64,7 +64,7 @@ class ProjectNoteDeleteView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.note = self.create_instance(ProjectNote, project=self.project1)
         self.lock = ObjectLock.objects.create(locked_object=self.note, object_id=self.note.pk, user=self.pentester1)
-        self.url = self.get_url('backend:note-detail', project=self.project1.pk, pk=self.note.pk)
+        self.url = self.get_url('api:backend:note-detail', project=self.project1.pk, pk=self.note.pk)
 
     def test_locked(self):
         self.client.force_login(self.pentester1)

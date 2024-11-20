@@ -1,14 +1,10 @@
-import re
 import warnings
 
 from django.contrib.contenttypes.fields import GenericRelation
-from django.contrib.contenttypes.models import ContentType
-from django.core.files.images import ImageFile
 from django.db import models
 from django.dispatch import receiver
 from django.utils import timezone
 from django.conf import settings
-from extra_settings.models import Setting
 
 from pecoret.core.models import TimestampedModel
 from pecoret.reporting.utils import get_report_template_choices
@@ -49,9 +45,6 @@ class VulnerabilityStatusChoices(models.IntegerChoices):
 
 class AdvisoryQuerySet(models.QuerySet):
     def for_user(self, user):
-        if user.is_vendor:
-            # TODO: only return vendor advisories
-            return self.none()
         return self.all()
 
     def for_share_token(self, token):
@@ -79,7 +72,7 @@ class AdvisoryQuerySet(models.QuerySet):
 class AdvisoryManager(models.Manager):
     def create_from_template(self, **data):
         data["date_planned_disclosure"] = timezone.now() + timezone.timedelta(
-            days=Setting.get('ADVISORY_DISCLOSURE_TIMEDELTA'))
+            days=settings.ADVISORY_DISCLOSURE_TIMEDELTA)
         data["recommendation"] = VulnerabilityTemplate.objects.get(
             vulnerability_id=data["vulnerability_key"]
         ).recommendation
@@ -88,7 +81,7 @@ class AdvisoryManager(models.Manager):
 
     def create_from_finding(self, finding, **data):
         data["date_planned_disclosure"] = timezone.now() + timezone.timedelta(
-            days=Setting.get('ADVISORY_DISCLOSURE_TIMEDELTA'))
+            days=settings.ADVISORY_DISCLOSURE_TIMEDELTA)
         data["severity"] = finding.severity
         data["user"] = finding.user
         data["proof_text"] = finding.proof_text
@@ -154,7 +147,7 @@ class Advisory(TimestampedModel):
         return self.user.report_display_name
 
     def get_advisory_id_display(self):
-        prefix = Setting.get('ADVISORY_ID_PREFIX')
+        prefix = settings.ADVISORY_ID_PREFIX
         return f"{prefix}{self.advisory_id}"
 
     @property

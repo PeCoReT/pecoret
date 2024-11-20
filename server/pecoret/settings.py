@@ -37,8 +37,9 @@ INSTALLED_APPS = [
     "django_filters",
     "drf_spectacular",
     "generic_relations",
-    "extra_settings",
     "djangoql",
+    "django_vite",
+    # my apps
     "backend.apps.BackendConfig",
     'core.storage.apps.StorageConfig',
     "advisories.apps.AdvisoriesConfig",
@@ -201,11 +202,8 @@ SPECTACULAR_SETTINGS = {
     },
 }
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:8080", "http://127.0.0.1:8080"]
-
 gettext = lambda s: s
 LANGUAGES = [("en", gettext("English")), ("de", gettext("German"))]
-MODELTRANSLATION_DEFAULT_LANGUAGE = "en"
 
 CORS_EXPOSE_HEADERS = ["Content-Disposition", "Content-Type"]
 CORS_ALLOW_CREDENTIALS = True
@@ -227,13 +225,13 @@ Q_CLUSTER = {
 }
 
 SITE_URLS = {
-    "PASSWORD_RESET": "/reset-password/{uid}/{token}",
-    "ACTIVATION": "/account-activation/{uid}/{token}",
-    "ADVISORY_DETAIL": "/advisories/{advisoryId}",
-    "FINDING_DETAIL": "/projects/{projectId}/findings/{findingId}",
-    "CHANGE_EMAIL": "/user/change-email/{uid}/{token}",
-    'FINDING_SCORES': '/projects/{projectId}/findings/{findingId}/scores',
-    "ADVISORY_SHARE_TOKEN_DOWNLOAD": '/advisories/{advisoryId}/download/{token}'
+    "PASSWORD_RESET": "/#/reset-password/{uid}/{token}",
+    "ACTIVATION": "/#/account-activation/{uid}/{token}",
+    "ADVISORY_DETAIL": "/#/advisories/{advisoryId}",
+    "FINDING_DETAIL": "/#/projects/{projectId}/findings/{findingId}",
+    "CHANGE_EMAIL": "/#/user/change-email/{uid}/{token}",
+    'FINDING_SCORES': '/#/projects/{projectId}/findings/{findingId}/scores',
+    "ADVISORY_SHARE_TOKEN_DOWNLOAD": '/#/advisories/{advisoryId}/download/{token}'
 }
 
 PASSWORD_HASHERS = [
@@ -248,43 +246,17 @@ SESSION_COOKIE_SAMESITE = 'Strict'
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-EXTRA_SETTINGS_DEFAULTS = [
-    {
-        'name': 'GENERAL_SITE_NAME',
-        'type': 'string',
-        'value': 'PeCoReT',
-        'description': 'Name of the site. Mainly used in mails.'
-    },
-    {
-        'name': 'GENERAL_SITE_URL',
-        'type': 'url',
-        'value': 'http://localhost:3000',
-        'description': 'URL to this application. Mainly used to generate links in mails.'
-    },
-    {
-        'name': 'GENERAL_COMPANY_NAME',
-        'type': 'string',
-        'value': 'PeCoReT Project'
-    },
-    {
-        'name': 'GENERAL_COMPANY_MAIL',
-        'type': 'email',
-        'value': 'pecoret@example.lan',
-    },
-    {
-        'name': 'ADVISORY_ID_PREFIX',
-        'type': 'string',
-        'value': 'pecoret'
-    },
-    {
-        'name': 'ADVISORY_DISCLOSURE_TIMEDELTA',
-        'type': 'int',
-        'value': 60,
-        'description': 'Timedelta (in days) for the planned disclosure date of an advisory.'
-    }
-]
-
 LDAP_SYNC_GROUP_MAPPING = {}
+
+### Django Vite
+DJANGO_VITE = {
+    "default": {
+        "dev_mode": DEBUG,
+        'dev_server_port': '3000',
+        'static_url_prefix': 'dist'
+    }
+}
+
 
 ###################
 # Report Templates
@@ -306,3 +278,12 @@ AS_ENABLE_SCANNING = False
 
 # fill the names with scan types that can be triggered on item creation
 AS_ALLOWED_SCAN_TYPES_ON_CREATION = []
+
+# ADVISORIES
+# Timedelta (in days) for the planned disclosure date of an advisory.
+ADVISORY_DISCLOSURE_TIMEDELTA = 60
+ADVISORY_ID_PREFIX = 'pecoret-'
+
+# PECORET general settings
+SITE_NAME = 'PeCoReT Project'
+SITE_URL = 'http://localhost:8000'

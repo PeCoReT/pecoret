@@ -8,7 +8,7 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class ReportListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:report-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:report-list", project=self.project1.pk)
 
     def test_allowed(self):
         users = [
@@ -20,8 +20,7 @@ class ReportListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.pentester2, self.user1, self.management2, self.customer1, self.customer2,
-            self.vendor2, self.vendor1,
+            self.pentester2, self.user1, self.management2, self.customer1, self.customer2
         ]
         for user in users:
             self.client.force_login(user)
@@ -31,7 +30,7 @@ class ReportListViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
 class ReportCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:report-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:report-list", project=self.project1.pk)
         self.report_template = list(settings.REPORT_TEMPLATES.keys())[0]
         self.data = {
             "name": "Test",
@@ -58,8 +57,7 @@ class ReportCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.pentester2, self.read_only1, self.user1, self.customer1, self.customer2, self.management2,
-            self.vendor2, self.vendor1
+            self.pentester2, self.read_only1, self.user1, self.customer1, self.customer2, self.management2
         ]
         for user in users:
             self.client.force_login(user)
@@ -82,7 +80,7 @@ class ReportUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             template=list(settings.REPORT_TEMPLATES.keys())[0]
         )
         self.url = self.get_url(
-            "backend:report-detail", project=self.project1.pk, pk=self.report1.pk
+            "api:backend:report-detail", project=self.project1.pk, pk=self.report1.pk
         )
         self.data = {"name": "test2"}
 
@@ -97,8 +95,7 @@ class ReportUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def test_forbidden(self):
         users = [
             self.pentester2, self.management2, self.read_only1,
-            self.customer1, self.customer2, self.vendor1,
-            self.vendor2, self.user1
+            self.customer1, self.customer2, self.user1
         ]
         for user in users:
             self.client.force_login(user)
@@ -110,7 +107,7 @@ class ReportDeleteViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.report1 = self.create_instance(Report, project=self.project1)
         self.url = self.get_url(
-            "backend:report-detail", project=self.project1.pk, pk=self.report1.pk
+            "api:backend:report-detail", project=self.project1.pk, pk=self.report1.pk
         )
 
     def test_pentester(self):

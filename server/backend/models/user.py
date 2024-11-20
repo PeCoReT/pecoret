@@ -39,10 +39,6 @@ class User(AbstractUser):
         return self.groups.filter(name='Management').exists()
 
     @property
-    def is_vendor(self):
-        return self.groups.filter(name='Vendor').exists()
-
-    @property
     def is_pentester_or_management(self):
         return self.groups.filter(models.Q(name='Management') | models.Q(name='Pentester')).exists()
 

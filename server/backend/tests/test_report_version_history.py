@@ -14,7 +14,7 @@ class ReportHistoryListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             ChangeHistory, report__project=self.project2
         )
         self.url = self.get_url(
-            "backend:change-history-list",
+            "api:backend:change-history-list",
             project=self.project1.pk,
             report=self.history1.report.pk,
         )
@@ -35,7 +35,7 @@ class ReportHistoryListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def test_broken_access(self):
         self.client.force_login(self.pentester1)
         url = self.get_url(
-            "backend:change-history-list",
+            "api:backend:change-history-list",
             project=self.project1.pk,
             report=self.history2.report.pk,
         )
@@ -49,7 +49,7 @@ class ReportHistoryCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.report1 = self.create_instance(Report, project=self.project1)
         self.report2 = self.create_instance(Report, project=self.project2)
         self.url1 = self.get_url(
-            "backend:change-history-list",
+            "api:backend:change-history-list",
             project=self.project1.pk,
             report=self.report1.pk,
         )
@@ -78,7 +78,7 @@ class ReportHistoryCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_broken_access(self):
         url = self.get_url(
-            "backend:change-history-list",
+            "api:backend:change-history-list",
             project=self.project1.pk,
             report=self.report2.pk,
         )
@@ -98,7 +98,7 @@ class ReportHistoryUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             ChangeHistory, report__project=self.project2
         )
         self.url = self.get_url(
-            "backend:change-history-detail",
+            "api:backend:change-history-detail",
             project=self.project1.pk,
             report=self.history1.report.pk,
             pk=self.history1.pk,
@@ -123,7 +123,7 @@ class ReportHistoryUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_broken_access(self):
         url = self.get_url(
-            "backend:change-history-detail",
+            "api:backend:change-history-detail",
             project=self.project1.pk,
             report=self.history2.report.pk,
             pk=self.history2.pk,
@@ -131,7 +131,7 @@ class ReportHistoryUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(url, self.client.patch, 403, data=self.data)
         url = self.get_url(
-            "backend:change-history-detail",
+            "api:backend:change-history-detail",
             project=self.project1.pk,
             report=self.history1.report.pk,
             pk=self.history2.pk,
@@ -139,7 +139,7 @@ class ReportHistoryUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(url, self.client.patch, 404, data=self.data)
         url = self.get_url(
-            "backend:change-history-detail",
+            "api:backend:change-history-detail",
             project=self.project1.pk,
             report=self.history2.report.pk,
             pk=self.history1.pk,
@@ -158,7 +158,7 @@ class ReportHistoryDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             ChangeHistory, report__project=self.project2
         )
         self.url = self.get_url(
-            "backend:change-history-detail",
+            "api:backend:change-history-detail",
             project=self.project1.pk,
             report=self.history1.report.pk,
             pk=self.history1.pk,
@@ -180,7 +180,7 @@ class ReportHistoryDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_broken_access(self):
         url = self.get_url(
-            "backend:change-history-detail",
+            "api:backend:change-history-detail",
             project=self.project1.pk,
             report=self.history1.report.pk,
             pk=self.history2.pk,
@@ -189,7 +189,7 @@ class ReportHistoryDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.basic_status_code_check(url, self.client.delete, 404)
 
         url = self.get_url(
-            "backend:change-history-detail",
+            "api:backend:change-history-detail",
             project=self.project1.pk,
             report=self.history2.report.pk,
             pk=self.history1.pk,
@@ -198,7 +198,7 @@ class ReportHistoryDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.basic_status_code_check(url, self.client.delete, 403)
 
         url = self.get_url(
-            "backend:change-history-detail",
+            "api:backend:change-history-detail",
             project=self.project2.pk,
             report=self.history1.report.pk,
             pk=self.history1.pk,
@@ -207,7 +207,7 @@ class ReportHistoryDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.basic_status_code_check(url, self.client.delete, 403)
 
         url = self.get_url(
-            "backend:change-history-detail",
+            "api:backend:change-history-detail",
             project=self.project1.pk,
             report=self.history2.report.pk,
             pk=self.history2.pk,

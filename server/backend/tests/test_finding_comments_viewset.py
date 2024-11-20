@@ -28,7 +28,7 @@ class FindingCommentListView(APITestCase, PeCoReTTestCaseMixin):
             finding=self.finding2
         )
         self.url = self.get_url(
-            "backend:findings:comment-list",
+            "api:backend:findings:comment-list",
             project=self.project1.pk,
             finding=self.comment1.finding.pk,
         )
@@ -72,7 +72,7 @@ class FindingCommentCreateView(APITestCase, PeCoReTTestCaseMixin):
             user=self.pentester2,
         )
         self.url = self.get_url(
-            "backend:findings:comment-list",
+            "api:backend:findings:comment-list",
             project=self.project1.pk,
             finding=self.finding1.pk,
         )
@@ -102,7 +102,7 @@ class FindingCommentCreateView(APITestCase, PeCoReTTestCaseMixin):
     def test_broken_access(self):
         self.client.force_login(self.pentester1)
         self.url = self.get_url(
-            "backend:findings:comment-list",
+            "api:backend:findings:comment-list",
             project=self.project1.pk,
             finding=self.finding2.pk,
         )
@@ -123,7 +123,7 @@ class FindingCommentDestroyView(APITestCase, PeCoReTTestCaseMixin):
             finding=self.finding1
         )
         self.url = self.get_url(
-            "backend:findings:comment-detail",
+            "api:backend:findings:comment-detail",
             project=self.project1.pk,
             finding=self.comment1.finding.pk,
             pk=self.comment1.pk,
@@ -164,7 +164,7 @@ class FindingCommentUpdateView(APITestCase, PeCoReTTestCaseMixin):
         )
         self.comment1 = self.create_instance(FindingComment, finding=self.finding1)
         self.url = self.get_url(
-            "backend:findings:comment-detail",
+            "api:backend:findings:comment-detail",
             project=self.project1.pk,
             finding=self.finding1.pk,
             pk=self.comment1.pk,

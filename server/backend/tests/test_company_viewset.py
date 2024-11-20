@@ -7,12 +7,12 @@ from pecoret.core.test import PeCoReTTestCaseMixin
 class CompanyListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:company-list")
+        self.url = self.get_url("api:backend:company-list")
         self.user_allowed = [
             self.management2, self.management1, self.read_only1, self.pentester2, self.pentester1,
             self.customer1, self.customer2
         ]
-        self.user_forbidden = [self.user1, self.vendor1, self.vendor2]
+        self.user_forbidden = [self.user1]
 
     def test_status_allowed(self):
         for user in self.user_allowed:
@@ -42,14 +42,14 @@ class CompanyListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 class CompanyUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:company-detail", pk=self.project1.company.pk)
+        self.url = self.get_url("api:backend:company-detail", pk=self.project1.company.pk)
         self.data = {"street": "randomstreet 1"}
         self.users_allowed = [
             self.management2, self.management1, self.customer1, self.pentester1, self.read_only1,
             self.pentester2
         ]
         self.users_forbidden = [
-            self.user1, self.vendor2, self.vendor1,
+            self.user1
         ]
 
     def test_status_allowed(self):
@@ -88,14 +88,14 @@ class CompanyUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 class CompanyCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:company-list")
+        self.url = self.get_url("api:backend:company-list")
         self.data = {"name": "test", "city": "asdf", "zipcode": "1234", "street": "teststreet",
                      "report_template": "default_template", "country": "asd"}
         self.users_allowed = [
             self.management2, self.management1
         ]
         self.users_forbidden = [
-            self.user1, self.pentester2, self.pentester1, self.read_only1, self.vendor2, self.vendor1,
+            self.user1, self.pentester2, self.pentester1, self.read_only1,
             self.customer2, self.customer1
         ]
 
@@ -114,7 +114,7 @@ class CompanyDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.company = self.create_instance(Company)
-        self.url = self.get_url("backend:company-detail", pk=self.company.pk)
+        self.url = self.get_url("api:backend:company-detail", pk=self.company.pk)
 
     def test_management_1(self):
         self.client.force_login(self.management1)
@@ -123,8 +123,7 @@ class CompanyDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.customer2, self.customer1,
-            self.vendor1, self.vendor2, self.read_only1,
+            self.customer2, self.customer1, self.read_only1,
             self.pentester1, self.pentester2
         ]
         for user in users:
@@ -135,13 +134,13 @@ class CompanyDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 class CompanyRetrieveViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("backend:company-detail", pk=self.project1.company.pk)
+        self.url = self.get_url("api:backend:company-detail", pk=self.project1.company.pk)
         self.users_allowed = [
             self.management2, self.management1, self.pentester2, self.pentester1, self.read_only1,
             self.customer1
         ]
         self.users_forbidden = [
-            self.user1, self.vendor2, self.vendor1
+            self.user1
         ]
 
     def test_status_allowed(self):

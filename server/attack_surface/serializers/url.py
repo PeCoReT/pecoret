@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from attack_surface import tasks
 from attack_surface.models.url import URL
-from backend.serializers.technology import FlatTechnologySerializer
+from backend.api.serializers.technology import FlatTechnologySerializer
 from pecoret.core.serializers import PrimaryKeyRelatedField
 from .service import ServiceSerializer
 from .tag import TagSerializer

@@ -8,12 +8,11 @@ class AdvisoryTimelineCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.url = self.get_url(
-            "advisories:timeline-list", advisory=self.advisory1.pk
+            "api:advisories:timeline-list", advisory=self.advisory1.pk
         )
         self.data = {"text": "test", "date": "2022-01-01"}
         self.users_allowed = [self.pentester2, self.pentester1, self.read_only1]
-        self.users_forbidden = [self.management1, self.management2, self.vendor2, self.vendor1, self.user1,
-                                self.vendor1, self.vendor2]
+        self.users_forbidden = [self.management1, self.management2, self.user1]
 
     def test_allowed(self):
         for user in self.users_allowed:
@@ -44,11 +43,11 @@ class AdvisoryTimelineDestroyView(APITestCase, PeCoReTTestCaseMixin):
         self.timeline1 = self.create_instance(AdvisoryTimeline, advisory=self.advisory1)
         self.timeline2 = self.create_instance(AdvisoryTimeline, advisory=self.advisory2)
         self.url = self.get_url(
-            "advisories:timeline-detail",
+            "api:advisories:timeline-detail",
             advisory=self.advisory1.pk,
             pk=self.timeline1.pk,
         )
-        self.forbidden_users = [self.management1, self.management2, self.vendor2, self.vendor1, self.user1]
+        self.forbidden_users = [self.management1, self.management2, self.user1]
 
     def test_pentester1(self):
         self.client.force_login(self.pentester1)
@@ -66,13 +65,13 @@ class AdvisoryTimelineUpdateView(APITestCase, PeCoReTTestCaseMixin):
         self.timeline1 = self.create_instance(AdvisoryTimeline, advisory=self.advisory1)
         self.timeline2 = self.create_instance(AdvisoryTimeline, advisory=self.advisory2)
         self.url = self.get_url(
-            "advisories:timeline-detail",
+            "api:advisories:timeline-detail",
             advisory=self.advisory1.pk,
             pk=self.timeline1.pk,
         )
         self.data = {"text": "anothertest"}
         self.allowed_users = [self.pentester2, self.pentester1, self.read_only1]
-        self.forbidden_users = [self.management1, self.management2, self.vendor2, self.vendor1, self.user1, ]
+        self.forbidden_users = [self.management1, self.management2, self.user1]
 
     def test_allowed(self):
         for user in self.allowed_users:
@@ -95,10 +94,10 @@ class AdvisoryTimelineListView(APITestCase, PeCoReTTestCaseMixin):
         self.timeline1 = self.create_instance(AdvisoryTimeline, advisory=self.advisory1)
         self.timeline2 = self.create_instance(AdvisoryTimeline, advisory=self.advisory2)
         self.url = self.get_url(
-            "advisories:timeline-list", advisory=self.advisory1.pk
+            "api:advisories:timeline-list", advisory=self.advisory1.pk
         )
         self.allowed_users = [self.pentester1, self.pentester2, self.read_only1]
-        self.forbidden_users = [self.management2, self.management1, self.user1, self.vendor2, self.vendor1]
+        self.forbidden_users = [self.management2, self.management1, self.user1]
 
     def test_allowed(self):
         for user in self.allowed_users:

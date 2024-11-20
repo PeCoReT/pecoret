@@ -7,7 +7,7 @@ class ProjectScopeListView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.scope1 = self.create_instance(ProjectScope, project=self.project1)
-        self.url = self.get_url("backend:scope-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:scope-list", project=self.project1.pk)
 
     def test_allowed(self):
         users = [
@@ -19,7 +19,7 @@ class ProjectScopeListView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.vendor1, self.vendor2, self.management2, self.pentester2, self.user1
+            self.management2, self.pentester2, self.user1
         ]
         for user in users:
             self.client.force_login(user)
@@ -30,7 +30,7 @@ class ProjectScopeUpdateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.scope1 = self.create_instance(ProjectScope, project=self.project1)
-        self.url = self.get_url("backend:scope-detail", project=self.project1.pk, pk=self.scope1.pk)
+        self.url = self.get_url("api:backend:scope-detail", project=self.project1.pk, pk=self.scope1.pk)
         self.data = {
             "details": "Test access allowed",
             "permission": ScopePermission.ALLOWED.label
@@ -46,8 +46,7 @@ class ProjectScopeUpdateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.vendor1, self.vendor2, self.management2,
-            self.pentester2, self.user1, self.read_only1
+            self.management2, self.pentester2, self.user1, self.read_only1
         ]
         for user in users:
             self.client.force_login(user)
@@ -58,7 +57,7 @@ class ProjectScopeCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.scope1 = self.create_instance(ProjectScope, project=self.project1)
-        self.url = self.get_url("backend:scope-list", project=self.project1.pk)
+        self.url = self.get_url("api:backend:scope-list", project=self.project1.pk)
         self.data = {
             "details": "Test access allowed",
             "permission": ScopePermission.ALLOWED.label
@@ -74,8 +73,7 @@ class ProjectScopeCreateView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.vendor1, self.vendor2, self.management2,
-            self.pentester2, self.user1, self.read_only1,
+            self.management2, self.pentester2, self.user1, self.read_only1,
         ]
         for user in users:
             self.client.force_login(user)
@@ -86,7 +84,7 @@ class ProjectScopeDeleteView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.scope1 = self.create_instance(ProjectScope, project=self.project1)
-        self.url = self.get_url("backend:scope-detail", project=self.project1.pk, pk=self.scope1.pk)
+        self.url = self.get_url("api:backend:scope-detail", project=self.project1.pk, pk=self.scope1.pk)
 
     def test_pentester1(self):
         self.client.force_login(self.pentester1)
@@ -98,9 +96,7 @@ class ProjectScopeDeleteView(APITestCase, PeCoReTTestCaseMixin):
 
     def test_forbidden(self):
         users = [
-            self.pentester2,
-            self.vendor2, self.vendor1,
-            self.user1, self.read_only1, self.management2
+            self.pentester2, self.user1, self.read_only1, self.management2
         ]
         for user in users:
             self.client.force_login(user)
