@@ -7,6 +7,10 @@ const endpoints = {
     authResetPasswordConfirm: '/users/reset_password_confirm/',
     authActivation: '/users/activation',
 
+    // all auth
+    authConfig: '/_allauth/browser/v1/config',
+    authProviderRedirect: '/_allauth/browser/v1/auth/provider/redirect',
+
     projectList: '/projects/',
     projectDetail: '/projects/{pk}/',
     projectsAvailableLanguages: '/projects/available-languages/',
