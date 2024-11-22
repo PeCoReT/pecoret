@@ -31,7 +31,7 @@ class BaseUserSerializer(serializers.ModelSerializer):
 class UpdateProfileSerializer(BaseUserSerializer):
     class Meta:
         model = User
-        fields = ["pk", "first_name", "last_name"]
+        fields = ["pk", "first_name", "last_name", 'nickname']
         read_only_fields = ["pk"]
 
 
@@ -102,7 +102,7 @@ class UserMeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["pk", "username", "first_name", "last_name", "is_active", "email", "groups", "is_superuser"]
+        fields = ["pk", "username", "first_name", "last_name", "is_active", "email", "groups", "is_superuser", "nickname"]
         read_only_Fields = ["pk", "username", "is_active", "groups", "is_superuser"]
 
 

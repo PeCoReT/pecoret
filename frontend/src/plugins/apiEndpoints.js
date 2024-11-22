@@ -102,7 +102,8 @@ const endpoints = {
     cContactList: '/companies/{cPk}/contacts/',
     cContactDetail: '/companies/{cPk}/contacts/{pk}/',
     cInfoList: '/companies/{cPk}/information/',
-    cInfoDetail: '/companies/{cPk}/information/{pk}',
+    cInfoDetail: '/companies/{cPk}/information/{pk}/',
+    companyLogo: '/companies/{pk}/logo/',
 
     userUpdateProfile: '/users/update_profile/',
     userChangePassword: '/users/change_password/',

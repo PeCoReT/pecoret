@@ -140,7 +140,7 @@ export default {
             return this.showLinks[name].some((attr) => this.authStore.groups[attr] === true);
         },
         onLogout() {
-            this.$api.post(this.$api.e.authLogout).then(() => {
+            this.$api.delete(this.$api.e.authLogout).then(() => {
                 this.authStore.unsetMe();
 
                 this.$router.push({ name: 'Login' });

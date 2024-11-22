@@ -13,7 +13,7 @@ class CompanySerializer(CompanyMinimalSerializer):
     class Meta:
         model = Company
         fields = CompanyMinimalSerializer.Meta.fields + ['street', 'zipcode', 'city', 'country', 'report_template',
-                                                         'logo']
+                                                         'logo', 'has_logo']
         extra_kwargs = {
             "logo": {
                 "write_only": True

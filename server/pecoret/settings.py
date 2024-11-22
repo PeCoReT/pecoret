@@ -139,6 +139,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Authentication
 AUTH_USER_MODEL = "backend.User"
+LOGIN_REDIRECT_URL = '/'
+
 # Keep ModelBackend around for per-user permissions and maybe a local
 # superuser.
 AUTHENTICATION_BACKENDS = (
@@ -152,7 +154,10 @@ ACCOUNT_AUTHENTICATION_MODE = 'username'
 HEADLESS_FRONTEND_URLS = {
     'socialaccount_login_error': '/#/login'
 }
-LOGIN_REDIRECT_URL = '/'
+
+SOCIALACCOUNT_ADAPTER = 'backend.adapter.PeCoReTSocialAccountAdapter'
+ACCOUNT_ADAPTER = 'backend.adapter.PeCoReTAccountAdapter'
+# HEADLESS_ADAPTER = 'backend.adapter.PeCoReTHeadlessAdapter'
 
 
 REST_FRAMEWORK = {

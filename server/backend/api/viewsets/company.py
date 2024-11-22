@@ -1,3 +1,8 @@
+from django.http import FileResponse
+from rest_framework import status
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
 from backend.models import Company
 from backend.api.serializers.company import CompanySerializer, CustomerCompanySerializer
 from pecoret.core import permissions
@@ -67,3 +72,10 @@ class CompanyViewSet(PeCoReTModelViewSet):
 
     def get_queryset(self):
         return Company.objects.for_user(self.request.user)
+
+    @action(detail=True, methods=['get'])
+    def logo(self, request, **kwargs):
+        obj = self.get_object()
+        if obj.logo:
+            return FileResponse(obj.logo, content_type="image/png")
+        return Response({}, status=status.HTTP_404_NOT_FOUND)

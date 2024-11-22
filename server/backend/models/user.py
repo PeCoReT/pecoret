@@ -19,6 +19,7 @@ class User(AbstractUser):
     objects = UserManager()
     email = models.EmailField(unique=True)
     new_email = models.EmailField(null=True, blank=True)
+    nickname = models.CharField(max_length=64, null=True)
     company = models.ForeignKey('backend.Company', on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
@@ -26,9 +27,9 @@ class User(AbstractUser):
 
     @property
     def report_display_name(self):
-        if self.usersettings.show_real_name_in_report:
-            return f"{self.first_name} {self.last_name}"
-        return self.username
+        if not self.nickname:
+            return f'{self.first_name} {self.last_name}'
+        return self.nickname
 
     @property
     def is_customer(self):

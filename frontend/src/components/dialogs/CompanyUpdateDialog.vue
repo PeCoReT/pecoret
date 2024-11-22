@@ -39,8 +39,8 @@ export default {
             this.$api.patch(this.$api.e.companyDetail, { pk: this.company.pk }, data).then(() => {
                 if (this.model.logo) {
                     let formData = new FormData();
-                    data.append('logo', this.model.logo);
-                    this.$api.patch(this.$api.e.companyList, { pk: this.company.pk }, formData).then(() => {});
+                    formData.append('logo', this.model.logo);
+                    this.$api.patch(this.$api.e.companyDetail, { pk: this.company.pk }, formData).then(() => {});
                 }
                 this.$emit('object-updated', this.model);
                 this.visible = false;

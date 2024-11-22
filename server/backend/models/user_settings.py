@@ -14,7 +14,6 @@ class UserSettings(PeCoReTBaseModel):
     """
     objects = UserSettingsQuerySet.as_manager()
     user = models.OneToOneField('backend.User', on_delete=models.CASCADE)
-    show_real_name_in_report = models.BooleanField(default=False)
 
     # advisories
     # send notification mails, when disclosure of advisory is soon

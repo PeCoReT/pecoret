@@ -33,7 +33,7 @@ export default {
         </div>
     </slot>
 
-    <div class="grid grid-cols-12 gap-3 mt-3">
+    <div class="grid grid-cols-12 gap-3 mt-3 mb-5">
         <slot></slot>
     </div>
 </template>

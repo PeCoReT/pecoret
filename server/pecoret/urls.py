@@ -8,7 +8,7 @@ urlpatterns = [
 
     # TODO: migrate to api
     path("accounts/", include("allauth.urls")),
-    path("api/_allauth/", include("allauth.headless.urls")),
+    path("api/_allauth/", include("allauth.headless.urls"))
 ]
 
 

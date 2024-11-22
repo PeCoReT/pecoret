@@ -49,7 +49,7 @@ export default {
             });
         },
         patch() {
-            this.$api.patch(this.$api.e.userUpdateProfile, this.model).then((response) => {
+            this.$api.patch(this.$api.e.userUpdateProfile, {}, this.model).then((response) => {
                 this.model = response.data;
                 this.$toast.add({
                     severity: 'success',
@@ -64,7 +64,7 @@ export default {
                 old_password: this.change_password.old_password,
                 new_password: this.change_password.new_password
             };
-            this.$api.post(this.$api.e.userChangePassword, data).then((response) => {
+            this.$api.post(this.$api.e.userChangePassword, {}, data).then((response) => {
                 this.change_password.old_password = null;
                 this.change_password.new_password = null;
                 this.change_password.new_password_confirm = null;
@@ -81,7 +81,7 @@ export default {
                 password: this.new_email.password,
                 email: this.new_email.mail
             };
-            this.$api.post(this.$api.e.userChangeEmail, data).then((response) => {
+            this.$api.post(this.$api.e.userChangeEmail, {}, data).then((response) => {
                 this.new_email.password = null;
                 this.new_email.mail = null;
                 this.$toast.add({
@@ -107,6 +107,9 @@ export default {
             </Field>
             <Field label="Last Name">
                 <InputText v-model="model.last_name"></InputText>
+            </Field>
+            <Field label="Nickname">
+                <InputText v-model="model.nickname"></InputText>
             </Field>
             <Button @click="patch" label="Save" class="w-full"></Button>
         </Form>
