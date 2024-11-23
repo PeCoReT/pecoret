@@ -53,7 +53,7 @@ export default {
     <BaseLayout :breadcrumbs="breadcrumbs">
         <div class="col-span-12 card gap-3">
             <div class="flex gap-3">
-                <Menu :model="menuItems" class="!border-0 md:!min-w-[20rem]">
+                <Menu :model="menuItems" class="!border-0 md:!min-w-[20rem] border-primary">
                     <template #item="{ item, props }">
                         <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
                             <a :href="href" v-bind="props.action" @click="navigate" :class="getActiveClass(item.route)">

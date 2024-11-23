@@ -13,7 +13,6 @@ class ChangeHistory(models.Model):
     version = models.FloatField()
     report = models.ForeignKey('backend.Report', on_delete=models.CASCADE)
     date = models.DateField()
-    user = models.ForeignKey('backend.User', on_delete=models.PROTECT)
     change = models.CharField(max_length=128)
 
     def __str__(self):

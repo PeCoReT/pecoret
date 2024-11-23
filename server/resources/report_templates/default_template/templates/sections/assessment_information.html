@@ -10,11 +10,7 @@
       <table class="{% if not loop.first %}mt-small{% endif %}">
         <tr>
           <td>
-            {% if member.user.usersettings.show_real_name_in_report %}
-            {{ member.user.first_name }} {{ member.user.last_name }}</td>
-            {% else %}
-            {{ member.user.username }}
-            {% endif %}
+            {{ member.user.report_display_name }}
         </tr>
         <tr>
           <td>{{ member.get_role_display() }}</td>

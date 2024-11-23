@@ -6,9 +6,6 @@ from backend.models.reports.change_history import ChangeHistory
 
 
 class ChangeHistorySerializer(serializers.ModelSerializer):
-    user = ReportAuthorRelatedField(
-        serializer=MinimalUserSerializer, queryset=User.objects.all()
-    )
 
     class Meta:
         model = ChangeHistory
@@ -17,7 +14,6 @@ class ChangeHistorySerializer(serializers.ModelSerializer):
             "date_created",
             "date_updated",
             "change",
-            "user",
             "date",
             "version",
         ]

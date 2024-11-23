@@ -1,11 +1,16 @@
 const endpoints = {
     attackSurfaceUrls: '/attack-surface/urls/',
-    authCheck: '/auth/check/',
-    authLogin: '/auth/login/',
-    authLogout: '/auth/logout/',
     authResetPassword: '/users/reset_password/',
     authResetPasswordConfirm: '/users/reset_password_confirm/',
     authActivation: '/users/activation',
+
+    // all auth
+    authConfig: '/_allauth/browser/v1/config',
+    authProviderRedirect: '/_allauth/browser/v1/auth/provider/redirect',
+    authLogin: '/_allauth/browser/v1/auth/login',
+    authCheck: '/_allauth/browser/v1/auth/session',
+    authLogout: '/_allauth/browser/v1/auth/session',
+    authChangePassword: '/_allauth/browser/v1/account/password/change',
 
     projectList: '/projects/',
     projectDetail: '/projects/{pk}/',
@@ -98,10 +103,10 @@ const endpoints = {
     cContactList: '/companies/{cPk}/contacts/',
     cContactDetail: '/companies/{cPk}/contacts/{pk}/',
     cInfoList: '/companies/{cPk}/information/',
-    cInfoDetail: '/companies/{cPk}/information/{pk}',
+    cInfoDetail: '/companies/{cPk}/information/{pk}/',
+    companyLogo: '/companies/{pk}/logo/',
 
     userUpdateProfile: '/users/update_profile/',
-    userChangePassword: '/users/change_password/',
     userChangeEmail: '/users/change_email/',
     userChangeEmailConfirm: '/users/change_email_confirm/',
     userUserSettings: '/users/user-settings/',

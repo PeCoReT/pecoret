@@ -29,7 +29,6 @@
       <tr>
         <th>{{ _('Version') }}</th>
         <th>{{ _('Change') }}</th>
-        <th>{{ _('User') }}</th>
         <th>{{ _('Date') }}</th>
       </tr>
       </thead>
@@ -39,7 +38,6 @@
         <tr>
           <td>{{ version.version }}</td>
           <td>{{ version.change }}</td>
-          <td>{{ version.user.report_display_name }}</td>
           <td>{{ version.date.strftime("%B %d, %Y") }}</td>
         </tr>
       {% endfor %}

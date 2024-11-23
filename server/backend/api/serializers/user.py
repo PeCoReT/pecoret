@@ -31,7 +31,7 @@ class BaseUserSerializer(serializers.ModelSerializer):
 class UpdateProfileSerializer(BaseUserSerializer):
     class Meta:
         model = User
-        fields = ["pk", "first_name", "last_name"]
+        fields = ["pk", "first_name", "last_name", 'nickname']
         read_only_fields = ["pk"]
 
 
@@ -102,7 +102,7 @@ class UserMeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["pk", "username", "first_name", "last_name", "is_active", "email", "groups", "is_superuser"]
+        fields = ["pk", "username", "first_name", "last_name", "is_active", "email", "groups", "is_superuser", "nickname"]
         read_only_Fields = ["pk", "username", "is_active", "groups", "is_superuser"]
 
 
@@ -179,28 +179,6 @@ class ChangeEmailSerializer(serializers.Serializer):
         if request.user.check_password(value):
             return True
         self.fail("invalid_password")
-
-
-class PasswordChangeSerializer(serializers.Serializer):
-    """
-    serializer for the "Change Password" functionality.
-    check if the old password is valid
-    """
-    default_error_messages = {"invalid_password": "password incorrect!"}
-
-    old_password = serializers.CharField(required=True, allow_null=False, allow_blank=False)
-    new_password = serializers.CharField(required=True, allow_null=False, allow_blank=False)
-
-    def validate_old_password(self, value):
-        request = self.context['request']
-        if request.user.check_password(value):
-            return True
-        self.fail('invalid_password')
-
-    def validate_new_password(self, value):
-        # validate_password raises ValidationError already
-        validate_password(value, self.context['request'].user)
-        return value
 
 
 class ActivationSerializer(PasswordResetConfirmSerializer):

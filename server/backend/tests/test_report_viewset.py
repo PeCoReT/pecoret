@@ -63,13 +63,6 @@ class ReportCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.client.force_login(user)
             self.basic_status_code_check(self.url, self.client.post, 403, data=self.data)
 
-    def test_foreign_author(self):
-        data = self.data
-        data["author"] = self.pentester2.pk
-        self.client.force_login(self.pentester1)
-        response = self.client.post(self.url, data)
-        self.assertEqual(response.status_code, 400)
-
 
 class ReportUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:

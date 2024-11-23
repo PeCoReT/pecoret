@@ -13,9 +13,10 @@ class ApiService {
 
         // interceptors for requests - X-CSRFToken
         this.client.interceptors.request.use((request) => {
-                    const authStore = useAuthStore();
+            const authStore = useAuthStore();
 
             request.headers['X-CSRFToken'] = authStore.csrfToken;
+            request.headers['X-Session-Token'] = authStore.sessionToken;
             return request;
         });
 
@@ -37,13 +38,22 @@ class ApiService {
                     return Promise.reject(error);
                 }
                 if (error.response.status === 401) {
-                    app.config.globalProperties.$toast.add({
-                        severity: 'error',
-                        summary: 'Unauthorized',
-                        life: 3000,
-                        detail: error.response.data.detail
-                    });
+                    if (error.response.data.meta && error.response.data.data) {
+                        // allauth views may return 401 in /session and logout
+                    } else {
+                        app.config.globalProperties.$toast.add({
+                            severity: 'error',
+                            summary: 'Unauthorized',
+                            life: 3000,
+                            detail: error.response.data.detail
+                        });
+                    }
+
                     router.push({ name: 'Login' });
+                    return Promise.resolve({
+                        status: 401,
+                        data: error.response.data
+                    });
                 }
                 if (error.response.status === 403) {
                     if (error.response.data.detail === 'Authentication credentials were not provided.') {

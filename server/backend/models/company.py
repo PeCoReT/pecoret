@@ -35,3 +35,9 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def has_logo(self):
+        if self.logo:
+            return True
+        return False

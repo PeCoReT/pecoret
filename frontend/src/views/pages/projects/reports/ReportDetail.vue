@@ -24,11 +24,10 @@ export default {
                     disabled: true
                 }
             ],
-            report: { author: {}, template: {} },
+            report: { template: {} },
             project: {},
             projectId: this.$route.params.projectId,
             reportId: this.$route.params.reportId,
-            authorChoices: [],
             saveLoading: false
         };
     },
@@ -42,7 +41,6 @@ export default {
         getItem() {
             this.$api.get(this.$api.e.pReportDetail, { pPk: this.projectId, pk: this.reportId }).then((response) => {
                 this.report = response.data;
-                this.authorChoices.push(this.report.author);
             });
         },
         updateReport() {
@@ -81,16 +79,6 @@ export default {
                     });
                 }
             });
-        },
-        getAuthorChoices() {
-            let url = '/projects/' + this.projectId + '/memberships/';
-            this.$api.get(url).then((response) => {
-                let authors = [];
-                response.data.results.forEach(function (item) {
-                    authors.push(item.user);
-                });
-                this.authorChoices = authors;
-            });
         }
     },
     components: { InlineFieldGroup, ReportTemplateSelectField, DetailCardWithIcon, ReportTabMenu, MarkdownEditor }
@@ -123,9 +111,6 @@ export default {
                         </InlineField>
                         <InlineField label="Title">
                             <InputText id="title" v-model="report.title"></InputText>
-                        </InlineField>
-                        <InlineField label="Author">
-                            <Select id="author" optionLabel="username" :options="authorChoices" v-model="report.author" @focus="getAuthorChoices"></Select>
                         </InlineField>
                         <InlineField label="Report Template">
                             <ReportTemplateSelectField v-model="report.template"></ReportTemplateSelectField>

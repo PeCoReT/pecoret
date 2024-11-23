@@ -7,10 +7,6 @@ from pecoret.core.serializers import ReportAuthorRelatedField
 
 
 class ReportSerializer(serializers.ModelSerializer):
-    author = ReportAuthorRelatedField(
-        serializer=MinimalUserSerializer, queryset=User.objects.all(),
-        required=False, allow_null=True, allow_empty=True
-    )
 
     class Meta:
         fields = [
@@ -20,7 +16,6 @@ class ReportSerializer(serializers.ModelSerializer):
             "name",
             "title",
             "template",
-            "author",
             "recommendation",
             "evaluation",
         ]

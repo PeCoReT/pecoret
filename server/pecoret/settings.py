@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from django.conf.global_settings import LOGIN_REDIRECT_URL
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,8 +41,13 @@ INSTALLED_APPS = [
     "generic_relations",
     "djangoql",
     "django_vite",
+    'allauth',
+    'allauth.account',
+    'allauth.headless',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.openid_connect',
     # my apps
-    "backend.apps.BackendConfig",
+    'backend.apps.BackendConfig',
     'core.storage.apps.StorageConfig',
     "advisories.apps.AdvisoriesConfig",
     "checklists.apps.ChecklistsConfig",
@@ -56,6 +63,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # django allauth
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "pecoret.urls"
@@ -130,6 +139,25 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Authentication
 AUTH_USER_MODEL = "backend.User"
+LOGIN_REDIRECT_URL = '/'
+
+# Keep ModelBackend around for per-user permissions and maybe a local
+# superuser.
+AUTHENTICATION_BACKENDS = (
+    'allauth.account.auth_backends.AuthenticationBackend',
+    "django.contrib.auth.backends.ModelBackend",
+)
+
+## django-all auth
+HEADLESS_ONLY = True
+ACCOUNT_AUTHENTICATION_MODE = 'username'
+HEADLESS_FRONTEND_URLS = {
+    'socialaccount_login_error': '/#/login'
+}
+SOCIALACCOUNT_ADAPTER = 'backend.adapter.PeCoReTSocialAccountAdapter'
+ACCOUNT_ADAPTER = 'backend.adapter.PeCoReTAccountAdapter'
+HEADLESS_ADAPTER = 'backend.adapter.PeCoReTHeadlessAdapter'
+
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -257,7 +285,6 @@ DJANGO_VITE = {
     }
 }
 
-
 ###################
 # Report Templates
 ###################
@@ -266,7 +293,6 @@ REPORT_TEMPLATE_PRESETS = {
         'path': BASE_DIR / 'resources/report_templates/default_template/report_template.py'
     }
 }
-
 
 ############################
 # Attack Surface Application

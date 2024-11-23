@@ -13,13 +13,22 @@ export default {
         if (this.authStore.me) {
             this.$router.push({ name: 'ProjectList' });
         }
+        this.$api.get(this.$api.e.authConfig).then((response) => {
+            this.providers = response.data.data.socialaccount.providers;
+        });
+    },
+    computed: {
+        callbackUrl() {
+            return window.location.href.split('#')[0];
+        },
     },
     data() {
         return {
             authStore: useAuthStore(),
             username: null,
             password: null,
-            loading: false
+            loading: false,
+            providers: []
         };
     },
     methods: {
@@ -51,6 +60,18 @@ export default {
             </div>
             <a @click="this.$router.push({ name: 'ResetPassword' })" class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</a>
         </div>
-        <Button :loading="loading" label="Sign In" class="w-full" @click="login"></Button>
+        <Button :loading="loading" label="Login" class="w-full" @click="login"></Button>
+
+        <div class="mt-3">
+            <div v-for="provider in providers" :key="provider.id">
+                <form :action="`/api${this.$api.e.authProviderRedirect}`" method="POST">
+                    <input type="hidden" :value="this.authStore.csrfToken" name="csrfmiddlewaretoken">
+                    <input type="hidden" :value="provider.id" name="provider" />
+                    <input type="hidden" :value="callbackUrl" name="callback_url" />
+                    <input type="hidden" value="login" name="process" />
+                    <Button class="w-full" type="submit">Login with {{ provider.name }}</Button>
+                </form>
+            </div>
+        </div>
     </AuthLayout>
 </template>

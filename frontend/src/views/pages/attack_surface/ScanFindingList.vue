@@ -146,14 +146,14 @@ export default {
                         <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
                     </template>
                     <template #filter="{ filterModel }">
-                        <Dropdown v-model="filterModel.value" :options="severityChoices()" class="p-column-filter" showClear optionLabel="name" optionValue="value"></Dropdown>
+                        <Select v-model="filterModel.value" :options="severityChoices()" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Select>
                     </template>
                 </Column>
                 <Column field="affected_component" header="Component"></Column>
                 <Column field="program.name" header="Program"></Column>
                 <Column field="status" header="Status" :showFilterMatchModes="false">
                     <template #filter="{ filterModel }">
-                        <Dropdown v-model="filterModel.value" :options="asFindingStatusChoices()" class="p-column-filter" showClear optionLabel="name" optionValue="value"></Dropdown>
+                        <Select v-model="filterModel.value" :options="asFindingStatusChoices()" class="p-column-filter" showClear optionLabel="name" optionValue="value"></Select>
                     </template>
                 </Column>
                 <Column field="tags" header="Tags" :showFilterMatchModes="false">
@@ -164,8 +164,8 @@ export default {
                         <span v-else>-</span>
                     </template>
                 </Column>
-                <Column field="date_created" header="Created" sortable></Column>
-                <Column field="date_updated" header="Updated" sortable></Column>
+                <Column field="date_created" header="Created" :sortable="true"></Column>
+                <Column field="date_updated" header="Updated" :sortable="true"></Column>
             </GenericDataTable>
         </template>
     </BaseListLayout>
