@@ -1,7 +1,14 @@
+from typing import Dict, Any
+
 import jwt
 from allauth.account.adapter import DefaultAccountAdapter
+from allauth.headless.adapter import DefaultHeadlessAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.contrib.auth.models import Group
+from django.contrib.auth.password_validation import validate_password
+from django.middleware.csrf import get_token
+
+from backend.api.serializers.user import UserMeSerializer
 
 
 class PeCoReTSocialAccountAdapter(DefaultSocialAccountAdapter):
@@ -49,3 +56,16 @@ class PeCoReTSocialAccountAdapter(DefaultSocialAccountAdapter):
 class PeCoReTAccountAdapter(DefaultAccountAdapter):
     def is_open_for_signup(self, request):
         return False
+
+
+class PeCoReTHeadlessAdapter(DefaultHeadlessAdapter):
+    def serialize_user(self, user):
+        serializer = UserMeSerializer(user)
+        data = serializer.data
+        data['csrf_token'] = self.get_csrftoken()
+        return data
+
+    def get_csrftoken(self):
+        if not self.request.META.get('CSRF_COOKIE'):
+            get_token(self.request)
+        return self.request.META.get('CSRF_COOKIE', None)

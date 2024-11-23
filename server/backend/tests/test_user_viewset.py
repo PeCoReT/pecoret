@@ -118,11 +118,11 @@ class AccountActivationView(APITestCase, PeCoReTTestCaseMixin):
         self.assertEqual(user.has_usable_password(), True)
 
         # test login
-        login_url = self.get_url("api:backend:login")
+        login_url = self.get_url("headless:browser:account:login")
         data = {"username": "testactivation", "password": "mysupersecurepassword1234!"}
-        response = self.client.post(login_url, data)
-        self.assertIn("csrf_token", response.json())
-        self.assertEqual(response.json().get("user", {}).get("username"), "testactivation")
+        response = self.client.post(login_url, data, format="json")
+        self.assertIn("csrf_token", response.json()['data']['user'])
+        self.assertEqual(response.json()['data'].get("user", {}).get("username"), "testactivation")
 
     def test_invalid_token(self):
         # TODO: fixme
@@ -136,9 +136,9 @@ class ChangePasswordView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.pentester1.set_password('test123')
         self.pentester1.save()
-        self.url = self.get_url('api:backend:user-change-password')
+        self.url = self.get_url('headless:browser:account:change_password')
         self.data = {
-            'old_password': 'test123',
+            'current_password': 'test123',
             'new_password': 'test1234!Changemevvvv!?'
         }
 
@@ -150,7 +150,7 @@ class ChangePasswordView(APITestCase, PeCoReTTestCaseMixin):
         self.assertEqual(user.check_password('test123'), False)
 
     def test_wrong_old_password(self):
-        self.data['old_password'] = 'invalid'
+        self.data['current_password'] = 'invalid'
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(self.url, self.client.post, 400, data=self.data)
         user = User.objects.get(pk=self.pentester1.pk)

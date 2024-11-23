@@ -45,7 +45,7 @@ export default {
     methods: {
         getItem() {
             this.$api.get(this.$api.e.authCheck).then((response) => {
-                this.model = response.data.user;
+                this.model = response.data.data.user;
             });
         },
         patch() {
@@ -61,10 +61,10 @@ export default {
         },
         changePassword() {
             let data = {
-                old_password: this.change_password.old_password,
+                current_password: this.change_password.old_password,
                 new_password: this.change_password.new_password
             };
-            this.$api.post(this.$api.e.userChangePassword, {}, data).then((response) => {
+            this.$api.post(this.$api.e.authChangePassword, {}, data).then((response) => {
                 this.change_password.old_password = null;
                 this.change_password.new_password = null;
                 this.change_password.new_password_confirm = null;

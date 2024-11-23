@@ -4,5 +4,11 @@
 {% block body %}
 <div id="app"></div>
 
+    <!-- initial CSRF Token; once logged in, receive it from /session endpoint -->
+{% csrf_token %}
+<script>
+window.csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+</script>
+
 {% vite_asset 'src/main.js' %}
 {% endblock body %}

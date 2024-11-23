@@ -18,4 +18,4 @@ class ProjectReportViewSet(PeCoReTModelViewSet):
         return Report.objects.for_project(self.request.project)
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user, project=self.request.project)
+        serializer.save(project=self.request.project)

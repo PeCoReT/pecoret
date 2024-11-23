@@ -84,9 +84,6 @@ urlpatterns = [
         ), name="user-settings-detail"
     ),
     path("", include(router.urls)),
-    path("auth/login/", views.LoginView.as_view(), name="login"),
-    path("auth/logout/", views.LogoutView.as_view(), name="logout"),
-    path("auth/check/", views.AuthCheckView.as_view(), name="auth-check"),
     path("cvss-calculator/4.0/", views.CVSS4CalculatorView.as_view(), name='cvss4-calculator'),
     path("cvss-calculator/3.1/", views.CVSS31CalculatorView.as_view(), name='cvss31-calculator'),
     path("render-markdown/", views.RenderMarkdownToHTML.as_view(), name='render-markdown'),

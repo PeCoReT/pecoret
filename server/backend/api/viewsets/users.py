@@ -141,17 +141,6 @@ class UserViewSet(PeCoReTModelViewSet):
         request.user.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @action(detail=False, methods=['post'], serializer_class=serializers.PasswordChangeSerializer,
-            permission_classes=[IsAuthenticated], throttle_classes=[AuthFlowThrottle])
-    @method_decorator(csrf_protect)
-    def change_password(self, request, *args, **kwargs):
-        serializer = serializers.PasswordChangeSerializer(data=request.data, context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        request.user.set_password(serializer.validated_data['new_password'])
-        request.user.save()
-        update_session_auth_hash(request, request.user)
-        return Response({'message': 'Password changed!'}, status=status.HTTP_200_OK)
-
 
 @extend_schema_view(
     list=extend_schema(

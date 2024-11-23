@@ -14,7 +14,6 @@ class Report(models.Model):
     name = models.CharField(max_length=128)
     title = models.CharField(max_length=128, default="Pentest Report")
     project = models.ForeignKey('backend.Project', on_delete=models.CASCADE)
-    author = models.ForeignKey('backend.User', on_delete=models.SET_NULL, null=True, blank=True)
     recommendation = models.TextField(null=True, blank=True)
     evaluation = models.TextField(null=True, blank=True)
     template = models.CharField(max_length=128, choices=get_report_template_choices)

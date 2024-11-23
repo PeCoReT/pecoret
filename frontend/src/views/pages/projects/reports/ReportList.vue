@@ -17,7 +17,7 @@ export default {
             items: [],
             loading: false,
             totalRecords: 0,
-            pagination: { page: 1, limit: 20 },
+            pagination: { page: 1, limit: 20 }
         };
     },
     mounted() {
@@ -93,7 +93,8 @@ export default {
             >
                 <Column field="name" header="Name"></Column>
                 <Column field="template" header="Template"></Column>
-                <Column field="author.username" header="Author"></Column>
+                <Column field="date_created" header="Date Created"></Column>
+                <Column field="date_updated" header="Date Updated"></Column>
             </GenericDataTable>
         </template>
     </BaseListLayout>

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 
 export const useAuthStore = defineStore('authStore', {
     state: () => ({
-        authToken: '',
+        sessionToken: null,
         isAuthenticated: false,
         me: null,
         csrfToken: null,
@@ -22,11 +22,32 @@ export const useAuthStore = defineStore('authStore', {
         deactivateProject() {
             this.activeProject = {};
         },
-        setAuthData(responseData) {
+        setAuthDataOld(responseData) {
             this.csrfToken = responseData.csrf_token;
             if (responseData.user) {
                 this.setMe(responseData.user);
                 this.isAuthenticated = true;
+            }
+        },
+        setAuthData(responseData) {
+            if (responseData.meta.is_authenticated === false ) {
+                this.csrfToken = window.csrftoken;
+                return
+            }
+            // old stuff - authcheck not yet ported to /session
+            if (responseData.meta && responseData.meta.is_authenticated !== true) {
+                this.setAuthDataOld(responseData);
+                return null;
+            }
+            if (!responseData.data){
+                this.setAuthDataOld(responseData)
+                return null
+            }
+            this.setMe(responseData.data.user);
+            this.isAuthenticated = true;
+            this.csrfToken = responseData.data.user.csrf_token;
+            if (responseData.meta) {
+                this.sessionToken = responseData.meta.session_token;
             }
         },
         unsetMe() {

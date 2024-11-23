@@ -30,11 +30,11 @@ class PasswordResetConfirmView(APITestCase, PeCoReTTestCaseMixin):
         self.data = {"token": self.token, "uid": self.uid, "new_password": "myCoolTest1234!1234"}
 
     def test_working(self):
-        response = self.client.post(self.url, self.data)
+        response = self.client.post(self.url, self.data, format="json")
         self.assertEqual(response.status_code, 204)
         # test login working
-        login_url = self.get_url("api:backend:login")
+        login_url = self.get_url("headless:browser:account:login")
         response = self.client.post(login_url, {"username": self.pentester1.username,
-                                                "password": self.data["new_password"]})
+                                                "password": self.data["new_password"]}, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertIn("csrf_token", response.json())
+        self.assertEqual(response.json()["meta"]["is_authenticated"], True)

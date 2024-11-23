@@ -143,7 +143,7 @@ export default {
             this.$api.delete(this.$api.e.authLogout).then(() => {
                 this.authStore.unsetMe();
 
-                this.$router.push({ name: 'Login' });
+                window.location = "/";
             });
         },
         isAttackSurfaceRoute() {

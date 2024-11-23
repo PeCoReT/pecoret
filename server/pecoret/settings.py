@@ -154,10 +154,9 @@ ACCOUNT_AUTHENTICATION_MODE = 'username'
 HEADLESS_FRONTEND_URLS = {
     'socialaccount_login_error': '/#/login'
 }
-
 SOCIALACCOUNT_ADAPTER = 'backend.adapter.PeCoReTSocialAccountAdapter'
 ACCOUNT_ADAPTER = 'backend.adapter.PeCoReTAccountAdapter'
-# HEADLESS_ADAPTER = 'backend.adapter.PeCoReTHeadlessAdapter'
+HEADLESS_ADAPTER = 'backend.adapter.PeCoReTHeadlessAdapter'
 
 
 REST_FRAMEWORK = {

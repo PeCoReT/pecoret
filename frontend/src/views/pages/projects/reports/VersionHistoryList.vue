@@ -120,7 +120,6 @@ export default {
                     <Column field="version" header="Version"></Column>
                     <Column field="change" header="Change"></Column>
                     <Column field="date" header="Date"></Column>
-                    <Column field="user.username" header="User"></Column>
                     <Column header="Actions">
                         <template #body="slotProps">
                             <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>

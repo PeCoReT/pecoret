@@ -14,7 +14,6 @@ export default {
                 author: null
             },
             templateChoices: null,
-            authorChoices: null,
             loading: false,
         };
     },
@@ -30,7 +29,6 @@ export default {
             let data = {
                 name: this.model.name,
                 template: this.model.template,
-                author: null
             };
             this.$api
                 .post(this.$api.e.pReportList, { pPk: this.projectId }, data)

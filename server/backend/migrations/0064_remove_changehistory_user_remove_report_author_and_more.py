@@ -9,6 +9,14 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RemoveField(
+            model_name='changehistory',
+            name='user',
+        ),
+        migrations.RemoveField(
+            model_name='report',
+            name='author',
+        ),
+        migrations.RemoveField(
             model_name='usersettings',
             name='show_real_name_in_report',
         ),
