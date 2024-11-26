@@ -294,6 +294,13 @@ REPORT_TEMPLATE_PRESETS = {
     }
 }
 
+REPORT_TEMPLATES = {
+    'default_template': {
+        'preset': 'default_template',
+        'css_files': [BASE_DIR / 'resources/report_templates/default_template/styles/blue.css']
+    },
+}
+
 ############################
 # Attack Surface Application
 ############################

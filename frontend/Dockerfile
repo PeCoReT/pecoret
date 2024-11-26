@@ -8,7 +8,7 @@ RUN npm install
 
 COPY . /app/
 
-RUN mv /app/docker/env /app/.env.production && npm run build
+RUN npm run build
 
 FROM nginx:mainline-alpine
 
@@ -19,11 +19,6 @@ WORKDIR /usr/share/nginx/html
 
 COPY --from=builder /app/dist/ .
 
-COPY ./docker/docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
-
-# expose internal port:80 and run init.sh
 EXPOSE 80
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]

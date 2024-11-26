@@ -1,8 +1,6 @@
-version: '3'
-
 services:
   backend:
-    image: ghcr.io/pecoret/pecoret-server:dev
+    build: .
     environment:
       DB_NAME: pecoret
       DB_USER: pecoret
@@ -12,8 +10,9 @@ services:
       DJANGO_SUPERUSER_EMAIL: admin@example.com
       ALLOWED_HOSTS: localhost
     volumes:
-      - ./volumes/server/conf:/app/conf
-      - server-static:/app/static
+      - ./volumes/server/conf:/opt/pecoret/conf
+    ports:
+      - "127.0.0.1:80:80"
     depends_on:
       db:
         condition: service_healthy
@@ -34,25 +33,15 @@ services:
       retries: 5
       start_period: 10s  
 
-
-  frontend:
-    image: ghcr.io/pecoret/pecoret-frontend:dev
-    environment:
-      VITE_APP_API_URL: http://localhost/api
-    ports:
-      - "127.0.0.1:80:80"
-    depends_on:
-      - backend
-
   worker:
-    image: ghcr.io/pecoret/pecoret-server:dev
+    build: .
     entrypoint: python3 manage.py qcluster
     environment:
       DB_NAME: pecoret
       DB_USER: pecoret
       DB_PASSWORD: dontusethispassword
     volumes:
-      - ./volumes/server/conf:/app/conf
+      - ./volumes/server/conf:/opt/pecoret/conf
     depends_on:
       db:
         condition: service_healthy

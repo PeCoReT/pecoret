@@ -1,7 +1,0 @@
-.gitignore
-db.sqlite3
-Dockerfile
-venv
-uploads
-conf/production.py
-__pycache__
