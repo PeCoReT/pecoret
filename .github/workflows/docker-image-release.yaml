@@ -8,7 +8,6 @@ on:
 
 env:
   IMAGE_NAME_SERVER: pecoret-server
-  IMAGE_NAME_FRONTEND: pecoret-frontend
   IMAGE_REPO: pecoret
   REGISTRY: ghcr.io
 
@@ -25,13 +24,8 @@ jobs:
       - name: build and upload images
         run: |
           docker login ${{ env.REGISTRY }} --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
-          docker build -t ${{ env.IMAGE_NAME_SERVER }} server
+          docker build -t ${{ env.IMAGE_NAME_SERVER }} .
           docker tag ${{ env.IMAGE_NAME_SERVER}} ${{ env.REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME_SERVER }}:$(git describe --abbrev=0 --tags)
           docker tag ${{ env.IMAGE_NAME_SERVER}} ${{ env.REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME_SERVER }}:latest
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME_SERVER }}:$(git describe --abbrev=0 --tags)
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME_SERVER }}:latest
-          docker build -t ${{ env.IMAGE_NAME_FRONTEND }} frontend
-          docker tag ${{ env.IMAGE_NAME_FRONTEND }} ${{ env.REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME_FRONTEND }}:$(git describe --abbrev=0 --tags)
-          docker tag ${{ env.IMAGE_NAME_FRONTEND }} ${{ env.REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME_FRONTEND }}:latest
-          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME_FRONTEND }}:$(git describe --abbrev=0 --tags)
-          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME_FRONTEND }}:latest
