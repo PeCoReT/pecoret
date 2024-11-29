@@ -5,12 +5,6 @@ export default {
         return {
             items: [
                 {
-                    label: 'Dashboard',
-                    route: this.$router.resolve({
-                        name: 'AttackSurfaceSearch'
-                    })
-                },
-                {
                     label: 'Search',
                     route: this.$router.resolve({
                         name: 'AttackSurfaceSearch'
