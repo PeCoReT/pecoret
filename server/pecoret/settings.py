@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     # my apps
     'backend.apps.BackendConfig',
     'core.storage.apps.StorageConfig',
+    'core.custom_fields.apps.CustomFieldsConfig',
     "advisories.apps.AdvisoriesConfig",
     "checklists.apps.ChecklistsConfig",
     'attack_surface.apps.AttackSurfaceConfig'

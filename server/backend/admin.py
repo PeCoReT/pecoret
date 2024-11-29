@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from backend.models import User, PentestType
+from backend import models
 
-admin.site.register(User, UserAdmin)
-admin.site.register(PentestType)
+admin.site.register(models.User, UserAdmin)
+admin.site.register(models.PentestType)
+admin.site.register(models.AssetType)
