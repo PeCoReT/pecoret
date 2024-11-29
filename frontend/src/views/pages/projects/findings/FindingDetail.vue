@@ -254,7 +254,7 @@ export default {
         </div>
 
         <div :class="containerCol">
-            <ProgressBar v-if="!this.previewData && this.showPreview === true" mode="indeterminate" class="h-1"></ProgressBar>
+            <ProgressBar v-if="!this.previewData && this.showPreview === true" mode="indeterminate" class="h-1rem"></ProgressBar>
             <iframe :src="this.previewUrl" v-if="previewLoading !== true && this.previewData" class="w-full h-full" :key="previewData"></iframe>
         </div>
     </div>

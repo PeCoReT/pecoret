@@ -3,6 +3,7 @@ import HostUpdateDialog from '@/components/projects/assets/HostUpdateDialog.vue'
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import markdown from '@/utils/markdown';
 import ServiceList from '@/components/projects/assets/ServiceList.vue';
+import AssetTechnologyCards from '@/components/cards/projects/AssetTechnologyCards.vue';
 
 export default {
     name: 'HostDetail',
@@ -61,7 +62,7 @@ export default {
             });
         }
     },
-    components: { ServiceList, DetailCardWithIcon, HostUpdateDialog }
+    components: { AssetTechnologyCards, ServiceList, DetailCardWithIcon, HostUpdateDialog }
 };
 </script>
 
@@ -105,6 +106,7 @@ export default {
                         </div>
                     </div>
                 </div>
+                <AssetTechnologyCards :technologies="model.technologies"></AssetTechnologyCards>
             </div>
         </div>
     </div>

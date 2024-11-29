@@ -2,6 +2,7 @@
 import WebApplicationUpdateDialog from '@/components/projects/assets/WebApplicationUpdateDialog.vue';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import markdown from '@/utils/markdown';
+import AssetTechnologyCards from "@/components/cards/projects/AssetTechnologyCards.vue";
 
 export default {
     name: 'WebApplicationDetail',
@@ -60,7 +61,7 @@ export default {
             });
         }
     },
-    components: { DetailCardWithIcon, WebApplicationUpdateDialog }
+    components: {AssetTechnologyCards, DetailCardWithIcon, WebApplicationUpdateDialog }
 };
 </script>
 
@@ -107,6 +108,8 @@ export default {
                         </div>
                     </div>
                 </div>
+                <AssetTechnologyCards :technologies="model.technologies"></AssetTechnologyCards>
+
             </div>
         </div>
     </div>

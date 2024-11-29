@@ -35,7 +35,7 @@ export default {
 
 <template>
     <UserSettingsPageLayout subheadline="Change your notification settings here!" headline="Notifications">
-        <div class="pt-6 pb-6 shadow-md">
+        <div class="pt-6 pb-6">
             <div class="flex items-center justify-between py-4">
                 <div>
                     <h2 class="text-lg font-medium">Email on new critical findings?</h2>

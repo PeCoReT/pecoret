@@ -2,6 +2,7 @@
 import GenericAssetUpdateDialog from '@/components/projects/assets/GenericAssetUpdateDialog.vue';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import markdown from '@/utils/markdown';
+import AssetTechnologyCards from '@/components/cards/projects/AssetTechnologyCards.vue';
 
 export default {
     name: 'GenericAssetDetail',
@@ -70,7 +71,7 @@ export default {
             });
         }
     },
-    components: { DetailCardWithIcon, GenericAssetUpdateDialog }
+    components: { AssetTechnologyCards, DetailCardWithIcon, GenericAssetUpdateDialog }
 };
 </script>
 
@@ -111,6 +112,7 @@ export default {
                         </div>
                     </div>
                 </div>
+                <AssetTechnologyCards :technologies="model.technologies"></AssetTechnologyCards>
             </div>
         </div>
     </div>

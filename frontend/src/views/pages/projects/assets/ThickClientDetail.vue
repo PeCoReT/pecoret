@@ -2,6 +2,7 @@
 import ThickClientUpdateDialog from '@/components/projects/assets/ThickClientUpdateDialog.vue';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import markdown from '@/utils/markdown';
+import AssetTechnologyCards from '@/components/cards/projects/AssetTechnologyCards.vue';
 
 export default {
     name: 'ThickClientDetail',
@@ -65,7 +66,7 @@ export default {
             });
         }
     },
-    components: { DetailCardWithIcon, ThickClientUpdateDialog }
+    components: { AssetTechnologyCards, DetailCardWithIcon, ThickClientUpdateDialog }
 };
 </script>
 
@@ -112,6 +113,7 @@ export default {
                         </div>
                     </div>
                 </div>
+                <AssetTechnologyCards :technologies="model.technologies"></AssetTechnologyCards>
             </div>
         </div>
     </div>

@@ -39,7 +39,7 @@ export default {
                 delete data.technologies;
             }
             this.$api
-                .patch(this.$api.e.pWebAppDetail, { projectPk: this.projectId, pk: this.asset.pk })
+                .patch(this.$api.e.pWebAppDetail, { projectPk: this.projectId, pk: this.asset.pk }, data)
                 .then(() => {
                     this.$emit('object-updated', this.model);
                     this.showDialog = false;

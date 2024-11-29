@@ -2,6 +2,7 @@
 import MobileApplicationUpdateDialog from '@/components/projects/assets/MobileApplicationUpdateDialog.vue';
 import DetailCardWithIcon from '@/components/DetailCardWithIcon.vue';
 import markdown from '@/utils/markdown';
+import AssetTechnologyCards from '@/components/cards/projects/AssetTechnologyCards.vue';
 
 export default {
     name: 'MobileApplicationDetail',
@@ -65,7 +66,7 @@ export default {
             });
         }
     },
-    components: { DetailCardWithIcon, MobileApplicationUpdateDialog }
+    components: { AssetTechnologyCards, DetailCardWithIcon, MobileApplicationUpdateDialog }
 };
 </script>
 
@@ -112,6 +113,7 @@ export default {
                         </div>
                     </div>
                 </div>
+                <AssetTechnologyCards :technologies="model.technologies"></AssetTechnologyCards>
             </div>
         </div>
     </div>
