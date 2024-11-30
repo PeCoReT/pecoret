@@ -1,9 +1,9 @@
 .gitignore
-db.sqlite3
+server/db.sqlite3
 Dockerfile
-venv
-uploads
+server/venv
+server/uploads/*
 server/conf/*
-__pycache__
+server/__pycache__
 frontend/node_modules
 frontend/components.d.ts

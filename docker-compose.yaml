@@ -1,6 +1,6 @@
 services:
   backend:
-    build: .
+    image: ghcr.io/pecoret/pecoret-server:latest
     environment:
       DB_NAME: pecoret
       DB_USER: pecoret
@@ -34,7 +34,7 @@ services:
       start_period: 10s  
 
   worker:
-    build: .
+    image: ghcr.io/pecoret/pecoret-server:latest
     entrypoint: python3 manage.py qcluster
     environment:
       DB_NAME: pecoret
