@@ -1,6 +1,9 @@
 <script>
+import Navbar from "@/components/common/Navbar.vue";
+
 export default {
     name: 'AttackSurfaceTabMenu',
+    components: {Navbar},
     data() {
         return {
             items: [
@@ -65,5 +68,5 @@ export default {
 </script>
 
 <template>
-    <pTabMenu v-model="items"></pTabMenu>
+    <Navbar :items="items"></Navbar>
 </template>

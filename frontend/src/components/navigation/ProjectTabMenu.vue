@@ -1,8 +1,10 @@
 <script>
 import { useAuthStore } from '@/store/auth';
+import Navbar from "@/components/common/Navbar.vue";
 
 export default {
     name: 'ProjectTabMenu',
+    components: {Navbar},
     mounted() {
         if (!this.authStore.activeProject.name) {
             this.$api.get(this.$api.e.projectDetail, { pk: this.$route.params.projectId }).then((response) => {
@@ -190,17 +192,5 @@ export default {
 </script>
 
 <template>
-    <Menubar :model="items" class="w-screen">
-        <template #item="{ label, item, props, root, hasSubmenu }">
-            <router-link v-if="item.route" :to="item.route" v-bind="props.action">
-                <span v-bind="props.icon" />
-                <span v-bind="props.label">{{ label }}</span>
-            </router-link>
-            <a v-else :href="item.url" :target="item.target" v-bind="props.action">
-                <span v-bind="props.icon" />
-                <span v-bind="props.label">{{ label }}</span>
-                <span :class="[hasSubmenu && (root ? 'fa fa-chevron-down' : 'fa fa-chevron-down')]" v-bind="props.submenuicon" />
-            </a>
-        </template>
-    </Menubar>
+    <Navbar :items="items"></Navbar>
 </template>
