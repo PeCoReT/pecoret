@@ -91,13 +91,8 @@ class Command(BaseCommand):
 
     def create_project_assets(self, project, data):
         for item in data:
-            asset_type = item.pop('type')
-            if asset_type == 'host':
-                models.Host.objects.get_or_create(ip=item['ip'], project=project, defaults=item)
-            elif asset_type == 'web_application':
-                models.WebApplication.objects.get_or_create(base_url=item['base_url'], project=project, defaults=item)
-            elif asset_type == 'thick_client':
-                models.ThickClient.objects.get_or_create(name=item['name'], project=project, defaults=item)
+            asset_type, _ = models.AssetType.objects.get_or_create(name=item.pop('type'))
+            models.Asset.objects.get_or_create(asset_type=asset_type, project=project, **item)
 
     def create_projects(self):
         self.stdout.write('Creating sample projects...')

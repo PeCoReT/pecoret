@@ -116,8 +116,6 @@ class PeCoReTTestCaseMixin:
         return self.create_instance(Finding, **kwargs)
 
     def create_asset_checklist(self, **kwargs):
-        kwargs["component_object_id"] = kwargs["component"].pk
-        kwargs["component_content_type"] = self.get_content_type_for_model(kwargs["component"])
         return self.create_instance(AssetChecklist, **kwargs)
 
     def get_content_type_for_model(self, model):

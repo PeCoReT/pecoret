@@ -1,8 +1,7 @@
 from rest_framework.test import APITestCase
 
 from backend.models import AssetType, CustomFieldAsset, CustomFieldAssetValue
-from backend.models.asset import Asset
-from backend.models.assets.base import Environment, AssetAccessibility
+from backend.models.asset import Asset, Environment, AssetAccessibility
 from pecoret.core.test import PeCoReTTestCaseMixin
 
 
