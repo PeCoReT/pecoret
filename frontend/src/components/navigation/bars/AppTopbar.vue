@@ -143,7 +143,7 @@ export default {
             this.$api.delete(this.$api.e.authLogout).then(() => {
                 this.authStore.unsetMe();
 
-                window.location = "/";
+                window.location = '/';
             });
         },
         isAttackSurfaceRoute() {
@@ -172,22 +172,10 @@ export default {
             <a v-else :href="item.url" :target="item.target" v-bind="props.action">
                 <span v-bind="props.icon" />
                 <span v-bind="props.label">{{ label }}</span>
-                <span :class="[hasSubmenu && (root ? 'fa fa-chevron-down' : 'fa fa-chevron-down')]" v-bind="props.submenuicon" />
+                <span :class="[hasSubmenu && (root ? 'fa fa-chevron-down' : 'fa fa-chevron-right')]" v-bind="props.submenuicon" />
             </a>
         </template>
     </Menubar>
     <ProjectTabMenu v-if="this.$route.params.projectId"></ProjectTabMenu>
     <AttackSurfaceTabMenu v-else-if="isAttackSurfaceRoute()"></AttackSurfaceTabMenu>
 </template>
-
-<style>
-.p-menubar-submenu {
-    right: 0 !important; /* Align the dropdown to the right */
-    left: auto !important; /* Ensure the left property is not overriding */
-    position: absolute !important; /* Ensure the dropdown is positioned correctly */
-}
-
-.p-menubar-item {
-    position: relative; /* Ensure the dropdown item is positioned correctly */
-}
-</style>

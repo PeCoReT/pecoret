@@ -1,15 +1,12 @@
 <script>
+import Navbar from "@/components/common/Navbar.vue";
+
 export default {
     name: 'AttackSurfaceTabMenu',
+    components: {Navbar},
     data() {
         return {
             items: [
-                {
-                    label: 'Dashboard',
-                    route: this.$router.resolve({
-                        name: 'AttackSurfaceSearch'
-                    })
-                },
                 {
                     label: 'Search',
                     route: this.$router.resolve({
@@ -71,5 +68,5 @@ export default {
 </script>
 
 <template>
-    <pTabMenu v-model="items"></pTabMenu>
+    <Navbar :items="items"></Navbar>
 </template>
