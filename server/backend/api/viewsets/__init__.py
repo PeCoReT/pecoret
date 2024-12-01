@@ -25,4 +25,3 @@ from .project_note import ProjectNoteViewSet
 from .technology import TechnologyViewSet
 from .asset_type import AssetTypeViewSet
 from .asset import AssetViewSet
-from .custom_field_assets import CustomFieldAssetViewSet

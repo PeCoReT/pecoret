@@ -26,21 +26,10 @@ export default {
     },
     methods: {
         open() {
-            this.showDialog = true;
-            this.customFields = this.model.custom_fields;
-        },
-        loadAssetTypes() {
-            if (!this.model.asset_type) {
-                this.customFields = [];
-                return;
-            }
             this.customFields = [];
-            this.$api.get(this.$api.e.pAssetCustomFieldList, { pPk: this.projectId }, { asset_type: this.model.asset_type }).then((response) => {
-                for (let i = 0; i < response.data.results.length; i++) {
-                    this.customFields.push({
-                        field: response.data.results[i]
-                    });
-                }
+            this.showDialog = true;
+            this.$api.get(this.$api.e.pAssetCustomFieldList, { pPk: this.projectId }, { limit: 200 }).then((response) => {
+                this.customFields = response.data.results;
             });
         },
         patch() {
@@ -50,12 +39,13 @@ export default {
                 delete data.technologies;
             }
             if (this.model.asset_type && this.model.asset_type.pk) {
-                delete data.asset_type;
+                delete data.asset_type
             }
-            for (let i = 0; i < this.customFields.length; i++) {
-                let key = `custom_${this.customFields[i].field.name}`;
-                data[key] = this.customFields[i].value;
-            }
+            Object.keys(this.model).forEach((key) => {
+                if (key.startsWith('custom_') === true) {
+                    data[key] = this.model[key].value;
+                }
+            })
             this.$api
                 .patch(this.$api.e.pAssetDetail, { pPk: this.projectId, pk: this.asset.pk }, data)
                 .then(() => {
@@ -73,7 +63,6 @@ export default {
             deep: true,
             handler(value) {
                 this.model = value;
-                this.customFields = this.model.custom_fields;
             }
         }
     },
@@ -98,7 +87,7 @@ export default {
                 <InputText id="name" type="text" v-model="model.name"></InputText>
             </Field>
             <Field label="Asset Type">
-                <AssetTypeSelectField v-model="model.asset_type" @update:model-value="loadAssetTypes"></AssetTypeSelectField>
+                <AssetTypeSelectField v-model="model.asset_type"></AssetTypeSelectField>
             </Field>
             <InlineFieldGroup>
                 <InlineField label="Environment">
@@ -114,8 +103,8 @@ export default {
             <Field label="Description">
                 <MarkdownEditor v-model="model.description"></MarkdownEditor>
             </Field>
-            <Field v-for="customField in customFields" :label="customField.field.label">
-                <GenericCustomField v-model="customField.value" :custom-field="customField"></GenericCustomField>
+            <Field v-for="customField in customFields" :label="customField.label">
+                <GenericCustomField v-model="model['custom_' + customField.name].value" :custom-field="customField"></GenericCustomField>
             </Field>
         </Form>
     </ModalDialog>

@@ -5,7 +5,7 @@ import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import ModalDialog from '@/components/common/ModalDialog.vue';
 import TechnologyMultiSelectField from '@/components/forms/fields/TechnologyMultiSelectField.vue';
 import AssetTypeSelectField from '@/components/forms/fields/AssetTypeSelectField.vue';
-import GenericCustomField from '@/components/common/GenericCustomField.vue';
+import GenericCustomField from "@/components/common/GenericCustomField.vue";
 
 export default {
     name: 'AssetCreateDialog',
@@ -20,7 +20,6 @@ export default {
                 name: null,
                 environment: 'Unknown',
                 accessible: 'Unknown',
-                asset_type: null,
                 description: '',
                 technologies: []
             }
@@ -30,13 +29,7 @@ export default {
         open() {
             this.customFields = [];
             this.showDialog = true;
-        },
-        loadAssetTypes() {
-            if (!this.model.asset_type) {
-                this.customFields = [];
-                return;
-            }
-            this.$api.get(this.$api.e.pAssetCustomFieldList, { pPk: this.projectId }, { asset_type: this.model.asset_type }).then((response) => {
+            this.$api.get(this.$api.e.pAssetCustomFieldList, { pPk: this.projectId }, { limit: 200 }).then((response) => {
                 this.customFields = response.data.results;
             });
         },
@@ -80,7 +73,7 @@ export default {
                 <InputText id="name" type="text" v-model="model.name"></InputText>
             </Field>
             <Field label="Asset Type">
-                <AssetTypeSelectField v-model="model.asset_type" @update:model-value="loadAssetTypes"></AssetTypeSelectField>
+                <AssetTypeSelectField v-model="model.asset_type"></AssetTypeSelectField>
             </Field>
             <InlineFieldGroup>
                 <InlineField label="Environment">

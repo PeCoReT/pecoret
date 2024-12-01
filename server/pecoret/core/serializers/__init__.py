@@ -9,6 +9,7 @@ from rest_framework import serializers
 
 from backend.models.company import Company
 from backend.models.finding import ProjectVulnerability
+from backend.models.membership import Roles
 from backend.models.vulnerability import VulnerabilityTemplate
 
 
@@ -96,6 +97,25 @@ class ProjectFilteredPrimaryKeyRelatedField(PrimaryKeyRelatedField):
     def get_queryset(self):
         return self.serializer.Meta.model.objects.for_project(
             self.context["request"].project
+        )
+
+
+class NonDraftAdvisoryPrimaryKeyRelatedField(PrimaryKeyRelatedField):
+    def get_queryset(self):
+        return self.serializer.Meta.model.objects.for_advisory_management()
+
+
+class ReportAuthorRelatedField(PrimaryKeyRelatedField):
+    # required to only allow defined roles as report authors
+    def get_queryset(self):
+        allowed_author_roles = [Roles.PROJECT_LEADER, Roles.CONTRIBUTOR, Roles.OWNER]
+        return (
+            super()
+            .get_queryset()
+            .filter(
+                membership__role__in=allowed_author_roles,
+                membership__project=self.context["request"].project,
+            )
         )
 
 

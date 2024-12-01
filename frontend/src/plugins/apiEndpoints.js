@@ -38,7 +38,7 @@ const endpoints = {
 
     pAssetList: '/projects/{pPk}/assets/',
     pAssetDetail: '/projects/{pPk}/assets/{pk}/',
-    pAssetCustomFieldList: '/custom-fields-asset/',
+    pAssetCustomFieldList: '/projects/{pPk}/assets/custom_fields/',
 
     // project checklists
     pChecklistList: '/projects/{projectPk}/checklists/',

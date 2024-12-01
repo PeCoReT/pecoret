@@ -7,7 +7,7 @@ export default {
             required: true
         },
         clear: {
-            default: false
+            default: true
         }
     },
     emits: ['update:modelValue'],
