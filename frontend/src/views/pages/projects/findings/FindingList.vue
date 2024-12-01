@@ -6,6 +6,7 @@ import FindingCreateDialog from '@/components/dialogs/FindingCreateDialog.vue';
 import FindingBulkEditDialog from '@/components/projects/findings/FindingBulkEditDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
+import { useListViewComposable } from '@/composables/listViewComposable';
 
 export default {
     name: 'FindingList',
@@ -22,27 +23,24 @@ export default {
             ],
             filters: {
                 needs_review: { value: null },
-                component: { value: null }
+                asset: { value: null }
             },
-            filterAsset: null,
             projectId: this.$route.params.projectId,
             findings: [],
             selectedItems: [],
             deleteButtonLoading: false,
             loading: false,
             totalRecords: 0,
+            listComposable: useListViewComposable(),
             pagination: { page: 1, limit: 20 }
         };
     },
     methods: {
-        getFindings() {
+        getFindings(params) {
             this.loading = true;
-            let params = {
-                limit: this.pagination.limit,
-                page: this.pagination.page
-            };
+            let data = this.listComposable.buildParams(this.pagination, this.filters, params);
             this.$api
-                .get(this.$api.e.pFindingList, { pPk: this.projectId }, params)
+                .get(this.$api.e.pFindingList, { pPk: this.projectId }, data)
                 .then((response) => {
                     this.totalRecords = response.data.count;
                     this.findings = response.data.results;
@@ -56,20 +54,10 @@ export default {
         onFilter(event) {
             this.loading = true;
             let params = {
-                needs_review: event.filters.needs_review.value
+                needs_review: event.filters.needs_review.value,
+                asset: event.filters.asset.value
             };
-            if (event.filters.component.value !== null) {
-                params[event.filters.component.value.type] = event.filters.component.value.pk;
-            }
-            this.$api
-                .get(this.$api.e.pFindingList, { pPk: this.projectId }, params)
-                .then((response) => {
-                    this.totalRecords = response.data.count;
-                    this.findings = response.data.results;
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
+            this.getFindings(params);
         },
         onPage(event) {
             this.pagination.page = event.page + 1;
@@ -180,9 +168,9 @@ export default {
                         <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>
                     </template>
                 </Column>
-                <Column field="component.display_name" filterField="component" header="Asset" :showFilterMatchModes="false">
+                <Column field="asset.name" filterField="asset" header="Asset" :showFilterMatchModes="false">
                     <template #filter="{ filterModel }">
-                        <AssetSelectField v-model="filterModel.value"></AssetSelectField>
+                        <AssetSelectField v-model="filterModel.value" :project-pk="this.projectId"></AssetSelectField>
                     </template>
                 </Column>
                 <Column field="vulnerability.name" header="Vulnerability"></Column>

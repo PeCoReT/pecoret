@@ -5,3 +5,5 @@ from backend import models
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.PentestType)
 admin.site.register(models.AssetType)
+admin.site.register(models.CustomFieldAsset)
+admin.site.register(models.Asset)

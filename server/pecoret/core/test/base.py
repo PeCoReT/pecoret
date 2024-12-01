@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 
 from advisories.models import advisory
 from backend.models import (
-    User, Project, Membership, WebApplication,
+    User, Project, Membership, Asset,
     Finding
 )
 from backend.models.api_token import APIToken, AccessChoices
@@ -50,8 +50,8 @@ class PeCoReTTestCaseMixin:
         self.superuser = self.create_user("superuser", "changeme", is_superuser=True, is_staff=True)
 
         # assets
-        self.asset1 = self.create_instance(WebApplication, project=self.project1)
-        self.asset2 = self.create_instance(WebApplication, project=self.project2)
+        self.asset1 = self.create_instance(Asset, project=self.project1)
+        self.asset2 = self.create_instance(Asset, project=self.project2)
         self.init_advisory_users()
 
     def set_token_header(self, token):
@@ -113,8 +113,6 @@ class PeCoReTTestCaseMixin:
         return G(obj_class, **kwargs)
 
     def create_finding(self, **kwargs):
-        kwargs["component_object_id"] = kwargs["component"].pk
-        kwargs["component_content_type"] = self.get_content_type_for_model(kwargs["component"])
         return self.create_instance(Finding, **kwargs)
 
     def create_asset_checklist(self, **kwargs):

@@ -8,6 +8,7 @@ from django.conf import settings
 from matplotlib.ticker import MaxNLocator
 
 from backend import models
+from backend.models import AssetType
 from backend.models.vulnerability import Severity
 from pecoret.reporting.components.chart import Chart
 from pecoret.reporting.template import errors
@@ -69,11 +70,6 @@ class ReportTemplate(mixins.SingleFindingMixin, mixins.AdvisoryMixin, mixins.Pen
     attack_surface_finding_sections = [
         'attack_surface/cover.html', 'attack_surface/single.html'
     ]
-    project_report_asset_classes = [
-        models.Host, models.WebApplication,
-        models.ThickClient, models.MobileApplication,
-        models.GenericAsset
-    ]
 
     def get_context(self, **kwargs):
         context = super().get_context(**kwargs)
@@ -99,6 +95,7 @@ class ReportTemplate(mixins.SingleFindingMixin, mixins.AdvisoryMixin, mixins.Pen
             pk__in=findings.values('vulnerability'))
         context['vulnerabilities'] = vulnerabilities
         context['findings'] = findings
+        context['asset_types'] = AssetType.objects.all()
         context['settings'] = {
             'SITE_NAME': settings.SITE_NAME,
             # legacy. TODO: deprecate
@@ -113,14 +110,17 @@ class ReportTemplate(mixins.SingleFindingMixin, mixins.AdvisoryMixin, mixins.Pen
         context['report_errors'] = self.get_errors()
         return context
 
-    def get_assets(self, project):
-        assets = []
-        for asset_class in self.project_report_asset_classes:
-            assets += list(asset_class.objects.for_project(project))
-        return assets
-
     def get_findings_count_for_asset(self, asset, severity=None):
-        qs = asset.findings.exclude(exclude_from_report=True)
+        qs = asset.finding_set.exclude(exclude_from_report=True)
         if severity:
             qs = qs.filter(severity=Severity[severity].value)
         return qs.count()
+
+    def get_asset_type_logo(self, asset_type):
+        if asset_type.name == 'Web Application':
+            return "web_application"
+        elif asset_type.name == 'Mobile Application':
+            return 'mobile_application'
+        elif asset_type.name == 'Thick Client':
+            return 'thick_client'
+        return 'generic'

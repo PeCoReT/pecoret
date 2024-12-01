@@ -43,53 +43,12 @@ export default {
                 {
                     label: 'Assets',
                     icon: 'fa fa-crosshairs',
-                    items: [
-                        {
-                            label: 'Web Applications',
-                            route: this.$router.resolve({
-                                name: 'WebApplicationList',
-                                params: {
-                                    projectId: this.$route.params.projectId
-                                }
-                            }).path
-                        },
-                        {
-                            label: 'Hosts',
-                            route: this.$router.resolve({
-                                name: 'HostList',
-                                params: {
-                                    projectId: this.$route.params.projectId
-                                }
-                            }).path
-                        },
-                        {
-                            label: 'Mobile Applications',
-                            route: this.$router.resolve({
-                                name: 'MobileApplicationList',
-                                params: {
-                                    projectId: this.$route.params.projectId
-                                }
-                            })
-                        },
-                        {
-                            label: 'Thick Clients',
-                            route: this.$router.resolve({
-                                name: 'ThickClientList',
-                                params: {
-                                    projectId: this.$route.params.projectId
-                                }
-                            })
-                        },
-                        {
-                            label: 'Generic',
-                            route: this.$router.resolve({
-                                name: 'GenericAssetList',
-                                params: {
-                                    projectId: this.$route.params.projectId
-                                }
-                            })
+                    route: this.$router.resolve({
+                        name: 'AssetList',
+                        params: {
+                            projectId: this.$route.params.projectId
                         }
-                    ]
+                    })
                 },
                 {
                     label: 'Reports',

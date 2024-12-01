@@ -13,7 +13,7 @@
         </thead>
         <tbody>
         <tr>
-            <td>{{ finding.component }}</td>
+            <td>{{ finding.asset.name }}</td>
             <td class="text-{{ finding.get_severity_display().lower() }}">
                 <strong>{{ finding.get_severity_display()|dynamic_trans }}</strong></td>
             <td>{{ finding.finding_date.strftime("%B %d, %Y") }}</td>

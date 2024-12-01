@@ -1,14 +1,16 @@
 from collections import OrderedDict
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Subquery
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from generic_relations.relations import GenericRelatedField
 from rest_framework import serializers
+
+from backend.models.company import Company
 from backend.models.finding import ProjectVulnerability
 from backend.models.membership import Roles
 from backend.models.vulnerability import VulnerabilityTemplate
-from backend.models.company import Company
 
 
 class ValuedChoiceField(serializers.ChoiceField):
@@ -80,25 +82,6 @@ class PrimaryKeyRelatedField(serializers.RelatedField):
             self.pk_field.fail("does_not_exist", pk_value=data)
         except (TypeError, ValueError):
             self.pk_field.fail("incorrect_type", data_type=type(data).__name__)
-
-
-class AssetGenericRelatedField(GenericRelatedField):
-    default_error_messages = {
-        "does_not_exist": 'object does not exist.',
-        'malformed': 'component is malformed. "type" and "pk" fields are required.',
-        'incorrect_value': 'value is incorrect.'
-    }
-
-    def to_internal_value(self, data):
-        if "type" not in data or "pk" not in data:
-            self.fail("malformed")
-        for serializer in self.serializers.keys():
-            if serializer.asset_type == data["type"]:
-                try:
-                    return serializer.objects.for_project(self.context['request'].project).get(pk=data["pk"])
-                except ObjectDoesNotExist:
-                    self.fail("does_not_exist")
-        self.fail("incorrect_value")
 
 
 class ObjectLockRelatedField(GenericRelatedField):

@@ -1,22 +1,16 @@
 from rest_framework import serializers
-from backend.models import ProjectVulnerability
-from backend.models import WebApplication, Host, Service, MobileApplication, ThickClient, GenericAsset
-from backend.models.finding import Finding, Severity, FindingStatus
-from backend.api.serializers.assets.web_application import WebApplicationSerializer
-from backend.api.serializers.assets.host import HostSerializer
-from backend.api.serializers.assets.thick_client import ThickClientSerializer
-from backend.api.serializers.assets.service import MinimalServiceSerializer
-from backend.api.serializers.assets.mobile_application import MobileApplicationSerializer
-from backend.api.serializers.assets.generic import GenericAssetSerializer
+
 from backend.api.serializers.fields.technology import TechnologyField
+from backend.models import ProjectVulnerability
+from backend.models.finding import Finding, Severity, FindingStatus
 from pecoret.core.serializers import (
     ValuedChoiceField,
-    AssetGenericRelatedField,
     ProjectVulnerabilityIdField,
     ProjectFilteredPrimaryKeyRelatedField
 )
-from .vulnerability import ProjectVulnerabilitySerializer
 from .account import AccountSerializer
+from .asset import AssetSerializer
+from .vulnerability import ProjectVulnerabilitySerializer
 
 
 class FindingSerializer(serializers.ModelSerializer):
@@ -30,14 +24,7 @@ class FindingSerializer(serializers.ModelSerializer):
         required=False, allow_empty=True, allow_null=True, serializer=AccountSerializer
     )
     authentication_required = serializers.BooleanField(read_only=True)
-    component = AssetGenericRelatedField({
-        WebApplication: WebApplicationSerializer(),
-        Host: HostSerializer(),
-        Service: MinimalServiceSerializer(),
-        MobileApplication: MobileApplicationSerializer(),
-        ThickClient: ThickClientSerializer(),
-        GenericAsset: GenericAssetSerializer()
-    })
+    asset = ProjectFilteredPrimaryKeyRelatedField(required=True, serializer=AssetSerializer)
 
     class Meta:
         model = Finding
@@ -62,8 +49,9 @@ class FindingSerializer(serializers.ModelSerializer):
             "retest_results",
             "date_retest",
             "exclude_from_report",
-            "component",
-            "proof_text"
+            "asset",
+            "proof_text",
+            "entrypoint"
         ]
 
 
@@ -81,7 +69,7 @@ class FindingCopySerializer(FindingSerializer):
             "severity",
             "status",
             "needs_review",
-            "component",
+            "asset",
             "vulnerability_id",
         ]
 

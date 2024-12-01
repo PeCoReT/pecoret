@@ -10,18 +10,14 @@ class FindingTimelineListView(APITestCase, PeCoReTTestCaseMixin):
             FindingTimeline,
             finding__user=self.pentester1,
             finding__vulnerability__project=self.project1,
-            finding__component=self.asset1,
-            finding__component_object_id=self.asset1.pk,
-            finding__component_content_type=self.get_content_type_for_model(self.asset1.__class__),
+            finding__asset=self.asset1,
             finding__project=self.project1,
         )
         self.timeline2 = self.create_instance(
             FindingTimeline,
             finding__user=self.pentester2,
             finding__vulnerability__project=self.project2,
-            finding__component=self.asset2,
-            finding__component_object_id=self.asset2.pk,
-            finding__component_content_type=self.get_content_type_for_model(self.asset2.__class__),
+            finding__asset=self.asset2,
             finding__project=self.project2,
         )
         self.url = self.get_url(

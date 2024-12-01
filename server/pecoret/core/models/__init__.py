@@ -1,6 +1,5 @@
 from django.db import models
 from backend.models import User
-from .assets import AssetRelatedModel
 
 
 class PeCoReTBaseModel(models.Model):

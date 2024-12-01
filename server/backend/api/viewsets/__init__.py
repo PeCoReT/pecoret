@@ -23,3 +23,5 @@ from .project_command import ProjectCommandViewSet
 from .project_scope import ProjectScopeViewSet
 from .project_note import ProjectNoteViewSet
 from .technology import TechnologyViewSet
+from .asset_type import AssetTypeViewSet
+from .asset import AssetViewSet

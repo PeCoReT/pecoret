@@ -10,7 +10,7 @@ class FindingCommentListView(APITestCase, PeCoReTTestCaseMixin):
             user=self.pentester1,
             vulnerability__project=self.project1,
             project=self.project1,
-            component=self.asset1
+            asset=self.asset1
         )
         self.comment1 = self.create_instance(
             FindingComment,
@@ -20,7 +20,7 @@ class FindingCommentListView(APITestCase, PeCoReTTestCaseMixin):
             user=self.pentester2,
             vulnerability__project=self.project2,
             project=self.project2,
-            component=self.asset2
+            asset=self.asset2
         )
 
         self.comment2 = self.create_instance(
@@ -60,13 +60,13 @@ class FindingCommentCreateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.finding1 = self.create_finding(
-            component=self.asset1,
+            asset=self.asset1,
             vulnerability__project=self.project1,
             project=self.project1,
             user=self.pentester1,
         )
         self.finding2 = self.create_finding(
-            component=self.asset2,
+            asset=self.asset2,
             vulnerability__project=self.project2,
             project=self.project2,
             user=self.pentester2,
@@ -115,7 +115,7 @@ class FindingCommentDestroyView(APITestCase, PeCoReTTestCaseMixin):
         self.finding1 = self.create_finding(
             user=self.pentester1,
             vulnerability__project=self.project1,
-            component=self.asset1,
+            asset=self.asset1,
             project=self.project1
         )
         self.comment1 = self.create_instance(
@@ -151,13 +151,13 @@ class FindingCommentUpdateView(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
         self.finding1 = self.create_finding(
-            component=self.asset1,
+            asset=self.asset1,
             vulnerability__project=self.project1,
             project=self.project1,
             user=self.pentester1,
         )
         self.finding2 = self.create_finding(
-            component=self.asset2,
+            asset=self.asset2,
             vulnerability__project=self.project2,
             project=self.project2,
             user=self.pentester2,

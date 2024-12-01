@@ -17,13 +17,13 @@ class FindingListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.finding1 = self.create_finding(
             project=self.project1,
             vulnerability__project=self.project1,
-            component=self.asset1,
+            asset=self.asset1,
             user=self.pentester1,
         )
         self.finding2 = self.create_finding(
             project=self.project2,
             vulnerability__project=self.project2,
-            component=self.asset2,
+            asset=self.asset2,
             user=self.pentester2,
         )
         self.url = self.get_url("api:backend:finding-list", project=self.project1.pk)
@@ -60,14 +60,14 @@ class FindingListViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_filter_component_valid(self):
         self.client.force_login(self.pentester1)
-        self.url = f"{self.url}?{self.asset1.asset_type}={self.asset1.pk}"
+        self.url = f"{self.url}?asset={self.asset1.pk}"
         response = self.client.get(self.url)
         self.assertEqual(response.json()["count"], 1)
         self.assertEqual(response.json()["results"][0]["pk"], self.finding1.pk)
 
     def test_filter_component_invalid(self):
         self.client.force_login(self.pentester1)
-        self.url = f"{self.url}?{self.asset2.asset_type}={self.asset2.pk}"
+        self.url = f"{self.url}?asset={self.asset2.pk}"
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 400)
 
@@ -84,7 +84,7 @@ class FindingCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             "recommendation": "",
             "proof_text": "test",
             "imported": False,
-            "component": {"type": "web_application", "pk": self.asset1.pk},
+            "asset": self.asset1.pk,
             "vulnerability_id": "path-traversal",
         }
         self.pentester1.usersettings.notify_critical_findings = True
@@ -110,7 +110,7 @@ class FindingCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
 
     def test_foreign_asset(self):
         data = self.data
-        data["component"]["pk"] = self.asset2.pk
+        data["asset"] = self.asset2.pk
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(self.url, self.client.post, 400, data=self.data)
 
@@ -130,13 +130,13 @@ class FindingUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.finding1 = self.create_finding(
             project=self.project1,
             vulnerability__project=self.project1,
-            component=self.asset1,
+            asset=self.asset1,
             user=self.pentester1,
         )
         self.finding2 = self.create_finding(
             project=self.project2,
             vulnerability__project=self.project2,
-            component=self.asset2,
+            asset=self.asset2,
             user=self.pentester2,
         )
         self.url = self.get_url(
@@ -183,7 +183,7 @@ class FindingDestroyViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.finding1 = self.create_finding(
             project=self.project1,
             vulnerability__project=self.project1,
-            component=self.asset1,
+            asset=self.asset1,
             user=self.pentester1,
         )
         self.url = self.get_url(
@@ -216,7 +216,7 @@ class FindingAsAdvisoryView(APITestCase, PeCoReTTestCaseMixin):
         )
         self.finding1 = self.create_finding(
             project=self.project1,
-            component=self.asset1,
+            asset=self.asset1,
             user=self.pentester1,
             vulnerability=self.project_vulnerability,
         )
@@ -268,7 +268,7 @@ class FindingPDFExportView(APITestCase, PeCoReTTestCaseMixin):
         )
         self.finding1 = self.create_finding(
             project=self.project1,
-            component=self.asset1,
+            asset=self.asset1,
             user=self.pentester1,
             vulnerability=self.project_vulnerability,
         )

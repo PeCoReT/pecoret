@@ -19,7 +19,7 @@ export default {
             model: {
                 vulnerability: null,
                 severity: null,
-                component: null,
+                asset: null,
                 authentication_required: false,
                 user_account: null,
                 name: null
@@ -46,7 +46,7 @@ export default {
         create() {
             this.loading = true;
             let data = {
-                component: this.model.component,
+                asset: this.model.asset,
                 severity: this.model.severity,
                 name: this.model.name,
                 status: 'Open',
@@ -91,7 +91,9 @@ export default {
             <Field label="Severity">
                 <SeveritySelectField v-model="model.severity"></SeveritySelectField>
             </Field>
-            <AssetSelectField v-model="model.component"></AssetSelectField>
+            <Field label="Asset">
+                <AssetSelectField v-model="model.asset" :projectPk="this.projectId"></AssetSelectField>
+            </Field>
             <Field label="Account">
                 <Select :options="userAccountChoices" @focus="onUserAccountFocus" optionLabel="username" v-model="model.user_account"></Select>
             </Field>

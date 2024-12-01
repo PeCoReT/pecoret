@@ -39,7 +39,8 @@ export default {
             let data = {
                 exclude_from_report: this.model.exclude_from_report,
                 name: this.model.name,
-                recommendation: this.model.recommendation
+                recommendation: this.model.recommendation,
+                entrypoint: this.model.entrypoint
             };
             if (this.model.user_account) {
                 data['user_account'] = this.model.user_account.pk;
@@ -84,6 +85,9 @@ export default {
         <Form>
             <Field label="Name">
                 <InputText id="name" type="text" v-model="model.name" label="Name"></InputText>
+            </Field>
+            <Field label="Entrypoint">
+                <InputText type="text" v-model="model.entrypoint"></InputText>
             </Field>
             <Field label="Account">
                 <Select :options="userAccountChoices" @focus="onUserAccountFocus" optionLabel="username" v-model="model.user_account" show-clear></Select>

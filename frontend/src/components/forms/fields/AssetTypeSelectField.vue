@@ -1,11 +1,9 @@
 <script>
+
 export default {
-    name: 'AssetSelectField',
+    name: 'AssetTypeSelectField',
     props: {
         modelValue: {
-            required: true
-        },
-        projectPk: {
             required: true
         },
         clear: {
@@ -26,7 +24,7 @@ export default {
             }
         },
         getItems(params) {
-            this.$api.get(this.$api.e.pAssetList, { pPk: this.projectPk }, params).then((response) => {
+            this.$api.get(this.$api.e.assetTypeList, null, params).then((response) => {
                 this.items = response.data.results;
             });
         },

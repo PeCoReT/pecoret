@@ -1,12 +1,9 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from backend.api.viewsets import assets as asset_viewsets
-from . import viewsets
 from . import views
-
+from . import viewsets
 
 app_name = "backend"
-
 
 router = DefaultRouter()
 router.register('projects', viewsets.ProjectViewSet)
@@ -14,6 +11,12 @@ router.register(
     "vulnerability-templates",
     viewsets.VulnerabilityTemplateViewSet,
     "vulnerability-template",
+)
+
+router.register(
+    'asset-types',
+    viewsets.AssetTypeViewSet,
+    'asset-type'
 )
 
 router.register("companies", viewsets.CompanyViewSet, "company")
@@ -35,16 +38,8 @@ project_router = DefaultRouter()
 project_router.register(
     "vulnerabilities", viewsets.ProjectVulnerabilityViewSet, "vulnerability"
 )
-project_router.register(
-    "web-applications", asset_viewsets.WebApplicationViewSet, "web-application"
-)
-project_router.register("hosts", asset_viewsets.HostViewSet, "host")
-project_router.register("services", asset_viewsets.ServiceViewSet, "service")
-project_router.register(
-    "mobile-applications", asset_viewsets.MobileApplicationViewSet, "mobile-application"
-)
-project_router.register("thick-clients", asset_viewsets.ThickClientViewSet, "thick-client")
-project_router.register('generic-assets', asset_viewsets.GenericAssetViewSet, 'generic-asset')
+
+project_router.register('assets', viewsets.AssetViewSet, 'asset')
 
 project_router.register("findings", viewsets.FindingViewSet, "finding")
 project_router.register("accounts", viewsets.AccountViewSet, "account")
@@ -58,13 +53,11 @@ project_router.register("commands", viewsets.ProjectCommandViewSet, "command")
 project_router.register("scopes", viewsets.ProjectScopeViewSet, "scope")
 project_router.register('notes', viewsets.ProjectNoteViewSet, 'note')
 
-
 # finding routes
 finding_router = DefaultRouter()
 finding_router.register("timelines", viewsets.FindingTimelineViewSet, "timeline")
 finding_router.register("comments", viewsets.FindingCommentViewSet, "comment")
 finding_router.register("attachments", viewsets.FindingImageAttachmentViewSet, "attachment")
-
 
 # reports routes
 report_router = DefaultRouter()
@@ -74,7 +67,6 @@ report_router.register(
 report_router.register(
     "change-histories", viewsets.ChangeHistoryViewSet, "change-history"
 )
-
 
 urlpatterns = [
     path(
