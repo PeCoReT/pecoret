@@ -26,7 +26,7 @@
     "@vue/eslint-config-prettier": "^10.1.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.15.0",
-    "eslint-plugin-vue": "^9.30.0",
+    "eslint-plugin-vue": "^9.32.0",
     "postcss": "^8.4.49",
     "prettier": "^3.3.3",
     "sass": "^1.81.0",
