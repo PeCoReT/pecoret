@@ -10,6 +10,10 @@ export default {
         },
         clear: {
             default: true
+        },
+        placeholder: {
+            default: null,
+            required: false
         }
     },
     emits: ['update:modelValue'],
@@ -52,5 +56,5 @@ export default {
 </script>
 
 <template>
-    <Select @focus="onFocus" option-label="name" option-value="pk" v-model="model" :options="items" :show-clear="clear" @update:model-value="this.$emit('update:modelValue', this.model)" :filter="true" @filter="filter"></Select>
+    <Select :placeholder="placeholder" @focus="onFocus" option-label="name" option-value="pk" v-model="model" :options="items" :show-clear="clear" @update:model-value="this.$emit('update:modelValue', this.model)" :filter="true" @filter="filter"></Select>
 </template>

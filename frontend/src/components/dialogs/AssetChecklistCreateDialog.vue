@@ -14,7 +14,7 @@ export default {
             },
             loading: false,
             projectId: this.$route.params.projectId,
-            checklistChoices: [],
+            checklistChoices: []
         };
     },
     methods: {
@@ -23,7 +23,7 @@ export default {
         },
         create() {
             let data = {
-                component: this.model.asset,
+                asset: this.model.asset,
                 checklist_id: this.model.checklist
             };
             this.$api.post(this.$api.e.pChecklistList, { projectPk: this.projectId }, data).then((response) => {
@@ -60,7 +60,9 @@ export default {
 
     <ModalDialog v-model:loading="loading" header="New Checklist" v-model="showDialog" @onSave="create">
         <Form>
-            <AssetSelectField v-model="model.asset"></AssetSelectField>
+            <Field label="Asset">
+                <AssetSelectField v-model="model.asset" :project-pk="projectId"></AssetSelectField>
+            </Field>
             <Field label="Checklist">
                 <Select v-model="model.checklist" :options="checklistChoices" filter @focus="onFocusChecklist" @filter="onFilterChecklist" optionLabel="name" optionValue="checklist_id"></Select>
             </Field>

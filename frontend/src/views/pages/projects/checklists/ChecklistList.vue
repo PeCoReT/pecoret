@@ -57,10 +57,14 @@ export default {
         },
         loadAssetChecklists(params) {
             if (!params) {
-                params = {};
+                params = { asset: this.asset };
+            }
+            if (!this.asset) {
+                this.checklistChoices = [];
+                return;
             }
             if (this.asset && this.asset.pk) {
-                params[this.asset.type] = this.asset.pk;
+                params['asset'] = this.asset.pk;
             }
             this.$api.get(this.$api.e.pChecklistList, { projectPk: this.projectId }, params).then((response) => {
                 this.checklistChoices = response.data.results;
@@ -124,19 +128,15 @@ export default {
 </script>
 <template>
     <BaseLayout :breadcrumbs="breadcrumbs">
+        <template #pre-content-left>
+            <AssetSelectField v-model="asset" :displayInline="true" @update:model-value="onAssetChange" :project-pk="projectId" placeholder="Asset"></AssetSelectField>
+        </template>
         <template #pre-content-right>
             <div class="flex justify-end">
                 <AssetChecklistCreateDialog @object-created="loadAssetChecklists"></AssetChecklistCreateDialog>
             </div>
         </template>
 
-        <div class="col-span-12">
-            <Form>
-                <InlineFieldGroup>
-                    <AssetSelectField v-model="asset" :displayInline="true" @update:model-value="onAssetChange"></AssetSelectField>
-                </InlineFieldGroup>
-            </Form>
-        </div>
         <div class="flex card col-span-12 gap-3">
             <!-- Left Sidebar - Checklists -->
             <div class="w-full md:w-1/5 p-4 shadow-md overflow-y-auto border-r border-gray-700">
@@ -149,7 +149,7 @@ export default {
                 <div class="mb-4">
                     <Form>
                         <Field>
-                            <InputText v-model="searchChecklist" placeholder="Search checklists" @update:modelValue="doChecklistSearch" :disabled="!this.asset"></InputText>
+                            <InputText v-model="searchChecklist" placeholder="Search checklists" @update:modelValue="doChecklistSearch" :disabled="!this.checklistChoices || this.checklistChoices.length < 1"></InputText>
                         </Field>
                     </Form>
                 </div>
@@ -173,7 +173,7 @@ export default {
                 <div class="mb-4">
                     <Form>
                         <Field>
-                            <InputText v-model="searchCategories" placeholder="Search categories" :disabled="!this.asset"></InputText>
+                            <InputText v-model="searchCategories" placeholder="Search categories" :disabled="!this.checklistChoices || this.checklistChoices.length < 1"></InputText>
                         </Field>
                     </Form>
                 </div>
