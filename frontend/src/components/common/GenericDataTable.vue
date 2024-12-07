@@ -59,7 +59,8 @@ export default {
         return {
             items: this.modelValue,
             filterModel: this.filters,
-            selectedItems: this.selection
+            selectedItems: this.selection,
+            searchInput: null
         };
     },
     methods: {
@@ -146,10 +147,10 @@ export default {
                 <div class="flex flex-row">
                     <div class="flex-none pl-0">
                         <div v-if="showSearch === true">
-                            <IconField iconPosition="left">
-                                <InputIcon class="fa fa-search"></InputIcon>
-                                <InputText @update:modelValue="onSearch" placeholder="Keyword Search" style="width: 100%" />
-                            </IconField>
+                            <InputGroup>
+                                <InputText v-model="searchInput" placeholder="Keyword Search" style="width: 100%" v-on:keyup.enter="onSearch(searchInput)" />
+                                <Button icon="fa fa-search" severity="secondary" outlined @click="onSearch(searchInput)"></Button>
+                            </InputGroup>
                         </div>
                     </div>
                     <div class="flex-none my-auto min-h-max">
@@ -165,8 +166,6 @@ export default {
             </slot>
         </template>
         <slot></slot>
-        <template #footer>
-            Total {{totalRecords}} items.
-        </template>
+        <template #footer> Total {{ totalRecords }} items. </template>
     </DataTable>
 </template>
