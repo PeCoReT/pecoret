@@ -34,12 +34,12 @@ export default {
                 this.customFields = [];
                 return;
             }
-            this.customFields = []
+            this.customFields = [];
             this.$api.get(this.$api.e.pAssetCustomFieldList, { pPk: this.projectId }, { asset_type: this.model.asset_type }).then((response) => {
-                for(let i = 0; i<response.data.results.length;i++){
+                for (let i = 0; i < response.data.results.length; i++) {
                     this.customFields.push({
                         field: response.data.results[i]
-                    })
+                    });
                 }
             });
         },
@@ -52,11 +52,10 @@ export default {
             if (this.model.asset_type && this.model.asset_type.pk) {
                 delete data.asset_type;
             }
-            Object.keys(this.model).forEach((key) => {
-                if (key.startsWith('custom_') === true) {
-                    data[key] = this.model[key].value;
-                }
-            });
+            for (let i = 0; i < this.customFields.length; i++) {
+                let key = `custom_${this.customFields[i].field.name}`;
+                data[key] = this.customFields[i].value;
+            }
             this.$api
                 .patch(this.$api.e.pAssetDetail, { pPk: this.projectId, pk: this.asset.pk }, data)
                 .then(() => {
@@ -74,6 +73,7 @@ export default {
             deep: true,
             handler(value) {
                 this.model = value;
+                this.customFields = this.model.custom_fields;
             }
         }
     },

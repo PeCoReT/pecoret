@@ -23,7 +23,7 @@ class BaseAssetQuerySet(models.QuerySet):
         return self.filter(project=project)
 
 
-class BaseAsset(PeCoReTBaseModel):
+class Asset(PeCoReTBaseModel):
     objects = BaseAssetQuerySet.as_manager()
     project = models.ForeignKey("backend.Project", on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -36,17 +36,6 @@ class BaseAsset(PeCoReTBaseModel):
         choices=Environment.choices, default=Environment.UNKNOWN
     )
     technologies = models.ManyToManyField('backend.Technology', blank=True)
-
-    class Meta:
-        abstract = True
-
-    @property
-    def display_name(self) -> str:
-        return str(self)
-
-
-class Asset(BaseAsset):
-    custom_fields = None
     name = models.CharField(max_length=255)
     asset_type = models.ForeignKey('AssetType', on_delete=models.PROTECT)
 
@@ -56,3 +45,15 @@ class Asset(BaseAsset):
 
     def __str__(self):
         return self.name
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.old_asset_type_pk = self.asset_type.pk
+        print(self.asset_type)
+
+    def save(self, *args, **kwargs):
+        print("new")
+        print(self.asset_type)
+        if self.old_asset_type_pk != self.asset_type.pk:
+            self.customfieldassetvalue_set.all().delete()
+        return super().save(*args, **kwargs)

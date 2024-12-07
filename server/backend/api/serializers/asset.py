@@ -90,10 +90,11 @@ class AssetSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         custom_fields = {}
+        # we have a PATCH and no change in asset type
         if not validated_data.get('asset_type'):
             asset_type = instance.asset_type
         else:
-            asset_type = instance.asset_type
+            asset_type = validated_data['asset_type']
         for field in CustomFieldAsset.objects.for_asset_type(asset_type):
             if f'custom_{field.name}' in validated_data.keys():
                 custom_fields[field.pk] = validated_data.pop(f'custom_{field.name}', None)
