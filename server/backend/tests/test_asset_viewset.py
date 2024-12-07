@@ -34,6 +34,7 @@ class AssetCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.url = self.get_url("api:backend:asset-list", project=self.project1.pk)
         self.asset_type = self.create_instance(AssetType)
+        self.asset_type2 = self.create_instance(AssetType)
         self.data = {"name": "testcreateview", "asset_type": self.asset_type.pk,
                      "environment": Environment.UNKNOWN.label, "accessible": AssetAccessibility.UNKNOWN.label}
 
@@ -54,9 +55,12 @@ class AssetCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
             self.basic_status_code_check(self.url, self.client.post, 403, data=self.data)
 
     def test_custom_field_create(self):
+        # test if fields are validated correctly and are required for this asset type
         self.custom_field = self.create_instance(CustomFieldAsset,
                                                  name="testcreatefield",
                                                  field_type=CustomFieldAsset.get_field_type_choices().URL)
+        self.custom_field.asset_types.add(self.asset_type)
+        self.custom_field.save()
         self.data["custom_testcreatefield"] = "invalidurl"
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(self.url, self.client.post, 400, data=self.data)
@@ -65,6 +69,18 @@ class AssetCreateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         asset = Asset.objects.get(name="testcreateview")
         asset_value = CustomFieldAssetValue.objects.get(asset=asset, field=self.custom_field)
         self.assertEqual(asset_value.value, "http://127.0.0.1")
+
+    def test_custom_field_asset_type(self):
+        # test with invalid asset type validation, so no fields are set, when not configured for this asset type
+        self.custom_field = self.create_instance(CustomFieldAsset,
+                                                 name="testcreatefield",
+                                                 field_type=CustomFieldAsset.get_field_type_choices().URL)
+        self.custom_field.asset_types.clear()
+        self.client.force_login(self.pentester1)
+        self.data["custom_testcreatefield"] = "http://127.0.0.1"
+        self.basic_status_code_check(self.url, self.client.post, 201, data=self.data)
+        custom_field = CustomFieldAssetValue.objects.filter(field=self.custom_field)
+        self.assertEqual(len(custom_field), 0)
 
 
 class AssetUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
@@ -107,6 +123,8 @@ class AssetUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.custom_field = self.create_instance(CustomFieldAsset,
                                                  name="testupdatefield",
                                                  field_type=CustomFieldAsset.get_field_type_choices().URL)
+        self.custom_field.asset_types.add(self.asset1.asset_type)
+        self.custom_field.save()
         self.data["custom_testupdatefield"] = "invalidurl"
         self.client.force_login(self.pentester1)
         self.basic_status_code_check(self.url, self.client.patch, 400, data=self.data)
@@ -114,6 +132,19 @@ class AssetUpdateViewTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.basic_status_code_check(self.url, self.client.patch, 200, data=self.data)
         asset_value = CustomFieldAssetValue.objects.get(asset=self.asset1, field=self.custom_field)
         self.assertEqual(asset_value.value, "http://127.0.0.1")
+
+    def test_custom_field_asset_type(self):
+        # test with invalid asset type validation, so no fields are set, when not configured for this asset type
+        self.custom_field = self.create_instance(CustomFieldAsset,
+                                                 name="testcreatefield",
+                                                 field_type=CustomFieldAsset.get_field_type_choices().URL)
+        self.custom_field.asset_types.clear()
+        self.client.force_login(self.pentester1)
+        self.data["custom_testcreatefield"] = "http://127.0.0.1"
+        self.basic_status_code_check(self.url, self.client.patch, 200, data=self.data)
+        custom_field = CustomFieldAssetValue.objects.filter(field=self.custom_field)
+        self.assertEqual(len(custom_field), 0)
+
 
 
 class AssetDeleteViewTestCase(APITestCase, PeCoReTTestCaseMixin):
@@ -206,12 +237,12 @@ class APITokenWriteTestCase(APITestCase, PeCoReTTestCaseMixin):
 class CustomFieldAssetViewTestCase(APITestCase, PeCoReTTestCaseMixin):
     def setUp(self) -> None:
         self.init_mixin()
-        self.url = self.get_url("api:backend:asset-custom-fields", project=self.project1.pk)
+        self.url = self.get_url("api:backend:custom-field-asset-list")
         self.allowed_users = [
-            self.pentester1, self.management1, self.read_only1
+            self.pentester1, self.management1, self.read_only1, self.management2, self.pentester2
         ]
         self.forbidden_users = [
-            self.pentester2, self.management2, self.user1, self.customer1, self.customer2
+            self.user1, self.customer1, self.customer2
         ]
 
     def test_status_allowed(self):

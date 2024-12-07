@@ -1,10 +1,16 @@
 from django.db import models
 
-from core.custom_fields.models import CustomField, CustomFieldValue
+from core.custom_fields.models import CustomField, CustomFieldValue, CustomFieldQuerySet
+
+
+class CustomFieldAssetQuerySet(CustomFieldQuerySet):
+    def for_asset_type(self, asset_type):
+        return self.filter(asset_types=asset_type)
 
 
 class CustomFieldAsset(CustomField):
-    pass
+    objects = CustomFieldAssetQuerySet.as_manager()
+    asset_types = models.ManyToManyField('backend.AssetType', blank=True)
 
 
 class CustomFieldAssetValueQuerySet(models.QuerySet):
@@ -13,7 +19,6 @@ class CustomFieldAssetValueQuerySet(models.QuerySet):
 
     def for_asset(self, asset):
         return self.filter(asset=asset)
-
 
 class CustomFieldAssetValue(CustomFieldValue):
     objects = CustomFieldAssetValueQuerySet.as_manager()

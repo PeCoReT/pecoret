@@ -22,6 +22,7 @@ router.register(
 router.register("companies", viewsets.CompanyViewSet, "company")
 router.register("cwes", viewsets.CWEViewSet, "cwe")
 router.register('technologies', viewsets.TechnologyViewSet, 'technology')
+router.register('custom-fields-asset', viewsets.CustomFieldAssetViewSet, 'custom-field-asset')
 router.register("users", viewsets.UserViewSet, "user")
 router.register("groups", viewsets.GroupViewSet, "group")
 
