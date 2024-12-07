@@ -52,7 +52,7 @@ def migrate_components_to_assets(apps, schema_editor):
         for finding in Finding.objects.filter(component_content_type=ct, component_object_id=host.pk):
             finding.asset = asset
             finding.save()
-        for service in host.service_set.all():
+        for service in host.services.all():
             ct = ContentType.objects.get_for_model(service)
             for finding in Finding.objects.filter(component_content_type=ct, component_object_id=service.pk):
                 finding.asset = asset

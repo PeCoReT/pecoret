@@ -14,6 +14,6 @@ class AssetTypeViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     ]
     queryset = AssetType.objects.all()
     filterset_class = None
-    search_fields = ['name', 'label']
+    search_fields = ['name']
     api_scope = 'scope_knowledgebase'
     serializer_class = AssetTypeSerializer

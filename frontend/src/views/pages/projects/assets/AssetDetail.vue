@@ -13,8 +13,7 @@ export default {
         return {
             projectId: this.$route.params.projectId,
             assetId: this.$route.params.assetId,
-            model: { asset_type: {} },
-            customFields: [],
+            model: { asset_type: {}, custom_fields: [] },
             breadcrumbs: [
                 {
                     label: 'Assets',
@@ -33,19 +32,9 @@ export default {
         };
     },
     methods: {
-        getCustomFields() {
-            this.customFields = [];
-            Object.keys(this.model).forEach((key) => {
-                if (key.startsWith('custom_') === true) {
-                    this.customFields.push(this.model[key]);
-
-                }
-            });
-        },
         getItem() {
             this.$api.get(this.$api.e.pAssetDetail, { pPk: this.projectId, pk: this.assetId }).then((response) => {
                 this.model = response.data;
-                this.getCustomFields()
             });
         },
         renderMarkdown(text) {
@@ -108,13 +97,13 @@ export default {
                         </div>
                     </div>
                 </div>
-                <div class="grid mt-3 grid-cols-1" v-if="customFields.length > 0">
+                <div class="grid mt-3 grid-cols-1" v-if="model.custom_fields.length > 0">
                     <div class="col-span-1 bg-surface-950 card">
                         <h2 class="text-2xl font-semibold mb-4">Asset Information</h2>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Key-Value Pair 1 -->
-                            <div class="flex flex-col" v-for="customField in customFields">
+                            <div class="flex flex-col" v-for="customField in model.custom_fields">
                                 <span class="text-sm font-bold">{{ customField.field.label }}</span>
                                 <span class="text-lg ">{{ customField.value }}</span>
                             </div>
