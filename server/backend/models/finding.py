@@ -1,9 +1,6 @@
 import copy
 import re
-
 import cvss
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
 from django.core import validators
 from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
@@ -19,7 +16,6 @@ from backend.utils import cvss4
 from .cwe import CWE
 from .finding_timeline import FindingTimeline
 from .vulnerability import Severity, ProjectVulnerability
-
 
 CVSS_40_REGEX = (r'CVSS:4\.0\/AV:[N|A|L|P]\/AC:[L|H]\/AT:[N|P]\/PR:[N|L|H]\/UI:[N|P|A]\/VC:[H|L|N]\/'
                  r'VI:[H|L|N]\/VA:[H|L|N]\/SC:[H|L|N]\/SI:[H|L|N]\/SA:[H|L|N]')
@@ -104,13 +100,6 @@ class FindingManager(models.Manager):
 
 
 class Finding(models.Model):
-    component_choices = models.Q(app_label="backend", model="webapplication") | \
-                        models.Q(app_label="backend", model="service") | \
-                        models.Q(app_label="backend", model="host") | \
-                        models.Q(app_label="backend", model="mobileapplication") | \
-                        models.Q(app_label="backend", model="thickclient") | \
-                        models.Q(app_label="backend", model="genericasset")
-
     objects = FindingManager.from_queryset(FindingQuerySet)()
     project = models.ForeignKey(
         "backend.Project", editable=False, on_delete=models.CASCADE
@@ -139,12 +128,6 @@ class Finding(models.Model):
     date_retest = models.DateField(null=True, blank=True)
     retest_results = models.TextField(null=True, blank=True)
 
-    # affected components
-    component_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE,
-                                               limit_choices_to=component_choices)
-    component_object_id = models.PositiveSmallIntegerField()
-    component = GenericForeignKey('component_content_type', 'component_object_id')
-
     proof_text = models.TextField(default="", blank=True)
     cvss_score_40 = models.CharField(max_length=255, null=True, blank=True, validators=[validators.RegexValidator(
         regex=CVSS_40_REGEX
@@ -153,18 +136,19 @@ class Finding(models.Model):
         regex=CVSS_31_REGEX
     )])
     unique_id = models.CharField(max_length=16, blank=True)
+    asset = models.ForeignKey("backend.Asset", null=True, on_delete=models.CASCADE)
+    entrypoint = models.CharField(max_length=255, help_text="expected to be a URI",
+                                  null=True, blank=True,
+                                  validators=[validators.URLValidator()])
 
     class Meta:
         ordering = ["-severity"]
-        indexes = [
-            models.Index(fields=['component_content_type', 'component_object_id'])
-        ]
         unique_together = [
             ('unique_id', 'project')
         ]
 
     def __str__(self):
-        return f"{self.vulnerability.name} ({self.component})"
+        return f"{self.vulnerability.name} ({self.asset})"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -211,10 +195,10 @@ class Finding(models.Model):
         return unique_id
 
     def clean(self):
-        if not self.component:
-            raise ValidationError({'component': 'component is required'})
-        if self.component.project != self.project:
-            raise ValidationError({"component": "component does not belong to project"})
+        if not self.asset:
+            raise ValidationError({'asset': 'asset is required'})
+        if self.asset.project != self.project:
+            raise ValidationError({"asset": "asset does not belong to project"})
         return super().clean()
 
     @property
@@ -267,11 +251,6 @@ def finding_timeline_on_save(sender, instance, created, **kwargs):
 def notify_project_users_critical_finding(sender, instance, created, **kwargs):
     """
     notify users - with corresponding setting - when new critical finding is created
-    :param sender:
-    :param instance:
-    :param created:
-    :param kwargs:
-    :return:
     """
     if created:
         context = {

@@ -42,7 +42,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for asset in template.get_assets(project) %}
+            {% for asset in project.asset_set.all() %}
                 <tr>
                     <td>{{ asset }}</td>
                     <td>{{ template.get_findings_count_for_asset(asset, "CRITICAL") }}</td>

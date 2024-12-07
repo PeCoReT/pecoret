@@ -12,13 +12,13 @@ class ImageAttachmentListView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.finding1 = self.create_finding(
             project=self.project1,
-            component=self.asset1,
+            asset=self.asset1,
             user=self.pentester1,
             vulnerability__project=self.project1,
         )
         self.finding2 = self.create_finding(
             project=self.project2,
-            component=self.asset2,
+            asset=self.asset2,
             user=self.pentester2,
             vulnerability__project=self.project2,
         )
@@ -76,13 +76,13 @@ class AttachmentCreateView(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.finding1 = self.create_finding(
             project=self.project1,
-            component=self.asset1,
+            asset=self.asset1,
             user=self.pentester1,
             vulnerability__project=self.project1,
         )
         self.finding2 = self.create_finding(
             project=self.project2,
-            component=self.asset2,
+            asset=self.asset2,
             user=self.pentester2,
             vulnerability__project=self.project2,
         )
@@ -125,13 +125,13 @@ class ProofDestroyViewSetTestCase(APITestCase, PeCoReTTestCaseMixin):
         self.init_mixin()
         self.finding1 = self.create_finding(
             project=self.project1,
-            component=self.asset1,
+            asset=self.asset1,
             user=self.pentester1,
             vulnerability__project=self.project1,
         )
         self.finding2 = self.create_finding(
             project=self.project2,
-            component=self.asset2,
+            asset=self.asset2,
             user=self.pentester2,
             vulnerability__project=self.project2,
         )

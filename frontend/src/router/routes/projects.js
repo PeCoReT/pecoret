@@ -48,44 +48,14 @@ const projectRoutes = [
                         component: () => import('@/views/pages/projects/findings/TimelineList.vue')
                     },
                     {
-                        path: '/projects/:projectId/web-applications',
-                        name: 'WebApplicationList',
-                        component: () => import('@/views/pages/projects/assets/WebApplicationList.vue')
+                        path: '/projects/:projectId/assets',
+                        name: 'AssetList',
+                        component: () => import('@/views/pages/projects/assets/AssetList.vue')
                     },
                     {
-                        path: '/projects/:projectId/web-applications/:assetId',
-                        name: 'WebApplicationDetail',
-                        component: () => import('@/views/pages/projects/assets/WebApplicationDetail.vue')
-                    },
-                    {
-                        path: '/projects/:projectId/hosts',
-                        name: 'HostList',
-                        component: () => import('@/views/pages/projects/assets/HostList.vue')
-                    },
-                    {
-                        path: '/projects/:projectId/hosts/:assetId',
-                        name: 'HostDetail',
-                        component: () => import('@/views/pages/projects/assets/HostDetail.vue')
-                    },
-                    {
-                        path: '/projects/:projectId/mobile-applications',
-                        name: 'MobileApplicationList',
-                        component: () => import('@/views/pages/projects/assets/MobileApplicationList.vue')
-                    },
-                    {
-                        path: '/projects/:projectId/mobile-applications/:assetId',
-                        name: 'MobileApplicationDetail',
-                        component: () => import('@/views/pages/projects/assets/MobileApplicationDetail.vue')
-                    },
-                    {
-                        path: '/projects/:projectId/thick-clients',
-                        name: 'ThickClientList',
-                        component: () => import('@/views/pages/projects/assets/ThickClientList.vue')
-                    },
-                    {
-                        path: '/projects/:projectId/thick-clients/:assetId',
-                        name: 'ThickClientDetail',
-                        component: () => import('@/views/pages/projects/assets/ThickClientDetail.vue')
+                        path: '/projects/:projectId/assets/:assetId',
+                        name: 'AssetDetail',
+                        component: () => import('@/views/pages/projects/assets/AssetDetail.vue')
                     },
                     {
                         path: '/projects/:projectId/team',
@@ -161,16 +131,6 @@ const projectRoutes = [
                         path: '/projects/:projectId/notes',
                         name: 'ProjectNoteList',
                         component: () => import('@/views/pages/projects/notes/NoteList.vue')
-                    },
-                    {
-                        path: '/projects/:projectId/generic-assets',
-                        name: 'GenericAssetList',
-                        component: () => import('@/views/pages/projects/assets/GenericAssetList.vue')
-                    },
-                    {
-                        path: '/projects/:projectId/generic-assets/:assetId',
-                        name: 'GenericAssetDetail',
-                        component: () => import('@/views/pages/projects/assets/GenericAssetDetail.vue')
                     }
                 ]
             }

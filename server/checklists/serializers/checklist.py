@@ -1,16 +1,12 @@
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
-from pecoret.core.serializers import AssetGenericRelatedField, PrimaryKeyRelatedField
+
+from backend.api.serializers.asset import AssetSerializer
 from checklists.models import Checklist, AssetChecklist
 from checklists.serializers.category import CategorySerializer
-from backend.api.serializers.assets.web_application import WebApplicationSerializer
-from backend.api.serializers.assets.host import HostSerializer
-from backend.api.serializers.assets.service import MinimalServiceSerializer
-from backend.api.serializers.assets.mobile_application import MobileApplicationSerializer
-from backend.api.serializers.assets.thick_client import ThickClientSerializer
-from backend.api.serializers.assets.generic import GenericAssetSerializer
-from backend.models import Host, Service, MobileApplication, WebApplication, ThickClient, GenericAsset
+from pecoret.core.serializers import PrimaryKeyRelatedField, \
+    ProjectFilteredPrimaryKeyRelatedField
 
 
 @extend_schema_field(OpenApiTypes.STR)
@@ -40,18 +36,11 @@ class ChecklistSerializer(serializers.ModelSerializer):
 
 
 class AssetChecklistSerializer(ChecklistSerializer):
-    component = AssetGenericRelatedField({
-        WebApplication: WebApplicationSerializer(),
-        Host: HostSerializer(),
-        Service: MinimalServiceSerializer(),
-        MobileApplication: MobileApplicationSerializer(),
-        ThickClient: ThickClientSerializer(),
-        GenericAsset: GenericAssetSerializer()
-    })
+    asset = ProjectFilteredPrimaryKeyRelatedField(serializer=AssetSerializer)
 
     class Meta:
         model = AssetChecklist
-        fields = ChecklistSerializer.Meta.fields + ["component"]
+        fields = ChecklistSerializer.Meta.fields + ["asset"]
 
 
 class AssetChecklistCreateSerializer(AssetChecklistSerializer):
@@ -59,7 +48,7 @@ class AssetChecklistCreateSerializer(AssetChecklistSerializer):
 
     class Meta:
         model = AssetChecklist
-        fields = ["checklist_id", "component"]
+        fields = ["checklist_id", "asset"]
 
     def create(self, validated_data):
         return AssetChecklist.objects.create_from_checklist(**validated_data)

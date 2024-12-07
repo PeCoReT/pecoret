@@ -65,7 +65,7 @@
   <h2>{{ _('Scope') }}</h2>
   <p>
     {% trans %}
-      This section provides an overview of the agreed scope of the project and the analysed components.
+      This section provides an overview of the scope of the project and the analysed components.
     {% endtrans %}
   </p>
   {% if scopes.forbidden().exists() %}
@@ -95,8 +95,4 @@
   {% endif %}
 
   {% include './sections/assessment-information/scope-web-application.html' %}
-  {% include './sections/assessment-information/scope-host.html' %}
-  {% include './sections/assessment-information/scope-mobile-application.html' %}
-  {% include './sections/assessment-information/scope-thick-client.html' %}
-  {% include './sections/assessment-information/scope-generic-asset.html' %}
 </div>

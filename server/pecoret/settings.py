@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     # my apps
     'backend.apps.BackendConfig',
     'core.storage.apps.StorageConfig',
+    'core.custom_fields.apps.CustomFieldsConfig',
     "advisories.apps.AdvisoriesConfig",
     "checklists.apps.ChecklistsConfig",
     'attack_surface.apps.AttackSurfaceConfig'
@@ -172,7 +173,7 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_THROTTLE_RATES": {"auth_flow_throttle": "7/hour"},
     "EXCEPTION_HANDLER": "pecoret.core.exceptions.handle",
-    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+    #"DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
 }
 
 SPECTACULAR_SETTINGS = {

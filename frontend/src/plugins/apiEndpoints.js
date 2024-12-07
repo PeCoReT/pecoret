@@ -36,19 +36,9 @@ const endpoints = {
     pScopeList: '/projects/{projectPk}/scopes/',
     pScopeDetail: '/projects/{projectPk}/scopes/{pk}/',
 
-    // assets
-    pGenericAssetList: '/projects/{projectPk}/generic-assets/',
-    pGenericAssetDetail: '/projects/{projectPk}/generic-assets/{pk}/',
-    pThickClientList: '/projects/{projectPk}/thick-clients/',
-    pThickClientDetail: '/projects/{projectPk}/thick-clients/{pk}/',
-    pMobileAppList: '/projects/{projectPk}/mobile-applications/',
-    pMobileAppDetail: '/projects/{projectPk}/mobile-applications/{pk}/',
-    pServiceList: '/projects/{projectPk}/services/',
-    pServiceDetail: '/projects/{projectPk}/services/{pk}/',
-    pHostList: '/projects/{projectPk}/hosts/',
-    pHostDetail: '/projects/{projectPk}/hosts/{pk}/',
-    pWebAppList: '/projects/{projectPk}/web-applications/',
-    pWebAppDetail: '/projects/{projectPk}/web-applications/{pk}/',
+    pAssetList: '/projects/{pPk}/assets/',
+    pAssetDetail: '/projects/{pPk}/assets/{pk}/',
+    pAssetCustomFieldList: '/custom-fields-asset/',
 
     // project checklists
     pChecklistList: '/projects/{projectPk}/checklists/',
@@ -126,6 +116,9 @@ const endpoints = {
     vulnTemplateDetail: '/vulnerability-templates/{pk}/',
     vulnTemplateTranslationList: '/vulnerability-templates/{vulnPk}/translations/',
     vulnTemplateTranslationDetail: '/vulnerability-templates/{vulnPk}/translations/{pk}/',
+
+    assetTypeList: '/asset-types/',
+    assetTypeDetail: '/asset-types/{pk}/',
 
     // checklists
     checklistList: '/checks/checklists/',

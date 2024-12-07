@@ -17,7 +17,7 @@ export default {
         return {
             projectId: this.$route.params.projectId,
             findingId: this.$route.params.findingId,
-            finding: { component: {} },
+            finding: { asset: {} },
             showPreview: false,
             previewData: null,
             previewLoading: false,
@@ -206,7 +206,7 @@ export default {
             <div class="card border-t-0">
                 <div class="grid grid-cols-12 gap-3">
                     <div class="col-span-12 md:col-span-4">
-                        <DetailCardWithIcon title="Asset" icon="fa-crosshairs" class="bg-surface-950" :text="finding.component.display_name"></DetailCardWithIcon>
+                        <DetailCardWithIcon title="Asset" icon="fa-crosshairs" class="bg-surface-950" :text="finding.asset.name"></DetailCardWithIcon>
                     </div>
                     <div class="col-span-12 md:col-span-4">
                         <DetailCardWithIcon title="User Account" icon="fa-user" class="bg-surface-950" :text="userAccountDisplay"></DetailCardWithIcon>

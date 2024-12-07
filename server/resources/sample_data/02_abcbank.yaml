@@ -26,6 +26,5 @@ projects:
       - username: hschrader
         role: OWNER
     assets:
-      - type: web_application
-        base_url: 'https://banking.abcbank.co.uk'
+      - type: Web Application
         name: Online Banking

@@ -1,12 +1,10 @@
-from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
+from django.db import models
+
 from pecoret.core.models import PeCoReTBaseModel
 from .category import AssetCategory
 from .item import AssetItem, Item
-
 
 ID_REGEX = r'^[\w\d_-]*$'
 
@@ -35,7 +33,7 @@ class AssetChecklistQuerySet(models.QuerySet):
         return self.filter(project=project)
 
     def with_asset(self, asset):
-        return self.filter(**{asset.asset_type: asset.pk})
+        return self.filter(asset=asset)
 
 
 class AssetChecklistManager(models.Manager):
@@ -68,29 +66,16 @@ class AssetChecklistManager(models.Manager):
 
 
 class AssetChecklist(BaseChecklist):
-    component_choices = models.Q(app_label="backend", model="webapplication") | \
-                        models.Q(app_label="backend", model="service") | \
-                        models.Q(app_label="backend", model="host") | \
-                        models.Q(app_label="backend", model="mobileapplication") | \
-                        models.Q(app_label="backend", model="thickclient") | \
-                        models.Q(app_label="backend", model="genericasset")
-
     project = models.ForeignKey(
         "backend.Project", editable=False, on_delete=models.CASCADE
     )
     checklist_id = models.CharField(max_length=128)
-    component_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE,
-                                               limit_choices_to=component_choices)
-    component_object_id = models.PositiveSmallIntegerField()
-    component = GenericForeignKey('component_content_type', 'component_object_id')
+    asset = models.ForeignKey('backend.Asset', on_delete=models.CASCADE)
     objects = AssetChecklistManager.from_queryset(AssetChecklistQuerySet)()
     categories = models.ManyToManyField("checklists.AssetCategory")
 
     class Meta:
         ordering = ["checklist_id"]
-        indexes = [
-            models.Index(fields=['component_content_type', 'component_object_id'])
-        ]
 
     @property
     def open_item_count(self):
@@ -106,6 +91,6 @@ class AssetChecklist(BaseChecklist):
 
     def clean(self):
         if AssetChecklist.objects.filter(checklist_id=self.checklist_id).with_asset(
-                self.component).exists():
+                self.asset).exists():
             raise ValidationError({'asset': "checklist already exist for this asset"})
         return super().clean()

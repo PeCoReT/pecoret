@@ -26,6 +26,5 @@ projects:
       - username: hschrader
         role: OWNER
     assets:
-      - type: thick_client
+      - type: Thick Client
         name: CyberGuard
-        decompile_allowed: true
