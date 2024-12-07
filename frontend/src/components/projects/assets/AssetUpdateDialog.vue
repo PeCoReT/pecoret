@@ -34,11 +34,23 @@ export default {
                 this.customFields = [];
                 return;
             }
+            let oldCustomFields = this.customFields;
             this.customFields = [];
             this.$api.get(this.$api.e.pAssetCustomFieldList, { pPk: this.projectId }, { asset_type: this.model.asset_type }).then((response) => {
                 for (let i = 0; i < response.data.results.length; i++) {
+                    let exists = null;
+                    for(let y=0;y<oldCustomFields.length;y++){
+                        let item = oldCustomFields[y]
+                        console.log(response.data.results[i]);
+                        console.log(item.field)
+                        if (item.field.pk === response.data.results[i].pk) {
+                            exists = item.value
+                            break
+                        }
+                    }
                     this.customFields.push({
-                        field: response.data.results[i]
+                        field: response.data.results[i],
+                        value: exists
                     });
                 }
             });
@@ -73,7 +85,6 @@ export default {
             deep: true,
             handler(value) {
                 this.model = value;
-                this.customFields = this.model.custom_fields;
             }
         }
     },
