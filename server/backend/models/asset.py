@@ -45,15 +45,3 @@ class Asset(PeCoReTBaseModel):
 
     def __str__(self):
         return self.name
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.old_asset_type_pk = self.asset_type.pk
-        print(self.asset_type)
-
-    def save(self, *args, **kwargs):
-        print("new")
-        print(self.asset_type)
-        if self.old_asset_type_pk != self.asset_type.pk:
-            self.customfieldassetvalue_set.all().delete()
-        return super().save(*args, **kwargs)
