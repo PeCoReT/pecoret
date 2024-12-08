@@ -51,14 +51,6 @@ export default {
                 });
         },
         onSort() {},
-        onFilter(event) {
-            this.loading = true;
-            let params = {
-                needs_review: event.filters.needs_review.value,
-                asset: event.filters.asset.value
-            };
-            this.getFindings(params);
-        },
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getFindings();
@@ -77,7 +69,7 @@ export default {
                         this.$api
                             .delete(this.$api.e.pFindingDetail, {
                                 pPk: this.projectId,
-                                pk: this.findingId
+                                pk: item.pk
                             })
                             .then(() => {
                                 itemsDeleted++;
@@ -147,7 +139,7 @@ export default {
                 v-model:selection="selectedItems"
                 @page="onPage"
                 @row-click="onRowClick"
-                @filter="onFilter"
+                @filter="getFindings"
                 @sort="onSort"
                 :filter="true"
                 filter-display="menu"
