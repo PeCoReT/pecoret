@@ -6,7 +6,7 @@ import GenericDataTable from '@/components/common/GenericDataTable.vue';
 import ScanFindingBulkEditDialog from '@/components/dialogs/attack_surface/ScanFindingBulkEditDialog.vue';
 import TagBadgeButton from '@/components/badges/TagBadgeButton.vue';
 import { useListViewComposable } from '@/composables/listViewComposable';
-import {asFindingStatusChoices, severityChoices} from "@/utils/constants";
+import { asFindingStatusChoices, severityChoices } from '@/utils/constants';
 
 export default {
     name: 'ScanFindingList',
@@ -41,10 +41,10 @@ export default {
     },
     methods: {
         asFindingStatusChoices() {
-            return asFindingStatusChoices
+            return asFindingStatusChoices;
         },
         severityChoices() {
-            return severityChoices
+            return severityChoices;
         },
         getItems(params) {
             this.loading = true;
@@ -62,12 +62,6 @@ export default {
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getItems();
-        },
-        onRowClick(row) {
-            this.$router.push({
-                name: 'AttackSurfaceScanFindingDetail',
-                params: { findingId: row.data.pk }
-            });
         },
         onGlobalSearch(query) {
             this.getItems({ search: query });
@@ -127,7 +121,6 @@ export default {
                 @search="onGlobalSearch"
                 :show-refresh-button="true"
                 @refresh="getItems"
-                @row-click="onRowClick"
                 @sort="
                     (event) => {
                         listComposable.sort(event, this.getItems);
@@ -140,7 +133,11 @@ export default {
                     <ScanFindingBulkEditDialog :findings="selectedItems" @object-updated="getItems"></ScanFindingBulkEditDialog>
                 </template>
                 <Column selectionMode="multiple" headerStyle=""></Column>
-                <Column field="name" header="Name"></Column>
+                <Column field="name" header="Name">
+                    <template #body="slotProps">
+                        <a :href="this.$router.resolve({ name: 'AttackSurfaceScanFindingDetail', params: { findingId: slotProps.data.pk } }).href" class="underline">{{ slotProps.data.name }}</a>
+                    </template>
+                </Column>
                 <Column field="severity" header="Severity" :show-filter-match-modes="false">
                     <template #body="slotProps">
                         <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>

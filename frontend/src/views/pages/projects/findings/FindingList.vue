@@ -98,15 +98,6 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
-        },
-        onRowClick(row) {
-            this.$router.push({
-                name: 'FindingDetail',
-                params: {
-                    projectId: this.projectId,
-                    findingId: row.data.pk
-                }
-            });
         }
     },
     components: {
@@ -138,7 +129,6 @@ export default {
                 v-model:filters="filters"
                 v-model:selection="selectedItems"
                 @page="onPage"
-                @row-click="onRowClick"
                 @filter="getFindings"
                 @sort="onSort"
                 :filter="true"
@@ -154,7 +144,11 @@ export default {
                 </template>
                 <Column selectionMode="multiple" headerStyle=""></Column>
 
-                <Column field="name" header="Name"></Column>
+                <Column field="name" header="Name">
+                    <template #body="slotProps">
+                        <a :href="this.$router.resolve({ name: 'FindingDetail', params: { projectId: this.projectId, findingId: slotProps.data.pk } }).href" class="underline">{{ slotProps.data.name }}</a>
+                    </template>
+                </Column>
                 <Column field="severity" header="Severity">
                     <template #body="slotProps">
                         <SeverityBadge :severity="slotProps.data.severity"></SeverityBadge>

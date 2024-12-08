@@ -92,13 +92,13 @@ export default {
             this.pagination.page = event.page + 1;
             this.getProjects();
         },
-        onRowClick(row) {
-            this.$router.push({
+        getProjectLink(pk){
+            return this.$router.resolve({
                 name: 'ProjectDetail',
                 params: {
-                    projectId: row.data.pk
+                    projectId: pk
                 }
-            });
+            }).href
         }
     },
     components: { BaseListLayout, GenericDataTable, ProjectCreateDialog }
@@ -141,7 +141,6 @@ export default {
                     @filter="getProjects"
                     :show-search="true"
                     filter-display="menu"
-                    @row-click="onRowClick"
                     v-model:filters="filters"
                     v-model:selection="selectedProjects"
                     :show-refresh-button="true"
@@ -153,7 +152,8 @@ export default {
                     </template>
                     <Column selectionMode="multiple" headerStyle=""></Column>
                     <Column field="name" header="Name" :sortable="true">
-                        <template #body="slotProps"> [{{ slotProps.data.year }}] {{ slotProps.data.name }}</template>
+                        <template #body="slotProps">
+                            <a :href="getProjectLink(slotProps.data.pk)" class="underline">[{{ slotProps.data.year }}] {{ slotProps.data.name }}</a></template>
                     </Column>
                     <Column field="company.name" header="Company"></Column>
                     <Column field="status" header="Status" :showFilterMatchModes="false">

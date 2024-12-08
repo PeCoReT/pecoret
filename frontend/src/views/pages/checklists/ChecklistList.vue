@@ -55,14 +55,6 @@ export default {
                 }
             });
         },
-        onRowClick(row) {
-            this.$router.push({
-                name: 'ChecklistUpdate',
-                params: {
-                    checklistId: row.data.pk
-                }
-            });
-        }
     }
 };
 </script>
@@ -81,9 +73,12 @@ export default {
                 blank-slate-icon="fa fa-check"
                 :model-value="items"
                 @page="onPage"
-                @rowClick="onRowClick"
             >
-                <Column field="name" header="Name"></Column>
+                <Column field="name" header="Name">
+                    <template #body="slotProps">
+                        <a :href="this.$router.resolve({name: 'ChecklistUpdate', params: {checklistId: slotProps.data.pk}}).href" class="underline">{{ slotProps.data.name }}</a>
+                    </template>
+                </Column>
                 <Column field="checklist_id" header="Checklist ID"></Column>
                 <Column header="Actions">
                     <template #body="slotProps">

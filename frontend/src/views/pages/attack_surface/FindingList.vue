@@ -73,13 +73,6 @@ export default {
         onSearch(query) {
             this.getItems({ search: query });
         },
-        onRowClick(row) {
-            /* workaround primvevue4 bug: https://github.com/primefaces/primevue/issues/6521 */
-            if (row.originalEvent.target.className === 'p-checkbox-input') {
-                return;
-            }
-            this.$router.push({ name: 'AttackSurfaceFindingUpdate', params: { findingId: row.data.pk } });
-        }
     }
 };
 </script>
@@ -99,7 +92,6 @@ export default {
                 blank-slate-icon="fa fa-bugs"
                 :model-value="items"
                 @page="onPage"
-                @row-click="onRowClick"
                 :show-search="true"
                 @search="onSearch"
                 v-model:selection="selectedItems"
@@ -109,7 +101,11 @@ export default {
                 </template>
                 <Column selectionMode="multiple" headerStyle=""></Column>
 
-                <Column header="Title" field="title"></Column>
+                <Column header="Title" field="title">
+                    <template #body="slotProps">
+                        <a :href="this.$router.resolve({name: 'AttackSurfaceFindingUpdate', params: {findingId: slotProps.data.pk}}).href" class="underline">{{ slotProps.data.title }}</a>
+                    </template>
+                </Column>
                 <Column header="Created By?" field="created_by_user.username"></Column>
                 <Column header="Status" field="status"></Column>
                 <Column header="Severity" field="severity">

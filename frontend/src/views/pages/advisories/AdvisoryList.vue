@@ -51,14 +51,6 @@ export default {
         onGlobalSearch(query) {
             this.getItems({ search: query });
         },
-        onRowClick(row) {
-            this.$router.push({
-                name: 'AdvisoryDetail',
-                params: {
-                    advisoryId: row.data.pk
-                }
-            });
-        },
         getItems(params) {
             this.loading = true;
             let data = this.buildParams(this.pagination, this.filters, params);
@@ -92,7 +84,6 @@ export default {
                 :model-value="items"
                 v-model:filters="filters"
                 @page="onPage"
-                @rowClick="onRowClick"
                 @filter="getItems"
                 filter-display="menu"
                 :filter="true"
@@ -103,7 +94,11 @@ export default {
                 :removable-sort="true"
                 @refresh="getItems"
             >
-                <Column field="advisory_id" header="ID" sortable></Column>
+                <Column field="advisory_id" header="ID" :sortable="true">
+                    <template #body="slotProps">
+                        <a :href="this.$router.resolve({name: 'AdvisoryDetail', params: {advisoryId: slotProps.data.pk}}).href" class="underline">{{ slotProps.data.advisory_id }}</a>
+                    </template>
+                </Column>
                 <Column field="title" header="Title"></Column>
                 <Column field="vulnerability.name" header="Vulnerability"></Column>
                 <Column field="severity" header="Severity">

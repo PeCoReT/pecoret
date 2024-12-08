@@ -51,7 +51,7 @@ export default {
                 icon: 'fa fa-trash',
                 acceptClass: 'p-button-danger',
                 accept: () => {
-                    this.$api.delete(this.$api.e.checkCategoryDetail, {pk: id}).then(() => {
+                    this.$api.delete(this.$api.e.checkCategoryDetail, { pk: id }).then(() => {
                         this.$toast.add({
                             severity: 'info',
                             summary: 'Deleted',
@@ -60,14 +60,6 @@ export default {
                         });
                         this.getItems();
                     });
-                }
-            });
-        },
-        onRowClick(row) {
-            this.$router.push({
-                name: 'ChecklistCategoryDetail',
-                params: {
-                    categoryId: row.data.pk
                 }
             });
         }
@@ -80,18 +72,12 @@ export default {
             <ChecklistCategoryCreate @object-created="getItems"></ChecklistCategoryCreate>
         </template>
         <template #table>
-            <GenericDataTable
-                :total-records="totalRecords"
-                :loading="loading"
-                :pagination="pagination"
-                blank-slate-text="No categories found!"
-                blank-slate-title="No Categories!"
-                blank-slate-icon="fa fa-tag"
-                :model-value="items"
-                @page="onPage"
-                @rowClick="onRowClick"
-            >
-                <Column field="name" header="Name"></Column>
+            <GenericDataTable :total-records="totalRecords" :loading="loading" :pagination="pagination" blank-slate-text="No categories found!" blank-slate-title="No Categories!" blank-slate-icon="fa fa-tag" :model-value="items" @page="onPage">
+                <Column field="name" header="Name">
+                    <template #body="slotProps">
+                        <a :href="this.$router.resolve({ name: 'ChecklistCategoryDetail', params: { categoryId: slotProps.data.pk } }).href" class="underline">{{ slotProps.data.name }}</a>
+                    </template>
+                </Column>
                 <Column field="category_id" header="Category ID"></Column>
                 <Column header="Actions">
                     <template #body="slotProps">

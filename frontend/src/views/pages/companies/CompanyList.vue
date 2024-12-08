@@ -46,14 +46,6 @@ export default {
                     this.loading = false;
                 });
         },
-        onRowClick(row) {
-            this.$router.push({
-                name: 'CompanyDetail',
-                params: {
-                    companyId: row.data.pk
-                }
-            });
-        },
         onPage(event) {
             this.pagination.page = event.page + 1;
             this.getCompanies();
@@ -78,11 +70,14 @@ export default {
                 blank-slate-icon="fa fa-globe"
                 :model-value="items"
                 @page="onPage"
-                @rowClick="onRowClick"
                 :show-search="true"
                 @search="onGlobalSearch"
             >
-                <Column field="name" header="Name"></Column>
+                <Column field="name" header="Name">
+                    <template #body="slotProps">
+                        <a class="underline" :href="this.$router.resolve({ name: 'CompanyDetail', params: { companyId: slotProps.data.pk } }).href">{{ slotProps.data.name }}</a>
+                    </template>
+                </Column>
                 <Column field="street" header="Street"></Column>
                 <Column field="city" header="City"></Column>
                 <Column field="country" header="Country"></Column>

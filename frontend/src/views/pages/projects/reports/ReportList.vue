@@ -57,15 +57,6 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
-        },
-        onRowClick(row) {
-            this.$router.push({
-                name: 'ReportDetail',
-                params: {
-                    projectId: this.projectId,
-                    reportId: row.data.pk
-                }
-            });
         }
     },
     components: { GenericDataTable, BaseListLayout, ReportCreateDialog }
@@ -86,12 +77,15 @@ export default {
                 blank-slate-title="No Reports!"
                 blank-slate-icon="fa fa-file"
                 :model-value="items"
-                @rowClick="onRowClick"
                 @page="onPage"
                 @search="onGlobalSearch"
                 :show-search="true"
             >
-                <Column field="name" header="Name"></Column>
+                <Column field="name" header="Name">
+                    <template #body="slotProps">
+                        <a :href="this.$router.resolve({name: 'ReportDetail', params: {projectId: this.projectId, reportId: slotProps.data.pk}}).href" class="underline">{{ slotProps.data.name}}</a>
+                    </template>
+                </Column>
                 <Column field="template" header="Template"></Column>
                 <Column field="date_created" header="Date Created"></Column>
                 <Column field="date_updated" header="Date Updated"></Column>
