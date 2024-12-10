@@ -1,20 +1,21 @@
-from django.contrib.auth import logout, update_session_auth_hash
+from django.contrib.auth import logout
 from django.contrib.auth.models import Group
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from django_q.tasks import async_task
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from drf_spectacular.utils import extend_schema_view, extend_schema
-from backend.models import User
+
 from backend.api.serializers import user as serializers
-from backend.tasks import mail
 from backend.api.throttle import AuthFlowThrottle
+from backend.models import User
+from backend.tasks import mail
 from pecoret.core import permissions
-from pecoret.core.viewsets import PeCoReTModelViewSet, PeCoReTReadOnlyModelViewSet
 from pecoret.core.utils.schema import extend_viewset_schema
+from pecoret.core.viewsets import PeCoReTModelViewSet, PeCoReTReadOnlyModelViewSet
 
 
 @extend_viewset_schema(tags=['Users'], verbose_name='user')

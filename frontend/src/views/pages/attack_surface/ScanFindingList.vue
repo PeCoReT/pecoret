@@ -99,7 +99,6 @@ export default {
 
 <template>
     <BaseListLayout :breadcrumbs="breadcrumbs">
-        <template #head-left> There are {{ totalRecords }} findings</template>
         <template #create-button>
             <ScanFindingCreateDialog @object-created="getItems"></ScanFindingCreateDialog>
         </template>

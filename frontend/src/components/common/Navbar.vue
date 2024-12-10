@@ -24,3 +24,10 @@ export default {
         </template>
     </Menubar>
 </template>
+
+<style>
+.router-link-exact-active {
+    background-color: var(--p-surface-600);
+    border-radius: inherit;
+}
+</style>

@@ -27,13 +27,13 @@ export default {
                     this.loading = false;
                 });
         },
-        onLatestVisit(pk) {
-            this.$router.push({
+        getLink(pk) {
+            return this.$router.resolve({
                 name: 'AdvisoryDetail',
                 params: {
                     advisoryId: pk
                 }
-            });
+            }).href;
         }
     }
 };
@@ -46,11 +46,11 @@ export default {
             <DataView :value="items" v-if="loading === false">
                 <template #list="slotProps">
                     <div v-for="(item, index) in slotProps.items" :key="index">
-                        <div class="col-span-12 rounded border border-surface-700 p-1 hover:bg-surface-950 card m-0" @click="onLatestVisit(item.pk)">
+                        <div class="col-span-12 rounded border border-surface-700 p-1 hover:bg-surface-950 card m-0">
                             <div class="flex p-4 gap-4">
-                                <div class="flex justify-start w-full">
+                                <a :href="getLink(item.pk)" class="flex justify-start w-full">
                                     {{ item.title }}
-                                </div>
+                                </a>
 
                                 <div class="flex align-center justify-end">
                                     <span class="severity-badge" :class="'severity-' + item.severity.toLowerCase()">{{ item.severity }}</span>
