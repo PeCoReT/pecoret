@@ -1,11 +1,8 @@
-from typing import Dict, Any
-
 import jwt
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.headless.adapter import DefaultHeadlessAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.contrib.auth.models import Group
-from django.contrib.auth.password_validation import validate_password
 from django.middleware.csrf import get_token
 
 from backend.api.serializers.user import UserMeSerializer
@@ -50,7 +47,7 @@ class PeCoReTSocialAccountAdapter(DefaultSocialAccountAdapter):
         # prevent external signups but allow allauth to create new accounts
         if "/login/callback" in request.path:
             return True
-        return True
+        return False
 
 
 class PeCoReTAccountAdapter(DefaultAccountAdapter):
