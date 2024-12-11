@@ -2,7 +2,6 @@
 import BlankSlate from '@/components/BlankSlate.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import { useListViewComposable } from '@/composables/listViewComposable';
-import AssetCreateDialog from '@/components/projects/assets/AssetCreateDialog.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
 import AssetBulkEditDialog from '@/components/dialogs/AssetBulkEditDialog.vue';
 
@@ -90,14 +89,14 @@ export default {
     mounted() {
         this.getItems();
     },
-    components: { AssetBulkEditDialog, GenericDataTable, AssetCreateDialog, BaseListLayout, BlankSlate }
+    components: { AssetBulkEditDialog, GenericDataTable, BaseListLayout, BlankSlate }
 };
 </script>
 
 <template>
     <BaseListLayout :breadcrumbs="breadcrumbs">
         <template #create-button>
-            <Button icon="fa fa-plus" label="Asset" outlined @click="this.$router.push({name: 'AssetCreate', params: {projectId: this.projectId}})"></Button>
+            <Button icon="fa fa-plus" label="Asset" outlined @click="this.$router.push({ name: 'AssetCreate', params: { projectId: this.projectId } })"></Button>
         </template>
         <template #table>
             <GenericDataTable
