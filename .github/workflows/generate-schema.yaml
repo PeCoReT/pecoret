@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -30,7 +30,7 @@ jobs:
           python manage.py migrate --settings conf.settings_testing
           python manage.py spectacular --settings conf.settings_testing --file /tmp/schema.yaml
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: schema.yaml
           path: /tmp/schema.yaml

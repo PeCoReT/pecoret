@@ -97,7 +97,7 @@ export default {
 <template>
     <BaseListLayout :breadcrumbs="breadcrumbs">
         <template #create-button>
-            <AssetCreateDialog @object-created="getItems"></AssetCreateDialog>
+            <Button icon="fa fa-plus" label="Asset" outlined @click="this.$router.push({name: 'AssetCreate', params: {projectId: this.projectId}})"></Button>
         </template>
         <template #table>
             <GenericDataTable

@@ -92,34 +92,29 @@ export default defineComponent({
             <LabelCreateDialog @object-created="getItems"></LabelCreateDialog>
         </template>
         <template #table>
-            <GenericDataTable
-                :total-records="totalRecords"
-                :loading="loading"
-                :pagination="pagination"
-                blank-slate-text="No labels found!"
-                blank-slate-title="No Labels!"
-                blank-slate-icon="fa fa-tags"
-                :model-value="items"
-                @page="onPage"
-                v-model:filters="filters"
-                filter-display="menu"
-                :show-search="true"
-                @search="onGlobalSearch"
-            >
-                <Column field="name" header="Name"></Column>
-                <Column field="description" header="Description"></Column>
-                <Column header="Preview">
-                    <template #body="slotProps">
-                        <AdvisoryLabelBadge :label="slotProps.data"></AdvisoryLabelBadge>
-                    </template>
-                </Column>
-                <Column header="Actions">
-                    <template #body="slotProps">
-                        <LabelUpdateDialog :label="slotProps.data" @object-updated="getItems"></LabelUpdateDialog>
-                        <Button size="small" outlined icon="fa fa-trash" severity="danger" @click="confirmDialogDelete(slotProps.data.pk)"></Button>
-                    </template>
-                </Column>
-            </GenericDataTable>
+            <DataView :value="items">
+                <template #list="slotProps">
+                    <div class="col-span-12 rounded border border-surface-700 p-1 hover:bg-surface-950 card m-0" v-for="(item, index) in slotProps.items" :key="index">
+                        <div class="flex p-4 gap-4">
+                            <div class="flex items-center w-1/3">
+                                <AdvisoryLabelBadge :label="item"></AdvisoryLabelBadge>
+                            </div>
+                            <div class="flex items-center w-2/3">
+                                {{ item.description }}
+                            </div>
+
+                            <div class="flex items-center justify-between"></div>
+                            <div class="flex items-center justify-end">
+                                <LabelUpdateDialog :label="item" @object-updated="getItems"></LabelUpdateDialog>
+                                <Button size="small" outlined label="Delete" severity="danger" @click="confirmDialogDelete(item.pk)" class="p-0 m-0"></Button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template #footer>
+                    <Paginator :rows="pagination.limit" :totalRecords="totalRecords" @page="onPage"></Paginator>
+                </template>
+            </DataView>
         </template>
     </BaseListLayout>
 </template>

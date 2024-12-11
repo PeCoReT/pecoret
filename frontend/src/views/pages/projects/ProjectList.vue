@@ -155,7 +155,11 @@ export default {
                         <template #body="slotProps">
                             <a :href="getProjectLink(slotProps.data.pk)" class="underline">[{{ slotProps.data.year }}] {{ slotProps.data.name }}</a></template>
                     </Column>
-                    <Column field="company.name" header="Company"></Column>
+                    <Column field="company.name" header="Company">
+                        <template #body="slotProps">
+                            <a :href="this.$router.resolve({name: 'CompanyDetail', params: {companyId: slotProps.data.company.pk}}).href" class="underline">{{ slotProps.data.company.name }}</a>
+                        </template>
+                    </Column>
                     <Column field="status" header="Status" :showFilterMatchModes="false">
                         <template #filter="{ filterModel }">
                             <Dropdown v-model="filterModel.value" :options="statusChoices" placeholder="Select One" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Dropdown>

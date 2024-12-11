@@ -58,6 +58,11 @@ const projectRoutes = [
                         component: () => import('@/views/pages/projects/assets/AssetDetail.vue')
                     },
                     {
+                        path: '/projects/:projectId/assets/create',
+                        name: 'AssetCreate',
+                        component: () => import('@/views/pages/projects/assets/AssetCreate.vue')
+                    },
+                    {
                         path: '/projects/:projectId/team',
                         name: 'ContributorList',
                         component: () => import('@/views/pages/projects/management/ContributorList.vue')
