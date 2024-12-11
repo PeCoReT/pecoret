@@ -5,10 +5,12 @@ import AdvisoryLabelBadge from '@/components/badges/AdvisoryLabelBadge.vue';
 import LabelUpdateDialog from '@/components/dialogs/advisories/LabelUpdateDialog.vue';
 import BaseListLayout from '@/layout/base/BaseListLayout.vue';
 import GenericDataTable from '@/components/common/GenericDataTable.vue';
+import BlankSlate from "@/components/BlankSlate.vue";
 
 export default defineComponent({
     name: 'LabelList',
     components: {
+        BlankSlate,
         GenericDataTable,
         BaseListLayout,
         LabelUpdateDialog,
@@ -24,6 +26,7 @@ export default defineComponent({
                     disabled: true
                 }
             ],
+            searchInput: null,
             items: [],
             totalRecords: 0,
             pagination: { page: 1, limit: 25 },
@@ -38,7 +41,7 @@ export default defineComponent({
             this.pagination.page = event.page + 1;
             this.getItems();
         },
-        onGlobalSearch(query) {
+        onSearch(query) {
             let params = {
                 search: query
             };
@@ -92,7 +95,14 @@ export default defineComponent({
             <LabelCreateDialog @object-created="getItems"></LabelCreateDialog>
         </template>
         <template #table>
-            <DataView :value="items">
+            <div class="sm:w-full md:w-1/3 mb-3">
+                <InputGroup>
+                    <InputText v-model="searchInput" placeholder="Keyword Search" style="width: 100%" v-on:keyup.enter="onSearch(searchInput)" />
+                    <Button icon="fa fa-search" severity="secondary" outlined @click="onSearch(searchInput)"></Button>
+                </InputGroup>
+            </div>
+
+            <DataView :value="items" v-if="items.length > 0">
                 <template #list="slotProps">
                     <div class="col-span-12 rounded border border-surface-700 p-1 hover:bg-surface-950 card m-0" v-for="(item, index) in slotProps.items" :key="index">
                         <div class="flex p-4 gap-4">
@@ -115,8 +125,7 @@ export default defineComponent({
                     <Paginator :rows="pagination.limit" :totalRecords="totalRecords" @page="onPage"></Paginator>
                 </template>
             </DataView>
+            <BlankSlate title="No Labels!" text="No labels found!" icon="fa fa-tag" v-else></BlankSlate>
         </template>
     </BaseListLayout>
 </template>
-
-<style scoped></style>
