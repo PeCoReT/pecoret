@@ -1,6 +1,8 @@
 <script>
 import AdvisoryTabMenu from '@/components/navigation/AdvisoryTabMenu.vue';
 import AdvisoryTimelineCreateDialog from '@/components/dialogs/advisories/AdvisoryTimelineCreateDialog.vue';
+import {Timeline} from "primevue";
+
 
 export default {
     name: 'TimelineList',
@@ -60,7 +62,7 @@ export default {
             });
         }
     },
-    components: { AdvisoryTabMenu, AdvisoryTimelineCreateDialog }
+    components: { AdvisoryTabMenu, AdvisoryTimelineCreateDialog, Timeline }
 };
 </script>
 

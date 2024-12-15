@@ -5,10 +5,11 @@ import CountryFlag from '@/components/icons/CountryFlag.vue';
 import BlankSlate from '@/components/BlankSlate.vue';
 import TagBadgeButton from '@/components/badges/TagBadgeButton.vue';
 import forceFileDownload from '@/utils/file';
+import {TabPanels, TabPanel, Tabs, TabList, Tab} from "primevue";
 
 export default {
     name: 'Search',
-    components: { TagBadgeButton, BlankSlate, CountryFlag, BaseLayout },
+    components: { TagBadgeButton, BlankSlate, CountryFlag, BaseLayout, Tabs, TabPanels, TabList, Tab, TabPanel },
     data() {
         return {
             items: [],

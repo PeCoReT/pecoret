@@ -8,6 +8,8 @@
 {% csrf_token %}
 <script>
 window.csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+window.themeName = '{{ settings.PECO_THEME }}';
+
 </script>
 
 {% vite_asset 'src/main.js' %}

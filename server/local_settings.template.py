@@ -155,3 +155,11 @@ from pecoret.settings import *
 # AS_ALLOWED_SCAN_TYPES_ON_CREATION: List of scan types allowed to be automatically
 # triggered when a new item is created. Keep empty if no scans are triggered on creation.
 # AS_ALLOWED_SCAN_TYPES_ON_CREATION = []
+
+# ----------------------------------------
+# Theming
+# ----------------------------------------
+# determined using the filename in the `frontend/presets/` directory
+# PECO_THEME = 'aura'
+# initial background color to bypass white pages on page reloads with PrimeVue4
+# PECO_THEME_INIT_BG_COLOR = '#020617'

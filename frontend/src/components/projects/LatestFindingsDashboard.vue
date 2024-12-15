@@ -1,7 +1,9 @@
 <script>
+import {DataView} from "primevue";
 
 export default {
     name: 'LatestFindingsDashboard',
+    components: {DataView},
     props: {
         projectId: {
             required: true

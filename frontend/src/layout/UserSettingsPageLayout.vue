@@ -1,9 +1,10 @@
 <script>
 import BaseLayout from '@/layout/base/BaseLayout.vue';
+import Menu from 'primevue/menu';
 
 export default {
     name: 'UserSettingsPageLayout',
-    components: { BaseLayout },
+    components: { BaseLayout, Menu },
     props: {
         headline: {
             required: true

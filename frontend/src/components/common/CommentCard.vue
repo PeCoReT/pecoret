@@ -1,9 +1,10 @@
 <script>
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
+import Menu from 'primevue/menu';
 
 export default {
     name: 'CommentCard',
-    components: { MarkdownEditor },
+    components: { MarkdownEditor, Menu },
     props: {
         comment: {
             required: true

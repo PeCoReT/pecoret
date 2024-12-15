@@ -1,7 +1,9 @@
 <script>
+import {DataView} from "primevue";
 
 export default {
     name: 'LatestSubmissionsDashboard',
+    components: {DataView},
     data() {
         return {
             items: [],

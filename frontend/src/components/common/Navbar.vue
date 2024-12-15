@@ -1,6 +1,9 @@
 <script>
+import Menubar from 'primevue/menubar';
+
 export default {
     name: 'Navbar',
+    components: {Menubar},
     props: {
         items: {
             required: false

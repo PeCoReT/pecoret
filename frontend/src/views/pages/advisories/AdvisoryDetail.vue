@@ -5,6 +5,7 @@ import InfoCardWithForm from '@/components/InfoCardWithForm.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import { useAuthStore } from '@/store/auth';
 import { advisoryStatusChoices, vulnerabilityStatusChoices } from '@/utils/constants';
+import ProgressBar from "primevue/progressbar";
 
 export default {
     name: 'AdvisoryDetail',
@@ -183,7 +184,7 @@ export default {
             return URL.createObjectURL(blob);
         }
     },
-    components: { DetailCardWithIcon, MarkdownEditor, InfoCardWithForm, AdvisoryTabMenu }
+    components: { DetailCardWithIcon, MarkdownEditor, InfoCardWithForm, AdvisoryTabMenu, ProgressBar }
 };
 </script>
 

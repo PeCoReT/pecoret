@@ -7,6 +7,8 @@ import FileDrop from '@/components/forms/fields/FileDrop.vue';
 import MarkdownEditor from '@/components/forms/MarkdownEditor.vue';
 import FindingUpdateDialog from '@/components/dialogs/FindingUpdateDialog.vue';
 import { findingStatusChoices, severityChoices } from '@/utils/constants';
+import ProgressBar from 'primevue/progressbar';
+
 
 export default {
     name: 'FindingDetail',
@@ -169,7 +171,8 @@ export default {
         DetailCardWithIcon,
         InfoCardWithForm,
         FindingAsAdvisoryDialog,
-        FileDrop
+        FileDrop,
+        ProgressBar
     }
 };
 </script>

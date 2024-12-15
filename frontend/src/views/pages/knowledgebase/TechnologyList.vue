@@ -107,7 +107,7 @@ export default {
                         {{ slotProps.data.source_code_available }}
                     </template>
                     <template #filter="{ filterModel }">
-                        <Dropdown v-model="filterModel.value" :show-clear="true" :options="sourceFilterChoices" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Dropdown>
+                        <Select v-model="filterModel.value" :show-clear="true" :options="sourceFilterChoices" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Select>
                     </template>
                 </Column>
                 <Column field="date_updated" header="Updated"></Column>

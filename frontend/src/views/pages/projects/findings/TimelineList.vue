@@ -1,5 +1,6 @@
 <script>
 import FindingTabMenu from '@/components/navigation/FindingTabMenu.vue';
+import {Timeline} from "primevue";
 
 export default {
     name: 'TimelineList',
@@ -45,7 +46,7 @@ export default {
     mounted() {
         this.getTimeline();
     },
-    components: { FindingTabMenu }
+    components: { FindingTabMenu, Timeline }
 };
 </script>
 

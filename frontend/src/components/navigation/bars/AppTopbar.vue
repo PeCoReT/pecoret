@@ -2,6 +2,8 @@
 import { useAuthStore } from '@/store/auth';
 import ProjectTabMenu from '@/components/navigation/ProjectTabMenu.vue';
 import AttackSurfaceTabMenu from '@/components/navigation/AttackSurfaceTabMenu.vue';
+import Menubar from 'primevue/menubar';
+
 
 export default {
     name: 'AppTopbar',
@@ -153,7 +155,7 @@ export default {
             return false;
         }
     },
-    components: { AttackSurfaceTabMenu, ProjectTabMenu }
+    components: { AttackSurfaceTabMenu, ProjectTabMenu, Menubar }
 };
 </script>
 

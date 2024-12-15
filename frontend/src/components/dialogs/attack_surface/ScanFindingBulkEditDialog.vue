@@ -59,11 +59,11 @@ export default {
         <div class="p-fluid grid formgrid">
             <div class="field col-12">
                 <label>Severity</label>
-                <Dropdown show-clear v-model="fields.severity" :options="severityChoices()" optionValue="value" optionLabel="name" class="w-full"></Dropdown>
+                <Select show-clear v-model="fields.severity" :options="severityChoices()" optionValue="value" optionLabel="name" class="w-full"></Select>
             </div>
             <div class="field col-12">
                 <label>Status</label>
-                <Dropdown show-clear v-model="fields.status" :options="asFindingStatusChoices()" optionValue="value" optionLabel="name"></Dropdown>
+                <Select show-clear v-model="fields.status" :options="asFindingStatusChoices()" optionValue="value" optionLabel="name"></Select>
             </div>
         </div>
     </ModalDialog>

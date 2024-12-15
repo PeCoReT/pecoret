@@ -1,22 +1,18 @@
 import { fileURLToPath, URL } from 'node:url';
-
-import { PrimeVueResolver } from '@primevue/auto-import-resolver';
 import vue from '@vitejs/plugin-vue';
-import Components from 'unplugin-vue-components/vite';
 import { defineConfig } from 'vite';
+
 
 // https://vitejs.dev/config/
 export default defineConfig({
     base: '/static/dist',
     plugins: [
-        vue(),
-        Components({
-            resolvers: [PrimeVueResolver()]
-        })
+        vue()
     ],
     build: {
         manifest: 'manifest.json',
         outDir: '../server/static/dist',
+        target: 'ES2022',
         emptyOutDir: true,
         rollupOptions: {
             input: {

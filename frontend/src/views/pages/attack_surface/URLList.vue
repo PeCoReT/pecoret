@@ -8,7 +8,7 @@ export default {
     components: {
         URLCreateDialog,
         GenericDataTable,
-        BaseListLayout
+        BaseListLayout,
     },
     data() {
         return {

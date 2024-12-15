@@ -1,9 +1,11 @@
 <script>
 import BlankSlate from '@/components/BlankSlate.vue';
+import DataTable from 'primevue/datatable';
+
 
 export default {
     name: 'GenericDataTable',
-    components: { BlankSlate },
+    components: { BlankSlate, DataTable, },
     emits: ['rowClick', 'page', 'filter', 'sort', 'update:selection', 'update:filters', 'update:modelValue', 'search', 'refresh'],
     props: {
         modelValue: {

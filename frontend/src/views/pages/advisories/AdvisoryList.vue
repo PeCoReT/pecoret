@@ -111,12 +111,12 @@ export default {
                 </Column>
                 <Column field="status" header="Status" :showFilterMatchModes="false">
                     <template #filter="{ filterModel }">
-                        <Dropdown v-model="filterModel.value" :options="statusChoices" placeholder="Select One" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Dropdown>
+                        <Select v-model="filterModel.value" :options="statusChoices" placeholder="Select One" class="p-column-filter" showClear optionLabel="label" optionValue="value"></Select>
                     </template>
                 </Column>
                 <Column field="vulnerability_status" header="Vulnerability Status" :showFilterMatchModes="false">
                     <template #filter="{ filterModel }">
-                        <Dropdown v-model="filterModel.value" :options="vulnerabilityStatusChoices" class="p-column-filter" :showClear="true" optionLabel="label" optionValue="value"></Dropdown>
+                        <Select v-model="filterModel.value" :options="vulnerabilityStatusChoices" class="p-column-filter" :showClear="true" optionLabel="label" optionValue="value"></Select>
                     </template>
                 </Column>
                 <Column field="user.username" header="User"></Column>

@@ -187,7 +187,7 @@ export default {
                 <Column field="data" header="Data"></Column>
                 <Column field="data_type" header="Data Type" :showFilterMatchModes="false">
                     <template #filter="{ filterModel }">
-                        <Dropdown v-model="filterModel.value" :options="DataTypeChoices()" :showClear="true" optionLabel="name" optionValue="value"></Dropdown>
+                        <Select v-model="filterModel.value" :options="DataTypeChoices()" :showClear="true" optionLabel="name" optionValue="value"></Select>
                     </template>
                 </Column>
                 <Column header="IP">
@@ -199,7 +199,7 @@ export default {
                 <Column field="date_updated" header="Updated" sortable></Column>
                 <Column field="scope" header="Scope" :show-filter-match-modes="false">
                     <template #filter="{ filterModel }">
-                        <Dropdown v-model="filterModel.value" :options="InScopeChoices()" optionValue="value" optionLabel="name"></Dropdown>
+                        <Select v-model="filterModel.value" :options="InScopeChoices()" optionValue="value" optionLabel="name"></Select>
                     </template>
                 </Column>
                 <Column header="Actions">

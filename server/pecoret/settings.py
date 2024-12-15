@@ -321,3 +321,10 @@ ADVISORY_ID_PREFIX = 'pecoret-'
 # PECORET general settings
 SITE_NAME = 'PeCoReT Project'
 SITE_URL = 'http://localhost:8000'
+
+#########
+# Theming
+#########
+PECO_THEME = 'aura'
+# initial background color to bypass white pages on page reloads with PrimeVue4
+PECO_THEME_INIT_BG_COLOR = '#020617'

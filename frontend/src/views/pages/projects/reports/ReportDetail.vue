@@ -81,7 +81,13 @@ export default {
             });
         }
     },
-    components: { InlineFieldGroup, ReportTemplateSelectField, DetailCardWithIcon, ReportTabMenu, MarkdownEditor }
+    components: {
+        InlineFieldGroup,
+        ReportTemplateSelectField,
+        DetailCardWithIcon,
+        ReportTabMenu,
+        MarkdownEditor
+    }
 };
 </script>
 <template>

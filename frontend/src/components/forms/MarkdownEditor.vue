@@ -181,13 +181,13 @@ export default {
 @import '@/../node_modules/easymde/dist/easymde.min.css';
 
 .CodeMirror {
-    background: var(--surface-ground) !important;
+    background: var(--p-surface-950) !important;
     color: inherit !important;
     border: 1px solid var(--p-form-field-border-color) !important;
 }
 
 .editor-preview {
-    background: var(--surface-ground) !important;
+    background: var(--p-surface-950) !important;
     color: inherit !important;
 }
 
