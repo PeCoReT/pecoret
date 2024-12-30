@@ -19,7 +19,7 @@
     "markdown-it": "^14.1.0",
     "pinia": "^2.3.0",
     "primevue": "^4.2.5",
-    "radix-vue": "^1.9.11",
+    "radix-vue": "^1.9.12",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-primeui": "^0.3.4",
