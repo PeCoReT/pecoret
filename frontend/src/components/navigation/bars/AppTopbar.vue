@@ -160,7 +160,7 @@ export default {
 </script>
 
 <template>
-    <Menubar :model="items" class="h-16 w-full px-8 sm:px-8 transition-[left] duration-[var(--layout-section-transition-duration)] flex items-center !rounded-none" :pt="{ rootList: { class: 'w-full flex justify-end rounded-none' } }">
+    <Menubar :model="items" class="h-16 w-full px-8 sm:px-8 transition-[left] duration-[\[var(--layout-section-transition-duration)\]] flex items-center !rounded-none" :pt="{ rootList: { class: 'w-full flex justify-end rounded-none' } }">
         <template #start>
             <router-link to="/" class="">
                 <img src="/images/logo-no-slogan.svg" alt="logo" class="max-w-[10rem] md:max-h-[3rem]" />
