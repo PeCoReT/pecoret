@@ -1,0 +1,39 @@
+@page no-chapter {
+  @top-left {
+    background: none;
+    content: none
+  }
+  @top-center {
+    content: none !important
+  }
+  @top-right {
+    content: none !important
+  }
+}
+
+@page {
+
+  size: a4 portrait;
+  margin: var(--page-margin-top) var(--page-margin-right) var(--page-margin-bottom) var(--page-margin-left);
+
+  background-color: var(--page-background);
+
+  @bottom-right {
+    font-size: 10px;
+    content: counter(page) ' / ' counter(pages);
+    margin-top: -5px;
+  }
+
+  @top-right {
+    content: " ";
+    background: url(file://images/logo.svg);
+    background-size: 60mm 10mm;
+    background-repeat: no-repeat;
+    height: 10mm;
+    width: 60mm;
+    margin-bottom: 8mm;
+    margin-right: -10mm;
+    background-position: right;
+  }
+
+}

@@ -1,0 +1,15 @@
+{% if is_draft %}
+<div>
+    <h2 class="no-toc no-counter">Report Errors</h2>
+    <div id="report-todo-list">
+        <ul>
+            {% for section, errors in template.get_errors().items() %}
+                {% for error in errors %}
+                    <li class="report-error"><a href="{{ error.url }}"><span>{{ error.message }}</span></a></li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% endif %}

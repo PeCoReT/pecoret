@@ -1,0 +1,33 @@
+{% load i18n %}
+
+{% block subject %}
+  {% blocktrans %}New critical finding in project {{ project }}{% endblocktrans %}
+{% endblock subject %}
+
+{% block text_body %}
+  Hello {{ user.username }},
+
+  {% blocktrans %}You're receiving this email because a new critical finding was created in the project "{{ project }}".
+  {% endblocktrans %}
+
+
+  {% trans "The finding can be found here:" %}
+  {{ site_url }}{{ url|safe }}
+
+  {% trans "Thanks for using our site!" %}
+
+  {% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+{% endblock text_body %}
+
+{% block html_body %}
+  <p>Hello {{ user.username }},</p>
+  <p>{% blocktrans %}You're receiving this email because a new critical finding was created in the project "
+    {{ project }}".{% endblocktrans %}</p>
+  <p>{% trans "The finding can be found here:" %}</p>
+  <p><a href="{{ site_url}}{{ url|safe }}">{{ site_url}}{{ url|safe }}</a></p>
+
+  <p>{% trans "Thanks for using our site!" %}</p>
+
+  <p>{% blocktrans %}The {{ site_name }} team{% endblocktrans %}</p>
+
+{% endblock html_body %}

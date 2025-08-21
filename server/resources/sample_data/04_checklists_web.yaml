@@ -1,0 +1,29 @@
+
+checklists:
+  - id: web-application-small
+    name: Web Application Small Checklist
+    categories:
+      - security-headers
+      - password-reset-function
+
+
+checklist-categories:
+  - id: password-reset-function
+    name: Password Reset Function
+    items:
+      - id: password-reset-poisoning
+        name: Password Reset Poisoning
+        description: |
+          ## Password Reset Poisoning
+    
+          - Trigger the password reset function and intercept the request
+          - manipulate the host header and observe the content of the mail
+          - Try to inject other `X-Forwarded-` headers and observe the content of the mail
+    
+          ### References
+          - https://portswigger.net/web-security/host-header/exploiting/password-reset-poisoning
+      - id: password-reset-lorem
+        name: Password Reset Lorem
+        description: |
+          ## Lorem Ipsum
+          usually you have a description here.

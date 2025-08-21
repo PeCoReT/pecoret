@@ -1,0 +1,18 @@
+.table-custom {
+  width: 100%;
+  border-collapse: collapse;
+
+  td, th {
+    border-bottom-color: var(--border-color-table);
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-collapse: collapse;
+    padding: 7px;
+    text-align: left;
+  }
+
+  th {
+    border-top: var(--border-color-table);
+    border-collapse: collapse;
+  }
+}

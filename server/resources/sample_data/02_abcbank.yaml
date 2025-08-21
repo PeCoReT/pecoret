@@ -1,0 +1,30 @@
+
+companies:
+  - name: ABC Bank
+    street: 456 Bank Avenue
+    zipcode: 54321
+    city: London
+    country: United Kingdom
+    contacts:
+      - first_name: Jane
+        last_name: Smith
+        email: jane.smith@abcbank.co.uk
+        phone: +44 123-456-7890
+        role: Security Officer
+
+
+projects:
+  - name: Web Application Security Test
+    start_date: 2023-07-03
+    end_date: 2023-07-23
+    pentest_types:
+      - Web Application Pentest
+    test_method: GREY_BOX
+    company: ABC Bank
+    description: This assessment focuses on evaluating the security measures implemented in ABC Bank's web applications to protect against potential attacks and data breaches.
+    members:
+      - username: hschrader
+        role: OWNER
+    assets:
+      - type: Web Application
+        name: Online Banking

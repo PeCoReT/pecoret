@@ -1,0 +1,643 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-08 20:19+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: extensions/report_templates/default_template/charts.py:25
+#: extensions/report_templates/default_template/templates/pages/executive_summary.html:34
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:46
+msgid "Critical"
+msgstr "Kritisch"
+
+#: extensions/report_templates/default_template/charts.py:25
+#: extensions/report_templates/default_template/templates/pages/executive_summary.html:35
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:60
+msgid "High"
+msgstr "Hoch"
+
+#: extensions/report_templates/default_template/charts.py:25
+#: extensions/report_templates/default_template/templates/pages/executive_summary.html:36
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:73
+msgid "Medium"
+msgstr "Mittel"
+
+#: extensions/report_templates/default_template/charts.py:25
+#: extensions/report_templates/default_template/templates/pages/executive_summary.html:37
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:90
+msgid "Low"
+msgstr "Niedrig"
+
+#: extensions/report_templates/default_template/charts.py:25
+#: extensions/report_templates/default_template/templates/pages/executive_summary.html:38
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:107
+msgid "Informational"
+msgstr "Informationell"
+
+#: extensions/report_templates/default_template/templates/pages/advisories/cover.html:3
+msgid "Vulnerability Report"
+msgstr "Schwachstellenbericht"
+
+#: extensions/report_templates/default_template/templates/pages/advisories/cover.html:10
+#: extensions/report_templates/default_template/templates/pages/cover.html:8
+msgid "Receipient"
+msgstr "Empfänger"
+
+#: extensions/report_templates/default_template/templates/pages/advisories/cover.html:14
+msgid "Researcher"
+msgstr "Researcher"
+
+#: extensions/report_templates/default_template/templates/pages/advisories/cover.html:19
+msgid "Advisory ID"
+msgstr "Advisory-ID"
+
+#: extensions/report_templates/default_template/templates/pages/advisories/cover.html:24
+#: extensions/report_templates/default_template/templates/pages/cover.html:20
+msgid "Generator"
+msgstr "Generator"
+
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-generic-asset.html:2
+msgid "Other Assets"
+msgstr ""
+
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-generic-asset.html:21
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-host.html:20
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-mobile-application.html:21
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-thick-client.html:21
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-web-application.html:21
+msgid "Environment"
+msgstr "Umgebung"
+
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-generic-asset.html:22
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-host.html:21
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-mobile-application.html:22
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-thick-client.html:22
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-web-application.html:22
+msgid "Accessibility"
+msgstr "Erreichbarkeit"
+
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-host.html:2
+msgid "Hosts"
+msgstr "Hosts"
+
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-host.html:22
+msgid "IP"
+msgstr "IP"
+
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-mobile-application.html:2
+msgid "Mobile Applications"
+msgstr "Mobile Anwendung"
+
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-mobile-application.html:23
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-thick-client.html:23
+msgid "Operating System"
+msgstr "Betriebssystem"
+
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-mobile-application.html:24
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-thick-client.html:24
+#: extensions/report_templates/default_template/templates/pages/cover.html:16
+#: extensions/report_templates/default_template/templates/pages/version_history.html:31
+msgid "Version"
+msgstr "Version"
+
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-thick-client.html:2
+msgid "Thick Clients"
+msgstr ""
+
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-web-application.html:2
+msgid "Web Applications"
+msgstr "Web Anwendung"
+
+#: extensions/report_templates/default_template/templates/pages/assessment-information/scope-web-application.html:23
+msgid "Base URL"
+msgstr "Basis URL"
+
+#: extensions/report_templates/default_template/templates/pages/assessment_information.html:2
+#: extensions/report_templates/default_template/templates/pages/toc.html:10
+msgid "Assessment Information"
+msgstr "Projektinformationen"
+
+#: extensions/report_templates/default_template/templates/pages/assessment_information.html:30
+#, fuzzy
+#| msgid "Proprietary Information"
+msgid "Client Information"
+msgstr "Geschützte Informationen"
+
+#: extensions/report_templates/default_template/templates/pages/assessment_information.html:42
+#: extensions/report_templates/default_template/templates/pages/toc.html:13
+msgid "Contacts"
+msgstr "Kontakte"
+
+#: extensions/report_templates/default_template/templates/pages/assessment_information.html:69
+#: extensions/report_templates/default_template/templates/pages/toc.html:16
+msgid "Scope"
+msgstr "Umfang"
+
+#: extensions/report_templates/default_template/templates/pages/assessment_information.html:71
+msgid ""
+"This section provides an overview of the agreed scope of the project and the "
+"analysed components."
+msgstr ""
+
+#: extensions/report_templates/default_template/templates/pages/assessment_information.html:77
+msgid "The following items have been agreed as out of scope:"
+msgstr ""
+
+#: extensions/report_templates/default_template/templates/pages/assessment_information.html:90
+msgid ""
+"During the preparations, the following permits were granted for the project:"
+msgstr ""
+
+#: extensions/report_templates/default_template/templates/pages/cover.html:12
+msgid "Author"
+msgstr "Autor"
+
+#: extensions/report_templates/default_template/templates/pages/executive_summary.html:2
+#: extensions/report_templates/default_template/templates/pages/toc.html:20
+msgid "Executive Summary"
+msgstr "Management Summary"
+
+#: extensions/report_templates/default_template/templates/pages/executive_summary.html:4
+msgid ""
+"This executive summary provides a high-level overview of the findings and "
+"recommendations from the recent penetration testing (pentest). The objective "
+"of the pentest was to evaluate the security posture of the in-scope assets, "
+"identify vulnerabilities, and recommend remediation actions to enhance the "
+"overall security."
+msgstr ""
+"Die Management-Summary gibt einen Überblick über die Ergebnisse und "
+"Empfehlungen des jüngsten Penetrationstests (Pentest). Ziel des Pentests war "
+"es, die Sicherheitslage der untersuchten Assets zu bewerten, Schwachstellen "
+"zu ermitteln und Maßnahmen zur Verbesserung der allgemeinen Sicherheit zu "
+"empfehlen."
+
+#: extensions/report_templates/default_template/templates/pages/executive_summary.html:15
+#: extensions/report_templates/default_template/templates/pages/toc.html:23
+msgid "Evaluation"
+msgstr "Evaluierung"
+
+#: extensions/report_templates/default_template/templates/pages/executive_summary.html:22
+#: extensions/report_templates/default_template/templates/pages/toc.html:26
+msgid "Assessment Summary"
+msgstr "Projectübersicht"
+
+#: extensions/report_templates/default_template/templates/pages/executive_summary.html:24
+msgid ""
+"The following table represents the penetration testing in-scope items and "
+"breaks down the issues, which were identified and classified by severity of "
+"risk. These findings can be fixed by following the best practices and "
+"recommendation given throughout the report."
+msgstr ""
+"Die folgende Tabelle stellt die während des Penetrationtests identifizierten "
+"Schwachstellen gruppiert nach den In-Scope-Assets dar.Diese Schwachstellen "
+"können behoben werden, indem die bewährten Verfahren und Empfehlungen, die "
+"in diesem Bericht gegeben werden, umgesetzt werden."
+
+#: extensions/report_templates/default_template/templates/pages/executive_summary.html:33
+#: extensions/report_templates/default_template/templates/pages/single_finding.html:9
+msgid "Asset"
+msgstr "Asset"
+
+#: extensions/report_templates/default_template/templates/pages/executive_summary.html:39
+msgid "Total"
+msgstr "Gesamt"
+
+#: extensions/report_templates/default_template/templates/pages/executive_summary.html:61
+msgid ""
+"The following chart gives an overview of how many vulnerabilities were found "
+"for which severity."
+msgstr ""
+
+#: extensions/report_templates/default_template/templates/pages/executive_summary.html:75
+msgid "Recommendations"
+msgstr "Empfehlungen"
+
+#: extensions/report_templates/default_template/templates/pages/last_page.html:2
+msgid "End of Report"
+msgstr "Ende des Berichts"
+
+#: extensions/report_templates/default_template/templates/pages/single_finding.html:10
+msgid "Severity"
+msgstr "Kritikalität"
+
+#: extensions/report_templates/default_template/templates/pages/single_finding.html:11
+#: extensions/report_templates/default_template/templates/pages/version_history.html:34
+msgid "Date"
+msgstr "Datum"
+
+#: extensions/report_templates/default_template/templates/pages/single_finding.html:12
+msgid "Status"
+msgstr "Status"
+
+#: extensions/report_templates/default_template/templates/pages/single_finding.html:28
+#, fuzzy
+#| msgid "Vulnerability Report"
+msgid "Vulnerability"
+msgstr "Schwachstellenbericht"
+
+#: extensions/report_templates/default_template/templates/pages/single_finding.html:37
+#: extensions/report_templates/default_template/templates/pages/single_finding.html:48
+msgid "CVSS Base Score"
+msgstr ""
+
+#: extensions/report_templates/default_template/templates/pages/single_finding.html:62
+#: extensions/report_templates/default_template/templates/pages/toc.html:29
+#: extensions/report_templates/default_template/templates/pages/vulnerabilities_overview.html:15
+msgid "Recommendation"
+msgstr "Empfehlung"
+
+#: extensions/report_templates/default_template/templates/pages/single_finding.html:66
+msgid "Steps to reproduce"
+msgstr "Schritte zur Nachstellung"
+
+#: extensions/report_templates/default_template/templates/pages/technical_details.html:2
+#: extensions/report_templates/default_template/templates/pages/toc.html:47
+msgid "Technical Details"
+msgstr "Technische Details"
+
+#: extensions/report_templates/default_template/templates/pages/technical_details.html:6
+msgid "This section outlines the findings discovered during the assessment."
+msgstr ""
+"In diesem Abschnitt werden die im Pentest entdeckten Findings dargelegt."
+
+#: extensions/report_templates/default_template/templates/pages/technical_details.html:14
+#, fuzzy
+#| msgid "Findings Overview"
+msgid "Findings"
+msgstr "Schwachstellenübersicht"
+
+#: extensions/report_templates/default_template/templates/pages/technical_details.html:16
+msgid ""
+"\"Findings\" are occurrences of various vulnerabilities described in the "
+"previous section. If the remediation of a finding requires steps other than "
+"those described in the vulnerability, the recommendations for the finding "
+"are listed accordingly."
+msgstr ""
+
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:2
+#: extensions/report_templates/default_template/templates/pages/toc.html:34
+msgid "Technical Summary"
+msgstr "Technische Zusammenfassung"
+
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:7
+msgid ""
+"This technical summary provides an overview of the findings resulting from "
+"the pentest conducted on the defined assets. Throughout the test, our team "
+"of skilled ethical hackers simulated real-world attacks on various targets "
+"within scope. The approach included a combination of automated vulnerability "
+"scanning, manual testing, and exploitation techniques to ascertain the level "
+"of resilience against potential malicious actors."
+msgstr ""
+"Diese technische Zusammenfassung gibt einen Überblick über die Ergebnisse "
+"des Pentests, der mit den definierten Assets durchgeführt wurde. Während des "
+"gesamten Tests simulierte unser Team aus erfahrenen ethischen Hackern reale "
+"Angriffe auf verschiedene Ziele innerhalb des Testbereichs. Der Ansatz "
+"umfasste eine Kombination aus automatisierten Schwachstellen-Scans, "
+"manuellen Tests und Ausnutzungstechniken, um den Grad der "
+"Widerstandsfähigkeit gegen potenzielle böswillige Akteure zu ermitteln."
+
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:19
+#: extensions/report_templates/default_template/templates/pages/toc.html:37
+msgid "Post Assessment Clean-up"
+msgstr "Aufräumen nach Projektabschluss"
+
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:21
+msgid ""
+"Any test accounts, which were created for the purpose of this assessment, "
+"should be disabled or removed, as appropriate, together with any associated "
+"content."
+msgstr ""
+"Alle Testkonten, die zum Zweck des Penetrationtests erstellt wurden, sollten "
+"gegebenenfalls deaktiviert oder entfernt werden, zusammen mit allen "
+"zugehörigen Inhalten."
+
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:29
+#: extensions/report_templates/default_template/templates/pages/toc.html:40
+msgid "Risk Ratings"
+msgstr "Riskobewertungen"
+
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:31
+msgid ""
+"The table below gives a key to the risk naming and colours used throughout "
+"this report to provide a clear and concise risk scoring system."
+msgstr ""
+"Die nachstehende Tabelle enthält einen Schlüssel zu den in diesem Bericht "
+"verwendeten Risikobezeichnungen und Farben, um ein klares und "
+"übersichtliches Risikobewertungssystem zu schaffen."
+
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:37
+msgid ""
+"It should be noted that quantifying the overall business risk posed by any "
+"of the issues found in any test is outside our scope. This means that some "
+"risks may be reported as high from a technical perspective but may, as a "
+"result of other controls unknown to us, be considered acceptable by the "
+"business."
+msgstr ""
+"Es ist anzumerken, dass die Quantifizierung des gesamten Geschäftsrisikos, "
+"das von jedem der in einem Test gefundenen Probleme ausgeht, außerhalb "
+"unserer Möglichkeiten liegt. Das bedeutet, dass einige Risiken aus "
+"technischer Sicht als hoch eingestuft werden können, aber aufgrund anderer, "
+"uns unbekannter Kontrollen vom Unternehmen als akzeptabel angesehen werden "
+"können."
+
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:48
+msgid ""
+"The risk rating \"critical\" represents the highest level of risk associated "
+"with a security issue. It indicates that the finding has the potential to "
+"cause severe damage, compromise sensitive data, or enable unauthorized "
+"access to critical systems or resources. The finding has a high likelihood "
+"of being exploited, either by a skilled attacker or through automated tools. "
+"The finding requires immediate attention and remediation to prevent "
+"potential breaches or compromise of critical assets."
+msgstr ""
+
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:62
+msgid ""
+"The risk \"high\" describes a security issue that poses a significant threat "
+"to asset being tested. A high risk finding is easily exploitable, has a wide "
+"range of potential impacts, and may lead to unauthorized access, data "
+"breaches or system compromise. High risk findings may have limitations in "
+"exploitation or impact compared to findings classified as critical. The "
+"finding requires immediate attention and remediation to prevent potential "
+"breaches or compromise of critical assets."
+msgstr ""
+
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:75
+msgid ""
+"The risk rating \"medium\" indicates a level of risk that is not as severe "
+"as \"high\" but is more significant than \"low\". It suggests that there are "
+"weaknesses identified during the penetration testing that could potentially "
+"be exploited by attackers. A medium risk rating implies that the identified "
+"issues can pose a moderate threat to the security of the system or network. "
+"While they may not immediately result in a significant impact, they still "
+"have the potential to be exploited with some effort or under certain "
+"circumstances. However, the risk is not severe enough to cause immediate "
+"damage or compromise critical assets. Once identified, these findings should "
+"be addressed and mitigated by the organization as part of their risk "
+"management strategy."
+msgstr ""
+
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:92
+msgid ""
+"This rating suggests that the issue, if exploited, is unlikely to result in "
+"significant harm or have a substantial impact on the target system or "
+"organization. The finding may have certain weaknesses or weaknesses that are "
+"difficult to exploit, significantly reducing the chances of successful "
+"exploitation. The consequences of exploiting the finding are minimal and "
+"generally do not pose a severe threat to the target organization's "
+"infrastructure, data, or operations. While a \"low\" risk rating may suggest "
+"a relatively low priority for immediate mitigation, it is essential to "
+"remember that maintaining a holistic security posture requires addressing "
+"findings, even if they present lower risks, to avoid potential future "
+"exploitation or connection with higher-risk findings."
+msgstr ""
+
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:109
+msgid ""
+"The risk rating \"informational\" refers a finding that poses little to no "
+"immediate threat or risk to the organization's systems or infrastructure. It "
+"means that the identified issue may not have a significant impact on the "
+"security of the environment, but it is still documented for informational "
+"purposes. An informational risk rating denotes findings that do not "
+"necessarily require immediate action or remediation but may provide valuable "
+"insights for improving the overall security posture. These findings could "
+"include things like harmless misconfigurations, or general information about "
+"the system's architecture. While Informational issues may not pose an "
+"immediate risk, they are still crucial for organizations to be aware of, as "
+"they provide an opportunity to proactively address potential security "
+"weaknesses before they can be exploited by malicious actors. Hence, it is "
+"essential to review and prioritize these findings accordingly, even if "
+"immediate remediation is not necessary."
+msgstr ""
+
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:130
+#: extensions/report_templates/default_template/templates/pages/toc.html:43
+msgid "Findings Overview"
+msgstr "Schwachstellenübersicht"
+
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:132
+msgid ""
+"All the issues identified during the assessment are listed below with a "
+"brief description and risk rating for each issue. The risk rating used in "
+"this report are defined in"
+msgstr ""
+"Alle bei der Bewertung ermittelten Probleme sind nachstehend mit einer "
+"kurzen Beschreibung und einer Risikobewertung für jedes Problem aufgeführt. "
+"Die in diesem Bericht verwendete Risikoeinstufung ist definiert in der"
+
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:137
+msgid "Risk Rating Section"
+msgstr "Riskobewertungssektion"
+
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:142
+#: extensions/report_templates/default_template/templates/pages/vulnerabilities_overview.html:22
+msgid "Finding"
+msgstr ""
+
+#: extensions/report_templates/default_template/templates/pages/technical_summary.html:143
+#: extensions/report_templates/default_template/templates/pages/vulnerabilities_overview.html:23
+msgid "Risk"
+msgstr "Risiko"
+
+#: extensions/report_templates/default_template/templates/pages/toc.html:2
+msgid "Table of Contents"
+msgstr "Inhaltsverzeichnis"
+
+#: extensions/report_templates/default_template/templates/pages/toc.html:6
+#: extensions/report_templates/default_template/templates/pages/version_history.html:2
+msgid "About this Document"
+msgstr "Über dieses Dokument"
+
+#: extensions/report_templates/default_template/templates/pages/version_history.html:4
+msgid "Client Confidentiality"
+msgstr "Streng vertraulich"
+
+#: extensions/report_templates/default_template/templates/pages/version_history.html:6
+msgid ""
+"This document contains sensitive and confidential information pertaining to "
+"the client's security vulnerabilities and to ensure the client's privacy and "
+"protect their business this document is considered strictly confidential and "
+"should not be shared with unauthorized individuals or third parties. Handle "
+"the report with utmost care and follow the client's instructions regarding "
+"its dissemination and storage. This document may not be copied without "
+"written permission."
+msgstr ""
+
+#: extensions/report_templates/default_template/templates/pages/version_history.html:15
+msgid "Proprietary Information"
+msgstr "Geschützte Informationen"
+
+#: extensions/report_templates/default_template/templates/pages/version_history.html:17
+msgid ""
+"The content of this document is considered proprietary information and "
+"should not be disclosed outside of the recipient organization's network."
+msgstr ""
+"Der Inhalt dieses Dokuments wird als urheberrechtlich geschützte Information "
+"betrachtet und sollte nicht außerhalb des Netzwerks des Empfängers "
+"weitergegeben werden."
+
+#: extensions/report_templates/default_template/templates/pages/version_history.html:24
+msgid "Document History"
+msgstr "Dokumentenhistorie"
+
+#: extensions/report_templates/default_template/templates/pages/version_history.html:32
+msgid "Change"
+msgstr "Änderung"
+
+#: extensions/report_templates/default_template/templates/pages/version_history.html:33
+msgid "User"
+msgstr "Benutzer"
+
+#: extensions/report_templates/default_template/templates/pages/vulnerabilities_overview.html:2
+#, fuzzy
+#| msgid "Vulnerability Report"
+msgid "Vulnerabilities"
+msgstr "Schwachstellenbericht"
+
+#: extensions/report_templates/default_template/templates/pages/vulnerabilities_overview.html:4
+msgid ""
+"This section aims to provide a comprehensive assessment of the weaknesses "
+"and potential vulnerabilities identified during the engagement."
+msgstr ""
+
+#: extensions/report_templates/default_template/templates/pentest_report.html:11
+msgid "Client Confidential"
+msgstr "Streng vertraulich"
+
+#: extensions/report_templates/default_template/templates/pentest_report.html:22
+msgid "of"
+msgstr "von"
+
+#: extensions/report_templates/default_template/templates/single_finding_export.html:12
+#, fuzzy
+#| msgid "Client Confidential"
+msgid "Confidential"
+msgstr "Streng vertraulich"
+
+#, fuzzy
+#~ msgid ""
+#~ "The following table shows the in-scope items and a short description of "
+#~ "the asset."
+#~ msgstr ""
+#~ "Die folgende Tabelle zeigt die In-Scope Assets und eine kurze "
+#~ "Beschreibung des Assets."
+
+#~ msgid ""
+#~ "The following listing describes the scope that was defined for the "
+#~ "assessment."
+#~ msgstr ""
+#~ "Die folgende Auflistung beschreibt den Scope, der für das Projekt "
+#~ "festgelegt wurde."
+
+#~ msgid "Description"
+#~ msgstr "Beschreibung"
+
+#~ msgid "Figure"
+#~ msgstr "Grafik"
+
+#~ msgid "Risk Rating"
+#~ msgstr "Riskobewertung"
+
+#~ msgid ""
+#~ "Critical vulnerabilities can lead to a full compromise of the asset. They "
+#~ "pose a serious risk to the security of the target and should be "
+#~ "remediated immediately."
+#~ msgstr ""
+#~ "Kritische Schwachstellen können zu einer vollständigen Kompromittierung "
+#~ "des Objekts führen. Sie stellen ein ernsthaftes Risiko für die Sicherheit "
+#~ "des Zielobjekts dar und sollten sofort behoben werden."
+
+#, fuzzy
+#~| msgid ""
+#~| "A vulnerability was discovered that has been rated as high. This "
+#~| "requires resolution in a short term."
+#~ msgid ""
+#~ "High-risk vulnerabilities pose a serious threat to the target. These "
+#~ "vulnerabilities require resolution in a short-term."
+#~ msgstr ""
+#~ "Es wurde eine Sicherheitslücke entdeckt, die als hoch eingestuft wurde. "
+#~ "Dies erfordert eine kurzfristige Lösung."
+
+#~ msgid ""
+#~ "Vulnerabilities indicated with this severity level pose a medium risk to "
+#~ "the target. Typically, these vulnerabilities depend on other factors that "
+#~ "must be present for successful exploitation. These vulnerabilities should "
+#~ "be resolved throughout the ongoing maintenance process."
+#~ msgstr ""
+#~ "Schwachstellen, die mit diesem Schweregrad angegeben sind, stellen ein "
+#~ "mittleres Risiko für das Ziel dar. Typischerweise hängen diese "
+#~ "Schwachstellen von anderen Faktoren ab, die die für eine erfolgreiche "
+#~ "Ausnutzung vorhanden sein müssen. Diese Schwachstellen sollten im Rahmen "
+#~ "des laufenden Wartungsprozesses behoben werden."
+
+#, fuzzy
+#~| msgid ""
+#~| "A vulnerability was discovered that has been rated as low. This should "
+#~| "be addressed as part of routine maintenance tasks."
+#~ msgid ""
+#~ "Low severity vulnerabilities pose a minimal risk to the target and are "
+#~ "often theoretical in nature. These vulnerabilities should be addressed as "
+#~ "part of routine maintenance tasks."
+#~ msgstr ""
+#~ "Es wurde eine Sicherheitslücke entdeckt, die als gering eingestuft wurde. "
+#~ "Diese sollte im Rahmen der routinemäßigen Wartungsaufgaben behoben werden."
+
+#, fuzzy
+#~| msgid ""
+#~| "A discovery was made that is reported for information. This should be "
+#~| "addressed in order to meet leading practice."
+#~ msgid ""
+#~ "Informational vulnerabilities, by themselves, have little or no impact on "
+#~ "the target. These vulnerabilities should be addressed in order to meet "
+#~ "leading practice."
+#~ msgstr ""
+#~ "Es wurde eine Entdeckung gemacht, die zur Information gemeldet wird. Dies "
+#~ "sollte in Angriff genommen werden, um der führenden Praxis zu entsprechen."
+
+#~ msgid ""
+#~ "This document contains Client Confidential information and may not be "
+#~ "copied without written permission."
+#~ msgstr ""
+#~ "Dieses Dokument enthälgt streng vertrauliche Informationen und darf nicht "
+#~ "ohne schriftliche Einverständnis vervielfälltigt werden."
+
+#~ msgid ""
+#~ "The graphs below represent a summary of the total number of findings "
+#~ "found up until issuing this current report:"
+#~ msgstr ""
+#~ "Die nachstehenden Schaubilder geben einen Überblick über die Gesamtzahl "
+#~ "der bis zur Veröffentlichung dieses Berichts festgestellten Mängel:"
+
+#~ msgid "Strategic Recommendations"
+#~ msgstr "Strategische Empfehlungen"
+
+#~ msgid ""
+#~ "A vulnerability was discovered that has been rated as critical. This "
+#~ "requires resolution as quickly as possible."
+#~ msgstr ""
+#~ "Es wurde eine Sicherheitslücke entdeckt, die als kritisch eingestuft "
+#~ "wurde. Diese muss so schnell wie möglich behoben werden."
+
+#~ msgid ""
+#~ "A vulnerability was discovered that has been rated as medium. This should "
+#~ "be resolved throughout the ongoing maintenance process."
+#~ msgstr ""
+#~ "Es wurde eine Sicherheitslücke entdeckt, die als mittel eingestuft wurde. "
+#~ "Diese sollte im Rahmen des laufenden Wartungsprozesses behoben werden."
+
+#~ msgid "Reference"
+#~ msgstr "Referenz"

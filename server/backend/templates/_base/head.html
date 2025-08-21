@@ -1,0 +1,17 @@
+{% load django_vite %}
+{% load static %}
+<meta charset="UTF-8">
+<link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="{% static 'css/codehilite.css' %}" />
+<link rel="stylesheet" href="{% static 'css/themes/'|add:settings.PECO_THEME %}" />
+<link rel="stylesheet" href="{% static 'fonts/lato/lato.css' %}"/>
+
+
+{% vite_asset 'src/assets/main.css.js' %}
+
+{% vite_hmr_client %}
+<script>
+    window.API_BASE_URL = '/api';
+</script>

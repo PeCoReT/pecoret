@@ -1,0 +1,30 @@
+:root {
+  /* github theme :) */
+  --muted: 214 25% 11%;
+  --muted-foreground: 214 8% 60%;
+  --border: 214 12% 27%;
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --navbar: 218 80% 2%;
+  --navbar-foreground: var(--foreground);
+  --popover: 214 25% 11%;
+  --popover-foreground: var(--foreground);
+  --card: var(--background);
+  --card-foreground: var(--foreground);
+  --input: var(--border);
+  --ring: 221.2 83.2% 53.3%;
+  --primary-foreground: 0 0% 100%;
+  --primary: 216 84% 52%;
+  --secondary: 212 19% 16%;
+  --secondary-foreground: var(--foreground);
+
+  --accent: 217 27.97% 14.49%;
+  --accent-foreground: 217 18% 80%;
+  --destructive: 2 95% 53%;
+  --destructive-foreground: 0 0% 100%;
+  --chart-1: 217 87% 23%;
+  --chart-2: 214 39% 15%;
+  --chart-3: 202 65% 45%;
+  --chart-4: 217 18% 21%;
+  --chart-5: 217 90% 15%;
+}

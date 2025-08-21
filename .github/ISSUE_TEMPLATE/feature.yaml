@@ -1,0 +1,30 @@
+name: Feature Request
+description: Give enhancement ideas, feature requests, ...
+labels: ["enhancement", "P/medium"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill an feature request!
+  - type: textarea
+    id: the-problem
+    attributes:
+      label: The problem you are addressing?
+      description: What problem would this enhancement solve?
+    validations:
+      required: true
+  - type: textarea
+    id: the-solution
+    attributes:
+      label: The Solution you would like
+      description: Describe a possible solution you would like.
+    validations:
+      required: true
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional Information
+      description: If there are some information you want to share about the issue
+    validations:
+      required: false

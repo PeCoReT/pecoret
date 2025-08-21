@@ -1,0 +1,152 @@
+project-types:
+  - name: Web Application Pentest
+  - name: Red Team Assessment
+  - name: System Level Pentest
+  - name: Thick Client Pentest
+  - name: Mobile Application Pentest
+  - name: Source Code Review
+  - name: Misc
+
+
+users:
+  - username: hschrader
+    first_name: Hank
+    last_name: Schrader
+    password: InitialPassword123
+    email: hschrader@pecoret.lan
+    groups:
+      - Management
+  - username: pentester1
+    first_name: Pentest
+    last_name: User
+    password: InitialPassword123
+    email: pentester1@pecoret.lan
+    groups:
+      - Pentester
+
+  - username: "ajohnson"
+    first_name: "Alice"
+    last_name: "Johnson"
+    email: "alice.johnson@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"
+  - username: "bwilliams"
+    first_name: "Brian"
+    last_name: "Williams"
+    email: "brian.williams@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"
+  - username: "cdavis"
+    first_name: "Carrie"
+    last_name: "Davis"
+    email: "carrie.davis@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"
+  - username: "ejones"
+    first_name: "Ethan"
+    last_name: "Jones"
+    email: "ethan.jones@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"
+  - username: "fclark"
+    first_name: "Frank"
+    last_name: "Clark"
+    email: "frank.clark@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"
+  - username: "kmiller"
+    first_name: "Karen"
+    last_name: "Miller"
+    email: "karen.miller@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"
+  - username: "lmoore"
+    first_name: "Larry"
+    last_name: "Moore"
+    email: "larry.moore@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"
+  - username: "nking"
+    first_name: "Nancy"
+    last_name: "King"
+    email: "nancy.king@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"
+  - username: "panderson"
+    first_name: "Peter"
+    last_name: "Anderson"
+    email: "peter.anderson@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"
+  - username: "qwhite"
+    first_name: "Quinn"
+    last_name: "White"
+    email: "quinn.white@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"
+  - username: "rsmith"
+    first_name: "Ryan"
+    last_name: "Smith"
+    email: "ryan.smith@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"
+  - username: "jharris"
+    first_name: "Jack"
+    last_name: "Harris"
+    email: "jack.harris@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"
+  - username: "kroberts"
+    first_name: "Katie"
+    last_name: "Roberts"
+    email: "katie.roberts@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"
+  - username: "levans"
+    first_name: "Luke"
+    last_name: "Evans"
+    email: "luke.evans@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"
+  - username: "mmurphy"
+    first_name: "Mark"
+    last_name: "Murphy"
+    email: "mark.murphy@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"
+  - username: "bjackson"
+    first_name: "Beth"
+    last_name: "Jackson"
+    email: "beth.jackson@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"
+  - username: "cwilson"
+    first_name: "Chris"
+    last_name: "Wilson"
+    email: "chris.wilson@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"
+  - username: "dlewis"
+    first_name: "David"
+    last_name: "Lewis"
+    email: "david.lewis@pecoret.lan"
+    password: "InitialPassword123"
+    groups:
+      - "Pentester"

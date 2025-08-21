@@ -1,0 +1,34 @@
+<div id="cover">
+  <div class="cover-container">
+    <div class="title">{{ _('Vulnerability Report') }}</div>
+    <div class="project">{{ advisory.title }}</div>
+    <p class="date">{{ now }}</p>
+  </div>
+
+  <table class="footer">
+    <tr>
+      <td>{{ _('Receipient') }}:</td>
+      {% if advisory.technology.vendor %}
+      <td>{{ advisory.technology.vendor }}</td>
+      {% else %}
+      <td>{{ advisory.technology.name }}</td>
+      {% endif %}
+    </tr>
+    <tr>
+      <td>{{ _('Researcher') }}:</td>
+      <td>{{ advisory.get_researchers() }}</td>
+    </tr>
+    {% if not advisory.hide_advisory_id_in_report %}
+    <tr>
+      <td>{{ _('Advisory ID') }}:</td>
+      <td>{{ advisory.get_advisory_id_display() }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+      <td>{{ _('Generator') }}:</td>
+      <td>
+        <a href="https://pecoret.github.io" rel="noopener nofollow">PeCoReT</a>
+      </td>
+    </tr>
+  </table>
+</div>

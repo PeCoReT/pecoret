@@ -1,0 +1,27 @@
+
+.scope-asset {
+  .header {
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-start;
+    padding: 0;
+    margin: 0;
+
+    .asset-logo {
+      width: 35px;
+      height: 35px;
+    }
+
+    .asset-name {
+      margin-left: 50px;
+    }
+  }
+
+}
+
+.finding-overview-table {
+  .risk {
+    text-align: right;
+    vertical-align: top;
+  }
+}

@@ -1,0 +1,88 @@
+<!-- Header Table -->
+<section id="vuln-{{ finding.pk }}-header" class="clear-header">
+  <h3 id="vuln-{{ finding.pk }}-title">
+    <span class="fa-layers text-{{ finding.get_severity_display().lower() }}">
+      <i class="fas fa-bookmark"></i>
+      <span
+        class="fa-layers-text"
+        data-fa-transform="shrink-8 down-3"
+        style="font-weight: 900"
+      ></span>
+    </span>
+    {{ finding.title }} - {{ finding.finding_id }}
+  </h3>
+
+  <table style="width: 100%" id="intro-detail-table">
+    <thead>
+      <tr>
+        <th>Severity</th>
+        {% if finding.findingcomponent_set.count() %}
+        <th>Affected Components</th>
+        {% endif %}
+        <th>Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="text-{{ finding.get_severity_display().lower() }}">
+          <strong
+            >{{ finding.get_severity_display().lower().capitalize() }}</strong
+          >
+        </td>
+        {% if finding.findingcomponent_set.count() %}
+        <td>{{ finding.findingcomponent_set.count() }}</td>
+        {% endif %}
+        <td>{{ now }}</td>
+        <td>{{ finding.get_status_display() }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  {% if finding.cvss_score %}
+  <table style="margin-top: 30px">
+    <tr>
+      <th>CVSS-Score</th>
+      <td>{{ finding.cvss_score }}</td>
+    </tr>
+  </table>
+  {% endif %}
+</section>
+
+<section id="{{ finding.pk }}-description">
+  <h4>Description</h4>
+  {{ report_helpers.bleach_md(finding.description)|safe }}
+</section>
+
+{% if finding.findingcomponent_set.count() %}
+<section id="{{ finding.pk }}-components">
+  <h4>Affected Components</h4>
+  <table class="table-custom">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for component in finding.findingcomponent_set.all() %}
+      <tr>
+        <td>{{ component.data }}</td>
+        <td>{{ component.get_status_display() }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+
+<section id="proofs-{{ finding.pk }}" class="proofs">
+  <h4>Details</h4>
+  {{ report_helpers.bleach_md(finding.exploitation_details)|safe }}
+</section>
+
+<section id="{{ finding.pk }}-recommendation">
+  <h4>Recommendation</h4>
+  {{ report_helpers.bleach_md(finding.recommendation)|safe }}
+</section>
+

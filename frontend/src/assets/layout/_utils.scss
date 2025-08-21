@@ -1,0 +1,19 @@
+@media (min-width: 768px) {
+  .p-menubar-submenu {
+    right: 0 !important; /* Align the dropdown to the right */
+    left: auto !important; /* Ensure the left property is not overriding */
+    position: absolute !important; /* Ensure the dropdown is positioned correctly */
+  }
+
+  .p-menubar-item {
+    position: relative; /* Ensure the dropdown item is positioned correctly */
+  }
+  .p-menubar-submenu {
+    .p-menubar-item-active {
+      .p-menubar-submenu {
+        margin-left: 1em;
+        left: 100% !important;
+      }
+    }
+  }
+}

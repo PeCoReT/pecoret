@@ -1,0 +1,47 @@
+{% import './macros.jinja2' as helpers %}
+
+<div id="change-history" class="chapter">
+  <h1 class="chapter-title" id="change-history-title">{{ _('About this Document') }}</h1>
+
+  <h4>{{ _('Client Confidentiality') }}</h4>
+  <p>
+    {% trans %}
+      This document contains sensitive and confidential information pertaining to the client's security vulnerabilities
+      and to ensure the client's privacy and protect their business this document is considered strictly confidential
+      and should not be shared with unauthorized individuals or third parties.
+      Handle the report with utmost care and follow the client's instructions regarding its dissemination and storage.
+      This document may not be copied without written permission.
+    {% endtrans %}
+  </p>
+
+  <h4>{{ _('Proprietary Information') }}</h4>
+  <p>
+    {% trans %}
+      The content of this document is considered proprietary information and should not be disclosed outside of the
+      recipient organization's network.
+    {% endtrans %}
+  </p>
+
+  <section>
+    <h4>{{ _('Document History') }}</h4>
+    <table class="change-history-table table-custom" id="change-history-table">
+      <thead>
+      <tr>
+        <th>{{ _('Version') }}</th>
+        <th>{{ _('Change') }}</th>
+        <th>{{ _('Date') }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      {{ helpers.report_errors_for_section('#change-history-table', report_errors) }}
+      {% for version in report_document.report.changehistory_set.all() %}
+        <tr>
+          <td>{{ version.version }}</td>
+          <td>{{ version.change }}</td>
+          <td>{{ version.date.strftime("%B %d, %Y") }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</div>

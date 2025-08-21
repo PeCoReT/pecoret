@@ -1,0 +1,31 @@
+name: Bug Report
+description: File a bug report
+labels: ["bug", "P/medium"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Summary
+      description: Summarize what happened.
+      placeholder: Tell us what you see!
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce?
+      description: If you know it, please describe the steps to reproduce the bug.
+    validations:
+      required: false
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional Information
+      description: If there are some information you want to share about the issue
+    validations:
+      required: false

@@ -1,0 +1,46 @@
+<section id="vulnerabilities">
+  <h2>{{ _('Vulnerabilities') }}</h2>
+  <p>
+    {% trans %}
+      This section aims to provide a comprehensive assessment of the weaknesses and potential vulnerabilities identified
+      during the engagement.
+    {% endtrans %}
+  </p>
+  {% for vulnerability in vulnerabilities %}
+    <section class="vulnerability" id="vulnerability-{{ vulnerability.pk }}">
+      <h3>{{ vulnerability.name }}</h3>
+
+      {{ report_helpers.bleach_md(vulnerability.description)|safe }}
+
+      <h4>{{ _('Recommendation') }}</h4>
+      {{ report_helpers.bleach_md(vulnerability.recommendation)|safe }}
+
+      <h4>Findings</h4>
+      <table class="w-100 finding-overview-table">
+        <thead>
+        <tr>
+          <th>{{ _('Finding') }}</th>
+          <th class="risk">{{ _('Risk') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for finding in vulnerability.finding_set.for_project(project) %}
+          <tr>
+            <td class="text-{{ finding.get_severity_display().lower() }}">
+              <a href="#finding-{{ finding.pk }}-title">
+                <strong>{{ finding.unique_id }} - {{ finding.vulnerability.name }}</strong>
+              </a>
+              <p class="text-black-200 font-space-small">{{ finding.component }}</p>
+
+            </td>
+            <td class="text-{{ finding.get_severity_display().lower() }} risk">
+              <strong>{{ finding.get_severity_display()|dynamic_trans }}</strong>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+    </section>
+  {% endfor %}
+</section>

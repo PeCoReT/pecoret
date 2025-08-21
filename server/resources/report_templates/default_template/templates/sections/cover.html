@@ -1,0 +1,25 @@
+<article id="cover">
+    <div class="title">{{ report_document.report.title }}</div>
+    <div class="project">{{ project.name }}</div>
+    <p class="date">{{ now }}</p>
+
+    <table class="footer">
+        <tr>
+            <td>{{ _('Receipient') }}:</td>
+            <td>{{ project.company.name }}</td>
+        </tr>
+        <tr>
+            <td>{{ _('Author') }}:</td>
+            <td>{{ settings.SITE_NAME }}</td>
+        </tr>
+        <tr>
+            <td>{{ _('Version') }}:</td>
+            <td>{{ version }}</td>
+        </tr>
+        <tr>
+            <td>{{ _('Generator') }}:</td>
+            <td><a href="https://pecoret.github.io" rel="noopener nofollow">PeCoReT</a></td>
+        </tr>
+    </table>
+
+</article>

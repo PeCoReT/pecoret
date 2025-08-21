@@ -1,0 +1,10 @@
+.table-custom {
+  .reference {
+    a:after {
+      content: target-counter(attr(href), chapter) "." target-counter(attr(href), section);
+    }
+    a {
+      color: var(--color-link-text);
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{% load django_vite %}
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    {% include '_base/head.html' %}
+    <title>{% block title %}{% endblock title %}PeCoReT</title>
+</head>
+
+<body style="background-color: hsl(var(--background))">
+{% block body %}
+
+{% endblock body %}
+</body>
+</html>

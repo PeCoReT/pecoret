@@ -1,0 +1,50 @@
+
+.w-100 {
+  width: 100%;
+}
+
+.page-break-after {
+  page-break-after: always;
+}
+
+.page-break-before {
+  page-break-before: always;
+}
+
+/* borders */
+.border-left-1 {
+  border-left: 1px solid var(--color-border);
+}
+
+.border-1 {
+  border: 1px solid var(--color-border);
+}
+
+.border-right-1 {
+  border-right: 1px solid var(--color-border);
+}
+
+/* flex */
+.flex {
+  display: flex;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  flex: 1;
+  flex-direction: column;
+}
+
+
+/* text */
+.text-black-200 {
+  color: var(--black-200);
+}
+
+.text-black-300 {
+  color: var(--black-300);
+}

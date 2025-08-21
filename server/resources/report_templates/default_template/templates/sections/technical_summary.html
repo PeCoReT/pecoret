@@ -1,0 +1,163 @@
+<article id="technical-summary" class="chapter">
+  <h1 class="chapter-title" id="technical-summary-title">{{ _('Technical Summary') }}</h1>
+</article>
+
+<section>
+  <p>
+    {% trans %}
+      This technical summary provides an overview of the findings resulting from the pentest conducted on the defined
+      assets.
+      Throughout the test, our team of skilled ethical hackers simulated real-world attacks on various targets within
+      scope. The approach included a combination of automated
+      vulnerability scanning, manual testing, and exploitation techniques to ascertain the level of resilience against
+      potential malicious actors.
+    {% endtrans %}
+  </p>
+</section>
+
+<section id="post-assessment-clean-up">
+  <h2>{{ _('Post Assessment Clean-up') }}</h2>
+  <p>
+    {% trans %}
+      Any test accounts, which were created for the purpose of this assessment, should be disabled or removed, as
+      appropriate, together with any associated content.
+    {% endtrans %}
+  </p>
+</section>
+
+<section>
+  <h2 id="section-risk-ratings">{{ _('Risk Ratings') }}</h2>
+  <p>
+    {% trans %}
+      The table below gives a key to the risk naming and colours used throughout this report to provide a clear and
+      concise risk scoring system.
+    {% endtrans %}
+  </p>
+  <p>
+    {% trans %}
+      It should be noted that quantifying the overall business risk posed by any of the issues found in any test is
+      outside
+      our scope. This means that some risks may be reported as high from a technical perspective but may, as a result
+      of other controls unknown to us, be considered acceptable by the business.
+    {% endtrans %}
+  </p>
+
+  <div>
+    <p class="text-critical"><strong>{{ _('Critical') }}</strong></p>
+    <p>
+      {% trans %}
+        The risk rating "critical" represents the highest level of risk associated with a security issue.
+        It indicates that the finding has the potential to cause severe damage, compromise sensitive data, or
+        enable unauthorized access to critical systems or resources.
+        The finding has a high likelihood of being exploited, either
+        by a skilled attacker or through automated tools.
+        The finding requires immediate attention and remediation to prevent potential breaches or compromise of critical
+        assets.
+      {% endtrans %}
+    </p>
+  </div>
+  <div>
+    <p class="text-high"><strong>{{ _('High') }}</strong></p>
+    <p>
+      {% trans %}
+        The risk "high" describes a security issue that poses a significant threat to asset being tested.
+        A high risk finding is easily exploitable, has a wide range of potential impacts, and may lead to unauthorized
+        access, data breaches or system compromise.
+        High risk findings may have limitations in exploitation or impact compared to findings classified as critical.
+        The finding requires immediate attention and remediation to prevent potential breaches or compromise of critical
+        assets.
+      {% endtrans %}
+    </p>
+  </div>
+  <div>
+    <p class="text-medium"><strong>{{ _('Medium') }}</strong></p>
+    <p>
+      {% trans %}
+        The risk rating "medium" indicates a level of risk that is not as severe as "high" but is
+        more significant than "low". It suggests that there are weaknesses identified during the
+        penetration testing that could potentially be exploited by attackers.
+
+        A medium risk rating implies that the identified issues can pose a moderate threat to the security of the system
+        or network. While they may not immediately result in a significant impact, they still have the potential to be
+        exploited with some effort or under certain circumstances. However, the risk is not severe enough to cause
+        immediate damage or compromise critical assets.
+        Once identified, these findings should be addressed and mitigated by the organization as part of their
+        risk management strategy.
+      {% endtrans %}
+    </p>
+  </div>
+  <div>
+    <p class="text-low"><strong>{{ _('Low') }}</strong></p>
+    <p>
+      {% trans %}
+        This rating suggests that the issue, if exploited, is unlikely to result in significant harm or have a
+        substantial impact on the target system or organization.
+        The finding may have certain weaknesses or weaknesses that are
+        difficult to exploit, significantly reducing the chances of successful exploitation.
+        The consequences of exploiting the finding are minimal and generally do not
+        pose a severe threat to the target organization's infrastructure, data, or operations.
+
+        While a "low" risk rating may suggest a relatively low priority for immediate mitigation, it is essential to
+        remember that maintaining a holistic security posture requires addressing findings, even if they present
+        lower risks, to avoid potential future exploitation or connection with higher-risk findings.
+      {% endtrans %}
+    </p>
+  </div>
+  <div>
+    <p class="text-informational"><strong>{{ _('Informational') }}</strong></p>
+    <p>
+      {% trans %}
+        The risk rating "informational" refers a finding that poses little to no immediate threat or risk to the organization's systems or infrastructure.
+        It means that the identified issue may not have a significant impact on the security of the environment, but it is
+        still documented for informational purposes.
+
+        An informational risk rating denotes findings that do not necessarily require
+        immediate action or remediation but may provide valuable insights for improving the overall security posture.
+        These findings could include things like harmless misconfigurations, or general
+        information about the system's architecture.
+
+        While Informational issues may not pose an immediate risk, they are still crucial for organizations to be aware
+        of, as they provide an opportunity to proactively address potential security weaknesses before they can be
+        exploited by malicious actors. Hence, it is essential to review and prioritize these findings accordingly, even
+        if immediate remediation is not necessary.
+      {% endtrans %}
+    </p>
+  </div>
+</section>
+<div class="page-break-after"></div>
+
+<section id="findings-overview">
+  <h2>{{ _('Findings Overview') }}</h2>
+  <p>
+    {% trans %}
+      All the issues identified during the assessment are listed below with a brief description and risk rating for each
+      issue.
+      The risk rating used in this report are defined in
+    {% endtrans %}
+    <a href="#section-risk-ratings">{{ _('Risk Rating Section') }}</a>.
+  </p>
+  <table class="w-100 finding-overview-table">
+    <thead>
+    <tr>
+      <th>{{ _('Finding') }}</th>
+      <th class="risk">{{ _('Risk') }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for finding in findings %}
+      <tr>
+        <td class="text-{{ finding.get_severity_display().lower() }}">
+          <a href="#finding-{{ finding.pk }}-title">
+            <strong>{{ finding.unique_id }} - {{ finding.vulnerability.name }}</strong>
+          </a>
+          <p class="text-black-200 font-space-small">{{ finding.vulnerability.remediation }}</p>
+
+        </td>
+        <td class="text-{{ finding.get_severity_display().lower() }} risk">
+          <strong>{{ finding.get_severity_display()|dynamic_trans }}</strong>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>

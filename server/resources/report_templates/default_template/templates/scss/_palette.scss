@@ -1,0 +1,67 @@
+:root {
+
+  /* base colors */
+  --surface-100: #f2f2f2; /* Lightest */
+  --surface-200: #e0e0e0;
+  --surface-300: #bdbdbd;
+  --surface-400: #9e9e9e; /* Middle */
+  --surface-500: #757575;
+  --surface-600: #616161;
+  --surface-700: #424242; /* Darkest */
+
+  --black-100: #454444;
+  --black-200: #363636;
+  --black-300: #2c2c2c;
+  --black-400: #232323;
+  --black-500: #1d1c1c;
+  --black-600: #161616;
+  --black-700: #0a0a0a;
+
+  --critical: #9c1720;
+  --high: #d13c0f;
+  --medium: #e8971e;
+  --low: #2075f5;
+  --informational: #059D1D;
+  --fixed: #43616f;
+
+  /* header */
+  --color-header-1: var(--primary-700);
+  --color-header-2: var(--primary-600);
+  --color-header-3: var(--primary-600);
+  --color-header-4: var(--primary-600);
+  --color-header-5: var(--primary-600);
+
+  /* font */
+  --font-size-normal: 13px;
+
+  /* page layout */
+  --page-background: var(--surface-100);
+  --page-margin-top: 25mm;
+  --page-margin-bottom: 25mm;
+  --page-margin-right: 25mm;
+  --page-margin-left: 25mm;
+  --page-height: 297mm;
+  --page-content-height: calc(var(--page-height) - var(--page-margin-bottom) - var(--page-margin-top));
+
+
+  /* table of content */
+  --color-toc-level-1: var(--black-600);
+  --color-toc-level-2: var(--black-300);
+
+  /* images */
+  --draft-image: url(file://images/draft.png);
+  --cover-image: url(file://images/cover.jpg);
+
+  /* code block */
+  --bg-codeblock: var(--surface-200);
+  --border-color-codeblock: var(--surface-400);
+
+  /* tables */
+  --border-color-table: var(--black-500);
+
+  /* borders */
+  --color-border: var(--black-500);
+
+  /* links */
+  --color-link-text: var(--surface-400);
+}

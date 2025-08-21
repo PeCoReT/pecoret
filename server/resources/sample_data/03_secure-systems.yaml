@@ -1,0 +1,30 @@
+
+companies:
+  - name: Secure Systems GmbH
+    street: Hauptstrasse 10
+    zipcode: 10115
+    city: Berlin
+    country: Germany
+    contacts:
+      - first_name: Markus
+        last_name: Schmidt
+        email: markus.schmidt@securesystems.gmbh
+        phone: +491234567890
+        role: Chief Information Officer
+
+
+projects:
+  - name: CyberGuard
+    start_date: 2023-07-03
+    end_date: 2023-07-23
+    pentest_types:
+      - Misc
+    test_method: GREY_BOX
+    company: Secure Systems GmbH
+    description: This assessment focuses on identifying vulnerabilities in CyberGuard. CyberGuard is a VPN application developed by *Secure Systems GmbH*.
+    members:
+      - username: hschrader
+        role: OWNER
+    assets:
+      - type: Thick Client
+        name: CyberGuard

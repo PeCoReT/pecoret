@@ -1,0 +1,74 @@
+{% import './macros.jinja2' as helpers %}
+
+<section class="page-break-after">
+    <h3 id="finding-{{ finding.pk }}-title">{{ finding.vulnerability.name }} - {{ finding.unique_id }}</h3>
+    <table class="finding-details">
+        <thead>
+        <tr>
+            <th>{{ _('Asset') }}</th>
+            <th>{{ _('Severity') }}</th>
+            <th>{{ _('Date') }}</th>
+            <th>{{ _('Status') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ finding.asset.name }}</td>
+            <td class="text-{{ finding.get_severity_display().lower() }}">
+                <strong>{{ finding.get_severity_display()|dynamic_trans }}</strong></td>
+            <td>{{ finding.finding_date.strftime("%B %d, %Y") }}</td>
+            <td>{{ finding.get_status_display()|dynamic_trans }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table style="margin-top: 30px;">
+        <tr>
+            <th style="padding-right:65px">{{ _('Vulnerability') }}</th>
+            <td>
+                <a href="#vulnerability-{{ finding.vulnerability.pk }}"
+                   class="text-black-200">{{ finding.vulnerability.name|dynamic_trans }}</a>
+            </td>
+        </tr>
+
+        {% if finding.project.require_cvss_score == 1 %}
+            <tr>
+                <th style="padding-right: 65px">{{ _('CVSS Base Score') }}</th>
+                <td>
+                    {% if finding.cvss31_score %}
+                        {{ finding.cvss31_score.0 }} - {{ finding.cvss31_score.1 | dynamic_trans }} (
+                        {{ finding.cvss_score_31 }})
+                    {% else %}
+                        Incomplete
+                    {% endif %}
+                </td>
+            </tr>
+        {% elif finding.project.require_cvss_score == 0 %}
+            <tr>
+                <th style="padding-right: 65px">{{ _('CVSS Base Score') }}</th>
+                <td>
+                    {% if finding.cvss40_score %}
+                        {{ finding.cvss40_score.0 }} - {{ finding.cvss40_score.1 | dynamic_trans }} (
+                        {{ finding.cvss_score_40 }})
+                    {% else %}
+                        Incomplete
+                    {% endif %}
+                </td>
+            </tr>
+        {% endif %}
+
+    </table>
+
+    <h4>{{ _('Details') }}</h4>
+    <div class="proofs" id="finding-{{ finding.pk }}-proofs">
+        {{ helpers.report_errors_for_section('#finding-' + finding.pk|string + '-proofs', report_errors) }}
+
+        {{ report_helpers.bleach_md(finding.report_proof_text)|safe }}
+    </div>
+
+    {% if finding.recommendation %}
+        <h4>{{ _('Recommendation') }}</h4>
+        {{ report_helpers.bleach_md(finding.recommendation)|safe }}
+    {% endif %}
+
+</section>

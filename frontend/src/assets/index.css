@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply font-sans antialiased bg-background text-sm text-foreground;
+    }
+
+    .card {
+        @apply border shadow-none p-[2rem] mb-0 rounded-lg;
+    }
+}
+
+@layer base {
+    :root {
+        --vis-tooltip-background-color: none !important;
+        --vis-tooltip-border-color: none !important;
+        --vis-tooltip-text-color: none !important;
+        --vis-tooltip-shadow-color: none !important;
+        --vis-tooltip-backdrop-filter: none !important;
+        --vis-tooltip-padding: none !important;
+
+        --vis-primary-color: var(--primary);
+        --vis-secondary-color: var(--secondary);
+        --vis-text-color: var(--muted-foreground);
+        --radius: 0.5rem;
+    }
+}
+
+pre {
+    white-space: pre-wrap; /* Allow wrapping of text */
+    word-wrap: break-word;
+}

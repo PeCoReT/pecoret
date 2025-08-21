@@ -1,0 +1,39 @@
+{% for asset_type in asset_types %}
+    {% if project.asset_set.filter(asset_type=asset_type).exists() %}
+        <h4>{{ _(asset_type.name) }}</h4>
+
+        {% for asset in project.asset_set.filter(asset_type=asset_type).all() %}
+            <div class="scope-asset">
+                <div class="header">
+      <span class="asset-logo">
+            <img src="file://images/assets/{{ template.get_asset_type_logo(asset_type) }}.svg" class="asset-logo">
+      </span>
+                    <div class="asset-name">
+                        <strong>{{ asset }}</strong>
+                        {{ report_helpers.bleach_md(asset.description)|safe }}
+
+                    </div>
+                </div>
+
+
+                <table class="w-100">
+                    <tr>
+                        <th>{{ _('Environment') }}</th>
+                        <th>{{ _('Accessibility') }}</th>
+                    </tr>
+                    <tr>
+                        <td>{{ asset.get_environment_display() | dynamic_trans }}</td>
+                        <td>{{ asset.get_accessible_display() | dynamic_trans }}</td>
+                    </tr>
+                </table>
+
+            </div>
+
+
+            {% if not loop.last %}
+                <hr/>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endfor %}
+

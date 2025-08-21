@@ -1,0 +1,91 @@
+<!-- Header Table -->
+<section id="vuln-{{ advisory.pk }}-header" class="clear-header">
+  <h3 id="vuln-{{ advisory.pk }}-title">
+    <span class="fa-layers text-{{ advisory.get_severity_display().lower() }}">
+      <i class="fas fa-bookmark"></i>
+      <span
+        class="fa-layers-text"
+        data-fa-transform="shrink-8 down-3"
+        style="font-weight: 900"
+      ></span>
+    </span>
+    {{ advisory.title}}{% if not advisory.hide_advisory_id_in_report %} - {{
+    advisory.get_advisory_id_display() }}{% endif %}
+  </h3>
+
+  <table style="width: 100%" id="intro-detail-table">
+    <thead>
+      <tr>
+        <th>Severity</th>
+        <th>Discovery</th>
+        <th>Planned Disclosure</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="text-{{ advisory.get_severity_display().lower() }}">
+          <strong
+            >{{ advisory.get_severity_display().lower().capitalize() }}</strong
+          >
+        </td>
+        <td>{{ advisory.date_created.strftime("%B %d, %Y") }}</td>
+        <td>{{ advisory.date_planned_disclosure.strftime("%B %d, %Y") }}</td>
+        <td>{{ advisory.get_vulnerability_status_display() }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table style="margin-top: 30px">
+    <tr>
+      {% if advisory.technology.vendor %}
+      <th style="padding-right: 65px">Vendor / Product</th>
+      <td>{{ advisory.vendor_name }} / {{ advisory.product }}</td>
+      {% else %}
+      <th style="padding-right: 65px">Product</th>
+      <td>{{ advisory.technology.name }}</td>
+      {% endif %}
+    </tr>
+    <tr>
+      <th>Affected Versions</th>
+      <td>{{ advisory.affected_versions }}</td>
+    </tr>
+    <tr>
+      <th>Fixed Versions</th>
+      <td>
+        {% if advisory.fixed_version %}{{ advisory.fixed_version }}{% else %}-{%
+        endif %}
+      </td>
+    </tr>
+    <tr>
+      <th>CVE-ID</th>
+      <td>
+        {% if advisory.cve_id %}{{ advisory.cve_id }}{% else %}-{% endif %}
+      </td>
+    </tr>
+    <tr>
+      <th>Discovered by</th>
+      <td>{{ advisory.get_researchers() }}</td>
+    </tr>
+    {% if advisory.cvss_vector %}
+    <tr>
+      <th>CVSS:</th>
+      <td>{{ advisory.cvss_vector }}</td>
+    </tr>
+    {% endif %}
+  </table>
+</section>
+
+<section id="{{ advisory.pk }}-description">
+  <h4>Description</h4>
+  {{ report_helpers.bleach_md(advisory.description)|safe }}
+</section>
+<section id="proofs-{{ advisory.pk }}" class="proofs">
+  <h4>Details</h4>
+  {{ report_helpers.bleach_md(advisory.proof_text)|safe }}
+</section>
+
+<section id="{{ advisory.pk }}-recommendation">
+  <h4>Recommendation</h4>
+  {{ report_helpers.bleach_md(advisory.recommendation)|safe }}
+</section>

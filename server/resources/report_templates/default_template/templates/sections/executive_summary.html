@@ -1,0 +1,84 @@
+{% import './macros.jinja2' as helpers %}
+
+<article id="executive-summary" class="chapter">
+    <h1 class="chapter-title" id="executive-summary-title">{{ _('Executive Summary') }}</h1>
+
+    {% trans %}
+    This executive summary provides a high-level overview of the findings and recommendations from the recent
+    penetration testing (pentest).
+    The objective of the pentest was to evaluate the security posture of the in-scope assets, identify
+    vulnerabilities, and recommend remediation actions to enhance the overall security.
+    {% endtrans %}
+
+</article>
+
+<article>
+    <section id="executive-summary-evaluation">
+        <h2>{{ _('Evaluation') }}</h2>
+        {{ helpers.report_errors_for_section('#executive-summary-evaluation', report_errors) }}
+        {{ report_helpers.bleach_md(report_document.report.evaluation)|safe }}
+    </section>
+    <section id="executive-summary-assessment-summary">
+        <h2>{{ _('Assessment Summary') }}</h2>
+        <p>
+            {% trans %}
+            The following table represents the penetration testing in-scope items and breaks down the issues, which
+            were
+            identified and classified by severity of risk.
+            These findings can be fixed by following the best practices and recommendation given throughout the
+            report.
+            {% endtrans %}
+        </p>
+        <table class="table-custom">
+            <thead>
+                <tr>
+                    <th>{{ _('Asset') }}</th>
+                    <th>{{ _('Critical') }}</th>
+                    <th>{{ _('High') }}</th>
+                    <th>{{ _('Medium') }}</th>
+                    <th>{{ _('Low') }}</th>
+                    <th>{{ _('Informational') }}</th>
+                    <th>{{ _('Total') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for asset in project.asset_set.all() %}
+                <tr>
+                    <td>{{ asset }}</td>
+                    <td>{{ template.get_findings_count_for_asset(asset, "CRITICAL") }}</td>
+                    <td>{{ template.get_findings_count_for_asset(asset, "HIGH") }}</td>
+                    <td>{{ template.get_findings_count_for_asset(asset, "MEDIUM") }}</td>
+                    <td>{{ template.get_findings_count_for_asset(asset, "LOW") }}</td>
+                    <td>{{ template.get_findings_count_for_asset(asset, "INFORMATIONAL") }}</td>
+                    <td>{{ template.get_findings_count_for_asset(asset) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+
+    <section>
+        <p>
+            {% trans %}
+            The following chart gives an overview of how many vulnerabilities were found for which severity.
+            {% endtrans %}
+        </p>
+    </section>
+    <section class="chart-container">
+        <div class="findings-bar">
+            {{ charts.findings_bar.plot() }}
+
+        </div>
+    </section>
+
+
+    <section>
+        <h2 id="executive-summary-recommendation">{{ _('Recommendations') }}</h2>
+        <p>
+            {{ helpers.report_errors_for_section('#executive-summary-recommendation', report_errors) }}
+
+            {{ report_helpers.bleach_md(report_document.report.recommendation)|safe }}
+        </p>
+    </section>
+</article>

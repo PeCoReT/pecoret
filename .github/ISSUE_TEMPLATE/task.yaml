@@ -1,0 +1,20 @@
+name: Task
+description: 'Anything else'
+labels: ["P/medium"]
+
+
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Give a brief summary
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional Information
+      description: If there are some information you want to share about the issue
+    validations:
+      required: false

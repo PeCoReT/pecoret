@@ -1,0 +1,29 @@
+:root {
+    /* source: https://ui.jln.dev/ */
+    --background: 228 44.76% 5.85%;
+    --foreground: 228 19% 98%;
+    --muted: 228 32% 15%;
+    --muted-foreground: 228 15% 75%;
+    --popover: 228 67.03% 5.53%;
+    --popover-foreground: 228 19% 98%;
+    --card: 228 65.82% 5.57%;
+    --card-foreground: 228 19% 98%;
+    --border: 228 24.59% 17.9%;
+    --input: 228 2% 15%;
+    --primary: 228 42% 43%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 228 7% 10%;
+    --secondary-foreground: 228 7% 70%;
+    --accent: 228 13% 18%;
+    --accent-foreground: 228 13% 78%;
+    --destructive: 5 98% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 228 42% 43%;
+    --chart-1: 228 42% 43%;
+    --chart-2: 228 7% 10%;
+    --chart-3: 228 13% 18%;
+    --chart-4: 228 7% 13%;
+    --chart-5: 228 45% 43%;
+    --navbar: var(--card);
+    --navbar-foreground: var(--card-foreground);
+}

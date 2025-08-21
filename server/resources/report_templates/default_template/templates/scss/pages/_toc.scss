@@ -1,0 +1,49 @@
+
+#toc {
+  a {
+    text-decoration: none;
+
+    &:after {
+      content: target-counter(attr(href), page);
+      position: absolute;
+      right: 0;
+      padding-left: 2px;
+    }
+  }
+
+  .entry {
+    position: relative;
+    display: flex;
+  }
+
+  .level-1 {
+    margin-bottom: 1.0em;
+    font-weight: bold;
+
+    a {
+      color: var(--color-toc-level-1);
+      font-size: 14px;
+    }
+  }
+
+  .level-2 {
+    margin-bottom: 1.0em;
+    font-weight: normal;
+    font-size: 11px;
+    padding-left: 6mm;
+
+    a {
+      color: var(--color-toc-level-2);
+      font-size: 14px;
+
+    }
+
+
+  }
+}
+
+
+#toc .level-1:not(:first-child) {
+  margin-top: 2em;
+}
+

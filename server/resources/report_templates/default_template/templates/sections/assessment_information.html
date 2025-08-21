@@ -1,0 +1,98 @@
+<div id="assessment-information" class="chapter">
+  <h1 class="chapter-title">{{ _('Assessment Information') }}</h1>
+</div>
+
+<div class="row">
+  <div class="column">
+    <h4 id="assessment-information-contacts">{{ settings.SITE_NAME }}</h4>
+
+    {% for member in members %}
+      <table class="{% if not loop.first %}mt-small{% endif %}">
+        <tr>
+          <td>
+            {{ member.user.report_display_name }}
+        </tr>
+        <tr>
+          <td>{{ member.get_role_display() }}</td>
+        </tr>
+        <tr>
+          <td>{{ member.user.email }}</td>
+        </tr>
+      </table>
+    {% endfor %}
+
+  </div>
+  <div class="column border-left-1 pl-3">
+    <h4>{{ _('Client Information') }}</h4>
+    <table>
+      <tr>
+        <td>{{ project.company.name }}</td>
+      </tr>
+      <tr>
+        <td>{{ project.company.street }}</td>
+      </tr>
+      <tr>
+        <td>{{ project.company.zipcode }} {{ project.company.city }}, {{ project.company.country }}</td>
+      </tr>
+    </table>
+    <h4>{{ _('Contacts') }}</h4>
+    {% for contact in project.projectcontact_set.all() %}
+      <table class="{% if not loop.first %}mt-small{% endif %}">
+        <tr>
+          <td>{{ contact.contact.first_name }} {{ contact.contact.last_name }}</td>
+        </tr>
+        {% if contact.contact.role %}
+          <tr>
+            <td>{{ contact.contact.role }}</td>
+          </tr>
+        {% endif %}
+        {% if contact.contact.email %}
+          <tr>
+            <td>{{ contact.contact.email }}</td>
+          </tr>
+        {% endif %}
+        {% if contact.contact.phone %}
+          <tr>
+            <td>{{ contact.contact.phone }}</td>
+          </tr>
+        {% endif %}
+      </table>
+    {% endfor %}
+  </div>
+</div>
+
+<div id="assessment-information-scope">
+  <h2>{{ _('Scope') }}</h2>
+  <p>
+    {% trans %}
+      This section provides an overview of the scope of the project and the analysed components.
+    {% endtrans %}
+  </p>
+  {% if scopes.forbidden().exists() %}
+    <p>
+      {% trans %}
+        The following items have been agreed as out of scope:
+      {% endtrans %}
+    <ul>
+      {% for scope in scopes.forbidden() %}
+        <li>{{ scope.details }}</li>
+      {% endfor %}
+    </ul>
+    </p>
+  {% endif %}
+
+  {% if scopes.allowed().exists() %}
+    <p>
+      {% trans %}
+        During the preparations, the following permits were granted for the project:
+      {% endtrans %}
+    <ul>
+      {% for scope in scopes.allowed() %}
+        <li>{{ scope.details }}</li>
+      {% endfor %}
+    </ul>
+    </p>
+  {% endif %}
+
+  {% include './sections/assessment-information/scope-web-application.html' %}
+</div>

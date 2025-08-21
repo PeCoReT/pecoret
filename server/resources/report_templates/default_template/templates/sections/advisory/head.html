@@ -1,0 +1,24 @@
+<head>
+    <style>
+        @page {
+            @bottom-left {
+                font-size: 10px;
+                content: "Confidential";
+                margin-top: -5px;
+
+            }
+
+            @bottom-center {
+                content: "{% if not advisory.hide_advisory_id_in_report %}{{ advisory.get_advisory_id_display() }} ({{ advisory.technology.name }}){% else %}{{ advisory.technology.name }}{% endif %}";
+                font-size: 10px;
+                margin-top: -5px;
+            }
+
+            @bottom-right {
+                font-size: 10px;
+                content: counter(page) ' / ' counter(pages);
+                margin-top: -5px;
+            }
+        }
+    </style>
+</head>
