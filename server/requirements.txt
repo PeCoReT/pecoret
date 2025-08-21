@@ -6,7 +6,7 @@ django-cors-headers==4.7.0
 django_q2==1.7.6
 weasyprint==65.1
 libsass==0.23.0
-markdown==3.8
+markdown==3.8.2
 pygments==2.19.1
 drf-spectacular==0.28.0
 cvss==3.4
