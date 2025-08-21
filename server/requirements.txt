@@ -9,7 +9,7 @@ libsass==0.23.0
 markdown==3.8.2
 pygments==2.19.2
 drf-spectacular==0.28.0
-cvss==3.4
+cvss==3.6
 jinja2==3.1.6
 argon2-cffi==23.1.0
 rest-framework-generic-relations==2.2.0
