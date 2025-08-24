@@ -6,32 +6,25 @@ from pecoret.core.viewsets import PeCoReTNoUpdateViewSet
 
 
 @extend_schema_view(
-    list=extend_schema(
-        operation_id='Get all API tokens', tags=['API Tokens']
-    ),
+    list=extend_schema(operation_id="Get all API tokens", tags=["API Tokens"]),
     retrieve=extend_schema(
-        operation_id='Get a specific API token', tags=['API Tokens']
+        operation_id="Get a specific API token", tags=["API Tokens"]
     ),
-    destroy=extend_schema(
-        operation_id='Delete a API token', tags=['API Tokens']
-    ),
-    create=extend_schema(
-        operation_id='Create a new API token', tags=['API Tokens']
-    )
+    destroy=extend_schema(operation_id="Delete a API token", tags=["API Tokens"]),
+    create=extend_schema(operation_id="Create a new API token", tags=["API Tokens"]),
 )
 class APITokenViewSet(PeCoReTNoUpdateViewSet):
     queryset = APIToken.objects.none()
     search_fields = ["name"]
-    ordering_fields = ['date_created', 'date_updated']
+    ordering_fields = ["date_created", "date_updated"]
     serializer_class = APITokenSerializer
     api_scope = None  # do not allow api tokens to configure api tokens
     permission_classes = [
         permissions.GroupPermission(
             read_write_groups=[
-                permissions.Groups.GROUP_MANAGEMENT,
                 permissions.Groups.GROUP_PENTESTER,
             ],
-            read_only_groups=[]
+            read_only_groups=[],
         )
     ]
 

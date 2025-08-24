@@ -45,11 +45,11 @@ export default {
 
 <template>
     <Card title="Latest Submissions">
-        <DataViewContent :items="items" :loading="loading" class="hover:bg-accent hover:text-accent-foreground !rounded-none">
+        <DataViewContent :items="items" :loading="loading" class="!p-0 hover:bg-accent hover:text-accent-foreground !rounded-none">
             <template #item="{ item }">
                 <a class="w-full p-0 m-0" :href="getLink(item.pk)">
-                    <div class="flex p-1 gap-4">
-                        <span  class="flex justify-start w-full">
+                    <div class="flex p-4 gap-4">
+                        <span class="flex justify-start w-full">
                             {{ item.title }}
                         </span>
                         <div class="flex align-center justify-end">

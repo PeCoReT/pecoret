@@ -1,15 +1,24 @@
 <script>
+import UserSettingsPageLayout from '@/layout/UserSettingsPageLayout.vue';
 import AlertPanel from '@/components/alert/Alert.vue';
 import { useAuthStore } from '@/store/auth';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/select';
 import { DatePicker } from '@/components/datepicker';
 import { Button } from '@/components/ui/button';
-import ContainerLayout from '@/layouts/ContainerLayout.vue';
+import PageHeader from '@/components/typography/PageHeader.vue';
 
 export default {
-    name: 'APITokenCreate.vue',
-    components: { ContainerLayout, AlertPanel, Input, Select, DatePicker, Button },
+    name: 'APITokenCreate',
+    components: {
+        UserSettingsPageLayout,
+        AlertPanel,
+        Input,
+        Select,
+        DatePicker,
+        Button,
+        PageHeader
+    },
     data() {
         return {
             model: {
@@ -23,30 +32,11 @@ export default {
                 scope_knowledgebase: 'No Access'
             },
             authStore: useAuthStore(),
-            breadcrumbs: [
-                {
-                    label: 'API-Tokens',
-                    route: this.$router.resolve({ name: 'APITokenList' })
-                },
-                {
-                    label: 'Create',
-                    disabled: true
-                }
-            ],
             loading: false,
             accessChoices: [
-                {
-                    label: 'No Access',
-                    value: 'No Access'
-                },
-                {
-                    label: 'Read',
-                    value: 'Read'
-                },
-                {
-                    label: 'Read Write',
-                    value: 'Read Write'
-                }
+                { label: 'No Access', value: 'No Access' },
+                { label: 'Read', value: 'Read' },
+                { label: 'Read Write', value: 'Read Write' }
             ]
         };
     },
@@ -67,35 +57,43 @@ export default {
 </script>
 
 <template>
-    <ContainerLayout :breadcrumbs="breadcrumbs">
-        <h3 class="text-3xl mb-3">Create API-Token</h3>
+    <UserSettingsPageLayout subheadline="Manage your API tokens!" headline="API Tokens">
         <Form>
             <Field label="Name">
-                <Input id="name" v-model="model.name" type="text"></Input>
+                <Input id="name" v-model="model.name" type="text" />
             </Field>
+
             <Field label="Date Expire?">
-                <DatePicker id="date_expire" v-model="model.date_expire"></DatePicker>
+                <DatePicker id="date_expire" v-model="model.date_expire" />
             </Field>
-            <Field label="Scope All Projects?">
-                <Select v-model="this.model.scope_all_projects" :options="accessChoices" class="w-full"></Select>
+
+            <PageHeader>Scopes</PageHeader>
+
+            <Field label="All Projects">
+                <Select v-model="model.scope_all_projects" :options="accessChoices" class="w-full" />
             </Field>
-            <Field label="Scope Companies?">
-                <Select v-model="this.model.scope_companies" :options="accessChoices" class="w-full"></Select>
+
+            <Field label="Companies">
+                <Select v-model="model.scope_companies" :options="accessChoices" class="w-full" />
             </Field>
-            <Field label="Scope User?">
-                <Select v-model="this.model.scope_user" :options="accessChoices" class="w-full"></Select>
+
+            <Field label="User">
+                <Select v-model="model.scope_user" :options="accessChoices" class="w-full" />
             </Field>
-            <Field label="Scope Advisories?">
-                <Select v-model="this.model.scope_advisories" :options="accessChoices" class="w-full"></Select>
+
+            <Field label="Advisories">
+                <Select v-model="model.scope_advisories" :options="accessChoices" class="w-full" />
             </Field>
-            <Field label="Scope Attack Surface?">
-                <Select v-model="this.model.scope_attack_surface" :options="accessChoices" class="w-full"></Select>
+
+            <Field label="Attack Surface">
+                <Select v-model="model.scope_attack_surface" :options="accessChoices" class="w-full" />
             </Field>
-            <Field label="Scope Knowledge Base?">
-                <Select v-model="this.model.scope_knowledgebase" :options="accessChoices" class="w-full"></Select>
+
+            <Field label="Knowledge Base">
+                <Select v-model="model.scope_knowledgebase" :options="accessChoices" class="w-full" />
             </Field>
+
             <Button class="w-full" @click="create">Save</Button>
         </Form>
-    </ContainerLayout>
-
+    </UserSettingsPageLayout>
 </template>

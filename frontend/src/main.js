@@ -9,12 +9,10 @@ import { Card } from '@/components/card';
 
 import { Field, Form, InlineField, InlineFieldGroup } from '@/components/form';
 
-
 const app = createApp(App);
 registerPlugins(app);
 
 app.use(router);
-
 
 // COMPONENTS
 // common form components

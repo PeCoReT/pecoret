@@ -26,15 +26,6 @@ export default {
                     }).href
                 },
                 {
-                    label: 'Comments',
-                    route: this.$router.resolve({
-                        name: 'AdvisoryCommentList',
-                        params: {
-                            advisoryId: this.$route.params.advisoryId
-                        }
-                    }).href
-                },
-                {
                     label: 'Share Tokens',
                     route: this.$router.resolve({
                         name: 'AdvisoryShareTokenList',

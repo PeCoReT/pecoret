@@ -11,7 +11,6 @@ from pecoret.core.validators.cvss import cvss_regex_validator
 from pecoret.reporting.utils import get_report_template_choices
 from advisories.models.advisory_timeline import AdvisoryTimeline
 from backend.models.finding import Severity
-from backend.models.vulnerability import VulnerabilityTemplate
 from backend.models.technology import Technology
 
 
@@ -124,6 +123,7 @@ class Advisory(TimestampedModel):
     custom_report_title = models.CharField(max_length=255, null=True, blank=True)
     hide_advisory_id_in_report = models.BooleanField(default=False)
     proof_text = models.TextField(blank=True, default="")
+    is_draft = models.BooleanField(default=True)
     report_template = models.CharField(
         max_length=128, choices=get_report_template_choices
     )

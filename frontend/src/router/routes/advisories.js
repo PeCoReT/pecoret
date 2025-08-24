@@ -28,11 +28,6 @@ const advisoryRoutes = [
                 component: () => import('@/views/pages/advisories/TimelineList.vue')
             },
             {
-                name: 'AdvisoryCommentList',
-                path: '/advisories/:advisoryId/comments',
-                component: () => import('@/views/pages/advisories/CommentList.vue')
-            },
-            {
                 name: 'AdvisoryDashboard',
                 path: '/advisories/dashboard',
                 component: () => import('@/views/pages/advisories/Dashboard.vue')

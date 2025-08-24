@@ -5,6 +5,7 @@ import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ReloadIcon } from '@radix-icons/vue';
+import { Select } from '@/components/select';
 import ModelCombobox from '@/components/combobox/ModelCombobox.vue';
 import MultiModelCombobox from '@/components/combobox/MultiModelCombobox.vue';
 import DefaultSkeleton from '@/components/skeleton/DefaultSkeleton.vue';
@@ -15,6 +16,7 @@ import { MarkdownEditor } from '@/components/editor';
 import Field from '@/components/form/Field.vue';
 import InlineField from '@/components/form/InlineField.vue';
 import InlineFieldGroup from '@/components/form/InlineFieldGroup.vue';
+import { severityChoices } from '@/utils/constants';
 
 export default {
     name: 'AdvisoryUpdate',
@@ -28,6 +30,7 @@ export default {
             templateChoices: [],
             loading: false,
             loaded: false,
+            severityChoices: severityChoices,
             downloadPending: false
         };
     },
@@ -46,13 +49,14 @@ export default {
             const data = {
                 title: this.model.title,
                 technology: this.model.technology?.pk,
+                severity: this.model.severity,
                 affected_versions: this.model.affected_versions,
                 fixed_version: this.model.fixed_version,
                 hide_advisory_id_in_report: this.model.hide_advisory_id_in_report,
                 custom_report_title: this.model.custom_report_title,
                 cve_id: this.model.cve_id,
                 researchers: this.model.researchers,
-                report_template: this.model.report_template?.name,
+                report_template: typeof this.model.report_template === 'object' ? this.model.report_template.name : this.model.report_template,
                 cvss_vector: this.model.cvss_vector,
                 description: this.model.description,
                 proof_text: this.model.proof_text,
@@ -150,6 +154,7 @@ export default {
         ModelCombobox,
         Card,
         Switch,
+        Select,
         Input,
         Button,
         ReloadIcon,
@@ -163,17 +168,20 @@ export default {
 
 <template>
     <ContainerLayout>
-        <BackLinkButton text="Back to Advisory" :href="$router.resolve({ name: 'AdvisoryDetail', params: { advisoryId } }).href" />
+        <template #left-header>
+            <BackLinkButton text="Back to Advisory" :href="$router.resolve({ name: 'AdvisoryDetail', params: { advisoryId } }).href" />
+        </template>
+        <template #right-header>
+            <div class="flex justify-end gap-2">
+                <Button variant="outline" @click="togglePreview"> <i class="fa fa-eye"></i> Preview </Button>
+                <Button :disabled="downloadPending" variant="default" @click="downloadAsPDF">
+                    <ReloadIcon v-if="downloadPending" class="w-4 h-4 mr-2 animate-spin" />
+                    <i class="fa fa-download"></i> Download
+                </Button>
+                <Button variant="destructive" @click="confirmDialogDelete"><i class="fa fa-trash"></i> Delete</Button>
+            </div>
+        </template>
         <PageHeader>Update Advisory</PageHeader>
-
-        <div class="flex justify-end gap-2 mb-4">
-            <Button variant="outline" @click="togglePreview"> <i class="fa fa-eye"></i> Preview </Button>
-            <Button :disabled="downloadPending" variant="default" @click="downloadAsPDF">
-                <ReloadIcon v-if="downloadPending" class="w-4 h-4 mr-2 animate-spin" />
-                <i class="fa fa-download"></i> Download
-            </Button>
-            <Button variant="destructive" @click="confirmDialogDelete"><i class="fa fa-trash"></i> Delete</Button>
-        </div>
 
         <div class="grid grid-cols-12 gap-4">
             <div :class="containerCol">
@@ -200,12 +208,16 @@ export default {
                         </InlineField>
                     </InlineFieldGroup>
 
+                    <Field label="Severity">
+                        <Select v-model="model.severity" :options="severityChoices"></Select>
+                    </Field>
+
                     <Field label="CVSS">
                         <Input id="cvss_vector" v-model="model.cvss_vector" />
                     </Field>
 
                     <Field label="Labels">
-                        <MultiModelCombobox v-model="model.labels" :options-url="$api.e.aLabelList" label-field="name" value-field="pk" />
+                        <MultiModelCombobox title="" v-model="model.labels" :options-url="$api.e.aLabelList" label-field="name" value-field="pk" />
                     </Field>
 
                     <InlineFieldGroup>

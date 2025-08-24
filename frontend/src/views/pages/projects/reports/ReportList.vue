@@ -1,16 +1,15 @@
 <script>
 import DataViewListLayout from '@/layouts/DataViewListLayout.vue';
 import SearchField from '@/partials/common/SearchField.vue';
-import DataViewHeader from '@/components/dataview/DataViewHeader.vue';
 import SortListDropdownMenu from '@/components/dropdown-menu/SortListDropdownMenu.vue';
 import { commonSortFilter } from '@/utils/constants';
-import DataViewContent from '@/components/dataview/DataViewContent.vue';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import ModelCombobox from '@/components/combobox/ModelCombobox.vue';
 import { Paginator } from '@/components/paginator';
 import { listViewMixin } from '@/mixins/listViewMixin';
+import { DataTable } from '@/components/datatable';
 
 export default {
     name: 'ReportList',
@@ -20,7 +19,8 @@ export default {
             projectId: this.$route.params.projectId,
             items: [],
             filters: {
-                search: { value: null }
+                search: { value: null },
+                ordering: { value: null }
             },
             loading: false,
             showCreateForm: false,
@@ -72,10 +72,9 @@ export default {
         ModelCombobox,
         Label,
         Button,
+        DataTable,
         Input,
-        DataViewContent,
         SortListDropdownMenu,
-        DataViewHeader,
         SearchField,
         DataViewListLayout
     }
@@ -85,11 +84,13 @@ export default {
 <template>
     <DataViewListLayout>
         <template #create-button>
-            <Button @click="
-                () => {
-                    this.showCreateForm = true;
-                }
-            ">
+            <Button
+                @click="
+                    () => {
+                        this.showCreateForm = true;
+                    }
+                "
+            >
                 <i class="fa fa-plus"></i> Report
             </Button>
         </template>
@@ -106,8 +107,7 @@ export default {
                 </div>
                 <div class="flex flex-col w-full md:w-auto flex-grow gap-2">
                     <Label class="text-sm font-medium">Report Template</Label>
-                    <ModelCombobox v-model="newReport.template" :api-endpoint="this.$api.e.reportTemplateList"
-                        label="Report Template" value-field="name">
+                    <ModelCombobox v-model="newReport.template" :api-endpoint="this.$api.e.reportTemplateList" label="Report Template" value-field="name">
                         <template #trigger="{ label }">
                             <Button class="justify-between" role="combobox" variant="outline">
                                 {{ newReport.template ? label : 'Select template...' }}
@@ -117,39 +117,44 @@ export default {
                     </ModelCombobox>
                 </div>
                 <div class="flex gap-2 ml-auto flex-col md:flex-row items-end mt-4 md:mt-0">
-                    <Button variant="outline" @click="
-                        () => {
-                            this.showCreateForm = false;
-                        }
-                    ">Cancel
+                    <Button
+                        variant="outline"
+                        @click="
+                            () => {
+                                this.showCreateForm = false;
+                            }
+                        "
+                        >Cancel
                     </Button>
                     <Button variant="default" @click="create">Save</Button>
                 </div>
             </div>
         </Card>
 
-        <DataViewHeader :total-records="totalRecords">
+        <DataTable
+            :columns="[
+                { key: 'name', title: 'Name' },
+                { key: 'template', title: 'Template' },
+                { key: 'date_updated', title: 'Date Updated' },
+                { key: 'date_created', title: 'Date Created' }
+            ]"
+            blank-slate-text="No reports found!"
+            blank-slate-icon="fa fa-file"
+            blank-slate-title="No Reports!"
+            :totalRecords="totalRecords"
+            :items="items"
+            :loading="loading"
+        >
             <template #filters>
-                <SortListDropdownMenu :items="commonSortFilter()"></SortListDropdownMenu>
+                <SortListDropdownMenu :items="commonSortFilter" v-model="filters.ordering.value" @update:model-value="getItems()"></SortListDropdownMenu>
             </template>
-        </DataViewHeader>
-        <DataViewContent :items="items" :loading="loading" blank-slate-icon="fa fa-file"
-            blank-slate-text="No reports found!" blank-slate-title="No Reports!">
-            <template #item="{ item }">
-                <div class="flex-1">
-                    <a :href="this.$router.resolve({ name: 'ReportDetail', params: { projectId: this.projectId, reportId: item.pk } }).href"
-                        class="hover:underline">{{ item.name }}</a>
-
-                    <div class="flex text-xs text-muted-foreground">
-                        <span>Created: {{ item.date_created }}</span>
-                        <span class="mx-2">|</span>
-                        <span>Updated: {{ item.date_updated }}</span>
-                    </div>
-                </div>
-                <span>{{ item.template }}</span>
+            <template #cell="{ item, col }">
+                <span v-if="col.key === 'name'">
+                    <a :href="this.$router.resolve({ name: 'ReportDetail', params: { projectId: this.projectId, reportId: item.pk } }).href" class="hover:underline">{{ item.name }}</a>
+                </span>
+                <span v-else>{{ item[col.key] }}</span>
             </template>
-        </DataViewContent>
-        <Paginator :rows="this.pagination.limit" :total-records="this.totalRecords"
-            class="w-full mt-3 flex justify-center" @page="onPage"></Paginator>
+        </DataTable>
+        <Paginator :rows="this.pagination.limit" :total-records="this.totalRecords" class="w-full mt-3 flex justify-center" @page="onPage"></Paginator>
     </DataViewListLayout>
 </template>

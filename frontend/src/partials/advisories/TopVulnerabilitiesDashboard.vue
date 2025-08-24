@@ -55,6 +55,14 @@ export default {
                         return '';
                     }
                 "
+                :x-formatter="
+                    (tick, i) => {
+                        if (Number.isInteger(tick) && data[tick]) {
+                            return data[tick]['name'];
+                        }
+                        return '';
+                    }
+                "
             ></BarChart>
         </div>
     </Card>

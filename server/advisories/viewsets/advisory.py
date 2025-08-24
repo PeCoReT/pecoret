@@ -52,7 +52,6 @@ class AdvisoryViewSet(PeCoReTModelViewSet):
     filterset_class = AdvisoryFilter
     api_scope = "scope_advisories"
     search_fields = [
-        "vulnerability__vulnerability_id",
         "technology__cpe",
         "technology__vendor",
         "title",

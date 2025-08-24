@@ -9,7 +9,8 @@ import { ReloadIcon } from '@radix-icons/vue';
 import { PageHeader } from '@/components/typography';
 import { DatePicker } from '@/components/datepicker';
 import { Select } from '@/components/select';
-import { advisoryStatusChoices, severityChoices, vulnerabilityStatusChoices } from '@/utils/constants';
+import { Switch } from '@/components/ui/switch';
+import { advisoryStatusChoices, vulnerabilityStatusChoices } from '@/utils/constants';
 
 export default {
     name: 'AdvisoryDetail',
@@ -25,7 +26,6 @@ export default {
             statusChoices: advisoryStatusChoices,
             vulnerabilityStatusChoices: vulnerabilityStatusChoices,
             exportTemplate: null,
-            severityChoices: severityChoices,
             downloadPending: false
         };
     },
@@ -105,6 +105,7 @@ export default {
         AdvisoryTabMenu,
         InfoCardWithForm,
         Button,
+        Switch,
         ReloadIcon,
         PageHeader
     }
@@ -148,8 +149,8 @@ export default {
                 </div>
                 <div class="grid grid-cols-12 mt-3 gap-3">
                     <div class="col-span-12 md:col-span-3">
-                        <InfoCardWithForm class="bg-background w-full" icon="fa fa-shield-halved" title="Severity">
-                            <Select v-model="advisory.severity" :options="severityChoices" @update:modelValue="patchAdvisory({ severity: advisory.severity })"></Select>
+                        <InfoCardWithForm class="bg-background w-full" icon="fa fa-shield-halved" title="Draft?">
+                            <Switch v-model:checked="advisory.is_draft" @update:checked="patchAdvisory({ is_draft: advisory.is_draft })" />
                         </InfoCardWithForm>
                     </div>
                     <div class="col-span-12 md:col-span-3">

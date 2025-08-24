@@ -38,7 +38,7 @@ export default {
                     this.items = response.data.results;
                 })
                 .finally(() => {
-                        this.loading = false;
+                    this.loading = false;
                 });
         }
     },
@@ -70,6 +70,9 @@ export default {
                 { key: 'country', title: 'Country' },
                 { key: 'report_template', title: 'Template' }
             ]"
+            blank-slate-text="No companies found!"
+            blank-slate-icon="fa fa-building"
+            blank-slate-title="No Companies!"
             :totalRecords="totalRecords"
             :items="items"
             :loading="loading"

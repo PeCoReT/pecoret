@@ -64,6 +64,7 @@ class BaseAdvisorySerializer(serializers.ModelSerializer):
             "report_template",
             "title",
             "cwes",
+            "is_draft",
             "cvss_vector",
         ]
         read_only_fields = ["pk", "user", "cwes"]

@@ -110,7 +110,7 @@ export default {
 
                 <!-- Blank Slate -->
                 <template v-else-if="!items.length">
-                    <TableRow>
+                    <TableRow class="cursor-default hover:bg-transparent">
                         <TableCell :colspan="colSpan" class="p-0">
                             <slot name="blankslate">
                                 <BlankSlate :icon="blankSlateIcon" :text="blankSlateText" :title="blankSlateTitle" class="border rounded-t-none rounded-b-lg" />

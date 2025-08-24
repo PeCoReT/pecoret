@@ -38,7 +38,7 @@ export default {
                 this.selectedItems = {};
                 this.bulkSelect = false;
             }
-            this.$emit('update:selection', this.selectedItems)
+            this.$emit('update:selection', this.selectedItems);
         }
     },
     computed: {
@@ -54,7 +54,7 @@ export default {
             immediate: true,
             handler(value) {
                 if (!this.hasBulkSelectedItem) {
-                    this.bulkSelect = false
+                    this.bulkSelect = false;
                 }
             }
         }
@@ -75,7 +75,9 @@ export default {
             </div>
             <div class="flex flex-1 justify-end">
                 <span v-if="hasBulkSelectedItem" class="flex items-center gap-2"> <slot name="bulk"></slot> </span>
-                <span v-else> <slot name="filters"></slot> </span>
+                <span v-else>
+                    <slot name="filters"> </slot>
+                </span>
             </div>
         </div>
     </div>
