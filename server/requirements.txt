@@ -13,7 +13,7 @@ cvss==3.6
 jinja2==3.1.6
 argon2-cffi==23.1.0
 rest-framework-generic-relations==2.2.0
-nh3==0.2.21
+nh3==0.3.0
 defusedxml==0.8.0rc2
 matplotlib==3.10.1
 djangoql==0.18.1
