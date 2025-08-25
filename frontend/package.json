@@ -18,7 +18,7 @@
         "chart.js": "^4.4.9",
         "class-variance-authority": "^0.7.1",
         "easymde": "^2.20.0",
-        "flag-icons": "^7.3.2",
+        "flag-icons": "^7.5.0",
         "markdown-it": "^14.1.0",
         "pinia": "^3.0.2",
         "radix-vue": "^1.9.17",
