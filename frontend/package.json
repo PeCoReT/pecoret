@@ -13,7 +13,7 @@
         "@radix-icons/vue": "^1.0.0",
         "@unovis/ts": "^1.5.1",
         "@unovis/vue": "^1.5.1",
-        "@vueuse/core": "^13.1.0",
+        "@vueuse/core": "^13.8.0",
         "axios": "^1.8.4",
         "chart.js": "^4.4.9",
         "class-variance-authority": "^0.7.1",
